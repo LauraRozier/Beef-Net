@@ -18,13 +18,13 @@ namespace Beef_Net
 		#error Unsupported CPU
 	#endif
 
-		private const String LIB_SSL    = "libssl-1_1.dll";
+		private const String LIB_SSL = "libssl-1_1.dll";
 		private const String LIB_CRYPTO = "libcrypto-1_1.dll";
 #elif BF_PLATFORM_LINUX
 	#if !BF_64_BIT
 		#error Unsupported CPU
 	#endif
-		private const String LIB_SSL    = "libssl.so";
+		private const String LIB_SSL = "libssl.so";
 		private const String LIB_CRYPTO = "libcrypto.so";
 #else
 	#error Unsupported platform
@@ -58,7 +58,7 @@ namespace Beef_Net
 		* (Prior to 0.9.5a beta1, a different scheme was used: MMNNFFRBB for
 		*  major minor fix final patch/beta)
 		*/
-		public const int OPENSSL_VERSION_NUMBER  = 0x1010108fL;
+		public const int OPENSSL_VERSION_NUMBER = 0x1010108fL;
 		public const String OPENSSL_VERSION_TEXT = "OpenSSL 1.1.1h  22 Sep 2020";
 
 		/*-
@@ -111,7 +111,7 @@ namespace Beef_Net
 		* should only keep the versions that are binary compatible with the current.
 		*/
 		public const String SHLIB_VERSION_HISTORY = "";
-		public const String SHLIB_VERSION_NUMBER  = "1.1";
+		public const String SHLIB_VERSION_NUMBER = "1.1";
 
 		/*-------------------------------------------------------------------------------
 		** opensslconf.h
@@ -187,6 +187,78 @@ namespace Beef_Net
 	#define OPENSSL_NO_STATIC_ENGINE
 #endif
 
-		typealias RC4_INT = uint;
+		public const String OPENSSL_FILE = "";
+		public const int OPENSSL_LINE = 0;
+
+		public const int OPENSSL_MIN_API = 0;
+		public const int OPENSSL_API_COMPAT = OPENSSL_MIN_API;
+
+		public typealias RC4_INT = uint;
+
+		/*-------------------------------------------------------------------------------
+		** aes.h
+		*/
+
+		public const int AES_ENCRYPT = 1;
+		public const int AES_DECRYPT = 0;
+
+		/*
+		 * Because array size can't be a const in C, the following two are macros.
+		 * Both sizes are in bytes.
+		 */
+		public const int AES_MAXNR = 14;
+		public const int AES_BLOCK_SIZE = 16;
+
+		/* This should be a hidden type, but EVP requires that the size be known */
+		[CRepr]
+		public struct aes_key_st
+		{
+#if AES_LONG
+			public uint[4 * (AES_MAXNR + 1)] rd_key;
+#else
+			public uint32[4 * (AES_MAXNR + 1)] rd_key;
+#endif
+			public int rounds;
+		}
+		public typealias AES_KEY = aes_key_st;
+
+		[Import(LIB_CRYPTO), CLink]
+		public extern static char8* AES_options();
+
+		[Import(LIB_CRYPTO), CLink]
+		public extern static int AES_set_encrypt_key(uint8* userKey, int bits, AES_KEY* key);
+		[Import(LIB_CRYPTO), CLink]
+		public extern static int AES_set_decrypt_key(uint8* userKey, int bits, AES_KEY* key);
+
+		[Import(LIB_CRYPTO), CLink]
+		public extern static void AES_encrypt(uint8* inData, uint8* outData, AES_KEY* key);
+		[Import(LIB_CRYPTO), CLink]
+		public extern static void AES_decrypt(uint8* inData, uint8* outData, AES_KEY* key);
+
+		[Import(LIB_CRYPTO), CLink]
+		public extern static void AES_ecb_encrypt(uint8* inData, uint8* outData, AES_KEY* key, int enc);
+		[Import(LIB_CRYPTO), CLink]
+		public extern static void AES_cbc_encrypt(uint8* inData, uint8* outData, uint length, AES_KEY* key, uint8* ivec, int enc);
+		[Import(LIB_CRYPTO), CLink]
+		public extern static void AES_cfb128_encrypt(uint8* inData, uint8* outData, uint length, AES_KEY* key, uint8* ivec, int* num, int enc);
+		[Import(LIB_CRYPTO), CLink]
+		public extern static void AES_cfb1_encrypt(uint8* inData, uint8* outData, uint length, AES_KEY* key, uint8* ivec, int* num, int enc);
+		[Import(LIB_CRYPTO), CLink]
+		public extern static void AES_cfb8_encrypt(uint8* inData, uint8* outData, uint length, AES_KEY* key, uint8* ivec, int* num, int enc);
+		[Import(LIB_CRYPTO), CLink]
+		public extern static void AES_ofb128_encrypt(uint8* inData, uint8* outData, uint length, AES_KEY* key, uint8* ivec, int* num);
+		/* NB: the IV is _two_ blocks long */
+		[Import(LIB_CRYPTO), CLink]
+		public extern static void AES_ige_encrypt(uint8* inData, uint8* outData, uint length, AES_KEY* key, uint8* ivec, int enc);
+		/* NB: the IV is _four_ blocks long */
+		[Import(LIB_CRYPTO), CLink]
+		public extern static void AES_bi_ige_encrypt(uint8* inData, uint8* outData, uint length, AES_KEY* key, AES_KEY* key2, uint8* ivec, int enc);
+
+		[Import(LIB_CRYPTO), CLink]
+		public extern static int AES_wrap_key(AES_KEY* key, uint8* iv, uint8* outData, uint8* inData, uint inLen);
+		[Import(LIB_CRYPTO), CLink]
+		public extern static int AES_unwrap_key(AES_KEY* key, uint8* iv, uint8* outData, uint8* inData, uint inLen);
+
+
 	}
 }

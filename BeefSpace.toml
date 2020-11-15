@@ -1,6 +1,6 @@
 FileVersion = 1
-Projects = {Beef-Net = {Path = "."}}
+Projects = {Beef-Net = {Path = "."}, Beef-Net-Test = {Path = "Beef-Net-Test"}}
 ExtraPlatforms = ["Linux64"]
 
 [Workspace]
-StartupProject = "Beef-Net"
+StartupProject = "Beef-Net-Test"

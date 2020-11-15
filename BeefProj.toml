@@ -12,7 +12,7 @@ PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/OpenSSL/Win32/bin/*.dll\
 PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/OpenSSL/Win64/bin/*.dll\")"]
 
 [Configs.Debug.Linux64]
-PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/OpenSSL/Lin64/lib/*.so.*\")"]
+PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/OpenSSL/Lin64/lib/*.so\")"]
 
 [Configs.Release.Win32]
 PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/OpenSSL/Win32/bin/*.dll\")"]
@@ -21,7 +21,7 @@ PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/OpenSSL/Win32/bin/*.dll\
 PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/OpenSSL/Win64/bin/*.dll\")"]
 
 [Configs.Release.Linux64]
-PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/OpenSSL/Lin64/lib/*.so.*\")"]
+PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/OpenSSL/Lin64/lib/*.so\")"]
 
 [Configs.Paranoid.Win32]
 PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/OpenSSL/Win32/bin/*.dll\")"]
@@ -30,7 +30,7 @@ PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/OpenSSL/Win32/bin/*.dll\
 PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/OpenSSL/Win64/bin/*.dll\")"]
 
 [Configs.Paranoid.Linux64]
-PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/OpenSSL/Lin64/lib/*.so.*\")"]
+PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/OpenSSL/Lin64/lib/*.so\")"]
 
 [Configs.Test.Win32]
 PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/OpenSSL/Win32/bin/*.dll\")"]
@@ -39,4 +39,4 @@ PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/OpenSSL/Win32/bin/*.dll\
 PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/OpenSSL/Win64/bin/*.dll\")"]
 
 [Configs.Test.Linux64]
-PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/OpenSSL/Lin64/lib/*.so.*\")"]
+PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/OpenSSL/Lin64/lib/*.so\")"]
