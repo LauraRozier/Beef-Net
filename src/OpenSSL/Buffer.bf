@@ -13,9 +13,6 @@ namespace Beef_Net.OpenSSL
 {
 	sealed abstract class Buffer
 	{
-		/*-------------------------------------------------------------------------------
-		** buffererr.h
-		*/
 		[Import(OPENSSL_LIB_CRYPTO), CLink]
 		public extern static int ERR_load_BUF_strings();
 
@@ -29,9 +26,45 @@ namespace Beef_Net.OpenSSL
 		/*
 		 * BUF reason codes.
 		 */
+		/*
+		 * These names are outdated as of OpenSSL 1.1; a future release
+		 * will move them to be deprecated.
+		 */
+		[Inline]
+		public static char8* strdup(char8* str) => OpenSSL.strdup(str);
+		[Inline]
+		public static char8* strndup(char8* str, uint size) => OpenSSL.strndup(str, size);
+		[Inline]
+		public static void* memdup(void* data, uint size) => OpenSSL.memdup(data, size);
+		[Inline]
+		public static uint strlcpy(char8* dst, char8* src, uint size) => OpenSSL.strlcpy(dst, src, size);
+		[Inline]
+		public static uint strlcat(char8* dst, char8* src, uint size) => OpenSSL.strlcat(dst, src, size);
+		[Inline]
+		public static uint strnlen(char8* str, uint maxlen) => OpenSSL.strnlen(str, maxlen);
 
-		/*-------------------------------------------------------------------------------
-		** buffer.h
-		*/
+		[CRepr]
+		public struct mem_st {
+		    public uint length; /* current number of bytes */
+		    public char8* data;
+		    public uint max;    /* size of buffer */
+		    public uint flags;
+		}
+		public typealias MEM = mem_st;
+		
+		public const int MEM_FLAG_SECURE = 0x01;
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BUF_MEM_new")]
+		public extern static MEM* MEM_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BUF_MEM_new_ex")]
+		public extern static MEM* MEM_new_ex(uint flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BUF_MEM_free")]
+		public extern static void MEM_free(MEM* a);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BUF_MEM_grow")]
+		public extern static uint MEM_grow(MEM* str, uint len);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BUF_MEM_grow_clean")]
+		public extern static uint MEM_grow_clean(MEM* str, uint len);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BUF_reverse")]
+		public extern static void reverse(uint8* outVal, uint8* inVal, uint siz);
 	}
 }

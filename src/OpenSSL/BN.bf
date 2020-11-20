@@ -510,7 +510,7 @@ namespace Beef_Net.OpenSSL
 		}
 #endif
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_print")]
-		public extern static int print(BIO_C.bio_st* bio, BIGNUM* a);
+		public extern static int print(BIO.bio_st* bio, BIGNUM* a);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_reciprocal")]
 		public extern static int reciprocal(BIGNUM* r, BIGNUM* m, int len, CTX* ctx);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_rshift")]

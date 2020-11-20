@@ -255,11 +255,11 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_zalloc")]
 		public extern static void* zalloc(uint num, char8* file, int line);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_memdup")]
-		public extern static void* memdup(void* str, uint siz, char8* file, int line);
+		public extern static void* memdup(void* data, uint size, char8* file, int line);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_strdup")]
 		public extern static char8* strdup(char8* str, char8* file, int line);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_strndup")]
-		public extern static char8* strndup(char8* str, uint s, char8* file, int line);
+		public extern static char8* strndup(char8* str, uint size, char8* file, int line);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_free")]
 		public extern static void free(void* ptr, char8* file, int line);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_clear_free")]
@@ -270,7 +270,7 @@ namespace Beef_Net.OpenSSL
 		public extern static void* clear_realloc(void *addr, uint old_num, uint num, char8* file, int line);
 		
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_secure_malloc_init")]
-		public extern static int secure_malloc_init(uint sz, int minsize);
+		public extern static int secure_malloc_init(uint size, int minsize);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_secure_malloc_done")]
 		public extern static int secure_malloc_done();
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_secure_malloc")]

@@ -13,6 +13,7 @@ namespace Beef_Net.OpenSSL
 {
 	sealed abstract class Blowfish
 	{
+#if !OPENSSL_NO_BF
 		public const int ENCRYPT = 1;
 		public const int DECRYPT = 0;
 
@@ -51,5 +52,6 @@ namespace Beef_Net.OpenSSL
 		public extern static void BF_ofb64_encrypt(uint8* inVal, uint8* outVal, int length, KEY* schedule, uint8* ivec, int* num);
 		[Import(OPENSSL_LIB_SSL), LinkName("BF_options")]
 		public extern static char8* options();
+#endif
 	}
 }

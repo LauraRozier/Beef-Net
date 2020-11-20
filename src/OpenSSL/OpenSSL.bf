@@ -42,16 +42,16 @@ namespace Beef_Net.OpenSSL
 		}
 
 		[Inline]
-		public static void malloc(uint num) => Crypto.malloc(num, OPENSSL_FILE, OPENSSL_LINE);
+		public static void* malloc(uint num) => Crypto.malloc(num, OPENSSL_FILE, OPENSSL_LINE);
 
 		[Inline]
-		public static void zalloc(uint num) => Crypto.zalloc(num, OPENSSL_FILE, OPENSSL_LINE);
+		public static void* zalloc(uint num) => Crypto.zalloc(num, OPENSSL_FILE, OPENSSL_LINE);
 
 		[Inline]
-		public static void realloc(void* addr, uint num) => Crypto.realloc(addr, num, OPENSSL_FILE, OPENSSL_LINE);
+		public static void* realloc(void* addr, uint num) => Crypto.realloc(addr, num, OPENSSL_FILE, OPENSSL_LINE);
 
 		[Inline]
-		public static void clear_realloc(void* addr, uint old_num, uint num) => Crypto.clear_realloc(addr, old_num, num, OPENSSL_FILE, OPENSSL_LINE);
+		public static void* clear_realloc(void* addr, uint old_num, uint num) => Crypto.clear_realloc(addr, old_num, num, OPENSSL_FILE, OPENSSL_LINE);
 
 		[Inline]
 		public static void clear_free(void* addr, uint num) => Crypto.clear_free(addr, num, OPENSSL_FILE, OPENSSL_LINE);
@@ -60,19 +60,19 @@ namespace Beef_Net.OpenSSL
 		public static void free(void* addr) => Crypto.free(addr, OPENSSL_FILE, OPENSSL_LINE);
 
 		[Inline]
-		public static void memdup(void* str, uint sz) => Crypto.memdup(str, sz, OPENSSL_FILE, OPENSSL_LINE);
+		public static void* memdup(void* data, uint size) => Crypto.memdup(data, size, OPENSSL_FILE, OPENSSL_LINE);
 
 		[Inline]
-		public static void strdup(char8* str) => Crypto.strdup(str, OPENSSL_FILE, OPENSSL_LINE);
+		public static char8* strdup(char8* str) => Crypto.strdup(str, OPENSSL_FILE, OPENSSL_LINE);
 
 		[Inline]
-		public static void strndup(char8* str, uint n) => Crypto.strndup(str, n, OPENSSL_FILE, OPENSSL_LINE);
+		public static char8* strndup(char8* str, uint n) => Crypto.strndup(str, n, OPENSSL_FILE, OPENSSL_LINE);
 
 		[Inline]
-		public static void secure_malloc(uint num) => Crypto.secure_malloc(num, OPENSSL_FILE, OPENSSL_LINE);
+		public static void* secure_malloc(uint num) => Crypto.secure_malloc(num, OPENSSL_FILE, OPENSSL_LINE);
 
 		[Inline]
-		public static void secure_zalloc(uint num) => Crypto.secure_zalloc(num, OPENSSL_FILE, OPENSSL_LINE);
+		public static void* secure_zalloc(uint num) => Crypto.secure_zalloc(num, OPENSSL_FILE, OPENSSL_LINE);
 
 		[Inline]
 		public static void secure_free(void* addr) => Crypto.secure_free(addr, OPENSSL_FILE, OPENSSL_LINE);
@@ -81,12 +81,12 @@ namespace Beef_Net.OpenSSL
 		public static void secure_clear_free(void* addr, uint num) => Crypto.secure_clear_free(addr, num, OPENSSL_FILE, OPENSSL_LINE);
 
 		[Inline]
-		public static void secure_actual_size(void* ptr) => Crypto.secure_actual_size(ptr);
+		public static uint secure_actual_size(void* ptr) => Crypto.secure_actual_size(ptr);
 		
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_strlcpy")]
-		public extern static uint strlcpy(char8* dst, char8* src, uint siz);
+		public extern static uint strlcpy(char8* dst, char8* src, uint size);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_strlcat")]
-		public extern static uint strlcat(char8* dst, char8* src, uint siz);
+		public extern static uint strlcat(char8* dst, char8* src, uint size);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_strnlen")]
 		public extern static uint strnlen(char8* str, uint maxlen);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_buf2hexstr")]
