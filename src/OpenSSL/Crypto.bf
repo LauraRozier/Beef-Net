@@ -19,6 +19,8 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_CRYPTO), CLink]
 		public extern static int ERR_load_CRYPTO_strings();
 
+		public typealias REF_COUNT = int;
+
 		/*
 		 * CRYPTO function codes.
 		 */
@@ -66,7 +68,7 @@ namespace Beef_Net.OpenSSL
 		    public int dummy;
 		}
 
-		typealias RWLOCK = void;
+		public typealias RWLOCK = void;
 
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_THREAD_lock_new")]
 		public extern static RWLOCK* THREAD_lock_new();
@@ -200,7 +202,7 @@ namespace Beef_Net.OpenSSL
 		[CRepr]
 		public struct threadid_st
 		{
-		    int dummy;
+		    public int dummy;
 		}
 		public typealias THREADID = threadid_st;
 		/* Only use THREADID_set_[numeric|pointer]() within callbacks */
@@ -303,9 +305,9 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_memcmp")]
 		public extern static int memcmp(void* in_a, void* in_b, uint len);
 
-		typealias ONCE         = uint;
-		typealias THREAD_LOCAL = uint;
-		typealias THREAD_ID    = uint;
+		public typealias ONCE         = uint;
+		public typealias THREAD_LOCAL = uint;
+		public typealias THREAD_ID    = uint;
 		
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_THREAD_run_once")]
 		public extern static int THREAD_run_once(ONCE* once, function void() init);

@@ -11,16 +11,1012 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
-	/*
-	libssl-1_1.dll
-		1    0 0000236A BIO_f_ssl
-		2    1 00001320 BIO_new_buffer_ssl_connect
-		3    2 000024D7 BIO_new_ssl
-		4    3 0000182A BIO_new_ssl_connect
-		5    4 000019C9 BIO_ssl_copy_session_id
-		6    5 000015DC BIO_ssl_shutdown
-	*/
-	sealed abstract class BIO
+	sealed abstract class BIO_C
 	{
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int ERR_load_BIO_strings();
+
+		/*
+		 * BIO function codes.
+		 */
+		public const int F_ACPT_STATE         = 100;
+		public const int F_ADDRINFO_WRAP      = 148;
+		public const int F_ADDR_STRINGS       = 134;
+		public const int F_BIO_ACCEPT         = 101;
+		public const int F_BIO_ACCEPT_EX      = 137;
+		public const int F_BIO_ACCEPT_NEW     = 152;
+		public const int F_BIO_ADDR_NEW       = 144;
+		public const int F_BIO_BIND           = 147;
+		public const int F_BIO_CALLBACK_CTRL  = 131;
+		public const int F_BIO_CONNECT        = 138;
+		public const int F_BIO_CONNECT_NEW    = 153;
+		public const int F_BIO_CTRL           = 103;
+		public const int F_BIO_GETS           = 104;
+		public const int F_BIO_GET_HOST_IP    = 106;
+		public const int F_BIO_GET_NEW_INDEX  = 102;
+		public const int F_BIO_GET_PORT       = 107;
+		public const int F_BIO_LISTEN         = 139;
+		public const int F_BIO_LOOKUP         = 135;
+		public const int F_BIO_LOOKUP_EX      = 143;
+		public const int F_BIO_MAKE_PAIR      = 121;
+		public const int F_BIO_METH_NEW       = 146;
+		public const int F_BIO_NEW            = 108;
+		public const int F_BIO_NEW_DGRAM_SCTP = 145;
+		public const int F_BIO_NEW_FILE       = 109;
+		public const int F_BIO_NEW_MEM_BUF    = 126;
+		public const int F_BIO_NREAD          = 123;
+		public const int F_BIO_NREAD0         = 124;
+		public const int F_BIO_NWRITE         = 125;
+		public const int F_BIO_NWRITE0        = 122;
+		public const int F_BIO_PARSE_HOSTSERV = 136;
+		public const int F_BIO_PUTS           = 110;
+		public const int F_BIO_READ           = 111;
+		public const int F_BIO_READ_EX        = 105;
+		public const int F_BIO_READ_INTERN    = 120;
+		public const int F_BIO_SOCKET         = 140;
+		public const int F_BIO_SOCKET_NBIO    = 142;
+		public const int F_BIO_SOCK_INFO      = 141;
+		public const int F_BIO_SOCK_INIT      = 112;
+		public const int F_BIO_WRITE          = 113;
+		public const int F_BIO_WRITE_EX       = 119;
+		public const int F_BIO_WRITE_INTERN   = 128;
+		public const int F_BUFFER_CTRL        = 114;
+		public const int F_CONN_CTRL          = 127;
+		public const int F_CONN_STATE         = 115;
+		public const int F_DGRAM_SCTP_NEW     = 149;
+		public const int F_DGRAM_SCTP_READ    = 132;
+		public const int F_DGRAM_SCTP_WRITE   = 133;
+		public const int F_DOAPR_OUTCH        = 150;
+		public const int F_FILE_CTRL          = 116;
+		public const int F_FILE_READ          = 130;
+		public const int F_LINEBUFFER_CTRL    = 129;
+		public const int F_LINEBUFFER_NEW     = 151;
+		public const int F_MEM_WRITE          = 117;
+		public const int F_NBIOF_NEW          = 154;
+		public const int F_SLG_WRITE          = 155;
+		public const int F_SSL_NEW            = 118;
+
+		/*
+		 * BIO reason codes.
+		 */
+		public const int R_ACCEPT_ERROR                        = 100;
+		public const int R_ADDRINFO_ADDR_IS_NOT_AF_INET        = 141;
+		public const int R_AMBIGUOUS_HOST_OR_SERVICE           = 129;
+		public const int R_BAD_FOPEN_MODE                      = 101;
+		public const int R_BROKEN_PIPE                         = 124;
+		public const int R_CONNECT_ERROR                       = 103;
+		public const int R_GETHOSTBYNAME_ADDR_IS_NOT_AF_INET   = 107;
+		public const int R_GETSOCKNAME_ERROR                   = 132;
+		public const int R_GETSOCKNAME_TRUNCATED_ADDRESS       = 133;
+		public const int R_GETTING_SOCKTYPE                    = 134;
+		public const int R_INVALID_ARGUMENT                    = 125;
+		public const int R_INVALID_SOCKET                      = 135;
+		public const int R_IN_USE                              = 123;
+		public const int R_LENGTH_TOO_LONG                     = 102;
+		public const int R_LISTEN_V6_ONLY                      = 136;
+		public const int R_LOOKUP_RETURNED_NOTHING             = 142;
+		public const int R_MALFORMED_HOST_OR_SERVICE           = 130;
+		public const int R_NBIO_CONNECT_ERROR                  = 110;
+		public const int R_NO_ACCEPT_ADDR_OR_SERVICE_SPECIFIED = 143;
+		public const int R_NO_HOSTNAME_OR_SERVICE_SPECIFIED    = 144;
+		public const int R_NO_PORT_DEFINED                     = 113;
+		public const int R_NO_SUCH_FILE                        = 128;
+		public const int R_NULL_PARAMETER                      = 115;
+		public const int R_UNABLE_TO_BIND_SOCKET               = 117;
+		public const int R_UNABLE_TO_CREATE_SOCKET             = 118;
+		public const int R_UNABLE_TO_KEEPALIVE                 = 137;
+		public const int R_UNABLE_TO_LISTEN_SOCKET             = 119;
+		public const int R_UNABLE_TO_NODELAY                   = 138;
+		public const int R_UNABLE_TO_REUSEADDR                 = 139;
+		public const int R_UNAVAILABLE_IP_FAMILY               = 145;
+		public const int R_UNINITIALIZED                       = 120;
+		public const int R_UNKNOWN_INFO_TYPE                   = 140;
+		public const int R_UNSUPPORTED_IP_FAMILY               = 146;
+		public const int R_UNSUPPORTED_METHOD                  = 121;
+		public const int R_UNSUPPORTED_PROTOCOL_FAMILY         = 131;
+		public const int R_WRITE_TO_READ_ONLY_BIO              = 126;
+		public const int R_WSASTARTUP                          = 122;
+
+		public function int info_cb(bio_st* p, int a, int b);
+		public function int callback_fn(bio_st* b, int oper, char8* argp, int argi, int argl, int ret);
+		public function int callback_fn_ex(bio_st* b, int oper, char8* argp, uint len, int argi, int argl, int ret, uint* processed);
+
+		[CRepr]
+		public struct method_st
+		{
+		    public int type;
+		    public char8* name;
+		    public function int(bio_st*, char8*, uint, uint*) bwrite;
+		    public function int(bio_st*, char8*, int) bwrite_old;
+		    public function int(bio_st*, char8*, uint, uint*) bread;
+		    public function int(bio_st*, char8*, int) bread_old;
+		    public function int(bio_st*, char8*) bputs;
+		    public function int(bio_st*, char8*, int) bgets;
+		    public function int(bio_st*, int, int, void*) ctrl;
+		    public function int(bio_st*) create;
+		    public function int(bio_st*) destroy;
+		    public function int(bio_st*, int, info_cb*) callback_ctrl;
+		}
+		public typealias METHOD = method_st;
+
+		[CRepr]
+		public struct bio_st
+		{
+		    public METHOD* method;
+		    /* bio, mode, argp, argi, argl, ret */
+		    public callback_fn callback;
+		    public callback_fn_ex callback_ex;
+		    public char8* cb_arg;               /* first argument for the callback */
+		    public int init;
+		    public int shutdown;
+		    public int flags;                  /* extra storage */
+		    public int retry_reason;
+		    public int num;
+		    public void* ptr;
+		    public bio_st* next_bio;    /* used by filter BIOs */
+		    public bio_st* prev_bio;    /* used by filter BIOs */
+		    public Crypto.REF_COUNT references;
+		    public uint64 num_read;
+		    public uint64 num_write;
+		    public Crypto.EX_DATA ex_data;
+		    public Crypto.RWLOCK* lock;
+		}
+		
+		/* There are the classes of BIOs */
+		public const int TYPE_DESCRIPTOR  = 0x0100; /* socket, fd, connect or accept */
+		public const int TYPE_FILTER      = 0x0200;
+		public const int TYPE_SOURCE_SINK = 0x0400;
+
+		/* These are the 'types' of BIOs */
+		public const int TYPE_NONE        =  0;
+        public const int TYPE_MEM         =  1 | TYPE_SOURCE_SINK;
+        public const int TYPE_FILE        =  2 | TYPE_SOURCE_SINK;
+
+        public const int TYPE_FD          =  4 | TYPE_SOURCE_SINK | TYPE_DESCRIPTOR;
+		public const int TYPE_SOCKET      =  5 | TYPE_SOURCE_SINK | TYPE_DESCRIPTOR;
+        public const int TYPE_NULL        =  6 | TYPE_SOURCE_SINK;
+        public const int TYPE_SSL         =  7 | TYPE_FILTER;
+        public const int TYPE_MD          =  8 | TYPE_FILTER;
+        public const int TYPE_BUFFER      =  9 | TYPE_FILTER;
+        public const int TYPE_CIPHER      = 10 | TYPE_FILTER;
+        public const int TYPE_BASE64      = 11 | TYPE_FILTER;
+        public const int TYPE_CONNECT     = 12 | TYPE_SOURCE_SINK | TYPE_DESCRIPTOR;
+        public const int TYPE_ACCEPT      = 13 | TYPE_SOURCE_SINK | TYPE_DESCRIPTOR;
+
+        public const int TYPE_NBIO_TEST   = 16 | TYPE_FILTER;/* server proxy BIO */
+        public const int TYPE_NULL_FILTER = 17 | TYPE_FILTER;
+        public const int TYPE_BIO         = 19 | TYPE_SOURCE_SINK;/* half a BIO pair */
+        public const int TYPE_LINEBUFFER  = 20 | TYPE_FILTER;
+        public const int TYPE_DGRAM       = 21 | TYPE_SOURCE_SINK | TYPE_DESCRIPTOR;
+        public const int TYPE_ASN1        = 22 | TYPE_FILTER;
+        public const int TYPE_COMP        = 23 | TYPE_FILTER;
+#if !OPENSSL_NO_SCTP
+        public const int TYPE_DGRAM_SCTP  = 24 | TYPE_SOURCE_SINK | TYPE_DESCRIPTOR;
+#endif
+
+        public const int TYPE_START       = 128;
+
+		/*
+		 * BIO_FILENAME_READ|BIO_CLOSE to open or close on free.
+		 * BIO_set_fp(in,stdin,BIO_NOCLOSE);
+		 */
+        public const int NOCLOSE = 0x00;
+        public const int CLOSE   = 0x01;
+
+		/*
+		 * These are used in the following macros and are passed to BIO_ctrl()
+		 */
+        public const int CTRL_RESET                       = 1;/* opt - rewind/zero etc */
+        public const int CTRL_EOF                         = 2;/* opt - are we at the eof */
+        public const int CTRL_INFO                        = 3;/* opt - extra tit-bits */
+        public const int CTRL_SET                         = 4;/* man - set the 'IO' type */
+        public const int CTRL_GET                         = 5;/* man - get the 'IO' type */
+        public const int CTRL_PUSH                        = 6;/* opt - internal, used to signify change */
+        public const int CTRL_POP                         = 7;/* opt - internal, used to signify change */
+        public const int CTRL_GET_CLOSE                   = 8;/* man - set the 'close' on free */
+        public const int CTRL_SET_CLOSE                   = 9;/* man - set the 'close' on free */
+        public const int CTRL_PENDING                     = 10;/* opt - is their more data buffered */
+        public const int CTRL_FLUSH                       = 11;/* opt - 'flush' buffered output */
+        public const int CTRL_DUP                         = 12;/* man - extra stuff for 'duped' BIO */
+        public const int CTRL_WPENDING                    = 13;/* opt - number of bytes still to write */
+        public const int CTRL_SET_CALLBACK                = 14;/* opt - set callback function */
+        public const int CTRL_GET_CALLBACK                = 15;/* opt - set callback function */
+
+        public const int CTRL_PEEK                        = 29;/* BIO_f_buffer special */
+        public const int CTRL_SET_FILENAME                = 30;/* BIO_s_file special */
+
+		/* dgram BIO stuff */
+        public const int CTRL_DGRAM_CONNECT               = 31;/* BIO dgram special */
+        public const int CTRL_DGRAM_SET_CONNECTED         = 32;/* allow for an externally connected socket to be passed in */
+        public const int CTRL_DGRAM_SET_RECV_TIMEOUT      = 33;/* setsockopt, essentially */
+        public const int CTRL_DGRAM_GET_RECV_TIMEOUT      = 34;/* getsockopt, essentially */
+        public const int CTRL_DGRAM_SET_SEND_TIMEOUT      = 35;/* setsockopt, essentially */
+        public const int CTRL_DGRAM_GET_SEND_TIMEOUT      = 36;/* getsockopt, essentially */
+
+        public const int CTRL_DGRAM_GET_RECV_TIMER_EXP    = 37;/* flag whether the last */
+        public const int CTRL_DGRAM_GET_SEND_TIMER_EXP    = 38;/* I/O operation tiemd out */
+
+		/* #ifdef IP_MTU_DISCOVER */
+        public const int CTRL_DGRAM_MTU_DISCOVER          = 39;/* set DF bit on egress packets */
+		/* #endif */
+
+        public const int CTRL_DGRAM_QUERY_MTU             = 40;/* as kernel for current MTU */
+        public const int CTRL_DGRAM_GET_FALLBACK_MTU      = 47;
+        public const int CTRL_DGRAM_GET_MTU               = 41;/* get cached value for MTU */
+        public const int CTRL_DGRAM_SET_MTU               = 42;/* set cached value for MTU. want to use this if asking the kernel fails */
+
+        public const int CTRL_DGRAM_MTU_EXCEEDED          = 43;/* check whether the MTU was exceed in the previous write operation */
+
+        public const int CTRL_DGRAM_GET_PEER              = 46;
+        public const int CTRL_DGRAM_SET_PEER              = 44;/* Destination for the data */
+
+        public const int CTRL_DGRAM_SET_NEXT_TIMEOUT      = 45;/* Next DTLS handshake timeout to adjust socket timeouts */
+        public const int CTRL_DGRAM_SET_DONT_FRAG         = 48;
+
+        public const int CTRL_DGRAM_GET_MTU_OVERHEAD      = 49;
+
+		/* Deliberately outside of OPENSSL_NO_SCTP - used in bss_dgram.c */
+        public const int CTRL_DGRAM_SCTP_SET_IN_HANDSHAKE = 50;
+#if !OPENSSL_NO_SCTP
+		/* SCTP stuff */
+        public const int CTRL_DGRAM_SCTP_ADD_AUTH_KEY     = 51;
+        public const int CTRL_DGRAM_SCTP_NEXT_AUTH_KEY    = 52;
+        public const int CTRL_DGRAM_SCTP_AUTH_CCS_RCVD    = 53;
+        public const int CTRL_DGRAM_SCTP_GET_SNDINFO      = 60;
+        public const int CTRL_DGRAM_SCTP_SET_SNDINFO      = 61;
+        public const int CTRL_DGRAM_SCTP_GET_RCVINFO      = 62;
+        public const int CTRL_DGRAM_SCTP_SET_RCVINFO      = 63;
+        public const int CTRL_DGRAM_SCTP_GET_PRINFO       = 64;
+        public const int CTRL_DGRAM_SCTP_SET_PRINFO       = 65;
+        public const int CTRL_DGRAM_SCTP_SAVE_SHUTDOWN    = 70;
+#endif
+
+        public const int CTRL_DGRAM_SET_PEEK_MODE = 71;
+
+		/* modifiers */
+        public const int FP_READ            = 0x02;
+        public const int FP_WRITE           = 0x04;
+        public const int FP_APPEND          = 0x08;
+        public const int FP_TEXT            = 0x10;
+
+        public const int FLAGS_READ         = 0x01;
+        public const int FLAGS_WRITE        = 0x02;
+        public const int FLAGS_IO_SPECIAL   = 0x04;
+        public const int FLAGS_RWS          = FLAGS_READ | FLAGS_WRITE | FLAGS_IO_SPECIAL;
+        public const int FLAGS_SHOULD_RETRY = 0x08;
+#if !BIO_FLAGS_UPLINK
+		/*
+		 * "UPLINK" flag denotes file descriptors provided by application. It
+		 * defaults to 0, as most platforms don't require UPLINK interface.
+		 */
+        public const int FLAGS_UPLINK       = 0;
+#endif
+
+        public const int FLAGS_BASE64_NO_NL = 0x100;
+
+		/*
+		 * This is used with memory BIOs:
+		 * BIO_FLAGS_MEM_RDONLY means we shouldn't free up or change the data in any way;
+		 * BIO_FLAGS_NONCLEAR_RST means we shouldn't clear data on reset.
+		 */
+        public const int FLAGS_MEM_RDONLY   = 0x200;
+        public const int FLAGS_NONCLEAR_RST = 0x400;
+        public const int FLAGS_IN_EOF       = 0x800;
+
+		[CRepr]
+		public struct addr_st
+		{
+
+		}
+		public typealias ADDR = addr_st;
+
+		[CRepr]
+		public struct addrinfo_st
+		{
+
+		}
+		public typealias ADDRINFO = addrinfo_st;
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_get_new_index")]
+		public extern static int get_new_index();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_set_flags")]
+		public extern static void set_flags(bio_st* b, int flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_test_flags")]
+		public extern static int test_flags(bio_st* b, int flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_clear_flags")]
+		public extern static void clear_flags(bio_st* b, int flags);
+
+		[Inline]
+		public static int get_flags(bio_st* b) => test_flags(b, ~(0x0));
+		[Inline]
+		public static void set_retry_special(bio_st* b) => set_flags(b, FLAGS_IO_SPECIAL | FLAGS_SHOULD_RETRY);
+		[Inline]
+		public static void set_retry_read(bio_st* b) => set_flags(b, FLAGS_READ | FLAGS_SHOULD_RETRY);
+		[Inline]
+		public static void set_retry_write(bio_st* b) => set_flags(b, FLAGS_WRITE | FLAGS_SHOULD_RETRY);
+
+		/* These are normally used internally in BIOs */
+		[Inline]
+		public static void clear_retry_flags(bio_st* b) => clear_flags(b, FLAGS_RWS | FLAGS_SHOULD_RETRY);
+		[Inline]
+		public static int get_retry_flags(bio_st* b) => test_flags(b, FLAGS_RWS | FLAGS_SHOULD_RETRY);
+
+		/* These should be used by the application to tell why we should retry */
+		[Inline]
+		public static int should_read(bio_st* a) => test_flags(a, FLAGS_READ);
+		[Inline]
+		public static int should_write(bio_st* a) => test_flags(a, FLAGS_WRITE);
+		[Inline]
+		public static int should_io_special(bio_st* a) => test_flags(a, FLAGS_IO_SPECIAL);
+		[Inline]
+		public static int retry_type(bio_st* a) => test_flags(a, FLAGS_RWS);
+		[Inline]
+		public static int should_retry(bio_st* a) => test_flags(a, FLAGS_SHOULD_RETRY);
+
+		/*
+		 * The next three are used in conjunction with the BIO_should_io_special()
+		 * condition.  After this returns true, bio_st* BIO_get_retry_BIO(bio_st* bio, int* reason);
+		 * will walk the BIO stack and return the 'reason' for the special
+		 * and the offending BIO. Given a BIO, BIO_get_retry_reason(bio) will return
+		 * the code.
+		 */
+		/*
+		 * Returned from the SSL bio when the certificate retrieval code had an error
+		 */
+        public const int RR_SSL_X509_LOOKUP = 0x01;
+		/* Returned from the connect BIO when a connect would have blocked */
+        public const int RR_CONNECT         = 0x02;
+		/* Returned from the accept BIO when an accept would have blocked */
+        public const int RR_ACCEPT          = 0x03;
+
+		/* These are passed by the BIO callback */
+        public const int CB_FREE  = 0x01;
+        public const int CB_READ  = 0x02;
+        public const int CB_WRITE = 0x03;
+        public const int CB_PUTS  = 0x04;
+        public const int CB_GETS  = 0x05;
+        public const int CB_CTRL  = 0x06;
+
+		/*
+		 * The callback is called before and after the underling operation, The
+		 * BIO_CB_RETURN flag indicates if it is after the call
+		 */
+        public const int CB_RETURN = 0x80;
+
+		[Inline]
+        public static int CB_return(int a) => a | CB_RETURN;
+		[Inline]
+        public static bool cb_pre(int a) => (a & CB_RETURN) <= 0;
+		[Inline]
+        public static bool cb_post(int a) => (a & CB_RETURN) > 0;
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_get_callback")]
+		public extern static callback_fn get_callback(bio_st* b);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_set_callback")]
+		public extern static void set_callback(bio_st* b, callback_fn callback);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_get_callback_ex")]
+		public extern static callback_fn_ex get_callback_ex(bio_st* b);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_set_callback_ex")]
+		public extern static void set_callback_ex(bio_st* b, callback_fn_ex callback);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_get_callback_arg")]
+		public extern static char8* get_callback_arg(bio_st* b);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_set_callback_arg")]
+		public extern static void set_callback_arg(bio_st* b, char8* arg);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_method_name")]
+		public extern static char8* method_name(bio_st* b);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_method_type")]
+		public extern static int method_type(bio_st* b);
+
+		/* Prefix and suffix callback in ASN1 BIO */
+		public function int asn1_ps_func(bio_st* b, uint8** pbuf, int* plen, void* parg);
+
+#if !OPENSSL_NO_SCTP
+		/* SCTP parameter structs */
+		[CRepr]
+		public struct bio_dgram_sctp_sndinfo {
+		    public uint16 snd_sid;
+		    public uint16 snd_flags;
+		    public uint32 snd_ppid;
+		    public uint32 snd_context;
+		}
+		
+		[CRepr]
+		public struct bio_dgram_sctp_rcvinfo {
+		    public uint16 rcv_sid;
+		    public uint16 rcv_ssn;
+		    public uint16 rcv_flags;
+		    public uint32 rcv_ppid;
+		    public uint32 rcv_tsn;
+		    public uint32 rcv_cumtsn;
+		    public uint32 rcv_context;
+		}
+		
+		[CRepr]
+		public struct bio_dgram_sctp_prinfo {
+		    public uint16 pr_policy;
+		    public uint32 pr_value;
+		}
+#endif
+
+		/*
+		 * #define BIO_CONN_get_param_hostname BIO_ctrl
+		 */
+
+		public const int C_SET_CONNECT                 = 100;
+		public const int C_DO_STATE_MACHINE            = 101;
+		public const int C_SET_NBIO                    = 102;
+		/* public const int C_SET_PROXY_PARAM             = 103; */
+		public const int C_SET_FD                      = 104;
+		public const int C_GET_FD                      = 105;
+		public const int C_SET_FILE_PTR                = 106;
+		public const int C_GET_FILE_PTR                = 107;
+		public const int C_SET_FILENAME                = 108;
+		public const int C_SET_SSL                     = 109;
+		public const int C_GET_SSL                     = 110;
+		public const int C_SET_MD                      = 111;
+		public const int C_GET_MD                      = 112;
+		public const int C_GET_CIPHER_STATUS           = 113;
+		public const int C_SET_BUF_MEM                 = 114;
+		public const int C_GET_BUF_MEM_PTR             = 115;
+		public const int C_GET_BUFF_NUM_LINES          = 116;
+		public const int C_SET_BUFF_SIZE               = 117;
+		public const int C_SET_ACCEPT                  = 118;
+		public const int C_SSL_MODE                    = 119;
+		public const int C_GET_MD_CTX                  = 120;
+		/* public const int C_GET_PROXY_PARAM             = 121; */
+		public const int C_SET_BUFF_READ_DATA          = 122;/* data to read first */
+		public const int C_GET_CONNECT                 = 123;
+		public const int C_GET_ACCEPT                  = 124;
+		public const int C_SET_SSL_RENEGOTIATE_BYTES   = 125;
+		public const int C_GET_SSL_NUM_RENEGOTIATES    = 126;
+		public const int C_SET_SSL_RENEGOTIATE_TIMEOUT = 127;
+		public const int C_FILE_SEEK                   = 128;
+		public const int C_GET_CIPHER_CTX              = 129;
+		public const int C_SET_BUF_MEM_EOF_RETURN      = 130;/* return end of input value */
+		public const int C_SET_BIND_MODE               = 131;
+		public const int C_GET_BIND_MODE               = 132;
+		public const int C_FILE_TELL                   = 133;
+		public const int C_GET_SOCKS                   = 134;
+		public const int C_SET_SOCKS                   = 135;
+		
+		public const int C_SET_WRITE_BUF_SIZE          = 136;/* for BIO_s_bio */
+		public const int C_GET_WRITE_BUF_SIZE          = 137;
+		public const int C_MAKE_BIO_PAIR               = 138;
+		public const int C_DESTROY_BIO_PAIR            = 139;
+		public const int C_GET_WRITE_GUARANTEE         = 140;
+		public const int C_GET_READ_REQUEST            = 141;
+		public const int C_SHUTDOWN_WR                 = 142;
+		public const int C_NREAD0                      = 143;
+		public const int C_NREAD                       = 144;
+		public const int C_NWRITE0                     = 145;
+		public const int C_NWRITE                      = 146;
+		public const int C_RESET_READ_REQUEST          = 147;
+		public const int C_SET_MD_CTX                  = 148;
+		
+		public const int C_SET_PREFIX                  = 149;
+		public const int C_GET_PREFIX                  = 150;
+		public const int C_SET_SUFFIX                  = 151;
+		public const int C_GET_SUFFIX                  = 152;
+
+		public const int C_SET_EX_ARG                  = 153;
+		public const int C_GET_EX_ARG                  = 154;
+		
+		public const int C_SET_CONNECT_MODE            = 155;
+
+		[Inline]
+		public static int set_app_data(bio_st* s, void* arg) => set_ex_data(s, 0, arg);
+		[Inline]
+		public static int get_app_data(bio_st* s) => get_ex_data(bio_st* s, 0);
+		
+		[Inline]
+		public static int set_nbio(bio_st* b, int n) => ctrl(b, C_SET_NBIO, n, null);
+
+#if !OPENSSL_NO_SOCK
+		/* IP families we support, for BIO_s_connect() and BIO_s_accept() */
+		/* Note: the underlying operating system may not support some of them */
+		public const int FAMILY_IPV4  = 4;
+		public const int FAMILY_IPV6  = 6;
+		public const int FAMILY_IPANY = 256;
+
+		/* BIO_s_connect() */
+		[Inline]
+		public static int set_conn_hostname(bio_st* b, char8* name) => ctrl(b, C_SET_CONNECT, 0, name);
+		[Inline]
+		public static int set_conn_port(bio_st* b, char8* port) => ctrl(b, C_SET_CONNECT, 1, port);
+		[Inline]
+		public static int set_conn_address(bio_st* b, char8* addr) => ctrl(b, C_SET_CONNECT, 2, addr);
+		[Inline]
+		public static int set_conn_ip_family(bio_st* b, int f) => int_ctrl(b, C_SET_CONNECT, 3, f);
+		[Inline]
+		public static char8* get_conn_hostname(bio_st* b) => (char8*)ptr_ctrl(b, C_GET_CONNECT, 0);
+		[Inline]
+		public static char8* get_conn_port(bio_st* b) => (char8*)ptr_ctrl(b, C_GET_CONNECT, 1);
+		[Inline]
+		public static ADDR* get_conn_address(bio_st* b) => (ADDR*)ptr_ctrl(b, C_GET_CONNECT, 2);
+		[Inline]
+		public static int get_conn_ip_family(bio_st* b) => ctrl(b, C_GET_CONNECT, 3, null);
+		[Inline]
+		public static int set_conn_mode(bio_st* b, int n) => ctrl(b, C_SET_CONNECT_MODE, n, null);
+
+		/* BIO_s_accept() */
+		[Inline]
+		public static int set_accept_name(bio_st* b, char8* name) => ctrl(b, C_SET_ACCEPT, 0, name);
+		[Inline]
+		public static int set_accept_port(bio_st* b, char8* port) => ctrl(b, C_SET_ACCEPT, 1, port);
+		[Inline]
+		public static char8* get_accept_name(bio_st* b) => (char8*)ptr_ctrl(b, C_GET_ACCEPT, 0);
+		[Inline]
+		public static char8* get_accept_port(bio_st* b) => (char8*)ptr_ctrl(b, C_GET_ACCEPT, 1);
+		[Inline]
+		public static char8* get_peer_name(bio_st* b) => (char8*)ptr_ctrl(b, C_GET_ACCEPT, 2);
+		[Inline]
+		public static char8* get_peer_port(bio_st* b) => (char8*)ptr_ctrl(b, C_GET_ACCEPT, 3);
+		/*
+		[Inline]
+		public static int set_nbio(bio_st* b, int n) => ctrl(b, C_SET_NBIO, n, null);
+		*/
+		[Inline]
+		public static int set_nbio_accept(bio_st* b, bool n) => ctrl(b, C_SET_ACCEPT, 2, n ? (void*)"a" : null);
+		[Inline]
+		public static int set_accept_bios(bio_st* b, char8* bio) => ctrl(b, C_SET_ACCEPT,3, bio);
+		[Inline]
+		public static int set_accept_ip_family(bio_st* b, int f) => int_ctrl(b, C_SET_ACCEPT, 4, f);
+		[Inline]
+		public static int get_accept_ip_family(bio_st* b) => ctrl(b, C_GET_ACCEPT, 4, null);
+
+		/* Aliases kept for backward compatibility */
+		public const int BIND_NORMAL              = 0;
+		public const int BIND_REUSEADDR           = SOCK_REUSEADDR;
+		public const int BIND_REUSEADDR_IF_UNUSED = SOCK_REUSEADDR;
+		[Inline]
+		public static int set_bind_mode(bio_st* b, int mode) => ctrl(b, C_SET_BIND_MODE, mode, null);
+		[Inline]
+		public static int get_bind_mode(bio_st* b) => ctrl(b, C_GET_BIND_MODE, 0, null);
+
+		/* BIO_s_accept() and BIO_s_connect() */
+		[Inline]
+		public static int do_connect(bio_st* b) => do_handshake(b);
+		[Inline]
+		public static int do_accept(bio_st* b) => do_handshake(b);
+#endif /* OPENSSL_NO_SOCK */
+
+		[Inline]
+		public static int do_handshake(bio_st* b) => ctrl(b, C_DO_STATE_MACHINE, 0, null);
+
+		/* BIO_s_datagram(), BIO_s_fd(), BIO_s_socket(), BIO_s_accept() and BIO_s_connect() */
+		[Inline]
+		public static int set_fd(bio_st* b, int fd, int c) => int_ctrl(b, C_SET_FD, c, fd);
+		[Inline]
+		public static int get_fd(bio_st* b, char8* c) => ctrl(b, C_GET_FD, 0, c);
+
+		/* BIO_s_file() */
+		[Inline]
+		public static int set_fp(bio_st* b, char8* fp, int c) => ctrl(b, C_SET_FILE_PTR, c, fp);
+		[Inline]
+		public static int get_fp(bio_st* b, char8* fpp) => ctrl(b, C_GET_FILE_PTR, 0, fpp);
+
+		/* BIO_s_fd() and BIO_s_file() */
+		[Inline]
+		public static int seek(bio_st* b, int ofs) => ctrl(b, C_FILE_SEEK, ofs, null);
+		[Inline]
+		public static int tell(bio_st* b) => ctrl(b, C_FILE_TELL, 0, null);
+
+		/*
+		 * name is cast to lose const, but might be better to route through a
+		 * function so we can do it safely
+		 */
+#if CONST_STRICT
+		/*
+		 * If you are wondering why this isn't defined, its because CONST_STRICT is
+		 * purely a compile-time kludge to allow const to be checked.
+		 */
+		int BIO_read_filename(bio_st* b, char8* name);
+#else
+		[Inline]
+		public static int read_filename(bio_st* b, char8* name) => ctrl(b, C_SET_FILENAME, CLOSE | FP_READ, name);
+#endif
+		[Inline]
+		public static int write_filename(bio_st* b, char8* name) => ctrl(b, C_SET_FILENAME, CLOSE | FP_WRITE, name);
+		[Inline]
+		public static int append_filename(bio_st* b, char8* name) => ctrl(b, C_SET_FILENAME, CLOSE | FP_APPEND, name);
+		[Inline]
+		public static int rw_filename(bio_st* b, char8* name) => ctrl(b, C_SET_FILENAME,  CLOSE | FP_READ | FP_WRITE, name);
+
+		/*
+		 * WARNING WARNING, this ups the reference count on the read bio of the SSL
+		 * structure.  This is because the ssl read BIO is now pointed to by the
+		 * next_bio field in the bio.  So when you free the BIO, make sure you are
+		 * doing a BIO_free_all() to catch the underlying BIO.
+		 */
+		[Inline]
+		public static int set_ssl(bio_st* b, char8* ssl, int c) => ctrl(b, C_SET_SSL, c, ssl);
+		[Inline]
+		public static int get_ssl(bio_st* b, char8* sslp) => ctrl(b, C_GET_SSL, 0, sslp);
+		[Inline]
+		public static int set_ssl_mode(bio_st* b, int client) => ctrl(b, C_SSL_MODE, client, null);
+		[Inline]
+		public static int set_ssl_renegotiate_bytes(bio_st* b, int num) => ctrl(b, C_SET_SSL_RENEGOTIATE_BYTES, num, null);
+		[Inline]
+		public static int get_num_renegotiates(bio_st* b) => ctrl(b, C_GET_SSL_NUM_RENEGOTIATES, 0, null);
+		[Inline]
+		public static int set_ssl_renegotiate_timeout(bio_st* b, int seconds) => ctrl(b, C_SET_SSL_RENEGOTIATE_TIMEOUT, seconds, null);
+
+		/* defined in evp.h */
+		/*
+		[Inline]
+		public static int BIO_set_md(bio_st* b, char8* md) => ctrl(b, C_SET_MD, 1, md);
+		*/
+
+		[Inline]
+		public static int get_mem_data(bio_st* b, char8* pp) => ctrl(b, CTRL_INFO, 0, pp);
+		[Inline]
+		public static int set_mem_buf(bio_st* b, char8* bm, int c) => ctrl(b, C_SET_BUF_MEM, c, bm);
+		[Inline]
+		public static int get_mem_ptr(bio_st* b, char8* pp) => ctrl(b, C_GET_BUF_MEM_PTR, 0, pp);
+		[Inline]
+		public static int set_mem_eof_return(bio_st* b,int v) => ctrl(b, C_SET_BUF_MEM_EOF_RETURN, v, null);
+
+		/* For the BIO_f_buffer() type */
+		[Inline]
+		public static int get_buffer_num_lines(bio_st* b) => ctrl(b, C_GET_BUFF_NUM_LINES, 0, null);
+		[Inline]
+		public static int set_buffer_size(bio_st* b,int size) => ctrl(b, C_SET_BUFF_SIZE,size, null);
+		[Inline]
+		public static int set_read_buffer_size(bio_st* b,int size) => int_ctrl(b, C_SET_BUFF_SIZE, size, 0);
+		[Inline]
+		public static int set_write_buffer_size(bio_st* b,int size) => int_ctrl(b, C_SET_BUFF_SIZE, size, 1);
+		[Inline]
+		public static int set_buffer_read_data(bio_st* b, char8* buf,int num) => ctrl(b, C_SET_BUFF_READ_DATA, num, buf);
+
+		/* Don't use the next one unless you know what you are doing :-) */
+		[Inline]
+		public static int dup_state(bio_st* b, char8* ret) => ctrl(b, CTRL_DUP, 0, ret);
+
+		[Inline]
+		public static int reset(bio_st* b) => ctrl(b, CTRL_RESET, 0, null);
+		[Inline]
+		public static int eof(bio_st* b) => ctrl(b, CTRL_EOF, 0, null);
+		[Inline]
+		public static int set_close(bio_st* b, int c) => ctrl(b, CTRL_SET_CLOSE, c, null);
+		[Inline]
+		public static int get_close(bio_st* b) => ctrl(b, CTRL_GET_CLOSE, 0, null);
+		[Inline]
+		public static int pending(bio_st* b) => ctrl(b, CTRL_PENDING, 0, null);
+		[Inline]
+		public static int wpending(bio_st* b) => ctrl(b, CTRL_WPENDING, 0, null);
+		/* ...pending macros have inappropriate return type */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_ctrl_pending")]
+		public extern static uint ctrl_pending(bio_st* b);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_ctrl_wpending")]
+		public extern static uint ctrl_wpending(bio_st* b);
+		[Inline]
+		public static int flush(bio_st* b) => ctrl(b, CTRL_FLUSH, 0, null);
+		[Inline]
+		public static int get_info_callback(bio_st* b, info_cb* cbp) => ctrl(b, CTRL_GET_CALLBACK, 0, cbp);
+		[Inline]
+		public static int set_info_callback(bio_st* b, info_cb* cb) => callback_ctrl(b, CTRL_SET_CALLBACK, cb);
+
+		/* For the BIO_f_buffer() type */
+		[Inline]
+		public static int buffer_get_num_lines(bio_st* b) => ctrl(b, CTRL_GET, 0, null);
+		[Inline]
+		public static int buffer_peek(bio_st* b, char8* s, int l) => ctrl(b, CTRL_PEEK, l, s);
+
+		/* For BIO_s_bio() */
+		[Inline]
+		public static int set_write_buf_size(bio_st* b, int size) => ctrl(b, C_SET_WRITE_BUF_SIZE, size, null);
+		[Inline]
+		public static int get_write_buf_size(bio_st* b, int size) => ctrl(b, C_GET_WRITE_BUF_SIZE, size, null);
+		[Inline]
+		public static int make_bio_pair(bio_st* b1, bio_st* b2) => ctrl(b1, C_MAKE_BIO_PAIR, 0, b2);
+		[Inline]
+		public static int destroy_bio_pair(bio_st* b) => ctrl(b, C_DESTROY_BIO_PAIR, 0, null);
+		[Inline]
+		public static int shutdown_wr(bio_st* b) => ctrl(b, C_SHUTDOWN_WR, 0, null);
+		/* macros with inappropriate type -- but ...pending macros use int too: */
+		[Inline]
+		public static int get_write_guarantee(bio_st* b) => ctrl(b, C_GET_WRITE_GUARANTEE, 0, null);
+		[Inline]
+		public static int get_read_request(bio_st* b) => ctrl(b, C_GET_READ_REQUEST, 0, null);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_ctrl_get_write_guarantee")]
+		public extern static uint ctrl_get_write_guarantee(bio_st* b);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_ctrl_get_read_request")]
+		public extern static uint ctrl_get_read_request(bio_st* b);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_ctrl_reset_read_request")]
+		public extern static int ctrl_reset_read_request(bio_st* b);
+
+		/* ctrl macros for dgram */
+		[Inline]
+		public static int ctrl_dgram_connect(bio_st* b, char8* peer) => ctrl(b, CTRL_DGRAM_CONNECT, 0, peer);
+		[Inline]
+		public static int ctrl_set_connected(bio_st* b, char8* peer) => ctrl(b, CTRL_DGRAM_SET_CONNECTED, 0, peer);
+		[Inline]
+		public static int dgram_recv_timedout(bio_st* b) => ctrl(b, CTRL_DGRAM_GET_RECV_TIMER_EXP, 0, null);
+		[Inline]
+		public static int dgram_send_timedout(bio_st* b) => ctrl(b, CTRL_DGRAM_GET_SEND_TIMER_EXP, 0, null);
+		[Inline]
+		public static int dgram_get_peer(bio_st* b, char8* peer) => ctrl(b, CTRL_DGRAM_GET_PEER, 0, peer);
+		[Inline]
+		public static int dgram_set_peer(bio_st* b, char8* peer) => ctrl(b, CTRL_DGRAM_SET_PEER, 0, peer);
+		[Inline]
+		public static uint dgram_get_mtu_overhead(bio_st* b) => (uint)ctrl(b, CTRL_DGRAM_GET_MTU_OVERHEAD, 0, null);
+
+		[Inline]
+		public static int get_ex_new_index(int argl, void* argp, Crypto.EX_new* new_func, Crypto.EX_dup* dup_func, Crypto.EX_free* free_func) =>
+		    Crypto.get_ex_new_index(Crypto.EX_INDEX_BIO, argl, argp, new_func, dup_func, free_func);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_set_ex_data")]
+		public extern static int set_ex_data(bio_st* bio, int idx, void* data);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_get_ex_data")]
+		public extern static void* get_ex_data(bio_st* bio, int idx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_number_read")]
+		public extern static uint64 number_read(bio_st* bio);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_number_written")]
+		public extern static uint64 number_written(bio_st* bio);
+
+		/* For BIO_f_asn1() */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_asn1_set_prefix")]
+		public extern static int asn1_set_prefix(bio_st* b, asn1_ps_func* prefix, asn1_ps_func* prefix_free);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_asn1_get_prefix")]
+		public extern static int asn1_get_prefix(bio_st* b, asn1_ps_func** pprefix, asn1_ps_func** pprefix_free);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_asn1_set_suffix")]
+		public extern static int asn1_set_suffix(bio_st* b, asn1_ps_func* suffix, asn1_ps_func* suffix_free);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_asn1_get_suffix")]
+		public extern static int asn1_get_suffix(bio_st* b, asn1_ps_func** psuffix, asn1_ps_func** psuffix_free);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_s_file")]
+		public extern static METHOD* s_file();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_new_file")]
+		public extern static bio_st* new_file(char8* filename, char8* mode);
+#if !OPENSSL_NO_STDIO
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_new_fp")]
+		public extern static bio_st* new_fp(Platform.BfpFile* stream, int close_flag);
+#endif
+		bio_st* BIO_new(METHOD* type);
+		int BIO_free(bio_st* a);
+		void BIO_set_data(bio_st* a, void* ptr);
+		void* BIO_get_data(bio_st* a);
+		void BIO_set_init(bio_st* a, int init);
+		int BIO_get_init(bio_st* a);
+		void BIO_set_shutdown(bio_st* a, int shut);
+		int BIO_get_shutdown(bio_st* a);
+		void BIO_vfree(bio_st* a);
+		int BIO_up_ref(bio_st* a);
+		int BIO_read(bio_st* b, void* data, int dlen);
+		int BIO_read_ex(bio_st* b, void* data, uint dlen, uint* readbytes);
+		int BIO_gets(bio_st* bp, char8* buf, int size);
+		int BIO_write(bio_st* b, void* data, int dlen);
+		int BIO_write_ex(bio_st* b, void* data, uint dlen, uint* written);
+		int BIO_puts(bio_st* bp, char8* buf);
+		int BIO_indent(bio_st* b, int indent, int max);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_ctrl")]
+		public extern static int ctrl(bio_st* bp, int cmd, int larg, void* parg);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_callback_ctrl")]
+		public extern static int callback_ctrl(bio_st* b, int cmd, info_cb* fp);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_ptr_ctrl")]
+		public extern static void* ptr_ctrl(bio_st* bp, int cmd, int larg);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_int_ctrl")]
+		public extern static int int_ctrl(bio_st* bp, int cmd, int larg, int iarg);
+		bio_st* BIO_push(bio_st* b, bio_st* append_);
+		bio_st* BIO_pop(bio_st* b);
+		void BIO_free_all(bio_st* a);
+		bio_st* BIO_find_type(bio_st* b, int bio_type);
+		bio_st* BIO_next(bio_st* b);
+		void BIO_set_next(bio_st* b, bio_st* next);
+		bio_st* BIO_get_retry_BIO(bio_st* bio, int* reason);
+		int BIO_get_retry_reason(bio_st* bio);
+		void BIO_set_retry_reason(bio_st* bio, int reason);
+		bio_st* BIO_dup_chain(bio_st* inVal);
+
+		int BIO_nread0(bio_st* bio, char8** buf);
+		int BIO_nread(bio_st* bio, char8** buf, int num);
+		int BIO_nwrite0(bio_st* bio, char8** buf);
+		int BIO_nwrite(bio_st* bio, char8** buf, int num);
+
+		int BIO_debug_callback(bio_st* bio, int cmd, char8* argp, int argi, int argl, int ret);
+
+		METHOD* BIO_s_mem();
+		METHOD* BIO_s_secmem();
+		bio_st* BIO_new_mem_buf(void* buf, int len);
+#if !OPENSSL_NO_SOCK
+		METHOD* BIO_s_socket();
+		METHOD* BIO_s_connect();
+		METHOD* BIO_s_accept();
+#endif
+		METHOD* BIO_s_fd();
+		METHOD* BIO_s_log();
+		METHOD* BIO_s_bio();
+		METHOD* BIO_s_null();
+		METHOD* BIO_f_null();
+		METHOD* BIO_f_buffer();
+		METHOD* BIO_f_linebuffer();
+		METHOD* BIO_f_nbio_test();
+#if !OPENSSL_NO_DGRAM
+		METHOD* BIO_s_datagram();
+		int BIO_dgram_non_fatal_error(int error);
+		bio_st* BIO_new_dgram(int fd, int close_flag);
+	#if !OPENSSL_NO_SCTP
+		METHOD* BIO_s_datagram_sctp();
+		bio_st* BIO_new_dgram_sctp(int fd, int close_flag);
+		int BIO_dgram_is_sctp(bio_st* bio);
+		int BIO_dgram_sctp_notification_cb(bio_st* b, function void(bio_st* bio, void* context, void* buf) handle_notifications, void* context);
+		int BIO_dgram_sctp_wait_for_dry(bio_st* b);
+		int BIO_dgram_sctp_msg_waiting(bio_st* b);
+	#endif
+#endif
+
+#if !OPENSSL_NO_SOCK
+		int BIO_sock_should_retry(int i);
+		int BIO_sock_non_fatal_error(int error);
+#endif
+
+		int BIO_fd_should_retry(int i);
+		int BIO_fd_non_fatal_error(int error);
+		int BIO_dump_cb(function int(void* data, uint len, void* u) cb, void* u, char8* s, int len);
+		int BIO_dump_indent_cb(function int(void* data, uint len, void* u) cb, void* u, char8* s, int len, int indent);
+		int BIO_dump(bio_st* b, char8* bytes, int len);
+		int BIO_dump_indent(bio_st* b, char8* bytes, int len, int indent);
+#if !OPENSSL_NO_STDIO
+		int BIO_dump_fp(Platform.BfpFile* fp, char8* s, int len);
+		int BIO_dump_indent_fp(Platform.BfpFile* fp, char8* s, int len, int indent);
+#endif
+		int BIO_hex_string(bio_st* outVal, int indent, int width, uint8* data, int datalen);
+
+#if !OPENSSL_NO_SOCK
+		ADDR* BIO_ADDR_new();
+		int BIO_ADDR_rawmake(ADDR* ap, int family, void* where_, uint wherelen, uint16 port);
+		void BIO_ADDR_free(ADDR* ap);
+		void BIO_ADDR_clear(ADDR* ap);
+		int BIO_ADDR_family(ADDR* ap);
+		int BIO_ADDR_rawaddress(ADDR* ap, void* p, uint* l);
+		uint16 BIO_ADDR_rawport(ADDR* ap);
+		char8* BIO_ADDR_hostname_string(ADDR* ap, int numeric);
+		char8* BIO_ADDR_service_string(ADDR* ap, int numeric);
+		char8* BIO_ADDR_path_string(ADDR* ap);
+
+		ADDRINFO* BIO_ADDRINFO_next(ADDRINFO* bai);
+		int BIO_ADDRINFO_family(ADDRINFO* bai);
+		int BIO_ADDRINFO_socktype(ADDRINFO* bai);
+		int BIO_ADDRINFO_protocol(ADDRINFO* bai);
+		ADDR* BIO_ADDRINFO_address(ADDRINFO* bai);
+		void BIO_ADDRINFO_free(ADDRINFO* bai);
+
+		enum hostserv_priorities {
+		    BIO_PARSE_PRIO_HOST,
+			BIO_PARSE_PRIO_SERV
+		}
+		int BIO_parse_hostserv(char8* hostserv, char8** host, char8** service, hostserv_priorities hostserv_prio);
+		enum lookup_type {
+		    BIO_LOOKUP_CLIENT,
+			BIO_LOOKUP_SERVER
+		}
+		int BIO_lookup(char8* host, char8* service, lookup_type lookup_type, int family, int socktype, ADDRINFO** res);
+		int BIO_lookup_ex(char8* host, char8* service, int lookup_type, int family, int socktype, int protocol, ADDRINFO** res);
+		int BIO_sock_error(int sock);
+		int BIO_socket_ioctl(int fd, int type, void* arg);
+		int BIO_socket_nbio(int fd, int mode);
+		int BIO_sock_init();
+#  define BIO_sock_cleanup() while(0) continue
+		int BIO_set_tcp_ndelay(int sock, int turn_on);
+
+		hostent* BIO_gethostbyname(char8* name);
+		int BIO_get_port(char8* str, uint16* port_ptr);
+		int BIO_get_host_ip(char8* str, uint8* ip);
+		int BIO_get_accept_socket(char8* host_port, int mode);
+		int BIO_accept(int sock, char8** ip_port);
+
+		[CRepr, Union]
+		public struct sock_info_u {
+		    ADDR* addr;
+		}
+		enum sock_info_type {
+		    BIO_SOCK_INFO_ADDRESS
+		}
+		int BIO_sock_info(int sock, sock_info_type type, sock_info_u* info);
+
+		public const int SOCK_REUSEADDR = 0x01;
+		public const int SOCK_V6_ONLY   = 0x02;
+		public const int SOCK_KEEPALIVE = 0x04;
+		public const int SOCK_NONBLOCK  = 0x08;
+		public const int SOCK_NODELAY   = 0x10;
+
+		int BIO_socket(int domain, int socktype, int protocol, int options);
+		int BIO_connect(int sock, ADDR* addr, int options);
+		int BIO_bind(int sock, ADDR* addr, int options);
+		int BIO_listen(int sock, ADDR* addr, int options);
+		int BIO_accept_ex(int accept_sock, ADDR* addr, int options);
+		int BIO_closesocket(int sock);
+
+		bio_st* BIO_new_socket(int sock, int close_flag);
+		bio_st* BIO_new_connect(char8* host_port);
+		bio_st* BIO_new_accept(char8* host_port);
+#endif /* OPENSSL_NO_SOCK*/
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_new_fd")]
+		public extern static bio_st* new_fd(int fd, int close_flag);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_new_bio_pair")]
+		public extern static int new_bio_pair(bio_st** bio1, uint writebuf1, bio_st** bio2, uint writebuf2);
+		/*
+		 * If successful, returns 1 and in *bio1, *bio2 two BIO pair endpoints.
+		 * Otherwise returns 0 and sets *bio1 and *bio2 to NULL. Size 0 uses default
+		 * value.
+		 */
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_copy_next_retry")]
+		public extern static void copy_next_retry(bio_st* b);
+
+		/*
+		 * long BIO_ghbn_ctrl(int cmd,int iarg,char8* parg);
+		 */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_printf")]
+		public extern static int printf(bio_st* bio, char8* format, ...);
+		/*
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_vprintf")]
+		public extern static int vprintf(bio_st* bio, char8* format, va_list args);
+		*/
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_snprintf")]
+		public extern static int snprintf(char8* buf, uint n, char8* format, ...);
+		/*
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_vsnprintf")]
+		public extern static int vsnprintf(char8* buf, uint n, char8* format, va_list args);
+		*/
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_new")]
+		public extern static METHOD* meth_new(int type, char8* name);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_free")]
+		public extern static void meth_free(METHOD* biom);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_get_write")]
+		public extern static function int(bio_st*, char8*, int) meth_get_write(METHOD* biom);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_get_write_ex")]
+		public extern static function int(bio_st*, char8*, uint, uint*) meth_get_write_ex(METHOD* biom);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_set_write")]
+		public extern static int meth_set_write(METHOD* biom, function int(bio_st*, char8*, int) write);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_set_write_ex")]
+		public extern static int meth_set_write_ex(METHOD* biom, function int(bio_st*, char8*, uint, uint*) bwrite);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_get_read")]
+		public extern static function int(bio_st*, char8*, int) meth_get_read(METHOD* biom);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_get_read_ex")]
+		public extern static function int(bio_st*, char8*, uint, uint*) meth_get_read_ex(METHOD* biom);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_set_read")]
+		public extern static int meth_set_read(METHOD* biom, function int(bio_st*, char8*, int) read);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_set_read_ex")]
+		public extern static int meth_set_read_ex(METHOD* biom, function int(bio_st*, char8*, uint, uint*) bread);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_get_puts")]
+		public extern static function int(bio_st*, char8*) meth_get_puts(METHOD* biom);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_set_puts")]
+		public extern static int meth_set_puts(METHOD* biom, function int(bio_st*, char8*) puts);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_get_gets")]
+		public extern static function int(bio_st*, char8*, int) meth_get_gets(METHOD* biom);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_set_gets")]
+		public extern static int meth_set_gets(METHOD* biom, function int(bio_st*, char8*, int) gets);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_get_ctrl")]
+		public extern static function int(bio_st* , int, int, void*) meth_get_ctrl(METHOD* biom);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_set_ctrl")]
+		public extern static int meth_set_ctrl(METHOD* biom, function int(bio_st*, int, int, void*) ctrl);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("meth_get_create")]
+		public extern static function int(bio_st*) BIO_meth_get_create(METHOD* bion);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_set_create")]
+		public extern static int meth_set_create(METHOD* biom, function int(bio_st*) create);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_get_destroy")]
+		public extern static function int(bio_st*) meth_get_destroy(METHOD* biom);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_set_destroy")]
+		public extern static int meth_set_destroy(METHOD* biom, function int(bio_st*) destroy);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_get_callback_ctrl")]
+		public extern static function int(bio_st*, int, info_cb*) meth_get_callback_ctrl(METHOD* biom);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_set_callback_ctrl")]
+		public extern static int meth_set_callback_ctrl(METHOD* biom, function int(bio_st*, int, info_cb*) callback_ctrl);
+
+		/*
+		** libssl-1_1.dll
+		**   1    0 0000236A BIO_f_ssl
+		**   2    1 00001320 BIO_new_buffer_ssl_connect
+		**   3    2 000024D7 BIO_new_ssl
+		**   4    3 0000182A BIO_new_ssl_connect
+		**   5    4 000019C9 BIO_ssl_copy_session_id
+		**   6    5 000015DC BIO_ssl_shutdown
+		*/
 	}
 }
