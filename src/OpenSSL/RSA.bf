@@ -13,5 +13,7 @@ namespace Beef_Net.OpenSSL
 {
 	sealed abstract class RSA
 	{
+#if !OPENSSL_NO_RSA
+#endif
 	}
 }

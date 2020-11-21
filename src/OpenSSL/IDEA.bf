@@ -13,5 +13,37 @@ namespace Beef_Net.OpenSSL
 {
 	sealed abstract class IDEA
 	{
+#if !OPENSSL_NO_IDEA
+		typealias IDEA_INT = uint;
+		
+		public const int ENCRYPT = 1;
+		public const int DECRYPT = 0;
+		
+		public const int BLOCK      = 8;
+		public const int KEY_LENGTH = 16;
+
+		[CRepr]
+		public struct key_st {
+		    public IDEA_INT[9][6] data;
+		}
+		public typealias KEY_SCHEDULE = key_st;
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("IDEA_options")]
+		public extern static char8* options();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("IDEA_ecb_encrypt")]
+		public extern static void ecb_encrypt(uint8* inVal, uint8* outVal, KEY_SCHEDULE* ks);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("IDEA_set_encrypt_key")]
+		public extern static void set_encrypt_key(uint8* key, KEY_SCHEDULE* ks);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("IDEA_set_decrypt_key")]
+		public extern static void set_decrypt_key(KEY_SCHEDULE* ek, KEY_SCHEDULE* dk);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("IDEA_cbc_encrypt")]
+		public extern static void cbc_encrypt(uint8* inVal, uint8* outVal, int length, KEY_SCHEDULE* ks, uint8* iv, int enc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("IDEA_cfb64_encrypt")]
+		public extern static void cfb64_encrypt(uint8* inVal, uint8* outVal, int length, KEY_SCHEDULE* ks, uint8* iv, int* num, int enc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("IDEA_ofb64_encrypt")]
+		public extern static void ofb64_encrypt(uint8* inVal, uint8* outVal, int length, KEY_SCHEDULE* ks, uint8* iv, int* num);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("IDEA_encrypt")]
+		public extern static void encrypt(uint* inVal, KEY_SCHEDULE* ks);
+#endif
 	}
 }

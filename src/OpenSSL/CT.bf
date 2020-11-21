@@ -13,5 +13,7 @@ namespace Beef_Net.OpenSSL
 {
 	sealed abstract class CT
 	{
+#if !OPENSSL_NO_CT
+#endif
 	}
 }

@@ -13,5 +13,7 @@ namespace Beef_Net.OpenSSL
 {
 	sealed abstract class DH
 	{
+#if !OPENSSL_NO_DH
+#endif
 	}
 }

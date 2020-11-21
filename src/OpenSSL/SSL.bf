@@ -472,6 +472,10 @@ namespace Beef_Net.OpenSSL
 	*/
 	sealed abstract class SSL
 	{
+		/* Not even going to port this, hell no. Feel free to contrib */
+		[CRepr]
+		public struct method_st { }
+		public typealias METHOD = method_st;
 	}
 
 	sealed abstract class SSL2

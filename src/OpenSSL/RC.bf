@@ -13,13 +13,19 @@ namespace Beef_Net.OpenSSL
 {
 	sealed abstract class RC2
 	{
+#if !OPENSSL_NO_RC2
+#endif
 	}
 
 	sealed abstract class RC4
 	{
+#if !OPENSSL_NO_RC4
+#endif
 	}
 
 	sealed abstract class RC5
 	{
+#if !OPENSSL_NO_RC5
+#endif
 	}
 }

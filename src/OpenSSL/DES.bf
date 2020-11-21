@@ -13,5 +13,7 @@ namespace Beef_Net.OpenSSL
 {
 	sealed abstract class DES
 	{
+#if !OPENSSL_NO_DES
+#endif
 	}
 }

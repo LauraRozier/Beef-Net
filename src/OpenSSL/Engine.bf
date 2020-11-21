@@ -13,5 +13,7 @@ namespace Beef_Net.OpenSSL
 {
 	sealed abstract class Engine
 	{
+#if !OPENSSL_NO_ENGINE
+#endif
 	}
 }

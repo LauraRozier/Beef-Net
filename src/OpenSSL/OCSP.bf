@@ -13,5 +13,7 @@ namespace Beef_Net.OpenSSL
 {
 	sealed abstract class OCSP
 	{
+#if !OPENSSL_NO_OCSP
+#endif
 	}
 }

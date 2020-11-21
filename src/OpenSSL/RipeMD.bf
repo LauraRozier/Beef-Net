@@ -13,5 +13,7 @@ namespace Beef_Net.OpenSSL
 {
 	sealed abstract class RipeMD
 	{
+#if !OPENSSL_NO_RMD160
+#endif
 	}
 }

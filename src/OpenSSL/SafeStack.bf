@@ -13,5 +13,26 @@ namespace Beef_Net.OpenSSL
 {
 	sealed abstract class SafeStack
 	{
+		/*-
+		 * Strings are special: normally an lhash entry will point to a single
+		 * (somewhat) mutable object. In the case of strings:
+		 *
+		 * a) Instead of a single char, there is an array of chars, NUL-terminated.
+		 * b) The string may have be immutable.
+		 *
+		 * So, they need their own declarations. Especially important for
+		 * type-checking tools, such as Deputy.
+		 *
+		 * In practice, however, it appears to be hard to have a const
+		 * string. For now, I'm settling for dealing with the fact it is a
+		 * string at all.
+		 */
+		public typealias OPENSSL_STRING = char8*;
+		public typealias OPENSSL_CSTRING = char8*;
+		/*
+		 * Similarly, we sometimes use a block of characters, NOT nul-terminated.
+		 * These should also be distinguished from "normal" stacks.
+		 */
+		public typealias OPENSSL_BLOCK = void*;
 	}
 }

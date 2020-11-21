@@ -13,5 +13,7 @@ namespace Beef_Net.OpenSSL
 {
 	sealed abstract class DSA
 	{
+#if !OPENSSL_NO_DSA
+#endif
 	}
 }

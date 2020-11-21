@@ -36,10 +36,7 @@ namespace Beef_Net.OpenSSL
 		public const int ENGINES_DIR = 5;
 		
 		[Inline, Obsolete("No longer needed, so this is a no-op", true)]
-		public static void malloc_init()
-		{
-			while(false) continue;
-		}
+		public static void malloc_init() { while(false) continue; }
 
 		[Inline]
 		public static void* malloc(uint num) => Crypto.malloc(num, OPENSSL_FILE, OPENSSL_LINE);

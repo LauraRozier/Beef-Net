@@ -14,5 +14,19 @@ namespace Beef_Net.OpenSSL
 	// Includes ECDH and ECDSA
 	sealed abstract class EC
 	{
+#if !OPENSSL_NO_EC
+#endif
+	}
+
+	sealed abstract class ECDH
+	{
+#if !OPENSSL_NO_EC
+#endif
+	}
+
+	sealed abstract class ECDSA
+	{
+#if !OPENSSL_NO_EC
+#endif
 	}
 }

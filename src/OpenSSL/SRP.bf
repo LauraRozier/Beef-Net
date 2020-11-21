@@ -13,6 +13,7 @@ namespace Beef_Net.OpenSSL
 {
 	sealed abstract class SRP
 	{
+#if !OPENSSL_NO_SRP
 		[CRepr]
 		public struct gN_cache_st {
 		    char8* b64_bn;
@@ -124,6 +125,7 @@ namespace Beef_Net.OpenSSL
 		public extern static int Verify_B_mod_N(BN.BIGNUM* B, BN.BIGNUM* N);
 
 		public const int MINIMAL_N = 1024;
+#endif
 		
 		/*
 		** MOVED for convenience

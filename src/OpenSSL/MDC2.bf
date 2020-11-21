@@ -13,5 +13,7 @@ namespace Beef_Net.OpenSSL
 {
 	sealed abstract class MDC2
 	{
+#if !OPENSSL_NO_MDC2
+#endif
 	}
 }

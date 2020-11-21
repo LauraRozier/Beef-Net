@@ -13,5 +13,7 @@ namespace Beef_Net.OpenSSL
 {
 	sealed abstract class TS
 	{
+#if !OPENSSL_NO_TS
+#endif
 	}
 }

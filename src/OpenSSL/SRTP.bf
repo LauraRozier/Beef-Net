@@ -13,5 +13,7 @@ namespace Beef_Net.OpenSSL
 {
 	sealed abstract class SRTP
 	{
+#if !OPENSSL_NO_SRTP
+#endif
 	}
 }
