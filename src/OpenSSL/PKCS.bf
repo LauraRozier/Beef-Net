@@ -11,10 +11,20 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
+	[AlwaysInclude]
+	sealed abstract class PKCS5
+	{
+		public const int SALT_LEN     = 8;
+		/* Default PKCS#5 iteration count */
+		public const int DEFAULT_ITER = 2048;
+	}
+	
+	[AlwaysInclude]
 	sealed abstract class PKCS7
 	{
 	}
-
+	
+	[AlwaysInclude]
 	sealed abstract class PKCS12
 	{
 	}

@@ -11,7 +11,364 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
+	[AlwaysInclude]
 	sealed abstract class Objects
 	{
+		public const int32 undef                               = 0L;
+		public const int32 itu_t                               = 0L;
+		public const int32 ccitt                               = itu_t;
+
+		public const int32 iso                                 = 1L;
+		public const int32[] member_body                       = new .[2](iso, 2L);
+		public const int32[] ISO_CN                            = new .[3](iso, 2L, 156L);
+		public const int32[] oscca                             = new .[4](iso, 2L, 156L, 10197L);
+		public const int32[] sm_scheme                         = new .[5](iso, 2L, 156L, 10197L, 1L);
+
+		public const int32[] ISO_US                            = new .[3](iso, 2L, 840L);
+		public const int32[] X9_57                             = new .[4](iso, 2L, 840L, 10040L);
+		public const int32[] X9cm                              = new .[5](iso, 2L, 840L, 10040L, 4L);
+		public const int32[] dsa                               = new .[6](iso, 2L, 840L, 10040L, 4L, 1L);
+		public const int32[] dsaWithSHA1                       = new .[6](iso, 2L, 840L, 10040L, 4L, 3L);
+
+		public const int32[] ansi_X9_62                        = new .[4](iso, 2L, 840L, 10045L);
+		public const int32[] X9_62_id_fieldType                = new .[5](iso, 2L, 840L, 10045L, 1L);
+		public const int32[] X9_62_prime_field                 = new .[6](iso, 2L, 840L, 10045L, 1L, 1L);
+		public const int32[] X9_62_characteristic_two_field    = new .[6](iso, 2L, 840L, 10045L, 1L, 2L);
+		public const int32[] X9_62_id_characteristic_two_basis = new .[7](iso, 2L, 840L, 10045L, 1L, 2L, 3L);
+		public const int32[] X9_62_onBasis                     = new .[8](iso, 2L, 840L, 10045L, 1L, 2L, 3L, 1L);
+		public const int32[] X9_62_tpBasis                     = new .[8](iso, 2L, 840L, 10045L, 1L, 2L, 3L, 2L);
+		public const int32[] X9_62_ppBasis                     = new .[8](iso, 2L, 840L, 10045L, 1L, 2L, 3L, 3L);
+
+		public const int32[] X9_62_id_publicKeyType            = new .[5](iso, 2L, 840L, 10045L, 2L);
+		public const int32[] X9_62_id_ecPublicKey              = new .[6](iso, 2L, 840L, 10045L, 2L, 1L);
+
+		public const int32[] X9_62_ellipticCurve               = new .[5](iso, 2L, 840L, 10045L, 3L);
+		public const int32[] X9_62_c_TwoCurve                  = new .[6](iso, 2L, 840L, 10045L, 3L, 0L);
+		public const int32[] X9_62_c2pnb163v1                  = new .[7](iso, 2L, 840L, 10045L, 3L, 0L, 1L);
+		public const int32[] X9_62_c2pnb163v2                  = new .[7](iso, 2L, 840L, 10045L, 3L, 0L, 2L);
+		public const int32[] X9_62_c2pnb163v3                  = new .[7](iso, 2L, 840L, 10045L, 3L, 0L, 3L);
+		public const int32[] X9_62_c2pnb176v1                  = new .[7](iso, 2L, 840L, 10045L, 3L, 0L, 4L);
+		public const int32[] X9_62_c2tnb191v1                  = new .[7](iso, 2L, 840L, 10045L, 3L, 0L, 5L);
+		public const int32[] X9_62_c2tnb191v2                  = new .[7](iso, 2L, 840L, 10045L, 3L, 0L, 6L);
+		public const int32[] X9_62_c2tnb191v3                  = new .[7](iso, 2L, 840L, 10045L, 3L, 0L, 7L);
+		public const int32[] X9_62_c2onb191v4                  = new .[7](iso, 2L, 840L, 10045L, 3L, 0L, 8L);
+		public const int32[] X9_62_c2onb191v5                  = new .[7](iso, 2L, 840L, 10045L, 3L, 0L, 9L);
+		public const int32[] X9_62_c2pnb208w1                  = new .[7](iso, 2L, 840L, 10045L, 3L, 0L, 10L);
+		public const int32[] X9_62_c2tnb239v1                  = new .[7](iso, 2L, 840L, 10045L, 3L, 0L, 11L);
+		public const int32[] X9_62_c2tnb239v2                  = new .[7](iso, 2L, 840L, 10045L, 3L, 0L, 12L);
+		public const int32[] X9_62_c2tnb239v3                  = new .[7](iso, 2L, 840L, 10045L, 3L, 0L, 13L);
+		public const int32[] X9_62_c2onb239v4                  = new .[7](iso, 2L, 840L, 10045L, 3L, 0L, 14L);
+		public const int32[] X9_62_c2onb239v5                  = new .[7](iso, 2L, 840L, 10045L, 3L, 0L, 15L);
+		public const int32[] X9_62_c2pnb272w1                  = new .[7](iso, 2L, 840L, 10045L, 3L, 0L, 16L);
+		public const int32[] X9_62_c2pnb304w1                  = new .[7](iso, 2L, 840L, 10045L, 3L, 0L, 17L);
+		public const int32[] X9_62_c2tnb359v1                  = new .[7](iso, 2L, 840L, 10045L, 3L, 0L, 18L);
+		public const int32[] X9_62_c2pnb368w1                  = new .[7](iso, 2L, 840L, 10045L, 3L, 0L, 19L);
+		public const int32[] X9_62_c2tnb431r1                  = new .[7](iso, 2L, 840L, 10045L, 3L, 0L, 20L);
+
+		public const int32[] X9_62_primeCurve                  = new .[6](iso, 2L, 840L, 10045L, 3L, 1L);
+		public const int32[] X9_62_prime192v1                  = new .[7](iso, 2L, 840L, 10045L, 3L, 1L, 1L);
+		public const int32[] X9_62_prime192v2                  = new .[7](iso, 2L, 840L, 10045L, 3L, 1L, 2L);
+		public const int32[] X9_62_prime192v3                  = new .[7](iso, 2L, 840L, 10045L, 3L, 1L, 3L);
+		public const int32[] X9_62_prime239v1                  = new .[7](iso, 2L, 840L, 10045L, 3L, 1L, 4L);
+		public const int32[] X9_62_prime239v2                  = new .[7](iso, 2L, 840L, 10045L, 3L, 1L, 5L);
+		public const int32[] X9_62_prime239v3                  = new .[7](iso, 2L, 840L, 10045L, 3L, 1L, 6L);
+		public const int32[] X9_62_prime256v1                  = new .[7](iso, 2L, 840L, 10045L, 3L, 1L, 7L);
+
+		public const int32[] X9_62_id_ecSigType                = new .[5](iso, 2L, 840L, 10045L, 4L);
+		public const int32[] ecdsa_with_SHA1                   = new .[6](iso, 2L, 840L, 10045L, 4L, 1L);
+
+		public const int32[] ecdsa_with_Recommended            = new .[6](iso, 2L, 840L, 10045L, 4L, 2L);
+
+		public const int32[] ecdsa_with_Specified              = new .[6](iso, 2L, 840L, 10045L, 4L, 3L);
+		public const int32[] ecdsa_with_SHA224                 = new .[7](iso, 2L, 840L, 10045L, 4L, 3L, 1L);
+		public const int32[] ecdsa_with_SHA256                 = new .[7](iso, 2L, 840L, 10045L, 4L, 3L, 2L);
+		public const int32[] ecdsa_with_SHA384                 = new .[7](iso, 2L, 840L, 10045L, 4L, 3L, 3L);
+		public const int32[] ecdsa_with_SHA512                 = new .[7](iso, 2L, 840L, 10045L, 4L, 3L, 4L);
+
+		public const int32[] cast5_cbc                         = new .[7](iso, 2L, 840L, 113533L, 7L, 66L, 10L);
+		public const int32[] pbeWithMD5AndCast5_CBC            = new .[7](iso, 2L, 840L, 113533L, 7L, 66L, 12L);
+		public const int32[] id_PasswordBasedMAC               = new .[7](iso, 2L, 840L, 113533L, 7L, 66L, 13L);
+		public const int32[] id_DHBasedMac                     = new .[7](iso, 2L, 840L, 113533L, 7L, 66L, 30L);
+
+		public const int32[] rsadsi                            = new .[4](iso, 2L, 840L, 113549L);
+		public const int32[] pkcs                              = new .[5](iso, 2L, 840L, 113549L, 1L);
+		public const int32[] pkcs1                             = new .[6](iso, 2L, 840L, 113549L, 1L, 1L);
+		public const int32[] rsaEncryption                     = new .[7](iso, 2L, 840L, 113549L, 1L, 1L, 1L);
+		public const int32[] md2WithRSAEncryption              = new .[7](iso, 2L, 840L, 113549L, 1L, 1L, 2L);
+		public const int32[] md4WithRSAEncryption              = new .[7](iso, 2L, 840L, 113549L, 1L, 1L, 3L);
+		public const int32[] md5WithRSAEncryption              = new .[7](iso, 2L, 840L, 113549L, 1L, 1L, 4L);
+		public const int32[] sha1WithRSAEncryption             = new .[7](iso, 2L, 840L, 113549L, 1L, 1L, 5L);
+		public const int32[] rsaesOaep                         = new .[7](iso, 2L, 840L, 113549L, 1L, 1L, 7L);
+		public const int32[] mgf1                              = new .[7](iso, 2L, 840L, 113549L, 1L, 1L, 8L);
+		public const int32[] pSpecified                        = new .[7](iso, 2L, 840L, 113549L, 1L, 1L, 9L);
+		public const int32[] rsassaPss                         = new .[7](iso, 2L, 840L, 113549L, 1L, 1L, 10L);
+		public const int32[] sha256WithRSAEncryption           = new .[7](iso, 2L, 840L, 113549L, 1L, 1L, 11L);
+		public const int32[] sha384WithRSAEncryption           = new .[7](iso, 2L, 840L, 113549L, 1L, 1L, 12L);
+		public const int32[] sha512WithRSAEncryption           = new .[7](iso, 2L, 840L, 113549L, 1L, 1L, 13L);
+		public const int32[] sha224WithRSAEncryption           = new .[7](iso, 2L, 840L, 113549L, 1L, 1L, 14L);
+		public const int32[] sha512_224WithRSAEncryption       = new .[7](iso, 2L, 840L, 113549L, 1L, 1L, 15L);
+		public const int32[] sha512_256WithRSAEncryption       = new .[7](iso, 2L, 840L, 113549L, 1L, 1L, 16L);
+
+		public const int32[] pkcs3                             = new .[6](iso, 2L, 840L, 113549L, 1L, 3L);
+		public const int32[] dhKeyAgreement                    = new .[7](iso, 2L, 840L, 113549L, 1L, 3L, 1L);
+
+		public const int32[] pkcs5                             = new .[6](iso, 2L, 840L, 113549L, 1L, 5L);
+		public const int32[] pbeWithMD2AndDES_CBC              = new .[7](iso, 2L, 840L, 113549L, 1L, 5L, 1L);
+		public const int32[] pbeWithMD5AndDES_CBC              = new .[7](iso, 2L, 840L, 113549L, 1L, 5L, 3L);
+		public const int32[] pbeWithMD2AndRC2_CBC              = new .[7](iso, 2L, 840L, 113549L, 1L, 5L, 4L);
+		public const int32[] pbeWithMD5AndRC2_CBC              = new .[7](iso, 2L, 840L, 113549L, 1L, 5L, 6L);
+		public const int32[] pbeWithSHA1AndDES_CBC             = new .[7](iso, 2L, 840L, 113549L, 1L, 5L, 10L);
+		public const int32[] pbeWithSHA1AndRC2_CBC             = new .[7](iso, 2L, 840L, 113549L, 1L, 5L, 11L);
+		public const int32[] id_pbkdf2                         = new .[7](iso, 2L, 840L, 113549L, 1L, 5L, 12L);
+		public const int32[] pbes2                             = new .[7](iso, 2L, 840L, 113549L, 1L, 5L, 13L);
+		public const int32[] pbmac1                            = new .[7](iso, 2L, 840L, 113549L, 1L, 5L, 14L);
+
+		public const int32[] identified_organization           = new .[2](iso, 3L);
+		public const int32[] hmac_md5                          = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 8L, 1L, 1L);
+		public const int32[] hmac_sha1                         = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 8L, 1L, 2L);
+
+		public const int32[] x509ExtAdmission                  = new .[6](iso, 3L, 36L, 8L, 3L, 3L);
+
+		public const int32[] ieee                              = new .[3](iso, 3L, 111L);
+		public const int32[] ieee_siswg                        = new .[5](iso, 3L, 111L, 2L, 1619L);
+
+		public const int32[] certicom_arc                      = new .[3](iso, 3L, 132L);
+		public const int32[] secg_ellipticCurve                = new .[4](iso, 3L, 132L, 0L);
+		public const int32[] sect163k1                         = new .[5](iso, 3L, 132L, 0L, 1L);
+		public const int32[] sect163r1                         = new .[5](iso, 3L, 132L, 0L, 2L);
+		public const int32[] sect239k1                         = new .[5](iso, 3L, 132L, 0L, 3L);
+		public const int32[] sect113r1                         = new .[5](iso, 3L, 132L, 0L, 4L);
+		public const int32[] sect113r2                         = new .[5](iso, 3L, 132L, 0L, 5L);
+		public const int32[] secp112r1                         = new .[5](iso, 3L, 132L, 0L, 6L);
+		public const int32[] secp112r2                         = new .[5](iso, 3L, 132L, 0L, 7L);
+		public const int32[] secp160r1                         = new .[5](iso, 3L, 132L, 0L, 8L);
+		public const int32[] secp160k1                         = new .[5](iso, 3L, 132L, 0L, 9L);
+		public const int32[] secp256k1                         = new .[5](iso, 3L, 132L, 0L, 10L);
+		public const int32[] sect163r2                         = new .[5](iso, 3L, 132L, 0L, 15L);
+		public const int32[] sect283k1                         = new .[5](iso, 3L, 132L, 0L, 16L);
+		public const int32[] sect283r1                         = new .[5](iso, 3L, 132L, 0L, 17L);
+		public const int32[] sect131r1                         = new .[5](iso, 3L, 132L, 0L, 22L);
+		public const int32[] sect131r2                         = new .[5](iso, 3L, 132L, 0L, 23L);
+		public const int32[] sect193r1                         = new .[5](iso, 3L, 132L, 0L, 24L);
+		public const int32[] sect193r2                         = new .[5](iso, 3L, 132L, 0L, 25L);
+		public const int32[] sect233k1                         = new .[5](iso, 3L, 132L, 0L, 26L);
+		public const int32[] sect233r1                         = new .[5](iso, 3L, 132L, 0L, 27L);
+		public const int32[] secp128r1                         = new .[5](iso, 3L, 132L, 0L, 28L);
+		public const int32[] secp128r2                         = new .[5](iso, 3L, 132L, 0L, 29L);
+		public const int32[] secp160r2                         = new .[5](iso, 3L, 132L, 0L, 30L);
+		public const int32[] secp192k1                         = new .[5](iso, 3L, 132L, 0L, 31L);
+		public const int32[] secp224k1                         = new .[5](iso, 3L, 132L, 0L, 32L);
+		public const int32[] secp224r1                         = new .[5](iso, 3L, 132L, 0L, 33L);
+		public const int32[] secp384r1                         = new .[5](iso, 3L, 132L, 0L, 34L);
+		public const int32[] secp521r1                         = new .[5](iso, 3L, 132L, 0L, 35L);
+		public const int32[] sect409k1                         = new .[5](iso, 3L, 132L, 0L, 36L);
+		public const int32[] sect409r1                         = new .[5](iso, 3L, 132L, 0L, 37L);	
+		public const int32[] sect571k1                         = new .[5](iso, 3L, 132L, 0L, 38L);
+		public const int32[] sect571r1                         = new .[5](iso, 3L, 132L, 0L, 39L);
+
+		public const int32 joint_iso_itu_t                     = 2L;
+		public const int32 joint_iso_ccitt                     = joint_iso_itu_t;
+		public const int32[] selected_attribute_types          = new .[4](joint_iso_itu_t, 5L, 1L, 5L);
+		public const int32[] clearance                         = new .[5](joint_iso_itu_t, 5L, 1L, 5L, 55L);
+
+		public const int32[] international_organizations       = new .[2](joint_iso_itu_t, 23L);
+		public const int32[] wap                               = new .[3](joint_iso_itu_t, 23L, 43L);
+		public const int32[] wap_wsg                           = new .[4](joint_iso_itu_t, 23L, 43L, 1L);
+		public const int32[] wap_wsg_idm_ecid                  = new .[5](joint_iso_itu_t, 23L, 43L, 1L, 4L);
+		public const int32[] wap_wsg_idm_ecid_wtls1            = new .[6](joint_iso_itu_t, 23L, 43L, 1L, 4L, 1L);
+		public const int32[] wap_wsg_idm_ecid_wtls3            = new .[6](joint_iso_itu_t, 23L, 43L, 1L, 4L, 3L);
+		public const int32[] wap_wsg_idm_ecid_wtls4            = new .[6](joint_iso_itu_t, 23L, 43L, 1L, 4L, 4L);
+		public const int32[] wap_wsg_idm_ecid_wtls5            = new .[6](joint_iso_itu_t, 23L, 43L, 1L, 4L, 5L);
+		public const int32[] wap_wsg_idm_ecid_wtls6            = new .[6](joint_iso_itu_t, 23L, 43L, 1L, 4L, 6L);
+		public const int32[] wap_wsg_idm_ecid_wtls7            = new .[6](joint_iso_itu_t, 23L, 43L, 1L, 4L, 7L);
+		public const int32[] wap_wsg_idm_ecid_wtls8            = new .[6](joint_iso_itu_t, 23L, 43L, 1L, 4L, 8L);
+		public const int32[] wap_wsg_idm_ecid_wtls9            = new .[6](joint_iso_itu_t, 23L, 43L, 1L, 4L, 9L);
+		public const int32[] wap_wsg_idm_ecid_wtls10           = new .[6](joint_iso_itu_t, 23L, 43L, 1L, 4L, 10L);
+		public const int32[] wap_wsg_idm_ecid_wtls11           = new .[6](joint_iso_itu_t, 23L, 43L, 1L, 4L, 11L);
+		public const int32[] wap_wsg_idm_ecid_wtls12           = new .[6](joint_iso_itu_t, 23L, 43L, 1L, 4L, 12L);
+
+
+
+		public const int NAME_TYPE_UNDEF       = 0x00;
+		public const int NAME_TYPE_MD_METH     = 0x01;
+		public const int NAME_TYPE_CIPHER_METH = 0x02;
+		public const int NAME_TYPE_PKEY_METH   = 0x03;
+		public const int NAME_TYPE_COMP_METH   = 0x04;
+		public const int NAME_TYPE_NUM         = 0x05;
+
+		public const int NAME_ALIAS            = 0x8000;
+
+		public const int BSEARCH_VALUE_ON_NOMATCH     = 0x01;
+		public const int BSEARCH_FIRST_VALUE_ON_MATCH = 0x02;
+
+		[CRepr]
+		public struct name_st
+		{
+		    public int type;
+		    public int alias;
+		    public char8* name;
+		    public char8* data;
+		}
+		public typealias NAME = name_st;
+
+		[Inline]
+		public static int create_and_add_object(char8* oid, char8* sn, char8* ln) => create(oid, sn, ln);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_NAME_init")]
+		public extern static int NAME_init();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_NAME_new_index")]
+		public extern static int NAME_new_index(function uint(char8*) hash_func, function int(char8*, char8*) cmp_func, function void(char8*, int, char8*) free_func);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_NAME_get")]
+		public extern static char8* NAME_get(char8* name, int type);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_NAME_add")]
+		public extern static int NAME_add(char8* name, int type, char8* data);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_NAME_remove")]
+		public extern static int NAME_remove(char8* name, int type);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_NAME_cleanup")]
+		public extern static void NAME_cleanup(int type); /* -1 for everything */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_NAME_do_all")]
+		public extern static void NAME_do_all(int type, function void(NAME*, void* arg) fn, void* arg);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_NAME_do_all_sorted")]
+		public extern static void NAME_do_all_sorted(int type, function void(NAME*, void* arg) fn, void* arg);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_dup")]
+		public extern static ASN1.OBJECT* dup(ASN1.OBJECT* o);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_nid2obj")]
+		public extern static ASN1.OBJECT* nid2obj(int n);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_nid2ln")]
+		public extern static char8* nid2ln(int n);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_nid2sn")]
+		public extern static char8* nid2sn(int n);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_obj2nid")]
+		public extern static int obj2nid(ASN1.OBJECT* o);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_txt2obj")]
+		public extern static ASN1.OBJECT* txt2obj(char8* s, int no_name);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_obj2txt")]
+		public extern static int obj2txt(char8* buf, int buf_len, ASN1.OBJECT* a, int no_name);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_txt2nid")]
+		public extern static int txt2nid(char8* s);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_ln2nid")]
+		public extern static int ln2nid(char8* s);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_sn2nid")]
+		public extern static int sn2nid(char8* s);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_cmp")]
+		public extern static int cmp(ASN1.OBJECT* a, ASN1.OBJECT* b);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_bsearch_")]
+		public extern static void* bsearch_(void* key, void* base_, int num, int size, function int(void*, void*) cmp);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_bsearch_ex_")]
+		public extern static void* bsearch_ex_(void* key, void* base_, int num, int size, function int(void*, void*) cmp, int flags);
+
+		/** FIXME: Good luck translating this. **/
+		/*
+		# define _DECLARE_OBJ_BSEARCH_CMP_FN(scope, type1, type2, nm)    \
+				  static int nm##_cmp_BSEARCH_CMP_FN(const void* , const void* ); \
+				  static int nm##_cmp(type1 const *, type2 const *); \
+				  scope type2 * OBJ_bsearch_##nm(type1 *key, type2 const *base, int num)
+
+		# define DECLARE_OBJ_BSEARCH_CMP_FN(type1, type2, cmp)   \
+				  _DECLARE_OBJ_BSEARCH_CMP_FN(static, type1, type2, cmp)
+		# define DECLARE_OBJ_BSEARCH_GLOBAL_CMP_FN(type1, type2, nm)     \
+				  type2 * OBJ_bsearch_##nm(type1 *key, type2 const *base, int num)
+		*/
+
+		/*-
+		 * Unsolved problem: if a type is actually a pointer type, like
+		 * nid_triple is, then its impossible to get a const where you need
+		 * it. Consider:
+		 *
+		 * typedef int nid_triple[3];
+		 * const void* a_;
+		 * const nid_triple const *a = a_;
+		 *
+		 * The assignment discards a const because what you really want is:
+		 *
+		 * const int const * const *a = a_;
+		 *
+		 * But if you do that, you lose the fact that a is an array of 3 ints,
+		 * which breaks comparison functions.
+		 *
+		 * Thus we end up having to cast, sadly, or unpack the
+		 * declarations. Or, as I finally did in this case, declare nid_triple
+		 * to be a struct, which it should have been in the first place.
+		 *
+		 * Ben, August 2008.
+		 *
+		 * Also, strictly speaking not all types need be const, but handling
+		 * the non-constness means a lot of complication, and in practice
+		 * comparison routines do always not touch their arguments.
+		 */
+
+		/** FIXME: Good luck translating this. **/
+		/*
+		# define IMPLEMENT_OBJ_BSEARCH_CMP_FN(type1, type2, nm)  \
+				  static int nm##_cmp_BSEARCH_CMP_FN(const void* a_, const void* b_)    \
+				      { \
+				      type1 const *a = a_; \
+				      type2 const *b = b_; \
+				      return nm##_cmp(a,b); \
+				      } \
+				  static type2 *OBJ_bsearch_##nm(type1 *key, type2 const *base, int num) \
+				      { \
+				      return (type2 *)OBJ_bsearch_(key, base, num, sizeof(type2), \
+				                                        nm##_cmp_BSEARCH_CMP_FN); \
+				      } \
+				      extern void dummy_prototype(void)
+
+		# define IMPLEMENT_OBJ_BSEARCH_GLOBAL_CMP_FN(type1, type2, nm)   \
+				  static int nm##_cmp_BSEARCH_CMP_FN(const void* a_, const void* b_)    \
+				      { \
+				      type1 const *a = a_; \
+				      type2 const *b = b_; \
+				      return nm##_cmp(a,b); \
+				      } \
+				  type2 *OBJ_bsearch_##nm(type1 *key, type2 const *base, int num) \
+				      { \
+				      return (type2 *)OBJ_bsearch_(key, base, num, sizeof(type2), \
+				                                        nm##_cmp_BSEARCH_CMP_FN); \
+				      } \
+				      extern void dummy_prototype(void)
+
+		# define OBJ_bsearch(type1,key,type2,base,num,cmp)                              \
+				  ((type2 *)OBJ_bsearch_(CHECKED_PTR_OF(type1,key),CHECKED_PTR_OF(type2,base), \
+				                         num,sizeof(type2),                             \
+				                         ((void)CHECKED_PTR_OF(type1,cmp##_type_1),     \
+				                          (void)CHECKED_PTR_OF(type2,cmp##_type_2),     \
+				                          cmp##_BSEARCH_CMP_FN)))
+
+		# define OBJ_bsearch_ex(type1,key,type2,base,num,cmp,flags)                      \
+				  ((type2 *)OBJ_bsearch_ex_(CHECKED_PTR_OF(type1,key),CHECKED_PTR_OF(type2,base), \
+				                         num,sizeof(type2),                             \
+				                         ((void)CHECKED_PTR_OF(type1,cmp##_type_1),     \
+				                          (void)type_2=CHECKED_PTR_OF(type2,cmp##_type_2), \
+				                          cmp##_BSEARCH_CMP_FN)),flags)
+		*/
+
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_new_nid")]
+		public extern static int new_nid(int num);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_add_object")]
+		public extern static int add_object(ASN1.OBJECT* obj);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_create")]
+		public extern static int create(char8* oid, char8* sn, char8* ln);
+
+		[Inline]
+		public static void cleanup() { while(false) continue; }
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_create_objects")]
+		public extern static int create_objects(BIO.bio_st* inVal);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_length")]
+		public extern static uint length(ASN1.OBJECT* obj);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_get0_data")]
+		public extern static uint8* get0_data(ASN1.OBJECT* obj);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_find_sigid_algs")]
+		public extern static int find_sigid_algs(int signid, int* pdig_nid, int* ppkey_nid);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_find_sigid_by_algs")]
+		public extern static int find_sigid_by_algs(int* psignid, int dig_nid, int pkey_nid);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_add_sigid")]
+		public extern static int add_sigid(int signid, int dig_id, int pkey_id);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_sigid_free")]
+		public extern static void sigid_free();
 	}
 }

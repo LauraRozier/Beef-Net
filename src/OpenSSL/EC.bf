@@ -11,19 +11,21 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
-	// Includes ECDH and ECDSA
+	[AlwaysInclude]
 	sealed abstract class EC
 	{
 #if !OPENSSL_NO_EC
 #endif
 	}
-
+	
+	[AlwaysInclude]
 	sealed abstract class ECDH
 	{
 #if !OPENSSL_NO_EC
 #endif
 	}
-
+	
+	[AlwaysInclude]
 	sealed abstract class ECDSA
 	{
 #if !OPENSSL_NO_EC

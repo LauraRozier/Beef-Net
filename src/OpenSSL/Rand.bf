@@ -11,10 +11,12 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
+	[AlwaysInclude]
 	sealed abstract class Rand
 	{
 	}
-
+	
+	[AlwaysInclude]
 	sealed abstract class RandDRBG
 	{
 	}

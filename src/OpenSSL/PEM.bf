@@ -18,6 +18,7 @@ namespace Beef_Net.OpenSSL
 		24   17 000010B4 PEM_write_SSL_SESSION
 		25   18 0000205E PEM_write_bio_SSL_SESSION
 	*/
+	[AlwaysInclude]
 	sealed abstract class PEM
 	{
 	}

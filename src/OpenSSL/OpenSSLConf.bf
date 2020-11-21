@@ -10,6 +10,7 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
+	[AlwaysInclude]
 	static {
 #if BF_PLATFORM_WINDOWS
 	#if !(BF_32_BIT || BF_64_BIT)

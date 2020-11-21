@@ -470,6 +470,7 @@ namespace Beef_Net.OpenSSL
 		494  1ED 00001410 d2i_SSL_SESSION
 		495  1EE 00001659 i2d_SSL_SESSION
 	*/
+	[AlwaysInclude]
 	sealed abstract class SSL
 	{
 		/* Not even going to port this, hell no. Feel free to contrib */
@@ -477,11 +478,13 @@ namespace Beef_Net.OpenSSL
 		public struct method_st { }
 		public typealias METHOD = method_st;
 	}
-
+	
+	[AlwaysInclude]
 	sealed abstract class SSL2
 	{
 	}
-
+	
+	[AlwaysInclude]
 	sealed abstract class SSL3
 	{
 	}

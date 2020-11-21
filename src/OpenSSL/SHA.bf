@@ -11,6 +11,7 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
+	[AlwaysInclude]
 	sealed abstract class SHA
 	{
 		/*-
@@ -47,7 +48,8 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("SHA1_Transform")]
 		public extern static void Transform(CTX* c, uint8* data);
 	}
-
+	
+	[AlwaysInclude]
 	sealed abstract class SHA224
 	{
 		public const int DIGEST_LENGTH = 28;
@@ -61,7 +63,8 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_CRYPTO), CLink]
 		public extern static uint8* SHA224(uint8* d, uint n, uint8* md);
 	}
-
+	
+	[AlwaysInclude]
 	sealed abstract class SHA256
 	{
 		/*
@@ -91,7 +94,8 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("SHA256_Transform")]
 		public extern static void Transform(CTX* c, uint8* data);
 	}
-
+	
+	[AlwaysInclude]
 	sealed abstract class SHA384
 	{
 		public const int DIGEST_LENGTH = 48;
@@ -105,7 +109,8 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_CRYPTO), CLink]
 		public extern static uint8* SHA384(uint8* d, uint n, uint8* md);
 	}
-
+	
+	[AlwaysInclude]
 	sealed abstract class SHA512
 	{
 		/*

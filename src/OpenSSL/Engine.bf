@@ -11,8 +11,57 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
+	[AlwaysInclude]
 	sealed abstract class Engine
 	{
+		/*
+		 * This is a structure for storing implementations of various crypto
+		 * algorithms and functions.
+		 */
+		[CRepr]
+		public struct engine_st {
+		    public char8* id;
+		    public char8* name;
+		    public RSA.METHOD* rsa_meth;
+		    public DSA.METHOD* dsa_meth;
+		    public DH.METHOD* dh_meth;
+		    public EC.KEY_METHOD* ec_meth;
+		    public Rand.METHOD* rand_meth;
+		    /* Cipher handling is via this callback */
+		    public Engine.CIPHERS_PTR ciphers;
+		    /* Digest handling is via this callback */
+		    public Engine.DIGESTS_PTR digests;
+		    /* Public key handling via this callback */
+		    public Engine.PKEY_METHS_PTR pkey_meths;
+		    /* ASN1 public key handling via this callback */
+		    public Engine.PKEY_ASN1_METHS_PTR pkey_asn1_meths;
+		    public Engine.GEN_INT_FUNC_PTR destroy;
+		    public Engine.GEN_INT_FUNC_PTR init;
+		    public Engine.GEN_INT_FUNC_PTR finish;
+		    public Engine.CTRL_FUNC_PTR ctrl;
+		    public Engine.LOAD_KEY_PTR load_privkey;
+		    public Engine.LOAD_KEY_PTR load_pubkey;
+		    public Engine.SSL_CLIENT_CERT_PTR load_ssl_client_cert;
+		    public Engine.CMD_DEFN* cmd_defns;
+		    public int flags;
+		    /* reference count on the structure itself */
+		    public Crypto.REF_COUNT struct_ref;
+		    /*
+		     * reference count on usability of the engine type. NB: This controls the
+		     * loading and initialisation of any functionality required by this
+		     * engine, whereas the previous count is simply to cope with
+		     * (de)allocation of this structure. Hence, running_ref <= struct_ref at
+		     * all times.
+		     */
+		    public int funct_ref;
+		    /* A place to store per-ENGINE data */
+		    public Crypto.EX_DATA ex_data;
+		    /* Used to maintain the linked-list of engines. */
+			public engine_st* prev;
+		    public engine_st* next;
+		}
+		public typealias ENGINE = engine_st;
+
 #if !OPENSSL_NO_ENGINE
 #endif
 	}

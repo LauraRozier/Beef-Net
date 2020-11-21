@@ -11,7 +11,48 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
+	[AlwaysInclude]
 	sealed abstract class EVP
 	{
+		public const int MAX_MD_SIZE      = 64;/* longest known is SHA512 */
+		public const int MAX_KEY_LENGTH   = 64;
+		public const int MAX_IV_LENGTH    = 16;
+		public const int MAX_BLOCK_LENGTH = 32;
+
+		public const int PK_RSA   = 0x0001;
+		public const int PK_DSA   = 0x0002;
+		public const int PK_DH    = 0x0004;
+		public const int PK_EC    = 0x0008;
+		public const int PKT_SIGN = 0x0010;
+		public const int PKT_ENC  = 0x0020;
+		public const int PKT_EXCH = 0x0040;
+		public const int PKS_RSA  = 0x0100;
+		public const int PKS_DSA  = 0x0200;
+		public const int PKS_EC   = 0x0400;
+		
+		public const int PKEY_NONE     = NID.undef;
+		public const int PKEY_RSA      = NID.rsaEncryption;
+		public const int PKEY_RSA2     = NID.rsa;
+		public const int PKEY_RSA_PSS  = NID.rsassaPss;
+		public const int PKEY_DSA      = NID.dsa;
+		public const int PKEY_DSA1     = NID.dsa_2;
+		public const int PKEY_DSA2     = NID.dsaWithSHA;
+		public const int PKEY_DSA3     = NID.dsaWithSHA1;
+		public const int PKEY_DSA4     = NID.dsaWithSHA1_2;
+		public const int PKEY_DH       = NID.dhKeyAgreement;
+		public const int PKEY_DHX      = NID.dhpublicnumber;
+		public const int PKEY_EC       = NID.X9_62_id_ecPublicKey;
+		public const int PKEY_SM2      = NID.sm2;
+		public const int PKEY_HMAC     = NID.hmac;
+		public const int PKEY_CMAC     = NID.cmac;
+		public const int PKEY_SCRYPT   = NID.id_scrypt;
+		public const int PKEY_TLS1_PRF = NID.tls1_prf;
+		public const int PKEY_HKDF     = NID.hkdf;
+		public const int PKEY_POLY1305 = NID.poly1305;
+		public const int PKEY_SIPHASH  = NID.siphash;
+		public const int PKEY_X25519   = NID.X25519;
+		public const int PKEY_ED25519  = NID.ED25519;
+		public const int PKEY_X448     = NID.X448;
+		public const int PKEY_ED448    = NID.ED448;
 	}
 }

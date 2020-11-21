@@ -11,6 +11,7 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
+	[AlwaysInclude]
 	sealed abstract class TxtDB
 	{
 		public const int ERROR_OK                 = 0;

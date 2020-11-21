@@ -11,16 +11,13 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
+	[AlwaysInclude]
 	sealed abstract class EBCDIC
 	{
-		/* Avoid name clashes with other applications */
-		// # define os_toascii   _openssl_os_toascii
-		// # define os_toebcdic  _openssl_os_toebcdic
-		// # define ebcdic2ascii _openssl_ebcdic2ascii
-		// # define ascii2ebcdic _openssl_ascii2ebcdic
-		
+		/** TODO: Once BeefLang is able to handle extern vars/consts these can be ported. **/
 		// extern const unsigned char os_toascii[256];
 		// extern const unsigned char os_toebcdic[256];
+
 		[Import(OPENSSL_LIB_CRYPTO), CLink]
 		public extern static void *ebcdic2ascii(void* dest, void* srce, uint count);
 		[Import(OPENSSL_LIB_CRYPTO), CLink]

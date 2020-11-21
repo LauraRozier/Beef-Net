@@ -11,6 +11,7 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
+	[AlwaysInclude]
 	sealed abstract class DES
 	{
 #if !OPENSSL_NO_DES

@@ -11,6 +11,7 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
+	[AlwaysInclude]
 	sealed abstract class OSSLType
 	{
 #if BF_PLATFORM_WINDOWS
@@ -173,12 +174,12 @@ namespace Beef_Net.OpenSSL
 		[Inline]
 		public static char8* h_addr(hostent h) => h.h_addr_list[0];
 
-		/* Not even going to port this, hell no. Feel free to contrib */
+		/** FIXME: Not even going to port this, hell no. Feel free to contrib. **/
 		[CRepr]
 		public struct ssl_st { }
 		public typealias SSL = ssl_st;
 
-		/* Not even going to port this, hell no. Feel free to contrib */
+		/** FIXME: Not even going to port this, hell no. Feel free to contrib. **/
 		[CRepr]
 		public struct ssl_ctx_st { }
 		public typealias SSL_CTX = ssl_ctx_st;

@@ -11,7 +11,10 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
+	[AlwaysInclude]
 	sealed abstract class Comp
 	{
+#if !OPENSSL_NO_COMP
+#endif
 	}
 }

@@ -11,6 +11,7 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
+	[AlwaysInclude]
 	sealed abstract class BIO
 	{
 		[Import(OPENSSL_LIB_CRYPTO), CLink]
@@ -491,7 +492,7 @@ namespace Beef_Net.OpenSSL
 		public const int C_FILE_TELL                   = 133;
 		public const int C_GET_SOCKS                   = 134;
 		public const int C_SET_SOCKS                   = 135;
-		
+
 		public const int C_SET_WRITE_BUF_SIZE          = 136;/* for BIO_s_bio */
 		public const int C_GET_WRITE_BUF_SIZE          = 137;
 		public const int C_MAKE_BIO_PAIR               = 138;
@@ -505,7 +506,7 @@ namespace Beef_Net.OpenSSL
 		public const int C_NWRITE                      = 146;
 		public const int C_RESET_READ_REQUEST          = 147;
 		public const int C_SET_MD_CTX                  = 148;
-		
+
 		public const int C_SET_PREFIX                  = 149;
 		public const int C_GET_PREFIX                  = 150;
 		public const int C_SET_SUFFIX                  = 151;
@@ -513,16 +514,13 @@ namespace Beef_Net.OpenSSL
 
 		public const int C_SET_EX_ARG                  = 153;
 		public const int C_GET_EX_ARG                  = 154;
-		
+
 		public const int C_SET_CONNECT_MODE            = 155;
 
 		[Inline]
 		public static int set_app_data(bio_st* s, void* arg) => set_ex_data(s, 0, arg);
 		[Inline]
 		public static void* get_app_data(bio_st* s) => get_ex_data(s, 0);
-		
-		[Inline]
-		public static int set_nbio(bio_st* b, int n) => ctrl(b, C_SET_NBIO, n, null);
 
 #if !OPENSSL_NO_SOCK
 		/* IP families we support, for BIO_s_connect() and BIO_s_accept() */
@@ -564,10 +562,8 @@ namespace Beef_Net.OpenSSL
 		public static char8* get_peer_name(bio_st* b) => (char8*)ptr_ctrl(b, C_GET_ACCEPT, 2);
 		[Inline]
 		public static char8* get_peer_port(bio_st* b) => (char8*)ptr_ctrl(b, C_GET_ACCEPT, 3);
-		/*
 		[Inline]
 		public static int set_nbio(bio_st* b, int n) => ctrl(b, C_SET_NBIO, n, null);
-		*/
 		[Inline]
 		public static int set_nbio_accept(bio_st* b, bool n) => ctrl(b, C_SET_ACCEPT, 2, n ? (void*)"a" : null);
 		[Inline]
@@ -623,7 +619,8 @@ namespace Beef_Net.OpenSSL
 		 * If you are wondering why this isn't defined, its because CONST_STRICT is
 		 * purely a compile-time kludge to allow const to be checked.
 		 */
-		int BIO_read_filename(bio_st* b, char8* name);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_read_filename")]
+		public extern static int read_filename(bio_st* b, char8* name);
 #else
 		[Inline]
 		public static int read_filename(bio_st* b, char8* name) => ctrl(b, C_SET_FILENAME, CLOSE | FP_READ, name);
@@ -654,10 +651,9 @@ namespace Beef_Net.OpenSSL
 		[Inline]
 		public static int set_ssl_renegotiate_timeout(bio_st* b, int seconds) => ctrl(b, C_SET_SSL_RENEGOTIATE_TIMEOUT, seconds, null);
 
-		/* defined in evp.h */
-		/*
+		/* defined in evp.h
 		[Inline]
-		public static int BIO_set_md(bio_st* b, char8* md) => ctrl(b, C_SET_MD, 1, md);
+		public static int set_md(bio_st* b, char8* md) => ctrl(b, C_SET_MD, 1, md);
 		*/
 
 		[Inline]
@@ -1069,12 +1065,14 @@ namespace Beef_Net.OpenSSL
 		 */
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_printf")]
 		public extern static int printf(bio_st* bio, char8* format, ...);
+		/** FIXME: Perhaps void* is enough. **/
 		/*
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_vprintf")]
 		public extern static int vprintf(bio_st* bio, char8* format, va_list args);
 		*/
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_snprintf")]
 		public extern static int snprintf(char8* buf, uint n, char8* format, ...);
+		/** FIXME: Perhaps void* is enough. **/
 		/*
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_vsnprintf")]
 		public extern static int vsnprintf(char8* buf, uint n, char8* format, va_list args);

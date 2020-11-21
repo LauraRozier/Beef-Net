@@ -11,14 +11,17 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
+	[AlwaysInclude]
 	sealed abstract class x509
 	{
 	}
-
+	
+	[AlwaysInclude]
 	sealed abstract class x509v3
 	{
 	}
-
+	
+	[AlwaysInclude]
 	sealed abstract class x509Vfy
 	{
 	}

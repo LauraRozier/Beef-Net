@@ -11,6 +11,7 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
+	[AlwaysInclude]
 	sealed abstract class RipeMD
 	{
 #if !OPENSSL_NO_RMD160

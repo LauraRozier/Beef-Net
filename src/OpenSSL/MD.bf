@@ -11,18 +11,21 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
+	[AlwaysInclude]
 	sealed abstract class MD2
 	{
 #if !OPENSSL_NO_MD2
 #endif
 	}
-
+	
+	[AlwaysInclude]
 	sealed abstract class MD4
 	{
 #if !OPENSSL_NO_MD4
 #endif
 	}
-
+	
+	[AlwaysInclude]
 	sealed abstract class MD5
 	{
 #if !OPENSSL_NO_MD5

@@ -26,7 +26,18 @@ namespace Beef_Net.OpenSSL
 		492  1EB 00001D2A TLSv1_method
 		493  1EC 000015C3 TLSv1_server_method
 	*/
+	[AlwaysInclude]
 	sealed abstract class TLS1
+	{
+	}
+	
+	[AlwaysInclude]
+	sealed abstract class TLS1_1
+	{
+	}
+	
+	[AlwaysInclude]
+	sealed abstract class TLS1_2
 	{
 	}
 }

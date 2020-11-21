@@ -11,6 +11,7 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
+	[AlwaysInclude]
 	sealed abstract class HMAC
 	{
 		public const int MAX_MD_CBLOCK = 128; /* Deprecated */

@@ -11,6 +11,7 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
+	[AlwaysInclude]
 	sealed abstract class SSLeay
 	{
 		/* SSLeay compat */
@@ -25,7 +26,8 @@ namespace Beef_Net.OpenSSL
 		public uint SSLeay()            => OpenSSL.version_num();
 		public char8* version(int type) => OpenSSL.version(type);
 	}
-
+	
+	[AlwaysInclude]
 	sealed abstract class OpenSSL
 	{
 		public const int VERSION     = 0;
@@ -34,7 +36,7 @@ namespace Beef_Net.OpenSSL
 		public const int PLATFORM    = 3;
 		public const int DIR         = 4;
 		public const int ENGINES_DIR = 5;
-		
+
 		[Inline, Obsolete("No longer needed, so this is a no-op", true)]
 		public static void malloc_init() { while(false) continue; }
 
@@ -79,7 +81,7 @@ namespace Beef_Net.OpenSSL
 
 		[Inline]
 		public static uint secure_actual_size(void* ptr) => Crypto.secure_actual_size(ptr);
-		
+
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_strlcpy")]
 		public extern static uint strlcpy(char8* dst, char8* src, uint size);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_strlcat")]
@@ -92,17 +94,18 @@ namespace Beef_Net.OpenSSL
 		public extern static uint8* hexstr2buf(char8* str, int* len);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_hexchar2int")]
 		public extern static int hexchar2int(uint8 c);
-		
-		// # define MALLOC_MAX_NELEMS(type)  (((1U<<(sizeof(int)*8-1))-1)/sizeof(type))
-		
+
+		[Inline]
+		public static uint MALLOC_MAX_NELEMS<T>() => ((1U << (sizeof(int) * 8 - 1)) - 1) / (uint32)sizeof(T);
+
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("OpenSSL_version_num")]
 		public extern static uint version_num();
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("OpenSSL_version")]
 		public extern static char8* version(int type);
-		
+
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_issetugid")]
 		public extern static int issetugid();
-		
+
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_cleanse")]
 		public extern static void cleanse(void *ptr, uint len);
 
@@ -120,7 +123,7 @@ namespace Beef_Net.OpenSSL
 				die(tmp.CStr(),  OPENSSL_FILE,  OPENSSL_LINE);
 			}
 		}
-		
+
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_isservice")]
 		public extern static int isservice();
 

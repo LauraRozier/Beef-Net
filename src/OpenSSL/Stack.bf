@@ -11,6 +11,7 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
+	[AlwaysInclude]
 	sealed abstract class Stack
 	{
 		public function int sk_compfunc(void* a, void* b);

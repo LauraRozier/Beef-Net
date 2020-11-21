@@ -11,7 +11,47 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
+	[AlwaysInclude]
 	sealed abstract class CMAC
 	{
+#if !OPENSSL_NO_CMAC
+		/* Opaque */
+		[CRepr]
+		public struct CTX_st
+		{
+			/* Cipher context to use */
+			public EVP.CIPHER_CTX* cctx;
+			/* Keys k1 and k2 */
+			public uint8[EVP.MAX_BLOCK_LENGTH] k1;
+			public uint8[EVP.MAX_BLOCK_LENGTH] k2;
+			/* Temporary block */
+			public uint8[EVP.MAX_BLOCK_LENGTH] tbl;
+			/* Last (possibly partial) block */
+			public uint8[EVP.MAX_BLOCK_LENGTH] last_block;
+			/* Number of bytes in last block: -1 means context not initialised */
+			public int nlast_block;
+		}
+		public typealias CTX = CTX_st;
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMAC_CTX_new")]
+		public extern static CTX* CTX_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMAC_CTX_cleanup")]
+		public extern static void CTX_cleanup(CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMAC_CTX_free")]
+		public extern static void CTX_free(CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMAC_CTX_get0_cipher_ctx")]
+		public extern static EVP.CIPHER_CTX* CTX_get0_cipher_ctx(CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMAC_CTX_copy")]
+		public extern static int CTX_copy(CTX* outVal, CTX* inVal);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMAC_Init")]
+		public extern static int Init(CTX* ctx, void* key, uint keylen, EVP.CIPHER* cipher, Engine.ENGINE* impl);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMAC_Update")]
+		public extern static int Update(CTX* ctx, void* data, uint dlen);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMAC_Final")]
+		public extern static int Final(CTX* ctx, uint8* outVal, uint* poutlen);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMAC_resume")]
+		public extern static int resume(CTX* ctx);
+#endif
 	}
 }
