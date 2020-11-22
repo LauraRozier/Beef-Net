@@ -17,6 +17,82 @@ namespace Beef_Net.OpenSSL
 		public const int32 undef                                = 0L;
 		public const int32 itu_t                                = 0L;
 		public const int32 ccitt                                = itu_t;
+		public const int32[] data                               = new .[2](itu_t, 9L);
+		public const int32[] pss                                = new .[3](itu_t, 9L, 2342L);
+		public const int32[] ucl                                = new .[4](itu_t, 9L, 2342L, 19200300L);
+		public const int32[] pilot                              = new .[5](itu_t, 9L, 2342L, 19200300L, 100L);
+		public const int32[] pilotAttributeType                 = new .[6](itu_t, 9L, 2342L, 19200300L, 100L, 1L);
+		public const int32[] userId                             = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 1L);
+		public const int32[] textEncodedORAddress               = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 2L);
+		public const int32[] rfc822Mailbox                      = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 3L);
+		public const int32[] info                               = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 4L);
+		public const int32[] favouriteDrink                     = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 5L);
+		public const int32[] roomNumber                         = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 6L);
+		public const int32[] photo                              = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 7L);
+		public const int32[] userClass                          = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 8L);
+		public const int32[] host                               = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 9L);
+		public const int32[] manager                            = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 10L);
+		public const int32[] documentIdentifier                 = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 11L);
+		public const int32[] documentTitle                      = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 12L);
+		public const int32[] documentVersion                    = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 13L);
+		public const int32[] documentAuthor                     = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 14L);
+		public const int32[] documentLocation                   = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 15L);
+		public const int32[] homeTelephoneNumber                = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 20L);
+		public const int32[] secretary                          = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 21L);
+		public const int32[] otherMailbox                       = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 22L);
+		public const int32[] lastModifiedTime                   = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 23L);
+		public const int32[] lastModifiedBy                     = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 24L);
+		public const int32[] domainComponent                    = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 25L);
+		public const int32[] aRecord                            = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 26L);
+		public const int32[] pilotAttributeType27               = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 27L);
+		public const int32[] mXRecord                           = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 28L);
+		public const int32[] nSRecord                           = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 29L);
+		public const int32[] sOARecord                          = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 30L);
+		public const int32[] cNAMERecord                        = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 31L);
+		public const int32[] associatedDomain                   = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 37L);
+		public const int32[] associatedName                     = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 38L);
+		public const int32[] homePostalAddress                  = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 39L);
+		public const int32[] personalTitle                      = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 40L);
+		public const int32[] mobileTelephoneNumber              = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 41L);
+		public const int32[] pagerTelephoneNumber               = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 42L);
+		public const int32[] friendlyCountryName                = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 43L);
+		public const int32[] uniqueIdentifier                   = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 44L);
+		public const int32[] organizationalStatus               = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 45L);
+		public const int32[] janetMailbox                       = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 46L);
+		public const int32[] mailPreferenceOption               = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 47L);
+		public const int32[] buildingName                       = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 48L);
+		public const int32[] dSAQuality                         = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 49L);
+		public const int32[] singleLevelQuality                 = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 50L);
+		public const int32[] subtreeMinimumQuality              = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 51L);
+		public const int32[] subtreeMaximumQuality              = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 52L);
+		public const int32[] personalSignature                  = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 53L);
+		public const int32[] dITRedirect                        = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 54L);
+		public const int32[] audio                              = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 55L);
+		public const int32[] documentPublisher                  = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 1L, 56L);
+
+		public const int32[] pilotAttributeSyntax               = new .[6](itu_t, 9L, 2342L, 19200300L, 100L, 3L);
+		public const int32[] iA5StringSyntax                    = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 3L, 4L);
+		public const int32[] caseIgnoreIA5StringSyntax          = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 3L, 5L);
+
+		public const int32[] pilotObject                        = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 4L, 3L);
+		public const int32[] pilotPerson                        = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 4L, 4L);
+		public const int32[] account                            = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 4L, 5L);
+		public const int32[] document                           = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 4L, 6L);
+		public const int32[] room                               = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 4L, 7L);
+		public const int32[] documentSeries                     = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 4L, 9L);
+		public const int32[] Domain                             = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 4L, 13L);
+		public const int32[] rFC822localPart                    = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 4L, 14L);
+		public const int32[] dNSDomain                          = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 4L, 15L);
+		public const int32[] domainRelatedObject                = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 4L, 17L);
+		public const int32[] friendlyCountry                    = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 4L, 18L);
+		public const int32[] simpleSecurityObject               = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 4L, 19L);
+		public const int32[] pilotOrganization                  = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 4L, 20L);
+		public const int32[] pilotDSA                           = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 4L, 21L);
+		public const int32[] qualityLabelledData                = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 4L, 22L);
+
+		public const int32[] pilotObjectClass                   = new .[6](itu_t, 9L, 2342L, 19200300L, 100L, 4L);
+
+		public const int32[] pilotGroups                        = new .[6](itu_t, 9L, 2342L, 19200300L, 100L, 10L);
 
 		public const int32 iso                                  = 1L;
 		public const int32[] member_body                        = new .[2](iso, 2L);
@@ -29,6 +105,11 @@ namespace Beef_Net.OpenSSL
 
 		public const int32[] ISO_US                             = new .[3](iso, 2L, 840L);
 		public const int32[] X9_57                              = new .[4](iso, 2L, 840L, 10040L);
+		public const int32[] holdInstruction                    = new .[5](iso, 2L, 840L, 10040L, 2L);
+		public const int32[] hold_instruction_none              = new .[6](iso, 2L, 840L, 10040L, 2L, 1L);
+		public const int32[] hold_instruction_call_issuer       = new .[6](iso, 2L, 840L, 10040L, 2L, 2L);
+		public const int32[] hold_instruction_reject            = new .[6](iso, 2L, 840L, 10040L, 2L, 3L);
+
 		public const int32[] X9cm                               = new .[5](iso, 2L, 840L, 10040L, 4L);
 		public const int32[] dsa                                = new .[6](iso, 2L, 840L, 10040L, 4L, 1L);
 		public const int32[] dsaWithSHA1                        = new .[6](iso, 2L, 840L, 10040L, 4L, 3L);
@@ -213,6 +294,7 @@ namespace Beef_Net.OpenSSL
 		public const int32[] id_smime_alg_ESDH                  = new .[9](iso, 2L, 840L, 113549L, 1L, 9L, 16L, 3L, 5L);
 		public const int32[] id_smime_alg_CMS3DESwrap           = new .[9](iso, 2L, 840L, 113549L, 1L, 9L, 16L, 3L, 6L);
 		public const int32[] id_smime_alg_CMSRC2wrap            = new .[9](iso, 2L, 840L, 113549L, 1L, 9L, 16L, 3L, 7L);
+		public const int32[] zlib_compression                   = new .[9](iso, 2L, 840L, 113549L, 1L, 9L, 16L, 3L, 8L);
 		public const int32[] id_alg_PWRI_KEK                    = new .[9](iso, 2L, 840L, 113549L, 1L, 9L, 16L, 3L, 9L);
 
 		public const int32[] id_smime_cd                        = new .[8](iso, 2L, 840L, 113549L, 1L, 9L, 16L, 4L);
@@ -229,7 +311,7 @@ namespace Beef_Net.OpenSSL
 		public const int32[] id_smime_cti_ets_proofOfSender     = new .[9](iso, 2L, 840L, 113549L, 1L, 9L, 16L, 6L, 4L);
 		public const int32[] id_smime_cti_ets_proofOfApproval   = new .[9](iso, 2L, 840L, 113549L, 1L, 9L, 16L, 6L, 5L);
 		public const int32[] id_smime_cti_ets_proofOfCreation   = new .[9](iso, 2L, 840L, 113549L, 1L, 9L, 16L, 6L, 6L);
-
+		
 		public const int32[] friendlyName                       = new .[7](iso, 2L, 840L, 113549L, 1L, 9L, 20L);
 		public const int32[] localKeyID                         = new .[7](iso, 2L, 840L, 113549L, 1L, 9L, 21L);
 		public const int32[] certTypes                          = new .[7](iso, 2L, 840L, 113549L, 1L, 9L, 22L);
@@ -262,13 +344,12 @@ namespace Beef_Net.OpenSSL
 		public const int32[] md5                                = new .[6](iso, 2L, 840L, 113549L, 2L, 5L);
 		public const int32[] hmacWithMD5                        = new .[6](iso, 2L, 840L, 113549L, 2L, 6L);
 		public const int32[] hmacWithSHA1                       = new .[6](iso, 2L, 840L, 113549L, 2L, 7L);
-
-		public const int32[] hmacWithSHA224                     = new .[6](iso, 2L,840L,113549L,2L,8L);
-		public const int32[] hmacWithSHA256                     = new .[6](iso, 2L,840L,113549L,2L,9L);
-		public const int32[] hmacWithSHA384                     = new .[6](iso, 2L,840L,113549L,2L,10L);
-		public const int32[] hmacWithSHA512                     = new .[6](iso, 2L,840L,113549L,2L,11L);
-		public const int32[] hmacWithSHA512_224                 = new .[6](iso, 2L,840L,113549L,2L,12L);
-		public const int32[] hmacWithSHA512_256                 = new .[6](iso, 2L,840L,113549L,2L,13L);
+		public const int32[] hmacWithSHA224                     = new .[6](iso, 2L, 840L, 113549L, 2L, 8L);
+		public const int32[] hmacWithSHA256                     = new .[6](iso, 2L, 840L, 113549L, 2L, 9L);
+		public const int32[] hmacWithSHA384                     = new .[6](iso, 2L, 840L, 113549L, 2L, 10L);
+		public const int32[] hmacWithSHA512                     = new .[6](iso, 2L, 840L, 113549L, 2L, 11L);
+		public const int32[] hmacWithSHA512_224                 = new .[6](iso, 2L, 840L, 113549L, 2L, 12L);
+		public const int32[] hmacWithSHA512_256                 = new .[6](iso, 2L, 840L, 113549L, 2L, 13L);
 
 		public const int32[] rc2_cbc                            = new .[6](iso, 2L, 840L, 113549L, 3L, 2L);
 		public const int32[] rc4                                = new .[6](iso, 2L, 840L, 113549L, 3L, 4L);
@@ -276,6 +357,15 @@ namespace Beef_Net.OpenSSL
 		public const int32[] rc5_cbc                            = new .[6](iso, 2L, 840L, 113549L, 3L, 8L);
 
 		public const int32[] identified_organization            = new .[2](iso, 3L);
+		public const int32[] org                                = new .[2](iso, 3L);
+		public const int32[] dod                                = new .[3](iso, 3L, 6L);
+		public const int32[] iana                               = new .[4](iso, 3L, 6L, 1L);
+		public const int32[] internet                           = iana;
+		public const int32[] Directory                          = new .[5](iso, 3L, 6L, 1L, 1L);
+		public const int32[] Management                         = new .[5](iso, 3L, 6L, 1L, 2L);
+		public const int32[] Experimental                       = new .[5](iso, 3L, 6L, 1L, 3L);
+		public const int32[] Private                            = new .[5](iso, 3L, 6L, 1L, 4L);
+		public const int32[] Enterprises                        = new .[6](iso, 3L, 6L, 1L, 4L, 1L);
 		public const int32[] idea_cbc                           = new .[11](iso, 3L, 6L, 1L, 4L, 1L, 188L, 7L, 1L, 1L, 2L);
 		
 		public const int32[] ms_ext_req                         = new .[10](iso, 3L, 6L, 1L, 4L, 1L, 311L, 2L, 1L, 14L);
@@ -292,8 +382,14 @@ namespace Beef_Net.OpenSSL
 		public const int32[] ms_smartcard_login                 = new .[10](iso, 3L, 6L, 1L, 4L, 1L, 311L, 20L, 2L, 2L);
 		public const int32[] ms_upn                             = new .[10](iso, 3L, 6L, 1L, 4L, 1L, 311L, 20L, 2L, 3L);
 
+		public const int32[] dcObject                           = new .[8](iso, 3L, 6L, 1L, 4L, 1L, 1466L, 344L);
+
+		public const int32[] blake2b512                         = new .[11](iso, 3L, 6L, 1L, 4L, 1L, 1722L, 12L, 2L, 1L, 16L);
+		public const int32[] blake2s256                         = new .[11](iso, 3L, 6L, 1L, 4L, 1L, 1722L, 12L, 2L, 2L, 8L);
+
 		public const int32[] bf_cbc                             = new .[9](iso, 3L, 6L, 1L, 4L, 1L, 3029L, 1L, 2L);
 		
+		public const int32[] Security                           = new .[5](iso, 3L, 6L, 1L, 5L);
 		public const int32[] id_pkix                            = new .[7](iso, 3L, 6L, 1L, 5L, 5L, 7L);
 		public const int32[] id_pkix_mod                        = new .[8](iso, 3L, 6L, 1L, 5L, 5L, 7L, 0L);
 		public const int32[] id_pkix1_explicit_88               = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 0L, 1L);
@@ -314,27 +410,198 @@ namespace Beef_Net.OpenSSL
 		public const int32[] id_mod_cmp2000                     = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 0L, 16L);
 
 		public const int32[] id_pe                              = new .[8](iso, 3L, 6L, 1L, 5L, 5L, 7L, 1L);
+		public const int32[] info_access                        = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 1L, 1L);
+		public const int32[] biometricInfo                      = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 1L, 2L);
+		public const int32[] qcStatements                       = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 1L, 3L);
+		public const int32[] ac_auditEntity                     = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 1L, 4L);
+		public const int32[] ac_targeting                       = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 1L, 5L);
+		public const int32[] aaControls                         = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 1L, 6L);
+		public const int32[] sbgp_ipAddrBlock                   = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 1L, 7L);
+		public const int32[] sbgp_autonomousSysNum              = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 1L, 8L);
+		public const int32[] sbgp_routerIdentifier              = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 1L, 9L);
+		public const int32[] ac_proxying                        = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 1L, 10L);
+		public const int32[] sinfo_access                       = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 1L, 11L);
+		public const int32[] proxyCertInfo                      = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 1L, 14L);
+		public const int32[] tlsfeature                         = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 1L, 24L);
+
 		public const int32[] id_qt                              = new .[8](iso, 3L, 6L, 1L, 5L, 5L, 7L, 2L);
+		public const int32[] id_qt_cps                          = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 2L, 1L);
+		public const int32[] id_qt_unotice                      = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 2L, 2L);
+		public const int32[] textNotice                         = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 2L, 3L);
+
 		public const int32[] id_kp                              = new .[8](iso, 3L, 6L, 1L, 5L, 5L, 7L, 3L);
+		public const int32[] server_auth                        = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 3L, 1L);
+		public const int32[] client_auth                        = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 3L, 2L);
+		public const int32[] code_sign                          = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 3L, 3L);
+		public const int32[] email_protect                      = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 3L, 4L);
+		public const int32[] ipsecEndSystem                     = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 3L, 5L);
+		public const int32[] ipsecTunnel                        = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 3L, 6L);
+		public const int32[] ipsecUser                          = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 3L, 7L);
+		public const int32[] time_stamp                         = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 3L, 8L);
+		public const int32[] OCSP_sign                          = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 3L, 9L);
+		public const int32[] dvcs                               = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 3L, 10L);
+		public const int32[] ipsec_IKE                          = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 3L, 17L);
+		public const int32[] capwapAC                           = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 3L, 18L);
+		public const int32[] capwapWTP                          = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 3L, 19L);
+		public const int32[] sshClient                          = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 3L, 21L);
+		public const int32[] sshServer                          = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 3L, 22L);
+		public const int32[] sendRouter                         = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 3L, 23L);
+		public const int32[] sendProxiedRouter                  = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 3L, 24L);
+		public const int32[] sendOwner                          = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 3L, 25L);
+		public const int32[] sendProxiedOwner                   = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 3L, 26L);
+		public const int32[] cmcCA                              = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 3L, 27L);
+		public const int32[] cmcRA                              = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 3L, 28L);
+
 		public const int32[] id_it                              = new .[8](iso, 3L, 6L, 1L, 5L, 5L, 7L, 4L);
+		public const int32[] id_it_caProtEncCert                = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 4L, 1L);
+		public const int32[] id_it_signKeyPairTypes             = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 4L, 2L);
+		public const int32[] id_it_encKeyPairTypes              = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 4L, 3L);
+		public const int32[] id_it_preferredSymmAlg             = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 4L, 4L);
+		public const int32[] id_it_caKeyUpdateInfo              = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 4L, 5L);
+		public const int32[] id_it_currentCRL                   = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 4L, 6L);
+		public const int32[] id_it_unsupportedOIDs              = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 4L, 7L);
+		public const int32[] id_it_subscriptionRequest          = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 4L, 8L);
+		public const int32[] id_it_subscriptionResponse         = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 4L, 9L);
+		public const int32[] id_it_keyPairParamReq              = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 4L, 10L);
+		public const int32[] id_it_keyPairParamRep              = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 4L, 11L);
+		public const int32[] id_it_revPassphrase                = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 4L, 12L);
+		public const int32[] id_it_implicitConfirm              = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 4L, 13L);
+		public const int32[] id_it_confirmWaitTime              = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 4L, 14L);
+		public const int32[] id_it_origPKIMessage               = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 4L, 15L);
+		public const int32[] id_it_suppLangTags                 = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 4L, 16L);
+
 		public const int32[] id_pkip                            = new .[8](iso, 3L, 6L, 1L, 5L, 5L, 7L, 5L);
+		public const int32[] id_regCtrl                         = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 5L, 1L);
+		public const int32[] id_regCtrl_regToken                = new .[10](iso, 3L, 6L, 1L, 5L, 5L, 7L, 5L, 1L, 1L);
+		public const int32[] id_regCtrl_authenticator           = new .[10](iso, 3L, 6L, 1L, 5L, 5L, 7L, 5L, 1L, 2L);
+		public const int32[] id_regCtrl_pkiPublicationInfo      = new .[10](iso, 3L, 6L, 1L, 5L, 5L, 7L, 5L, 1L, 3L);
+		public const int32[] id_regCtrl_pkiArchiveOptions       = new .[10](iso, 3L, 6L, 1L, 5L, 5L, 7L, 5L, 1L, 4L);
+		public const int32[] id_regCtrl_oldCertID               = new .[10](iso, 3L, 6L, 1L, 5L, 5L, 7L, 5L, 1L, 5L);
+		public const int32[] id_regCtrl_protocolEncrKey         = new .[10](iso, 3L, 6L, 1L, 5L, 5L, 7L, 5L, 1L, 6L);
+
+		public const int32[] id_regInfo                         = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 5L, 2L);
+		public const int32[] id_regInfo_utf8Pairs               = new .[10](iso, 3L, 6L, 1L, 5L, 5L, 7L, 5L, 2L, 1L);
+		public const int32[] id_regInfo_certReq                 = new .[10](iso, 3L, 6L, 1L, 5L, 5L, 7L, 5L, 2L, 2L);
+
 		public const int32[] id_alg                             = new .[8](iso, 3L, 6L, 1L, 5L, 5L, 7L, 6L);
+		public const int32[] id_alg_des40                       = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 6L, 1L);
+		public const int32[] id_alg_noSignature                 = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 6L, 2L);
+		public const int32[] id_alg_dh_sig_hmac_sha1            = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 6L, 3L);
+		public const int32[] id_alg_dh_pop                      = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 6L, 4L);
+
 		public const int32[] id_cmc                             = new .[8](iso, 3L, 6L, 1L, 5L, 5L, 7L, 7L);
+		public const int32[] id_cmc_statusInfo                  = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 7L, 1L);
+		public const int32[] id_cmc_identification              = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 7L, 2L);
+		public const int32[] id_cmc_identityProof               = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 7L, 3L);
+		public const int32[] id_cmc_dataReturn                  = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 7L, 4L);
+		public const int32[] id_cmc_transactionId               = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 7L, 5L);
+		public const int32[] id_cmc_senderNonce                 = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 7L, 6L);
+		public const int32[] id_cmc_recipientNonce              = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 7L, 7L);
+		public const int32[] id_cmc_addExtensions               = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 7L, 8L);
+		public const int32[] id_cmc_encryptedPOP                = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 7L, 9L);
+		public const int32[] id_cmc_decryptedPOP                = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 7L, 10L);
+		public const int32[] id_cmc_lraPOPWitness               = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 7L, 11L);
+		public const int32[] id_cmc_getCert                     = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 7L, 15L);
+		public const int32[] id_cmc_getCRL                      = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 7L, 16L);
+		public const int32[] id_cmc_revokeRequest               = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 7L, 17L);
+		public const int32[] id_cmc_regInfo                     = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 7L, 18L);
+		public const int32[] id_cmc_responseInfo                = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 7L, 19L);
+		public const int32[] id_cmc_queryPending                = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 7L, 21L);
+		public const int32[] id_cmc_popLinkRandom               = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 7L, 22L);
+		public const int32[] id_cmc_popLinkWitness              = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 7L, 23L);
+		public const int32[] id_cmc_confirmCertAcceptance       = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 7L, 24L);
+
 		public const int32[] id_on                              = new .[8](iso, 3L, 6L, 1L, 5L, 5L, 7L, 8L);
+		public const int32[] id_on_personalData                 = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 8L, 1L);
+		public const int32[] id_on_permanentIdentifier          = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 8L, 3L);
+
 		public const int32[] id_pda                             = new .[8](iso, 3L, 6L, 1L, 5L, 5L, 7L, 9L);
+		public const int32[] id_pda_dateOfBirth                 = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 9L, 1L);
+		public const int32[] id_pda_placeOfBirth                = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 9L, 2L);
+		public const int32[] id_pda_gender                      = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 9L, 3L);
+		public const int32[] id_pda_countryOfCitizenship        = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 9L, 4L);
+		public const int32[] id_pda_countryOfResidence          = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 9L, 5L);
+
 		public const int32[] id_aca                             = new .[8](iso, 3L, 6L, 1L, 5L, 5L, 7L, 10L);
+		public const int32[] id_aca_authenticationInfo          = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 10L, 1L);
+		public const int32[] id_aca_accessIdentity              = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 10L, 2L);
+		public const int32[] id_aca_chargingIdentity            = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 10L, 3L);
+		public const int32[] id_aca_group                       = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 10L, 4L);
+		public const int32[] id_aca_role                        = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 10L, 5L);
+		public const int32[] id_aca_encAttrs                    = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 10L, 6L);
+
 		public const int32[] id_qcs                             = new .[8](iso, 3L, 6L, 1L, 5L, 5L, 7L, 11L);
+		public const int32[] id_qcs_pkixQCSyntax_v1             = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 11L, 1L);
+
 		public const int32[] id_cct                             = new .[8](iso, 3L, 6L, 1L, 5L, 5L, 7L, 12L);
+		public const int32[] id_cct_crs                         = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 12L, 1L);
+		public const int32[] id_cct_PKIData                     = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 12L, 2L);
+		public const int32[] id_cct_PKIResponse                 = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 12L, 3L);
+
 		public const int32[] id_ppl                             = new .[8](iso, 3L, 6L, 1L, 5L, 5L, 7L, 21L);
+		public const int32[] id_ppl_anyLanguage                 = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 21L, 0L);
+		public const int32[] id_ppl_inheritAll                  = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 21L, 1L);
+		public const int32[] Independent                        = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 21L, 2L);
+
 		public const int32[] id_ad                              = new .[8](iso, 3L, 6L, 1L, 5L, 5L, 7L, 48L);
+		public const int32[] ad_OCSP                            = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 48L, 1L);
+		public const int32[] ad_ca_issuers                      = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 48L, 2L);
+		public const int32[] ad_timeStamping                    = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 48L, 3L);
+		public const int32[] ad_dvcs                            = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 48L, 4L);
+		public const int32[] caRepository                       = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 7L, 48L, 5L);
+
+		public const int32[] id_pkix_OCSP                       = ad_OCSP;
+		public const int32[] id_pkix_OCSP_basic                 = new .[10](iso, 3L, 6L, 1L, 5L, 5L, 7L, 48L, 1L, 1L);
+		public const int32[] id_pkix_OCSP_Nonce                 = new .[10](iso, 3L, 6L, 1L, 5L, 5L, 7L, 48L, 1L, 2L);
+		public const int32[] id_pkix_OCSP_CrlID                 = new .[10](iso, 3L, 6L, 1L, 5L, 5L, 7L, 48L, 1L, 3L);
+		public const int32[] id_pkix_OCSP_acceptableResponses   = new .[10](iso, 3L, 6L, 1L, 5L, 5L, 7L, 48L, 1L, 4L);
+		public const int32[] id_pkix_OCSP_noCheck               = new .[10](iso, 3L, 6L, 1L, 5L, 5L, 7L, 48L, 1L, 5L);
+		public const int32[] id_pkix_OCSP_archiveCutoff         = new .[10](iso, 3L, 6L, 1L, 5L, 5L, 7L, 48L, 1L, 6L);
+		public const int32[] id_pkix_OCSP_serviceLocator        = new .[10](iso, 3L, 6L, 1L, 5L, 5L, 7L, 48L, 1L, 7L);
+		public const int32[] id_pkix_OCSP_extendedStatus        = new .[10](iso, 3L, 6L, 1L, 5L, 5L, 7L, 48L, 1L, 8L);
+		public const int32[] id_pkix_OCSP_valid                 = new .[10](iso, 3L, 6L, 1L, 5L, 5L, 7L, 48L, 1L, 9L);
+		public const int32[] id_pkix_OCSP_path                  = new .[10](iso, 3L, 6L, 1L, 5L, 5L, 7L, 48L, 1L, 10L);
+		public const int32[] id_pkix_OCSP_trustRoot             = new .[10](iso, 3L, 6L, 1L, 5L, 5L, 7L, 48L, 1L, 11L);
 
 		public const int32[] hmac_md5                           = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 8L, 1L, 1L);
 		public const int32[] hmac_sha1                          = new .[9](iso, 3L, 6L, 1L, 5L, 5L, 8L, 1L, 2L);
+		
+		public const int32[] SNMPv2                             = new .[5](iso, 3L, 6L, 1L, 6L);
+		public const int32[] Mail                               = new .[5](iso, 3L, 6L, 1L, 7L);
+		public const int32[] mime_mhs                           = new .[6](iso, 3L, 6L, 1L, 7L, 1L);
+		public const int32[] mime_mhs_headings                  = new .[7](iso, 3L, 6L, 1L, 7L, 1L, 1L);
+		public const int32[] mime_mhs_bodies                    = new .[7](iso, 3L, 6L, 1L, 7L, 1L, 2L);
+		public const int32[] id_hex_partial_message             = new .[8](iso, 3L, 6L, 1L, 7L, 1L, 1L, 1L);
+		public const int32[] id_hex_multipart_message           = new .[8](iso, 3L, 6L, 1L, 7L, 1L, 1L, 2L);
+
+		public const int32[] algorithm                          = new .[5](iso, 3L, 14L, 3L, 2L);
+		public const int32[] md5WithRSA                         = new .[6](iso, 3L, 14L, 3L, 2L, 3L);
+		public const int32[] des_ecb                            = new .[6](iso, 3L, 14L, 3L, 2L, 6L);
+		public const int32[] des_cbc                            = new .[6](iso, 3L, 14L, 3L, 2L, 7L);
+		public const int32[] des_ofb64                          = new .[6](iso, 3L, 14L, 3L, 2L, 8L);
+		public const int32[] des_cfb64                          = new .[6](iso, 3L, 14L, 3L, 2L, 9L);
+		public const int32[] rsaSignature                       = new .[6](iso, 3L, 14L, 3L, 2L, 11L);
+		public const int32[] dsa_2                              = new .[6](iso, 3L, 14L, 3L, 2L, 12L);
+		public const int32[] dsaWithSHA                         = new .[6](iso, 3L, 14L, 3L, 2L, 13L);
+		public const int32[] shaWithRSAEncryption               = new .[6](iso, 3L, 14L, 3L, 2L, 15L);
+		public const int32[] des_ede_ecb                        = new .[6](iso, 3L, 14L, 3L, 2L, 17L);
+		public const int32[] sha                                = new .[6](iso, 3L, 14L, 3L, 2L, 18L);
+		public const int32[] sha1                               = new .[6](iso, 3L, 14L, 3L, 2L, 26L);
+		public const int32[] dsaWithSHA1_2                      = new .[6](iso, 3L, 14L, 3L, 2L, 27L);
+		public const int32[] sha1WithRSA                        = new .[6](iso, 3L, 14L, 3L, 2L, 29L);
+		
+		public const int32[] ripemd160                          = new .[6](iso, 3L, 36L, 3L, 2L, 1L);
+
+		public const int32[] ripemd160WithRSA                   = new .[7](iso, 3L, 36L, 3L, 3L, 1L, 2L);
 
 		public const int32[] x509ExtAdmission                   = new .[6](iso, 3L, 36L, 8L, 3L, 3L);
 
+		public const int32[] sxnet                              = new .[6](iso, 3L, 101L, 1L, 4L, 1L);
+
 		public const int32[] ieee                               = new .[3](iso, 3L, 111L);
 		public const int32[] ieee_siswg                         = new .[5](iso, 3L, 111L, 2L, 1619L);
+		public const int32[] aes_128_xts                        = new .[8](iso, 3L, 111L, 2L, 1619L, 0L, 1L, 1L);
+		public const int32[] aes_256_xts                        = new .[8](iso, 3L, 111L, 2L, 1619L, 0L, 1L, 2L);
 
 		public const int32[] certicom_arc                       = new .[3](iso, 3L, 132L);
 		public const int32[] secg_ellipticCurve                 = new .[4](iso, 3L, 132L, 0L);
@@ -372,8 +639,189 @@ namespace Beef_Net.OpenSSL
 
 		public const int32 joint_iso_itu_t                      = 2L;
 		public const int32 joint_iso_ccitt                      = joint_iso_itu_t;
+		public const int32[] X500                               = new .[2](joint_iso_itu_t, 5L);
 		public const int32[] selected_attribute_types           = new .[4](joint_iso_itu_t, 5L, 1L, 5L);
 		public const int32[] clearance                          = new .[5](joint_iso_itu_t, 5L, 1L, 5L, 55L);
+
+		public const int32[] X509                               = new .[3](joint_iso_itu_t, 5L, 4L);
+		public const int32[] commonName                         = new .[4](joint_iso_itu_t, 5L, 4L, 3L);
+		public const int32[] surname                            = new .[4](joint_iso_itu_t, 5L, 4L, 4L);
+		public const int32[] serialNumber                       = new .[4](joint_iso_itu_t, 5L, 4L, 5L);
+		public const int32[] countryName                        = new .[4](joint_iso_itu_t, 5L, 4L, 6L);
+		public const int32[] localityName                       = new .[4](joint_iso_itu_t, 5L, 4L, 7L);
+		public const int32[] stateOrProvinceName                = new .[4](joint_iso_itu_t, 5L, 4L, 8L);
+		public const int32[] streetAddress                      = new .[4](joint_iso_itu_t, 5L, 4L, 9L);
+		public const int32[] organizationName                   = new .[4](joint_iso_itu_t, 5L, 4L, 10L);
+		public const int32[] organizationalUnitName             = new .[4](joint_iso_itu_t, 5L, 4L, 11L);
+		public const int32[] title                              = new .[4](joint_iso_itu_t, 5L, 4L, 12L);
+		public const int32[] description                        = new .[4](joint_iso_itu_t, 5L, 4L, 13L);
+		public const int32[] searchGuide                        = new .[4](joint_iso_itu_t, 5L, 4L, 14L);
+		public const int32[] businessCategory                   = new .[4](joint_iso_itu_t, 5L, 4L, 15L);
+		public const int32[] postalAddress                      = new .[4](joint_iso_itu_t, 5L, 4L, 16L);
+		public const int32[] postalCode                         = new .[4](joint_iso_itu_t, 5L, 4L, 17L);
+		public const int32[] postOfficeBox                      = new .[4](joint_iso_itu_t, 5L, 4L, 18L);
+		public const int32[] physicalDeliveryOfficeName         = new .[4](joint_iso_itu_t, 5L, 4L, 19L);
+		public const int32[] telephoneNumber                    = new .[4](joint_iso_itu_t, 5L, 4L, 20L);
+		public const int32[] telexNumber                        = new .[4](joint_iso_itu_t, 5L, 4L, 21L);
+		public const int32[] teletexTerminalIdentifier          = new .[4](joint_iso_itu_t, 5L, 4L, 22L);
+		public const int32[] facsimileTelephoneNumber           = new .[4](joint_iso_itu_t, 5L, 4L, 23L);
+		public const int32[] x121Address                        = new .[4](joint_iso_itu_t, 5L, 4L, 24L);
+		public const int32[] internationaliSDNNumber            = new .[4](joint_iso_itu_t, 5L, 4L, 25L);
+		public const int32[] registeredAddress                  = new .[4](joint_iso_itu_t, 5L, 4L, 26L);
+		public const int32[] destinationIndicator               = new .[4](joint_iso_itu_t, 5L, 4L, 27L);
+		public const int32[] preferredDeliveryMethod            = new .[4](joint_iso_itu_t, 5L, 4L, 28L);
+		public const int32[] presentationAddress                = new .[4](joint_iso_itu_t, 5L, 4L, 29L);
+		public const int32[] supportedApplicationContext        = new .[4](joint_iso_itu_t, 5L, 4L, 30L);
+		public const int32[] member                             = new .[4](joint_iso_itu_t, 5L, 4L, 31L);
+		public const int32[] owner                              = new .[4](joint_iso_itu_t, 5L, 4L, 32L);
+		public const int32[] roleOccupant                       = new .[4](joint_iso_itu_t, 5L, 4L, 33L);
+		public const int32[] seeAlso                            = new .[4](joint_iso_itu_t, 5L, 4L, 34L);
+		public const int32[] userPassword                       = new .[4](joint_iso_itu_t, 5L, 4L, 35L);
+		public const int32[] userCertificate                    = new .[4](joint_iso_itu_t, 5L, 4L, 36L);
+		public const int32[] cACertificate                      = new .[4](joint_iso_itu_t, 5L, 4L, 37L);
+		public const int32[] authorityRevocationList            = new .[4](joint_iso_itu_t, 5L, 4L, 38L);
+		public const int32[] certificateRevocationList          = new .[4](joint_iso_itu_t, 5L, 4L, 39L);
+		public const int32[] crossCertificatePair               = new .[4](joint_iso_itu_t, 5L, 4L, 40L);
+		public const int32[] name                               = new .[4](joint_iso_itu_t, 5L, 4L, 41L);
+		public const int32[] givenName                          = new .[4](joint_iso_itu_t, 5L, 4L, 42L);
+		public const int32[] initials                           = new .[4](joint_iso_itu_t, 5L, 4L, 43L);
+		public const int32[] generationQualifier                = new .[4](joint_iso_itu_t, 5L, 4L, 44L);
+		public const int32[] x500UniqueIdentifier               = new .[4](joint_iso_itu_t, 5L, 4L, 45L);
+		public const int32[] dnQualifier                        = new .[4](joint_iso_itu_t, 5L, 4L, 46L);
+		public const int32[] enhancedSearchGuide                = new .[4](joint_iso_itu_t, 5L, 4L, 47L);
+		public const int32[] protocolInformation                = new .[4](joint_iso_itu_t, 5L, 4L, 48L);
+		public const int32[] distinguishedName                  = new .[4](joint_iso_itu_t, 5L, 4L, 49L);
+		public const int32[] uniqueMember                       = new .[4](joint_iso_itu_t, 5L, 4L, 50L);
+		public const int32[] houseIdentifier                    = new .[4](joint_iso_itu_t, 5L, 4L, 51L);
+		public const int32[] supportedAlgorithms                = new .[4](joint_iso_itu_t, 5L, 4L, 52L);
+		public const int32[] deltaRevocationList                = new .[4](joint_iso_itu_t, 5L, 4L, 53L);
+		public const int32[] dmdName                            = new .[4](joint_iso_itu_t, 5L, 4L, 54L);
+		public const int32[] pseudonym                          = new .[4](joint_iso_itu_t, 5L, 4L, 65L);
+		public const int32[] role                               = new .[4](joint_iso_itu_t, 5L, 4L, 72L);
+		public const int32[] organizationIdentifier             = new .[4](joint_iso_itu_t, 5L, 4L, 97L);
+		public const int32[] countryCode3c                      = new .[4](joint_iso_itu_t, 5L, 4L, 98L);
+		public const int32[] countryCode3n                      = new .[4](joint_iso_itu_t, 5L, 4L, 99L);
+		public const int32[] dnsName                            = new .[4](joint_iso_itu_t, 5L, 4L, 100L);
+		
+		public const int32[] X500algorithms                     = new .[3](joint_iso_itu_t, 5L, 8L);
+		public const int32[] rsa                                = new .[5](joint_iso_itu_t, 5L, 8L, 1L, 1L);
+		public const int32[] mdc2WithRSA                        = new .[5](joint_iso_itu_t, 5L, 8L, 3L, 100L);
+		public const int32[] mdc2                               = new .[5](joint_iso_itu_t, 5L, 8L, 3L, 101L);
+
+		public const int32[] id_ce                              = new .[3](joint_iso_itu_t, 5L, 29L);
+		public const int32[] subject_directory_attributes       = new .[4](joint_iso_itu_t, 5L, 29L, 9L);
+		public const int32[] subject_key_identifier             = new .[4](joint_iso_itu_t, 5L, 29L, 14L);
+		public const int32[] key_usage                          = new .[4](joint_iso_itu_t, 5L, 29L, 15L);
+		public const int32[] private_key_usage_period           = new .[4](joint_iso_itu_t, 5L, 29L, 16L);
+		public const int32[] subject_alt_name                   = new .[4](joint_iso_itu_t, 5L, 29L, 17L);
+		public const int32[] issuer_alt_name                    = new .[4](joint_iso_itu_t, 5L, 29L, 18L);
+		public const int32[] basic_constraints                  = new .[4](joint_iso_itu_t, 5L, 29L, 19L);
+		public const int32[] crl_number                         = new .[4](joint_iso_itu_t, 5L, 29L, 20L);
+		public const int32[] crl_reason                         = new .[4](joint_iso_itu_t, 5L, 29L, 21L);
+		public const int32[] hold_instruction_code              = new .[4](joint_iso_itu_t, 5L, 29L, 23L);
+		public const int32[] invalidity_date                    = new .[4](joint_iso_itu_t, 5L, 29L, 24L);
+		public const int32[] delta_crl                          = new .[4](joint_iso_itu_t, 5L, 29L, 27L);
+		public const int32[] issuing_distribution_point32       = new .[4](joint_iso_itu_t, 5L, 29L, 28L);
+		public const int32[] certificate_issuer                 = new .[4](joint_iso_itu_t, 5L, 29L, 29L);
+		public const int32[] name_constraints                   = new .[4](joint_iso_itu_t, 5L, 29L, 30L);
+		public const int32[] crl_distribution_points            = new .[4](joint_iso_itu_t, 5L, 29L, 31L);
+
+		public const int32[] certificate_policies               = new .[4](joint_iso_itu_t, 5L, 29L, 32L);
+		public const int32[] any_policy                         = new .[5](joint_iso_itu_t, 5L, 29L, 32L, 0L);
+
+		public const int32[] policy_mappings                    = new .[4](joint_iso_itu_t, 5L, 29L, 33L);
+		public const int32[] authority_key_identifier           = new .[4](joint_iso_itu_t, 5L, 29L, 35L);
+		public const int32[] policy_constraints                 = new .[4](joint_iso_itu_t, 5L, 29L, 36L);
+
+		public const int32[] ext_key_usage                      = new .[4](joint_iso_itu_t, 5L, 29L, 37L);
+		public const int32[] anyExtendedKeyUsage                = new .[5](joint_iso_itu_t, 5L, 29L, 37L, 0L);
+
+		public const int32[] freshest_crl                       = new .[4](joint_iso_itu_t, 5L, 29L, 46L);
+		public const int32[] inhibit_any_policy                 = new .[4](joint_iso_itu_t, 5L, 29L, 54L);
+		public const int32[] target_information                 = new .[4](joint_iso_itu_t, 5L, 29L, 55L);
+		public const int32[] no_rev_avail                       = new .[4](joint_iso_itu_t, 5L, 29L, 56L);
+		
+		public const int32[] csor                               = new .[6](joint_iso_itu_t, 16L, 840L, 1L, 101L,3L);
+
+		public const int32[] nistAlgorithms                     = new .[7](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L);
+		public const int32[] aes                                = new .[8](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 1L);
+		public const int32[] aes_128_ecb                        = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 1L, 1L);
+		public const int32[] aes_128_cbc                        = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 1L, 2L);
+		public const int32[] aes_128_ofb128                     = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 1L, 3L);
+		public const int32[] aes_128_cfb128                     = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 1L, 4L);
+		public const int32[] id_aes128_wrap                     = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 1L, 5L);
+		public const int32[] aes_128_gcm                        = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 1L, 6L);
+		public const int32[] aes_128_ccm                        = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 1L, 7L);
+		public const int32[] id_aes128_wrap_pad                 = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 1L, 8L);
+		public const int32[] aes_192_ecb                        = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 1L, 21L);
+		public const int32[] aes_192_cbc                        = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 1L, 22L);
+		public const int32[] aes_192_ofb128                     = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 1L, 23L);
+		public const int32[] aes_192_cfb128                     = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 1L, 24L);
+		public const int32[] id_aes192_wrap                     = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 1L, 25L);
+		public const int32[] aes_192_gcm                        = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 1L, 26L);
+		public const int32[] aes_192_ccm                        = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 1L, 27L);
+		public const int32[] id_aes192_wrap_pad                 = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 1L, 28L);
+		public const int32[] aes_256_ecb                        = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 1L, 41L);
+		public const int32[] aes_256_cbc                        = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 1L, 42L);
+		public const int32[] aes_256_ofb128                     = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 1L, 43L);
+		public const int32[] aes_256_cfb128                     = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 1L, 44L);
+		public const int32[] id_aes256_wrap                     = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 1L, 45L);
+		public const int32[] aes_256_gcm                        = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 1L, 46L);
+		public const int32[] aes_256_ccm                        = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 1L, 47L);
+		public const int32[] id_aes256_wrap_pad                 = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 1L, 48L);
+
+		public const int32[] nist_hashalgs                      = new .[8](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 2L);
+		public const int32[] sha256                             = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 2L, 1L);
+		public const int32[] sha384                             = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 2L, 2L);
+		public const int32[] sha512                             = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 2L, 3L);
+		public const int32[] sha224                             = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 2L, 4L);
+		public const int32[] sha512_224                         = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 2L, 5L);
+		public const int32[] sha512_256                         = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 2L, 6L);
+		public const int32[] sha3_224                           = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 2L, 7L);
+		public const int32[] sha3_256                           = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 2L, 8L);
+		public const int32[] sha3_384                           = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 2L, 9L);
+		public const int32[] sha3_512                           = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 2L, 10L);
+		public const int32[] shake128                           = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 2L, 11L);
+		public const int32[] shake256                           = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 2L, 12L);
+		public const int32[] hmac_sha3_224                      = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 2L, 13L);
+		public const int32[] hmac_sha3_256                      = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 2L, 14L);
+		public const int32[] hmac_sha3_384                      = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 2L, 15L);
+		public const int32[] hmac_sha3_512                      = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 2L, 16L);
+
+		public const int32[] dsa_with_sha2                      = new .[8](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 3L);
+		public const int32[] sigAlgs                            = new .[8](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 3L);
+		public const int32[] dsa_with_SHA224                    = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 3L, 1L);
+		public const int32[] dsa_with_SHA256                    = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 3L, 2L);
+		public const int32[] dsa_with_SHA384                    = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 3L, 3L);
+		public const int32[] dsa_with_SHA512                    = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 3L, 4L);
+		public const int32[] dsa_with_SHA3_224                  = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 3L, 5L);
+		public const int32[] dsa_with_SHA3_256                  = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 3L, 6L);
+		public const int32[] dsa_with_SHA3_384                  = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 3L, 7L);
+		public const int32[] dsa_with_SHA3_512                  = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 3L, 8L);
+		public const int32[] ecdsa_with_SHA3_224                = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 3L, 9L);
+		public const int32[] ecdsa_with_SHA3_256                = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 3L, 10L);
+		public const int32[] ecdsa_with_SHA3_384                = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 3L, 11L);
+		public const int32[] ecdsa_with_SHA3_512                = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 3L, 12L);
+		public const int32[] RSA_SHA3_224                       = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 3L, 13L);
+		public const int32[] RSA_SHA3_256                       = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 3L, 14L);
+		public const int32[] RSA_SHA3_384                       = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 3L, 15L);
+		public const int32[] RSA_SHA3_512                       = new .[9](joint_iso_itu_t, 16L, 840L, 1L, 101L, 3L, 4L, 3L, 16L);
+
+		public const int32[] netscape                           = new .[5](joint_iso_itu_t, 16L, 840L, 1L, 113730L);
+		public const int32[] netscape_cert_extension            = new .[6](joint_iso_itu_t, 16L, 840L, 1L, 113730L, 1L);
+		public const int32[] netscape_cert_type                 = new .[7](joint_iso_itu_t, 16L, 840L, 1L, 113730L, 1L, 1L);
+		public const int32[] netscape_base_url                  = new .[7](joint_iso_itu_t, 16L, 840L, 1L, 113730L, 1L, 2L);
+		public const int32[] netscape_revocation_url            = new .[7](joint_iso_itu_t, 16L, 840L, 1L, 113730L, 1L, 3L);
+		public const int32[] netscape_ca_revocation_url         = new .[7](joint_iso_itu_t, 16L, 840L, 1L, 113730L, 1L, 4L);
+		public const int32[] netscape_renewal_url               = new .[7](joint_iso_itu_t, 16L, 840L, 1L, 113730L, 1L, 7L);
+		public const int32[] netscape_ca_policy_url             = new .[7](joint_iso_itu_t, 16L, 840L, 1L, 113730L, 1L, 8L);
+		public const int32[] netscape_ssl_server_name           = new .[7](joint_iso_itu_t, 16L, 840L, 1L, 113730L, 1L, 12L);
+		public const int32[] netscape_comment                   = new .[7](joint_iso_itu_t, 16L, 840L, 1L, 113730L, 1L, 13L);
+
+		public const int32[] netscape_data_type                 = new .[6](joint_iso_itu_t, 16L, 840L, 1L, 113730L, 2L);
+		public const int32[] netscape_cert_sequence             = new .[7](joint_iso_itu_t, 16L, 840L, 1L, 113730L, 2L, 5L);
+
+		public const int32[] ns_sgc                             = new .[7](joint_iso_itu_t, 16L, 840L, 1L, 113730L, 4L, 1L);
 
 		public const int32[] international_organizations        = new .[2](joint_iso_itu_t, 23L);
 		public const int32[] wap                                = new .[3](joint_iso_itu_t, 23L, 43L);
@@ -390,6 +838,10 @@ namespace Beef_Net.OpenSSL
 		public const int32[] wap_wsg_idm_ecid_wtls10            = new .[6](joint_iso_itu_t, 23L, 43L, 1L, 4L, 10L);
 		public const int32[] wap_wsg_idm_ecid_wtls11            = new .[6](joint_iso_itu_t, 23L, 43L, 1L, 4L, 11L);
 		public const int32[] wap_wsg_idm_ecid_wtls12            = new .[6](joint_iso_itu_t, 23L, 43L, 1L, 4L, 12L);
+
+
+
+
 
 
 
