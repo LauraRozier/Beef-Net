@@ -14,6 +14,7 @@ namespace Beef_Net.OpenSSL
 	[AlwaysInclude]
 	sealed abstract class Objects
 	{
+		/* ObjMAC header */
 		public const int32 undef                                                    = 0L;
 		public const int32 itu_t                                                    = 0L;
 		public const int32 ccitt                                                    = itu_t;
@@ -1261,9 +1262,7 @@ namespace Beef_Net.OpenSSL
 		public const int32[] wap_wsg_idm_ecid_wtls11                                = new .[6](joint_iso_itu_t, 23L, 43L, 1L, 4L, 11L);
 		public const int32[] wap_wsg_idm_ecid_wtls12                                = new .[6](joint_iso_itu_t, 23L, 43L, 1L, 4L, 12L);
 
-
-
-
+		/* Objects header */
 		public const int NAME_TYPE_UNDEF       = 0x00;
 		public const int NAME_TYPE_MD_METH     = 0x01;
 		public const int NAME_TYPE_CIPHER_METH = 0x02;
