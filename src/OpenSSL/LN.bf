@@ -514,5 +514,22 @@ namespace Beef_Net.OpenSSL
 		public const String personalSignature                  = "personalSignature";
 		public const String dITRedirect                        = "dITRedirect";
 		public const String documentPublisher                  = "documentPublisher";
+
+		public const String id_set                             = "Secure Electronic Transactions";
+		public const String set_ctype                          = "content types";
+		public const String set_msgExt                         = "message extensions";
+		public const String set_certExt                        = "certificate extensions";
+
+		public const String setext_genCrypt                    = "generic cryptogram";
+		public const String setext_miAuth                      = "merchant initiated auth";
+		public const String setext_cv                          = "additional verification";
+
+		public const String setAttr_PGWYcap                    = "payment gateway capabilities";
+		public const String setAttr_IssCap                     = "issuer capabilities";
+		public const String setAttr_GenCryptgrm                = "generate cryptogram";
+		public const String setAttr_T2Enc                      = "encrypted track 2";
+		public const String setAttr_T2cleartxt                 = "cleartext track 2";
+		public const String setAttr_TokICCsig                  = "ICC or token signature";
+		public const String setAttr_SecDevSig                  = "secure device signature";
 	}
 }
