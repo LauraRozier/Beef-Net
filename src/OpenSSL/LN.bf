@@ -571,5 +571,155 @@ namespace Beef_Net.OpenSSL
 		public const String id_tc26_gost_3410_2012_512_paramSetB     = "GOST R 34.10-2012 (512 bit) ParamSet B";
 		public const String id_tc26_gost_3410_2012_512_paramSetC     = "GOST R 34.10-2012 (512 bit) ParamSet C";
 		public const String id_tc26_gost_28147_param_Z               = "GOST 28147-89 TC26 parameter set";
+
+		public const String INN                                      = "INN";
+		public const String OGRN                                     = "OGRN";
+		public const String SNILS                                    = "SNILS";
+		public const String subjectSignTool                          = "Signing Tool of Subject";
+		public const String issuerSignTool                           = "Signing Tool of Issuer";
+
+		public const String camellia_128_cbc                         = "camellia-128-cbc";
+		public const String camellia_128_ecb                         = "camellia-128-ecb";
+		public const String camellia_128_ofb128                      = "camellia-128-ofb";
+		public const String camellia_128_cfb128                      = "camellia-128-cfb";
+		public const String camellia_128_gcm                         = "camellia-128-gcm";
+		public const String camellia_128_ccm                         = "camellia-128-ccm";
+		public const String camellia_128_ctr                         = "camellia-128-ctr";
+		public const String camellia_128_cmac                        = "camellia-128-cmac";
+		public const String camellia_128_cfb1                        = "camellia-128-cfb1";
+		public const String camellia_128_cfb8                        = "camellia-128-cfb8";
+		public const String camellia_192_cbc                         = "camellia-192-cbc";
+		public const String camellia_192_ecb                         = "camellia-192-ecb";
+		public const String camellia_192_ofb128                      = "camellia-192-ofb";
+		public const String camellia_192_cfb128                      = "camellia-192-cfb";
+		public const String camellia_192_gcm                         = "camellia-192-gcm";
+		public const String camellia_192_ccm                         = "camellia-192-ccm";
+		public const String camellia_192_ctr                         = "camellia-192-ctr";
+		public const String camellia_192_cmac                        = "camellia-192-cmac";
+		public const String camellia_192_cfb1                        = "camellia-192-cfb1";
+		public const String camellia_192_cfb8                        = "camellia-192-cfb8";
+		public const String camellia_256_cbc                         = "camellia-256-cbc";
+		public const String camellia_256_ecb                         = "camellia-256-ecb";
+		public const String camellia_256_ofb128                      = "camellia-256-ofb";
+		public const String camellia_256_cfb128                      = "camellia-256-cfb";
+		public const String camellia_256_gcm                         = "camellia-256-gcm";
+		public const String camellia_256_ccm                         = "camellia-256-ccm";
+		public const String camellia_256_ctr                         = "camellia-256-ctr";
+		public const String camellia_256_cmac                        = "camellia-256-cmac";
+		public const String camellia_256_cfb1                        = "camellia-256-cfb1";
+		public const String camellia_256_cfb8                        = "camellia-256-cfb8";
+
+		public const String aria_128_ecb                             = "aria-128-ecb";
+		public const String aria_128_cbc                             = "aria-128-cbc";
+		public const String aria_128_cfb128                          = "aria-128-cfb";
+		public const String aria_128_ofb128                          = "aria-128-ofb";
+		public const String aria_128_ctr                             = "aria-128-ctr";
+		public const String aria_128_cfb1                            = "aria-128-cfb1";
+		public const String aria_128_cfb8                            = "aria-128-cfb8";
+		public const String aria_128_ccm                             = "aria-128-ccm";
+		public const String aria_128_gcm                             = "aria-128-gcm";
+		public const String aria_192_ecb                             = "aria-192-ecb";
+		public const String aria_192_cbc                             = "aria-192-cbc";
+		public const String aria_192_cfb128                          = "aria-192-cfb";
+		public const String aria_192_ofb128                          = "aria-192-ofb";
+		public const String aria_192_ctr                             = "aria-192-ctr";
+		public const String aria_192_cfb1                            = "aria-192-cfb1";
+		public const String aria_192_cfb8                            = "aria-192-cfb8";
+		public const String aria_192_ccm                             = "aria-192-ccm";
+		public const String aria_192_gcm                             = "aria-192-gcm";
+		public const String aria_256_ecb                             = "aria-256-ecb";
+		public const String aria_256_cbc                             = "aria-256-cbc";
+		public const String aria_256_cfb128                          = "aria-256-cfb";
+		public const String aria_256_ofb128                          = "aria-256-ofb";
+		public const String aria_256_ctr                             = "aria-256-ctr";
+		public const String aria_256_cfb1                            = "aria-256-cfb1";
+		public const String aria_256_cfb8                            = "aria-256-cfb8";
+		public const String aria_256_ccm                             = "aria-256-ccm";
+		public const String aria_256_gcm                             = "aria-256-gcm";
+
+		public const String kisa                                     = "kisa";
+		public const String seed_ecb                                 = "seed-ecb";
+		public const String seed_cbc                                 = "seed-cbc";
+		public const String seed_cfb128                              = "seed-cfb";
+		public const String seed_ofb128                              = "seed-ofb";
+		public const String sm4_ecb                                  = "sm4-ecb";
+		public const String sm4_cbc                                  = "sm4-cbc";
+		public const String sm4_ofb128                               = "sm4-ofb";
+		public const String sm4_cfb128                               = "sm4-cfb";
+		public const String sm4_cfb1                                 = "sm4-cfb1";
+		public const String sm4_cfb8                                 = "sm4-cfb8";
+		public const String sm4_ctr                                  = "sm4-ctr";
+		public const String hmac                                     = "hmac";
+		public const String cmac                                     = "cmac";
+
+		public const String rc4_hmac_md5                             = "rc4-hmac-md5";
+		public const String aes_128_cbc_hmac_sha1                    = "aes-128-cbc-hmac-sha1";
+		public const String aes_192_cbc_hmac_sha1                    = "aes-192-cbc-hmac-sha1";
+		public const String aes_256_cbc_hmac_sha1                    = "aes-256-cbc-hmac-sha1";
+		public const String aes_128_cbc_hmac_sha256                  = "aes-128-cbc-hmac-sha256";
+		public const String aes_192_cbc_hmac_sha256                  = "aes-192-cbc-hmac-sha256";
+		public const String aes_256_cbc_hmac_sha256                  = "aes-256-cbc-hmac-sha256";
+		public const String chacha20_poly1305                        = "chacha20-poly1305";
+		public const String chacha20                                 = "chacha20";
+
+		public const String dhpublicnumber                           = "X9.42 DH";
+
+		public const String ct_precert_scts                          = "CT Precertificate SCTs";
+		public const String ct_precert_poison                        = "CT Precertificate Poison";
+		public const String ct_precert_signer                        = "CT Precertificate Signer";
+		public const String ct_cert_scts                             = "CT Certificate SCTs";
+
+		public const String jurisdictionLocalityName                 = "jurisdictionLocalityName";
+		public const String jurisdictionStateOrProvinceName          = "jurisdictionStateOrProvinceName";
+		public const String jurisdictionCountryName                  = "jurisdictionCountryName";
+
+		public const String id_scrypt                                = "scrypt";
+		public const String tls1_prf                                 = "tls1-prf";
+		public const String hkdf                                     = "hkdf";
+
+		public const String pkInitClientAuth                         = "PKINIT Client Auth";
+		public const String pkInitKDC                                = "Signing KDC Response";
+
+		public const String kx_rsa                                   = "kx-rsa";
+		public const String kx_ecdhe                                 = "kx-ecdhe";
+		public const String kx_dhe                                   = "kx-dhe";
+		public const String kx_ecdhe_psk                             = "kx-ecdhe-psk";
+		public const String kx_dhe_psk                               = "kx-dhe-psk";
+		public const String kx_rsa_psk                               = "kx-rsa-psk";
+		public const String kx_psk                                   = "kx-psk";
+		public const String kx_srp                                   = "kx-srp";
+		public const String kx_gost                                  = "kx-gost";
+		public const String kx_any                                   = "kx-any";
+
+		public const String auth_rsa                                 = "auth-rsa";
+		public const String auth_ecdsa                               = "auth-ecdsa";
+		public const String auth_psk                                 = "auth-psk";
+		public const String auth_dss                                 = "auth-dss";
+		public const String auth_gost01                              = "auth-gost01";
+		public const String auth_gost12                              = "auth-gost12";
+		public const String auth_srp                                 = "auth-srp";
+		public const String auth_null                                = "auth-null";
+		public const String auth_any                                 = "auth-any";
+		public const String poly1305                                 = "poly1305";
+		public const String siphash                                  = "siphash";
+			
+		public const String dstu28147                                = "DSTU Gost 28147-2009";
+		public const String dstu28147_ofb                            = "DSTU Gost 28147-2009 OFB mode";
+		public const String dstu28147_cfb                            = "DSTU Gost 28147-2009 CFB mode";
+		public const String dstu28147_wrap                           = "DSTU Gost 28147-2009 key wrap";
+		public const String hmacWithDstu34311                        = "HMAC DSTU Gost 34311-95";
+		public const String dstu34311                                = "DSTU Gost 34311-95";
+		public const String dstu4145le                               = "DSTU 4145-2002 little endian";
+		public const String dstu4145be                               = "DSTU 4145-2002 big endian";
+		public const String uacurve0                                 = "DSTU curve 0";
+		public const String uacurve1                                 = "DSTU curve 1";
+		public const String uacurve2                                 = "DSTU curve 2";
+		public const String uacurve3                                 = "DSTU curve 3";
+		public const String uacurve4                                 = "DSTU curve 4";
+		public const String uacurve5                                 = "DSTU curve 5";
+		public const String uacurve6                                 = "DSTU curve 6";
+		public const String uacurve7                                 = "DSTU curve 7";
+		public const String uacurve8                                 = "DSTU curve 8";
+		public const String uacurve9                                 = "DSTU curve 9";
 	}
 }
