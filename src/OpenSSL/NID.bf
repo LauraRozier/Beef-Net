@@ -1093,5 +1093,214 @@ namespace Beef_Net.OpenSSL
 		public const int32 id_tc26_cipher_constants                               = 1001;
 		public const int32 id_tc26_gost_28147_constants                           = 1002;
 		public const int32 id_tc26_gost_28147_param_Z                             = 1003;
+
+		public const int32 INN                                                    = 1004;
+		public const int32 OGRN                                                   = 1005;
+		public const int32 SNILS                                                  = 1006;
+		public const int32 subjectSignTool                                        = 1007;
+		public const int32 issuerSignTool                                         = 1008;
+
+		public const int32 grasshopper_ecb                                        = 1012;
+		public const int32 grasshopper_ctr                                        = 1013;
+		public const int32 grasshopper_ofb                                        = 1014;
+		public const int32 grasshopper_cbc                                        = 1015;
+		public const int32 grasshopper_cfb                                        = 1016;
+		public const int32 grasshopper_mac                                        = 1017;
+
+		public const int32 magma_ecb                                              = 1187;
+		public const int32 magma_ctr                                              = 1188;
+		public const int32 magma_ofb                                              = 1189;
+		public const int32 magma_cbc                                              = 1190;
+		public const int32 magma_cfb                                              = 1191;
+		public const int32 magma_mac                                              = 1192;
+
+		public const int32 camellia_128_cbc                                       = 751;
+		public const int32 camellia_128_ecb                                       = 754;
+		public const int32 camellia_128_ofb128                                    = 766;
+		public const int32 camellia_128_cfb128                                    = 757;
+		public const int32 camellia_128_gcm                                       = 961;
+		public const int32 camellia_128_ccm                                       = 962;
+		public const int32 camellia_128_ctr                                       = 963;
+		public const int32 camellia_128_cmac                                      = 964;
+		public const int32 camellia_128_cfb1                                      = 760;
+		public const int32 camellia_128_cfb8                                      = 763;
+		public const int32 camellia_192_cbc                                       = 752;
+		public const int32 camellia_192_ecb                                       = 755;
+		public const int32 camellia_192_ofb128                                    = 767;
+		public const int32 camellia_192_cfb128                                    = 758;
+		public const int32 camellia_192_gcm                                       = 965;
+		public const int32 camellia_192_ccm                                       = 966;
+		public const int32 camellia_192_ctr                                       = 967;
+		public const int32 camellia_192_cmac                                      = 968;
+		public const int32 camellia_192_cfb8                                      = 764;
+		public const int32 camellia_192_cfb1                                      = 761;
+		public const int32 camellia_256_cbc                                       = 753;
+		public const int32 camellia_256_ecb                                       = 756;
+		public const int32 camellia_256_ofb128                                    = 768;
+		public const int32 camellia_256_cfb128                                    = 759;
+		public const int32 camellia_256_gcm                                       = 969;
+		public const int32 camellia_256_ccm                                       = 970;
+		public const int32 camellia_256_ctr                                       = 971;
+		public const int32 camellia_256_cmac                                      = 972;
+		public const int32 camellia_256_cfb1                                      = 762;
+		public const int32 camellia_256_cfb8                                      = 765;
+
+		public const int32 id_camellia128_wrap                                    = 907;
+		public const int32 id_camellia192_wrap                                    = 908;
+		public const int32 id_camellia256_wrap                                    = 909;
+
+		public const int32 aria_128_ecb                                           = 1065;
+		public const int32 aria_128_cbc                                           = 1066;
+		public const int32 aria_128_cfb128                                        = 1067;
+		public const int32 aria_128_ofb128                                        = 1068;
+		public const int32 aria_128_ctr                                           = 1069;
+		public const int32 aria_128_cfb1                                          = 1080;
+		public const int32 aria_128_cfb8                                          = 1083;
+		public const int32 aria_128_ccm                                           = 1120;
+		public const int32 aria_128_gcm                                           = 1123;
+		public const int32 aria_192_cfb8                                          = 1084;
+		public const int32 aria_192_ecb                                           = 1070;
+		public const int32 aria_192_cbc                                           = 1071;
+		public const int32 aria_192_cfb128                                        = 1072;
+		public const int32 aria_192_ofb128                                        = 1073;
+		public const int32 aria_192_ctr                                           = 1074;
+		public const int32 aria_192_cfb1                                          = 1081;
+		public const int32 aria_192_ccm                                           = 1121;
+		public const int32 aria_192_gcm                                           = 1124;
+		public const int32 aria_256_ecb                                           = 1075;
+		public const int32 aria_256_cbc                                           = 1076;
+		public const int32 aria_256_cfb128                                        = 1077;
+		public const int32 aria_256_ofb128                                        = 1078;
+		public const int32 aria_256_ctr                                           = 1079;
+		public const int32 aria_256_cfb1                                          = 1082;
+		public const int32 aria_256_cfb8                                          = 1085;
+		public const int32 aria_256_ccm                                           = 1122;
+		public const int32 aria_256_gcm                                           = 1125;
+
+		public const int32 kisa                                                   = 773;
+		public const int32 seed_ecb                                               = 776;
+		public const int32 seed_cbc                                               = 777;
+		public const int32 seed_cfb128                                            = 779;
+		public const int32 seed_ofb128                                            = 778;
+		public const int32 sm4_ecb                                                = 1133;
+		public const int32 sm4_cbc                                                = 1134;
+		public const int32 sm4_ofb128                                             = 1135;
+		public const int32 sm4_cfb128                                             = 1137;
+		public const int32 sm4_cfb1                                               = 1136;
+		public const int32 sm4_cfb8                                               = 1138;
+		public const int32 sm4_ctr                                                = 1139;
+		public const int32 hmac                                                   = 855;
+		public const int32 cmac                                                   = 894;
+
+		public const int32 rc4_hmac_md5                                           = 915;
+		public const int32 aes_128_cbc_hmac_sha1                                  = 916;
+		public const int32 aes_192_cbc_hmac_sha1                                  = 917;
+		public const int32 aes_256_cbc_hmac_sha1                                  = 918;
+		public const int32 aes_128_cbc_hmac_sha256                                = 948;
+		public const int32 aes_192_cbc_hmac_sha256                                = 949;
+		public const int32 aes_256_cbc_hmac_sha256                                = 950;
+		public const int32 chacha20_poly1305                                      = 1018;
+		public const int32 chacha20                                               = 1019;
+
+		public const int32 dhpublicnumber                                         = 920;
+		public const int32 brainpoolP160r1                                        = 921;
+		public const int32 brainpoolP160t1                                        = 922;
+		public const int32 brainpoolP192r1                                        = 923;
+		public const int32 brainpoolP192t1                                        = 924;
+		public const int32 brainpoolP224r1                                        = 925;
+		public const int32 brainpoolP224t1                                        = 926;
+		public const int32 brainpoolP256r1                                        = 927;
+		public const int32 brainpoolP256t1                                        = 928;
+		public const int32 brainpoolP320r1                                        = 929;
+		public const int32 brainpoolP320t1                                        = 930;
+		public const int32 brainpoolP384r1                                        = 931;
+		public const int32 brainpoolP384t1                                        = 932;
+		public const int32 brainpoolP512r1                                        = 933;
+		public const int32 brainpoolP512t1                                        = 934;
+
+		public const int32 dhSinglePass_stdDH_sha1kdf_scheme                      = 936;
+		public const int32 dhSinglePass_stdDH_sha224kdf_scheme                    = 937;
+		public const int32 dhSinglePass_stdDH_sha256kdf_scheme                    = 938;
+		public const int32 dhSinglePass_stdDH_sha384kdf_scheme                    = 939;
+		public const int32 dhSinglePass_stdDH_sha512kdf_scheme                    = 940;
+		public const int32 dhSinglePass_cofactorDH_sha1kdf_scheme                 = 941;
+		public const int32 dhSinglePass_cofactorDH_sha224kdf_scheme               = 942;
+		public const int32 dhSinglePass_cofactorDH_sha256kdf_scheme               = 943;
+		public const int32 dhSinglePass_cofactorDH_sha384kdf_scheme               = 944;
+		public const int32 dhSinglePass_cofactorDH_sha512kdf_scheme               = 945;
+		public const int32 dh_std_kdf                                             = 946;
+		public const int32 dh_cofactor_kdf                                        = 947;
+
+		public const int32 ct_precert_scts                                        = 951;
+		public const int32 ct_precert_poison                                      = 952;
+		public const int32 ct_precert_signer                                      = 953;
+		public const int32 ct_cert_scts                                           = 954;
+
+		public const int32 jurisdictionLocalityName                               = 955;
+		public const int32 jurisdictionStateOrProvinceName                        = 956;
+		public const int32 jurisdictionCountryName                                = 957;
+
+		public const int32 id_scrypt                                              = 973;
+		public const int32 tls1_prf                                               = 1021;
+		public const int32 hkdf                                                   = 1036;
+
+		public const int32 id_pkinit                                              = 1031;
+		public const int32 pkInitClientAuth                                       = 1032;
+		public const int32 pkInitKDC                                              = 1033;
+
+		public const int32 X25519                                                 = 1034;
+		public const int32 X448                                                   = 1035;
+		public const int32 ED25519                                                = 1087;
+		public const int32 ED448                                                  = 1088;
+
+		public const int32 kx_rsa                                                 = 1037;
+		public const int32 kx_ecdhe                                               = 1038;
+		public const int32 kx_dhe                                                 = 1039;
+		public const int32 kx_ecdhe_psk                                           = 1040;
+		public const int32 kx_dhe_psk                                             = 1041;
+		public const int32 kx_rsa_psk                                             = 1042;
+		public const int32 kx_psk                                                 = 1043;
+		public const int32 kx_srp                                                 = 1044;
+		public const int32 kx_gost                                                = 1045;
+		public const int32 kx_any                                                 = 1063;
+
+		public const int32 auth_rsa                                               = 1046;
+		public const int32 auth_ecdsa                                             = 1047;
+		public const int32 auth_psk                                               = 1048;
+		public const int32 auth_dss                                               = 1049;
+		public const int32 auth_gost01                                            = 1050;
+		public const int32 auth_gost12                                            = 1051;
+		public const int32 auth_srp                                               = 1052;
+		public const int32 auth_null                                              = 1053;
+		public const int32 auth_any                                               = 1064;
+		public const int32 poly1305                                               = 1061;
+		public const int32 siphash                                                = 1062;
+
+		public const int32 ffdhe2048                                              = 1126;
+		public const int32 ffdhe3072                                              = 1127;
+		public const int32 ffdhe4096                                              = 1128;
+		public const int32 ffdhe6144                                              = 1129;
+		public const int32 ffdhe8192                                              = 1130;
+
+		public const int32 ISO_UA                                                 = 1150;
+		public const int32 ua_pki                                                 = 1151;
+		public const int32 dstu28147                                              = 1152;
+		public const int32 dstu28147_ofb                                          = 1153;
+		public const int32 dstu28147_cfb                                          = 1154;
+		public const int32 dstu28147_wrap                                         = 1155;
+		public const int32 hmacWithDstu34311                                      = 1156;
+		public const int32 dstu34311                                              = 1157;
+		public const int32 dstu4145le                                             = 1158;
+		public const int32 dstu4145be                                             = 1159;
+		public const int32 uacurve0                                               = 1160;
+		public const int32 uacurve1                                               = 1161;
+		public const int32 uacurve2                                               = 1162;
+		public const int32 uacurve3                                               = 1163;
+		public const int32 uacurve4                                               = 1164;
+		public const int32 uacurve5                                               = 1165;
+		public const int32 uacurve6                                               = 1166;
+		public const int32 uacurve7                                               = 1167;
+		public const int32 uacurve8                                               = 1168;
+		public const int32 uacurve9                                               = 1169;
 	}
 }
