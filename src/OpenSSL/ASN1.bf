@@ -14,5 +14,18 @@ namespace Beef_Net.OpenSSL
 	[AlwaysInclude]
 	sealed abstract class ASN1
 	{
+		public const int PKEY_ALIAS         = 0x1;
+		public const int PKEY_DYNAMIC       = 0x2;
+		public const int PKEY_SIGPARAM_NULL = 0x4;
+		
+		public const int PKEY_CTRL_PKCS7_SIGN     = 0x1;
+		public const int PKEY_CTRL_PKCS7_ENCRYPT  = 0x2;
+		public const int PKEY_CTRL_DEFAULT_MD_NID = 0x3;
+		public const int PKEY_CTRL_CMS_SIGN       = 0x5;
+		public const int PKEY_CTRL_CMS_ENVELOPE   = 0x7;
+		public const int PKEY_CTRL_CMS_RI_TYPE    = 0x8;
+		
+		public const int PKEY_CTRL_SET1_TLS_ENCPT = 0x9;
+		public const int PKEY_CTRL_GET1_TLS_ENCPT = 0xa;
 	}
 }

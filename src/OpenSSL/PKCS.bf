@@ -25,6 +25,11 @@ namespace Beef_Net.OpenSSL
 	}
 	
 	[AlwaysInclude]
+	sealed abstract class PKCS8
+	{
+	}
+	
+	[AlwaysInclude]
 	sealed abstract class PKCS12
 	{
 	}
