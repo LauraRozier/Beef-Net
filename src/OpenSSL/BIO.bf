@@ -971,12 +971,15 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_ADDRINFO_free")]
 		public extern static void ADDRINFO_free(ADDRINFO* bai);
 
+		[CRepr]
 		enum hostserv_priorities {
 		    BIO_PARSE_PRIO_HOST,
 			BIO_PARSE_PRIO_SERV
 		}
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_parse_hostserv")]
 		public extern static int parse_hostserv(char8* hostserv, char8** host, char8** service, hostserv_priorities hostserv_prio);
+		
+		[CRepr]
 		enum lookup_type {
 		    BIO_LOOKUP_CLIENT,
 			BIO_LOOKUP_SERVER
@@ -1013,6 +1016,7 @@ namespace Beef_Net.OpenSSL
 		public struct sock_info_u {
 		    ADDR* addr;
 		}
+		[CRepr]
 		enum sock_info_type {
 		    BIO_SOCK_INFO_ADDRESS
 		}
@@ -1122,6 +1126,35 @@ namespace Beef_Net.OpenSSL
 		public extern static function int(bio_st*, int, info_cb*) meth_get_callback_ctrl(METHOD* biom);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_set_callback_ctrl")]
 		public extern static int meth_set_callback_ctrl(METHOD* biom, function int(bio_st*, int, info_cb*) callback_ctrl);
+
+#if CONST_STRICT
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_set_md")]
+		public extern static void set_md(bio_st*, MD* md);
+#else
+		[Inline]
+		public static int set_md(bio_st* b, char8* md) => ctrl(b, C_SET_MD, 0, md);
+#endif
+		[Inline]
+		public static int get_md(bio_st* b, char8* mdp) => ctrl(b, C_GET_MD, 0, mdp);
+		[Inline]
+		public static int get_md_ctx(bio_st* b, char8* mdcp) => ctrl(b, C_GET_MD_CTX, 0, mdcp);
+		[Inline]
+		public static int set_md_ctx(bio_st* b, char8* mdcp) => ctrl(b, C_SET_MD_CTX, 0, mdcp);
+		[Inline]
+		public static int get_cipher_status(bio_st* b) => ctrl(b, C_GET_CIPHER_STATUS, 0, null);
+		[Inline]
+		public static int get_cipher_ctx(bio_st* b, char8* c_pp) => ctrl(b, C_GET_CIPHER_CTX, 0, c_pp);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_f_md")]
+		public extern static METHOD* f_md();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_f_base64")]
+		public extern static METHOD* f_base64();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_f_cipher")]
+		public extern static METHOD* f_cipher();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_f_reliable")]
+		public extern static METHOD* f_reliable();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_set_cipher")]
+		public extern static int set_cipher(bio_st* b, EVP.CIPHER* c, uint8* k, uint8* i, int enc);
 
 		/*
 		** MOVED for convenience

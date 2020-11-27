@@ -17,6 +17,26 @@ namespace Beef_Net.OpenSSL
 		public const int SALT_LEN     = 8;
 		/* Default PKCS#5 iteration count */
 		public const int DEFAULT_ITER = 2048;
+
+		
+
+		/* PKCS5 password based encryption */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS5_PBE_keyivgen")]
+		public extern static int PBE_keyivgen(EVP.CIPHER_CTX* ctx, char8* pass, int passlen, ASN1.TYPE* param, EVP.CIPHER* cipher, EVP.MD* md, int en_de);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS5_PBKDF2_HMAC_SHA1")]
+		public extern static int PBKDF2_HMAC_SHA1(char8* pass, int passlen, uint8* salt, int saltlen, int iter, int keylen, uint8* outVal);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS5_PBKDF2_HMAC")]
+		public extern static int PBKDF2_HMAC(char8* pass, int passlen, uint8* salt, int saltlen, int iter, MD* digest, int keylen, uint8* outVal);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS5_v2_PBE_keyivgen")]
+		public extern static int v2_PBE_keyivgen(EVP.CIPHER_CTX* ctx, char8* pass, int passlen, ASN1.TYPE* param, EVP.CIPHER* cipher, EVP.MD* md, int en_de);
+
+#if !OPENSSL_NO_SCRYPT
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS5_v2_scrypt_keyivgen")]
+		public extern static int v2_scrypt_keyivgen(EVP.CIPHER_CTX* ctx, char8* pass, int passlen, ASN1.TYPE* param, EVP.CIPHER* c, EVP.MD* md, int en_de);
+#endif
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS5_PBE_add")]
+		public extern static void PBE_add();
 	}
 	
 	[AlwaysInclude]

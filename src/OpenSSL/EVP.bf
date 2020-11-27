@@ -384,10 +384,10 @@ namespace Beef_Net.OpenSSL
 		public const int MD_CTRL_ALG_CTRL  = 0x1000;
 #endif
 
-		/* values for EVP_MD_CTX flags */
+		/* values for MD_CTX flags */
 		public const int MD_CTX_FLAG_ONESHOT        = 0x0001; /* digest update will be called once only */
 		public const int MD_CTX_FLAG_CLEANED        = 0x0002; /* context has already been cleaned */
-		public const int MD_CTX_FLAG_REUSE          = 0x0004; /* Don't free up ctx->md_data in EVP_MD_CTX_reset */
+		public const int MD_CTX_FLAG_REUSE          = 0x0004; /* Don't free up ctx->md_data in MD_CTX_reset */
 		/*
 		 * FIPS and pad options are ignored in 1.0.0, definitions are here so we
 		 * don't accidentally reuse the values for other purposes.
@@ -396,7 +396,7 @@ namespace Beef_Net.OpenSSL
 
 		/*
 		 * The following PAD options are also currently ignored in 1.0.0, digest
-		 * parameters are handled through EVP_DigestSign*() and EVP_DigestVerify*()
+		 * parameters are handled through DigestSign*() and DigestVerify*()
 		 * instead.
 		 */
 		public const int MD_CTX_FLAG_PAD_MASK       = 0xF0; /* RSA mode to use */
@@ -406,7 +406,7 @@ namespace Beef_Net.OpenSSL
 
 		public const int MD_CTX_FLAG_NO_INIT        = 0x0100; /* Don't initialize md_data */
 		/*
-		 * Some functions such as EVP_DigestSign only finalise copies of internal
+		 * Some functions such as DigestSign only finalise copies of internal
 		 * contexts so additional data can be included after the finalisation call.
 		 * This is inefficient if this functionality is not required: it is disabled
 		 * if the following flag is set.
@@ -538,7 +538,7 @@ namespace Beef_Net.OpenSSL
 		public const int CTRL_CCM_SET_MSGLEN                = 0x15;
 		/*
 		 * AEAD cipher deduces payload length and returns number of bytes required to
-		 * store MAC and eventual padding. Subsequent call to EVP_Cipher even
+		 * store MAC and eventual padding. Subsequent call to Cipher even
 		 * appends/verifies MAC.
 		 */
 		public const int CTRL_AEAD_TLS1_AAD                 = 0x16;
@@ -554,18 +554,18 @@ namespace Beef_Net.OpenSSL
 
 		public const int CTRL_SSL3_MASTER_SECRET            = 0x1d;
 
-		/* EVP_CTRL_SET_SBOX takes the char8*  specifying S-boxes */
+		/* CTRL_SET_SBOX takes the char8*  specifying S-boxes */
 		public const int CTRL_SET_SBOX                      = 0x1e;
 		/*
-		 * EVP_CTRL_SBOX_USED takes a 'uint' and 'char8* ', pointing at a
+		 * CTRL_SBOX_USED takes a 'uint' and 'char8* ', pointing at a
 		 * pre-allocated buffer with specified size
 		 */
 		public const int CTRL_SBOX_USED                     = 0x1f;
-		/* EVP_CTRL_KEY_MESH takes 'uint' number of bytes to mesh the key after,
+		/* CTRL_KEY_MESH takes 'uint' number of bytes to mesh the key after,
 		 * 0 switches meshing off
 		 */
 		public const int CTRL_KEY_MESH                      = 0x20;
-		/* EVP_CTRL_BLOCK_PADDING_MODE takes the padding mode */
+		/* CTRL_BLOCK_PADDING_MODE takes the padding mode */
 		public const int CTRL_BLOCK_PADDING_MODE            = 0x21;
 
 		/* Set the output buffers to use for a pipelined operation */
@@ -631,29 +631,30 @@ namespace Beef_Net.OpenSSL
 		public function int PBE_KEYGEN(CIPHER_CTX* ctx, char8* pass, int passlen, ASN1.TYPE* param, CIPHER* cipher, MD* md, int en_de);
 
 #if !OPENSSL_NO_RSA
-		#  define EVP_PKEY_assign_RSA(pkey,rsa) => EVP_PKEY_assign((pkey),EVP_PKEY_RSA, (char8* )(rsa))
+		[Inline]
+		public static int PKEY_assign_RSA(PKEY* pkey, char8* rsa) => PKEY_assign(pkey, PKEY_RSA, rsa);
 #endif
-
 #if !OPENSSL_NO_DSA
-		#  define EVP_PKEY_assign_DSA(pkey,dsa) => EVP_PKEY_assign((pkey),EVP_PKEY_DSA, (char8* )(dsa))
+		[Inline]
+		public static int PKEY_assign_DSA(PKEY* pkey, char8* dsa) => PKEY_assign(pkey, PKEY_DSA, dsa);
 #endif
-
 #if !OPENSSL_NO_DH
-		#  define EVP_PKEY_assign_DH(pkey,dh) => EVP_PKEY_assign((pkey),EVP_PKEY_DH, (char8* )(dh))
+		[Inline]
+		public static int PKEY_assign_DH(PKEY* pkey, char8* dh) => PKEY_assign(pkey, PKEY_DH, dh);
 #endif
-
 #if !OPENSSL_NO_EC
-		#  define EVP_PKEY_assign_EC_KEY(pkey,eckey) => EVP_PKEY_assign((pkey),EVP_PKEY_EC, (char8* )(eckey))
+		[Inline]
+		public static int PKEY_assign_EC_KEY(PKEY* pkey, char8* eckey) => PKEY_assign(pkey, PKEY_EC, eckey);
 #endif
 #if !OPENSSL_NO_SIPHASH
-		#  define EVP_PKEY_assign_SIPHASH(pkey,shkey) => EVP_PKEY_assign((pkey),EVP_PKEY_SIPHASH, (char8* )(shkey))
+		[Inline]
+		public static int PKEY_assign_SIPHASH(PKEY* pkey, char8* shkey) => PKEY_assign(pkey, PKEY_SIPHASH, shkey);
 #endif
-
 #if !OPENSSL_NO_POLY1305
-		#  define EVP_PKEY_assign_POLY1305(pkey,polykey) => EVP_PKEY_assign((pkey),EVP_PKEY_POLY1305, (char8* )(polykey))
+		[Inline]
+		public static int PKEY_assign_POLY1305(PKEY* pkey, char8* polykey) => PKEY_assign(pkey, PKEY_POLY1305, polykey);
 #endif
 
-		
 		/* Add some extra combinations */
 		[Inline]
 		public static MD* get_digestbynid(int a) => get_digestbyname(Objects.nid2sn(a));
@@ -701,7 +702,7 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CIPHER_nid")]
 		public extern static int CIPHER_nid(CIPHER* cipher);
 		[Inline]
-		public static char8* EVP_CIPHER_name(CIPHER* cipher) => Objects.nid2sn(CIPHER_nid(cipher));
+		public static char8* CIPHER_name(CIPHER* cipher) => Objects.nid2sn(CIPHER_nid(cipher));
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CIPHER_block_size")]
 		public extern static int CIPHER_block_size(CIPHER* cipher);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CIPHER_impl_ctx_size")]
@@ -713,422 +714,694 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CIPHER_flags")]
 		public extern static uint CIPHER_flags(CIPHER* cipher);
 		[Inline]
-		public static uint EVP_CIPHER_mode(CIPHER* cipher) => (CIPHER_flags(cipher) & CIPH_MODE);
+		public static uint CIPHER_mode(CIPHER* cipher) => (CIPHER_flags(cipher) & CIPH_MODE);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CIPHER_CTX_cipher")]
+		public extern static CIPHER* CIPHER_CTX_cipher(CIPHER_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CIPHER_CTX_encrypting")]
+		public extern static int CIPHER_CTX_encrypting(CIPHER_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CIPHER_CTX_nid")]
+		public extern static int CIPHER_CTX_nid(CIPHER_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CIPHER_CTX_block_size")]
+		public extern static int CIPHER_CTX_block_size(CIPHER_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CIPHER_CTX_key_length")]
+		public extern static int CIPHER_CTX_key_length(CIPHER_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CIPHER_CTX_iv_length")]
+		public extern static int CIPHER_CTX_iv_length(CIPHER_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CIPHER_CTX_iv")]
+		public extern static uint8* CIPHER_CTX_iv(CIPHER_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CIPHER_CTX_original_iv")]
+		public extern static uint8* CIPHER_CTX_original_iv(CIPHER_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CIPHER_CTX_iv_noconst")]
+		public extern static uint8* CIPHER_CTX_iv_noconst(CIPHER_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CIPHER_CTX_buf_noconst")]
+		public extern static uint8* CIPHER_CTX_buf_noconst(CIPHER_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CIPHER_CTX_num")]
+		public extern static int CIPHER_CTX_num(CIPHER_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CIPHER_CTX_set_num")]
+		public extern static void CIPHER_CTX_set_num(CIPHER_CTX* ctx, int num);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CIPHER_CTX_copy")]
+		public extern static int CIPHER_CTX_copy(CIPHER_CTX* outVal, CIPHER_CTX* inVal);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CIPHER_CTX_get_app_data")]
+		public extern static void* CIPHER_CTX_get_app_data(CIPHER_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CIPHER_CTX_set_app_data")]
+		public extern static void CIPHER_CTX_set_app_data(CIPHER_CTX* ctx, void* data);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CIPHER_CTX_get_cipher_data")]
+		public extern static void* CIPHER_CTX_get_cipher_data(CIPHER_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CIPHER_CTX_set_cipher_data")]
+		public extern static void* CIPHER_CTX_set_cipher_data(CIPHER_CTX* ctx, void* cipher_data);
+		[Inline]
+		public static int CIPHER_CTX_type(CIPHER_CTX* c) => CIPHER_type(CIPHER_CTX_cipher(c));
+		[Inline]
+		public static uint CIPHER_CTX_flags(CIPHER_CTX* c) => CIPHER_flags(CIPHER_CTX_cipher(c));
+		[Inline]
+		public static uint CIPHER_CTX_mode(CIPHER_CTX* c) => CIPHER_mode(CIPHER_CTX_cipher(c));
+		
+		[Inline]
+		public static uint ENCODE_LENGTH(uint l) => ((l + 2) / 3 * 4) + (l / 48 + 1) * 2 + 80;
+		[Inline]
+		public static uint DECODE_LENGTH(uint l) => (l + 3) / 4 * 3 + 80;
+		
+		[Inline]
+		public static int SignInit_ex(MD_CTX* ctx, MD* type, Engine.ENGINE* impl) => DigestInit_ex(ctx, type, impl);
+		[Inline]
+		public static int SignInit(MD_CTX* ctx, MD* type) => DigestInit(ctx, type);
+		[Inline]
+		public static int SignUpdate(MD_CTX* ctx, void* d, uint cnt) => DigestUpdate(ctx, d, cnt);
+		[Inline]
+		public static int VerifyInit_ex(MD_CTX* ctx, MD* type, Engine.ENGINE* impl) => DigestInit_ex(ctx, type, impl);
+		[Inline]
+		public static int VerifyInit(MD_CTX* ctx, MD* type) => DigestInit(ctx, type);
+		[Inline]
+		public static int VerifyUpdate(MD_CTX* ctx, void* d, uint cnt) => DigestUpdate(ctx, d, cnt);
+		[Inline]
+		public static int OpenUpdate(CIPHER_CTX* ctx, uint8* outVal, int* outl, uint8* inVal, int inl) => DecryptUpdate(ctx, outVal, outl, inVal, inl);
+		[Inline]
+		public static int SealUpdate(CIPHER_CTX* ctx, uint8* outVal, int* outl, uint8* inVal, int inl) => EncryptUpdate(ctx, outVal, outl, inVal, inl);
+		[Inline]
+		public static int DigestSignUpdate(MD_CTX* ctx, void* d, uint cnt) => DigestUpdate(ctx, d, cnt);
+		[Inline]
+		public static int DigestVerifyUpdate(MD_CTX* ctx, void* d, uint cnt) => DigestUpdate(ctx, d, cnt);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_Cipher")]
+		public extern static int Cipher(CIPHER_CTX* c, uint8* outVal, uint8* inVal, uint inl);
 
-		public extern static CIPHER* EVP_CIPHER_CTX_cipher(CIPHER_CTX* ctx);
-		public extern static int EVP_CIPHER_CTX_encrypting(CIPHER_CTX* ctx);
-		public extern static int EVP_CIPHER_CTX_nid(CIPHER_CTX* ctx);
-		public extern static int EVP_CIPHER_CTX_block_size(CIPHER_CTX* ctx);
-		public extern static int EVP_CIPHER_CTX_key_length(CIPHER_CTX* ctx);
-		public extern static int EVP_CIPHER_CTX_iv_length(CIPHER_CTX* ctx);
-		public extern static uint8* EVP_CIPHER_CTX_iv(CIPHER_CTX* ctx);
-		public extern static uint8* EVP_CIPHER_CTX_original_iv(CIPHER_CTX* ctx);
-		public extern static uint8* EVP_CIPHER_CTX_iv_noconst(CIPHER_CTX* ctx);
-		public extern static uint8* EVP_CIPHER_CTX_buf_noconst(CIPHER_CTX* ctx);
-		public extern static int EVP_CIPHER_CTX_num(CIPHER_CTX* ctx);
-		public extern static void EVP_CIPHER_CTX_set_num(CIPHER_CTX* ctx, int num);
-		public extern static int EVP_CIPHER_CTX_copy(CIPHER_CTX* outVal, CIPHER_CTX* inVal);
-		public extern static void* EVP_CIPHER_CTX_get_app_data(CIPHER_CTX* ctx);
-		public extern static void EVP_CIPHER_CTX_set_app_data(CIPHER_CTX* ctx, void* data);
-		public extern static void* EVP_CIPHER_CTX_get_cipher_data(CIPHER_CTX* ctx);
-		public extern static void* EVP_CIPHER_CTX_set_cipher_data(CIPHER_CTX* ctx, void* cipher_data);
-# define EVP_CIPHER_CTX_type(c) => EVP_CIPHER_type(EVP_CIPHER_CTX_cipher(c));
-#  define EVP_CIPHER_CTX_flags(c) => EVP_CIPHER_flags(EVP_CIPHER_CTX_cipher(c));
-# define EVP_CIPHER_CTX_mode(c) => EVP_CIPHER_mode(EVP_CIPHER_CTX_cipher(c));
-
-# define EVP_ENCODE_LENGTH(l) => ((((l)+2)/3*4)+((l)/48+1)*2+80);
-# define EVP_DECODE_LENGTH(l) => (((l)+3)/4*3+80);
-
-# define EVP_SignInit_ex(a,b,c) => EVP_DigestInit_ex(a,b,c);
-# define EVP_SignInit(a,b) => EVP_DigestInit(a,b);
-# define EVP_SignUpdate(a,b,c) => EVP_DigestUpdate(a,b,c);
-# define EVP_VerifyInit_ex(a,b,c) => EVP_DigestInit_ex(a,b,c);
-# define EVP_VerifyInit(a,b) => EVP_DigestInit(a,b);
-# define EVP_VerifyUpdate(a,b,c) => EVP_DigestUpdate(a,b,c);
-# define EVP_OpenUpdate(a,b,c,d,e) => EVP_DecryptUpdate(a,b,c,d,e);
-# define EVP_SealUpdate(a,b,c,d,e) => EVP_EncryptUpdate(a,b,c,d,e);
-# define EVP_DigestSignUpdate(a,b,c) => EVP_DigestUpdate(a,b,c);
-# define EVP_DigestVerifyUpdate(a,b,c) => EVP_DigestUpdate(a,b,c);
-
-#if CONST_STRICT
-		void BIO_set_md(BIO.bio_st*, MD* md);
-#else
-#  define BIO_set_md(b,md) => BIO_ctrl(b,BIO_C_SET_MD,0,(char8* )(md));
-#endif
-# define BIO_get_md(b,mdp) => BIO_ctrl(b,BIO_C_GET_MD,0,(char8* )(mdp));
-# define BIO_get_md_ctx(b,mdcp) => BIO_ctrl(b,BIO_C_GET_MD_CTX,0, (char8* )(mdcp));
-# define BIO_set_md_ctx(b,mdcp) => BIO_ctrl(b,BIO_C_SET_MD_CTX,0, (char8* )(mdcp));
-# define BIO_get_cipher_status(b) => BIO_ctrl(b,BIO_C_GET_CIPHER_STATUS,0,NULL);
-# define BIO_get_cipher_ctx(b,c_pp) => BIO_ctrl(b,BIO_C_GET_CIPHER_CTX,0, (char8* )(c_pp));
-
-		public extern static int EVP_Cipher(CIPHER_CTX* c, uint8* outVal, uint8* inVal, uint inl);
-
-# define EVP_add_cipher_alias(n,alias) => OBJ_NAME_add((alias),OBJ_NAME_TYPE_CIPHER_METH|OBJ_NAME_ALIAS,(n));
-# define EVP_add_digest_alias(n,alias) => OBJ_NAME_add((alias),OBJ_NAME_TYPE_MD_METH|OBJ_NAME_ALIAS,(n));
-# define EVP_delete_cipher_alias(alias) => OBJ_NAME_remove(alias,OBJ_NAME_TYPE_CIPHER_METH|OBJ_NAME_ALIAS);
-# define EVP_delete_digest_alias(alias) => OBJ_NAME_remove(alias,OBJ_NAME_TYPE_MD_METH|OBJ_NAME_ALIAS);
-
-		public extern static int EVP_MD_CTX_ctrl(MD_CTX* ctx, int cmd, int p1, void* p2);
-		public extern static MD_CTX* EVP_MD_CTX_new();
-		public extern static int EVP_MD_CTX_reset(MD_CTX* ctx);
-		public extern static void EVP_MD_CTX_free(MD_CTX* ctx);
-# define EVP_MD_CTX_create() => EVP_MD_CTX_new();
-# define EVP_MD_CTX_init(ctx) => EVP_MD_CTX_reset((ctx));
-# define EVP_MD_CTX_destroy(ctx) => EVP_MD_CTX_free((ctx));
-		public extern static int EVP_MD_CTX_copy_ex(MD_CTX* outVal, MD_CTX* inVal);
-		public extern static void EVP_MD_CTX_set_flags(MD_CTX* ctx, int flags);
-		public extern static void EVP_MD_CTX_clear_flags(MD_CTX* ctx, int flags);
-		public extern static int EVP_MD_CTX_test_flags(MD_CTX* ctx, int flags);
-		public extern static int EVP_DigestInit_ex(MD_CTX* ctx, MD* type, Engine.ENGINE* impl);
-		public extern static int EVP_DigestUpdate(MD_CTX* ctx, void* d, uint cnt);
-		public extern static int EVP_DigestFinal_ex(MD_CTX* ctx, uint8* md, uint* s);
-		public extern static int EVP_Digest(void* data, uint count, uint8* md, uint* size, MD* type, Engine.ENGINE* impl);
-
-		public extern static int EVP_MD_CTX_copy(MD_CTX* outVal, MD_CTX* inVal);
-		public extern static int EVP_DigestInit(MD_CTX* ctx, MD* type);
-		public extern static int EVP_DigestFinal(MD_CTX* ctx, uint8* md, uint* s);
-		public extern static int EVP_DigestFinalXOF(MD_CTX* ctx, uint8* md, uint len);
-
-		public extern static int EVP_read_pw_string(char8* buf, int length, char8* prompt, int verify);
-		public extern static int EVP_read_pw_string_min(char8* buf, int minlen, int maxlen, char8* prompt, int verify);
-		public extern static void EVP_set_pw_prompt(char8* prompt);
-		public extern static char8* EVP_get_pw_prompt();
-
-		public extern static int EVP_BytesToKey(CIPHER* type, MD* md, uint8* salt, uint8* data, int datal, int count, uint8* key, uint8* iv);
-
-		public extern static void EVP_CIPHER_CTX_set_flags(CIPHER_CTX* ctx, int flags);
-		public extern static void EVP_CIPHER_CTX_clear_flags(CIPHER_CTX* ctx, int flags);
-		public extern static int EVP_CIPHER_CTX_test_flags(CIPHER_CTX* ctx, int flags);
-
-		public extern static int EVP_EncryptInit(CIPHER_CTX* ctx, CIPHER* cipher, uint8* key, uint8* iv);
-		public extern static int EVP_EncryptInit_ex(CIPHER_CTX* ctx, CIPHER* cipher, Engine.ENGINE* impl, uint8* key, uint8* iv);
-		public extern static int EVP_EncryptUpdate(CIPHER_CTX* ctx, uint8* outVal, int* outl, uint8* inVal, int inl);
-		public extern static int EVP_EncryptFinal_ex(CIPHER_CTX* ctx, uint8* outVal, int* outl);
-		public extern static int EVP_EncryptFinal(CIPHER_CTX* ctx, uint8* outVal, int* outl);
-
-		public extern static int EVP_DecryptInit(CIPHER_CTX* ctx, CIPHER* cipher, uint8* key, uint8* iv);
-		public extern static int EVP_DecryptInit_ex(CIPHER_CTX* ctx, CIPHER* cipher, Engine.ENGINE* impl, uint8* key, uint8* iv);
-		public extern static int EVP_DecryptUpdate(CIPHER_CTX* ctx, uint8* outVal, int* outl, uint8* inVal, int inl);
-		public extern static int EVP_DecryptFinal(CIPHER_CTX* ctx, uint8* outm, int* outl);
-		public extern static int EVP_DecryptFinal_ex(CIPHER_CTX* ctx, uint8* outm, int* outl);
-
-		public extern static int EVP_CipherInit(CIPHER_CTX* ctx, CIPHER* cipher, uint8* key, uint8* iv, int enc);
-		public extern static int EVP_CipherInit_ex(CIPHER_CTX* ctx, CIPHER* cipher, Engine.ENGINE* impl, uint8* key, uint8* iv, int enc);
-		public extern static int EVP_CipherUpdate(CIPHER_CTX* ctx, uint8* outVal, int* outl, uint8* inVal, int inl);
-		public extern static int EVP_CipherFinal(CIPHER_CTX* ctx, uint8* outm, int* outl);
-		public extern static int EVP_CipherFinal_ex(CIPHER_CTX* ctx, uint8* outm, int* outl);
-
-		public extern static int EVP_SignFinal(MD_CTX* ctx, uint8* md, uint* s, PKEY* pkey);
-
-		public extern static int EVP_DigestSign(MD_CTX* ctx, uint8* sigret, uint* siglen, uint8* tbs, uint tbslen);
-
-		public extern static int EVP_VerifyFinal(MD_CTX* ctx, uint8* sigbuf, uint siglen, PKEY* pkey);
-
-		public extern static int EVP_DigestVerify(MD_CTX* ctx, uint8* sigret, uint siglen, uint8* tbs, uint tbslen);
-
-		public extern static int EVP_DigestSignInit(MD_CTX* ctx, PKEY_CTX** pctx, MD* type, Engine.ENGINE* e, PKEY* pkey);
-		public extern static int EVP_DigestSignFinal(MD_CTX* ctx, uint8* sigret, uint* siglen);
-
-		public extern static int EVP_DigestVerifyInit(MD_CTX* ctx, PKEY_CTX** pctx, MD* type, Engine.ENGINE* e, PKEY* pkey);
-		public extern static int EVP_DigestVerifyFinal(MD_CTX* ctx, uint8* sig, uint siglen);
+		[Inline]
+		public static int add_cipher_alias(char8* n, char8* alias) => Objects.NAME_add(alias, Objects.NAME_TYPE_CIPHER_METH | Objects.NAME_ALIAS, n);
+		[Inline]
+		public static int add_digest_alias(char8* n, char8* alias) => Objects.NAME_add(alias, Objects.NAME_TYPE_MD_METH | Objects.NAME_ALIAS, n);
+		[Inline]
+		public static int delete_cipher_alias(char8* alias) => Objects.NAME_remove(alias, Objects.NAME_TYPE_CIPHER_METH | Objects.NAME_ALIAS);
+		[Inline]
+		public static int delete_digest_alias(char8* alias) => Objects.NAME_remove(alias, Objects.NAME_TYPE_MD_METH | Objects.NAME_ALIAS);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_MD_CTX_ctrl")]
+		public extern static int MD_CTX_ctrl(MD_CTX* ctx, int cmd, int p1, void* p2);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_MD_CTX_new")]
+		public extern static MD_CTX* MD_CTX_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_MD_CTX_reset")]
+		public extern static int MD_CTX_reset(MD_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_MD_CTX_free")]
+		public extern static void MD_CTX_free(MD_CTX* ctx);
+		[Inline]
+		public static MD_CTX* MD_CTX_create() => MD_CTX_new();
+		[Inline]
+		public static int MD_CTX_init(MD_CTX* ctx) => MD_CTX_reset(ctx);
+		[Inline]
+		public static void MD_CTX_destroy(MD_CTX* ctx) => MD_CTX_free(ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_MD_CTX_copy_ex")]
+		public extern static int MD_CTX_copy_ex(MD_CTX* outVal, MD_CTX* inVal);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_MD_CTX_set_flags")]
+		public extern static void MD_CTX_set_flags(MD_CTX* ctx, int flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_MD_CTX_clear_flags")]
+		public extern static void MD_CTX_clear_flags(MD_CTX* ctx, int flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_MD_CTX_test_flags")]
+		public extern static int MD_CTX_test_flags(MD_CTX* ctx, int flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_DigestInit_ex")]
+		public extern static int DigestInit_ex(MD_CTX* ctx, MD* type, Engine.ENGINE* impl);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_DigestUpdate")]
+		public extern static int DigestUpdate(MD_CTX* ctx, void* d, uint cnt);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_DigestFinal_ex")]
+		public extern static int DigestFinal_ex(MD_CTX* ctx, uint8* md, uint* s);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_Digest")]
+		public extern static int Digest(void* data, uint count, uint8* md, uint* size, MD* type, Engine.ENGINE* impl);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_MD_CTX_copy")]
+		public extern static int MD_CTX_copy(MD_CTX* outVal, MD_CTX* inVal);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_DigestInit")]
+		public extern static int DigestInit(MD_CTX* ctx, MD* type);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_DigestFinal")]
+		public extern static int DigestFinal(MD_CTX* ctx, uint8* md, uint* s);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_DigestFinalXOF")]
+		public extern static int DigestFinalXOF(MD_CTX* ctx, uint8* md, uint len);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_read_pw_string")]
+		public extern static int read_pw_string(char8* buf, int length, char8* prompt, int verify);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_read_pw_string_min")]
+		public extern static int read_pw_string_min(char8* buf, int minlen, int maxlen, char8* prompt, int verify);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_set_pw_prompt")]
+		public extern static void set_pw_prompt(char8* prompt);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_get_pw_prompt")]
+		public extern static char8* get_pw_prompt();
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_BytesToKey")]
+		public extern static int BytesToKey(CIPHER* type, MD* md, uint8* salt, uint8* data, int datal, int count, uint8* key, uint8* iv);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CIPHER_CTX_set_flags")]
+		public extern static void CIPHER_CTX_set_flags(CIPHER_CTX* ctx, int flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CIPHER_CTX_clear_flags")]
+		public extern static void CIPHER_CTX_clear_flags(CIPHER_CTX* ctx, int flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CIPHER_CTX_test_flags")]
+		public extern static int CIPHER_CTX_test_flags(CIPHER_CTX* ctx, int flags);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_EncryptInit")]
+		public extern static int EncryptInit(CIPHER_CTX* ctx, CIPHER* cipher, uint8* key, uint8* iv);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_EncryptInit_ex")]
+		public extern static int EncryptInit_ex(CIPHER_CTX* ctx, CIPHER* cipher, Engine.ENGINE* impl, uint8* key, uint8* iv);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_EncryptUpdate")]
+		public extern static int EncryptUpdate(CIPHER_CTX* ctx, uint8* outVal, int* outl, uint8* inVal, int inl);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_EncryptFinal_ex")]
+		public extern static int EncryptFinal_ex(CIPHER_CTX* ctx, uint8* outVal, int* outl);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_EncryptFinal")]
+		public extern static int EncryptFinal(CIPHER_CTX* ctx, uint8* outVal, int* outl);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_DecryptInit")]
+		public extern static int DecryptInit(CIPHER_CTX* ctx, CIPHER* cipher, uint8* key, uint8* iv);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_DecryptInit_ex")]
+		public extern static int DecryptInit_ex(CIPHER_CTX* ctx, CIPHER* cipher, Engine.ENGINE* impl, uint8* key, uint8* iv);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_DecryptUpdate")]
+		public extern static int DecryptUpdate(CIPHER_CTX* ctx, uint8* outVal, int* outl, uint8* inVal, int inl);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_DecryptFinal")]
+		public extern static int DecryptFinal(CIPHER_CTX* ctx, uint8* outm, int* outl);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_DecryptFinal_ex")]
+		public extern static int DecryptFinal_ex(CIPHER_CTX* ctx, uint8* outm, int* outl);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CipherInit")]
+		public extern static int CipherInit(CIPHER_CTX* ctx, CIPHER* cipher, uint8* key, uint8* iv, int enc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CipherInit_ex")]
+		public extern static int CipherInit_ex(CIPHER_CTX* ctx, CIPHER* cipher, Engine.ENGINE* impl, uint8* key, uint8* iv, int enc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CipherUpdate")]
+		public extern static int CipherUpdate(CIPHER_CTX* ctx, uint8* outVal, int* outl, uint8* inVal, int inl);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CipherFinal")]
+		public extern static int CipherFinal(CIPHER_CTX* ctx, uint8* outm, int* outl);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CipherFinal_ex")]
+		public extern static int CipherFinal_ex(CIPHER_CTX* ctx, uint8* outm, int* outl);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_SignFinal")]
+		public extern static int SignFinal(MD_CTX* ctx, uint8* md, uint* s, PKEY* pkey);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_DigestSign")]
+		public extern static int DigestSign(MD_CTX* ctx, uint8* sigret, uint* siglen, uint8* tbs, uint tbslen);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_VerifyFinal")]
+		public extern static int VerifyFinal(MD_CTX* ctx, uint8* sigbuf, uint siglen, PKEY* pkey);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_DigestVerify")]
+		public extern static int DigestVerify(MD_CTX* ctx, uint8* sigret, uint siglen, uint8* tbs, uint tbslen);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_DigestSignInit")]
+		public extern static int DigestSignInit(MD_CTX* ctx, PKEY_CTX** pctx, MD* type, Engine.ENGINE* e, PKEY* pkey);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_DigestSignFinal")]
+		public extern static int DigestSignFinal(MD_CTX* ctx, uint8* sigret, uint* siglen);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_DigestVerifyInit")]
+		public extern static int DigestVerifyInit(MD_CTX* ctx, PKEY_CTX** pctx, MD* type, Engine.ENGINE* e, PKEY* pkey);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_DigestVerifyFinal")]
+		public extern static int DigestVerifyFinal(MD_CTX* ctx, uint8* sig, uint siglen);
 
 #if !OPENSSL_NO_RSA
-		public extern static int EVP_OpenInit(CIPHER_CTX* ctx, CIPHER* type, uint8* ek, int ekl, uint8* iv, PKEY* priv);
-		public extern static int EVP_OpenFinal(CIPHER_CTX* ctx, uint8* outVal, int* outl);
-
-		public extern static int EVP_SealInit(CIPHER_CTX* ctx, CIPHER* type, uint8** ek, int* ekl, uint8* iv, PKEY** pubk, int npubk);
-		public extern static int EVP_SealFinal(CIPHER_CTX* ctx, uint8* outVal, int* outl);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_OpenInit")]
+		public extern static int OpenInit(CIPHER_CTX* ctx, CIPHER* type, uint8* ek, int ekl, uint8* iv, PKEY* priv);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_OpenFinal")]
+		public extern static int OpenFinal(CIPHER_CTX* ctx, uint8* outVal, int* outl);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_SealInit")]
+		public extern static int SealInit(CIPHER_CTX* ctx, CIPHER* type, uint8** ek, int* ekl, uint8* iv, PKEY** pubk, int npubk);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_SealFinal")]
+		public extern static int SealFinal(CIPHER_CTX* ctx, uint8* outVal, int* outl);
 #endif
 
-		public extern static ENCODE_CTX* EVP_ENCODE_CTX_new();
-		public extern static void EVP_ENCODE_CTX_free(ENCODE_CTX* ctx);
-		public extern static int EVP_ENCODE_CTX_copy(ENCODE_CTX* dctx, ENCODE_CTX* sctx);
-		public extern static int EVP_ENCODE_CTX_num(ENCODE_CTX* ctx);
-		public extern static void EVP_EncodeInit(ENCODE_CTX* ctx);
-		public extern static int EVP_EncodeUpdate(ENCODE_CTX* ctx, uint8* outVal, int* outl, uint8* inVal, int inl);
-		public extern static void EVP_EncodeFinal(ENCODE_CTX* ctx, uint8* outVal, int* outl);
-		public extern static int EVP_EncodeBlock(uint8* t, uint8* f, int n);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_ENCODE_CTX_new")]
+		public extern static ENCODE_CTX* ENCODE_CTX_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_ENCODE_CTX_free")]
+		public extern static void ENCODE_CTX_free(ENCODE_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_ENCODE_CTX_copy")]
+		public extern static int ENCODE_CTX_copy(ENCODE_CTX* dctx, ENCODE_CTX* sctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_ENCODE_CTX_num")]
+		public extern static int ENCODE_CTX_num(ENCODE_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_EncodeInit")]
+		public extern static void EncodeInit(ENCODE_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_EncodeUpdate")]
+		public extern static int EncodeUpdate(ENCODE_CTX* ctx, uint8* outVal, int* outl, uint8* inVal, int inl);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_EncodeFinal")]
+		public extern static void EncodeFinal(ENCODE_CTX* ctx, uint8* outVal, int* outl);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_EncodeBlock")]
+		public extern static int EncodeBlock(uint8* t, uint8* f, int n);
 
-		public extern static void EVP_DecodeInit(ENCODE_CTX* ctx);
-		public extern static int EVP_DecodeUpdate(ENCODE_CTX* ctx, uint8* outVal, int* outl, uint8* inVal, int inl);
-		public extern static int EVP_DecodeFinal(ENCODE_CTX* ctx, uint8* outVal, int* outl);
-		public extern static int EVP_DecodeBlock(uint8* t, uint8* f, int n);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_DecodeInit")]
+		public extern static void DecodeInit(ENCODE_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_DecodeUpdate")]
+		public extern static int DecodeUpdate(ENCODE_CTX* ctx, uint8* outVal, int* outl, uint8* inVal, int inl);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_DecodeFinal")]
+		public extern static int DecodeFinal(ENCODE_CTX* ctx, uint8* outVal, int* outl);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_DecodeBlock")]
+		public extern static int DecodeBlock(uint8* t, uint8* f, int n);
 
-#  define EVP_CIPHER_CTX_init(c) => EVP_CIPHER_CTX_reset(c);
-#  define EVP_CIPHER_CTX_cleanup(c) => EVP_CIPHER_CTX_reset(c);
-		public extern static CIPHER_CTX* EVP_CIPHER_CTX_new();
-		public extern static int EVP_CIPHER_CTX_reset(CIPHER_CTX* c);
-		public extern static void EVP_CIPHER_CTX_free(CIPHER_CTX* c);
-		public extern static int EVP_CIPHER_CTX_set_key_length(CIPHER_CTX* x, int keylen);
-		public extern static int EVP_CIPHER_CTX_set_padding(CIPHER_CTX* c, int pad);
-		public extern static int EVP_CIPHER_CTX_ctrl(CIPHER_CTX* ctx, int type, int arg, void* ptr);
-		public extern static int EVP_CIPHER_CTX_rand_key(CIPHER_CTX* ctx, uint8* key);
+		[Inline]
+		public static int CIPHER_CTX_init(CIPHER_CTX* c) => CIPHER_CTX_reset(c);
+		[Inline]
+		public static int CIPHER_CTX_cleanup(CIPHER_CTX* c) => CIPHER_CTX_reset(c);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CIPHER_CTX_new")]
+		public extern static CIPHER_CTX* CIPHER_CTX_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CIPHER_CTX_reset")]
+		public extern static int CIPHER_CTX_reset(CIPHER_CTX* c);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CIPHER_CTX_free")]
+		public extern static void CIPHER_CTX_free(CIPHER_CTX* c);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CIPHER_CTX_set_key_length")]
+		public extern static int CIPHER_CTX_set_key_length(CIPHER_CTX* x, int keylen);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CIPHER_CTX_set_padding")]
+		public extern static int CIPHER_CTX_set_padding(CIPHER_CTX* c, int pad);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CIPHER_CTX_ctrl")]
+		public extern static int CIPHER_CTX_ctrl(CIPHER_CTX* ctx, int type, int arg, void* ptr);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CIPHER_CTX_rand_key")]
+		public extern static int CIPHER_CTX_rand_key(CIPHER_CTX* ctx, uint8* key);
 
-		public extern static BIO.METHOD* BIO_f_md();
-		public extern static BIO.METHOD* BIO_f_base64();
-		public extern static BIO.METHOD* BIO_f_cipher();
-		public extern static BIO.METHOD* BIO_f_reliable();
-		public extern static int BIO_set_cipher(BIO.bio_st* b, CIPHER* c, uint8* k, uint8* i, int enc);
-
-		public extern static MD* EVP_md_null();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_md_null")]
+		public extern static MD* md_null();
 #if !OPENSSL_NO_MD2
-		public extern static MD* EVP_md2();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_md2")]
+		public extern static MD* md2();
 #endif
 #if !OPENSSL_NO_MD4
-		public extern static MD* EVP_md4();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_md4")]
+		public extern static MD* md4();
 #endif
 #if !OPENSSL_NO_MD5
-		public extern static MD* EVP_md5();
-		public extern static MD* EVP_md5_sha1();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_md5")]
+		public extern static MD* md5();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_md5_sha1")]
+		public extern static MD* md5_sha1();
 #endif
 #if !OPENSSL_NO_BLAKE2
-		public extern static MD* EVP_blake2b512();
-		public extern static MD* EVP_blake2s256();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_blake2b512")]
+		public extern static MD* blake2b512();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_blake2s256")]
+		public extern static MD* blake2s256();
 #endif
-		public extern static MD* EVP_sha1();
-		public extern static MD* EVP_sha224();
-		public extern static MD* EVP_sha256();
-		public extern static MD* EVP_sha384();
-		public extern static MD* EVP_sha512();
-		public extern static MD* EVP_sha512_224();
-		public extern static MD* EVP_sha512_256();
-		public extern static MD* EVP_sha3_224();
-		public extern static MD* EVP_sha3_256();
-		public extern static MD* EVP_sha3_384();
-		public extern static MD* EVP_sha3_512();
-		public extern static MD* EVP_shake128();
-		public extern static MD* EVP_shake256();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_sha1")]
+		public extern static MD* sha1();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_sha224")]
+		public extern static MD* sha224();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_sha256")]
+		public extern static MD* sha256();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_sha384")]
+		public extern static MD* sha384();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_sha512")]
+		public extern static MD* sha512();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_sha512_224")]
+		public extern static MD* sha512_224();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_sha512_256")]
+		public extern static MD* sha512_256();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_sha3_224")]
+		public extern static MD* sha3_224();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_sha3_256")]
+		public extern static MD* sha3_256();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_sha3_384")]
+		public extern static MD* sha3_384();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_sha3_512")]
+		public extern static MD* sha3_512();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_shake128")]
+		public extern static MD* shake128();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_shake256")]
+		public extern static MD* shake256();
 #if !OPENSSL_NO_MDC2
-		public extern static MD* EVP_mdc2();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_mdc2")]
+		public extern static MD* mdc2();
 #endif
 #if !OPENSSL_NO_RMD160
-		public extern static MD* EVP_ripemd160();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_ripemd160")]
+		public extern static MD* ripemd160();
 #endif
 #if !OPENSSL_NO_WHIRLPOOL
-		public extern static MD* EVP_whirlpool();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_whirlpool")]
+		public extern static MD* whirlpool();
 #endif
 #if !OPENSSL_NO_SM3
-		public extern static MD* EVP_sm3();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_sm3")]
+		public extern static MD* sm3();
 #endif
-		public extern static CIPHER* EVP_enc_null(); /* does nothing :-) */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_enc_null")]
+		public extern static CIPHER* enc_null(); /* does nothing :-) */
 #if !OPENSSL_NO_DES
-		public extern static CIPHER* EVP_des_ecb();
-		public extern static CIPHER* EVP_des_ede();
-		public extern static CIPHER* EVP_des_ede3();
-		public extern static CIPHER* EVP_des_ede_ecb();
-		public extern static CIPHER* EVP_des_ede3_ecb();
-		public extern static CIPHER* EVP_des_cfb64();
-#  define EVP_des_cfb => EVP_des_cfb64;
-		public extern static CIPHER* EVP_des_cfb1();
-		public extern static CIPHER* EVP_des_cfb8();
-		public extern static CIPHER* EVP_des_ede_cfb64();
-#  define EVP_des_ede_cfb => EVP_des_ede_cfb64;
-		public extern static CIPHER* EVP_des_ede3_cfb64();
-#  define EVP_des_ede3_cfb => EVP_des_ede3_cfb64;
-		public extern static CIPHER* EVP_des_ede3_cfb1();
-		public extern static CIPHER* EVP_des_ede3_cfb8();
-		public extern static CIPHER* EVP_des_ofb();
-		public extern static CIPHER* EVP_des_ede_ofb();
-		public extern static CIPHER* EVP_des_ede3_ofb();
-		public extern static CIPHER* EVP_des_cbc();
-		public extern static CIPHER* EVP_des_ede_cbc();
-		public extern static CIPHER* EVP_des_ede3_cbc();
-		public extern static CIPHER* EVP_desx_cbc();
-		public extern static CIPHER* EVP_des_ede3_wrap();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_des_ecb")]
+		public extern static CIPHER* des_ecb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_des_ede")]
+		public extern static CIPHER* des_ede();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_des_ede3")]
+		public extern static CIPHER* des_ede3();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_des_ede_ecb")]
+		public extern static CIPHER* des_ede_ecb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_des_ede3_ecb")]
+		public extern static CIPHER* des_ede3_ecb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_des_cfb64")]
+		public extern static CIPHER* des_cfb64();
+		[Inline]
+		public static CIPHER* des_cfb() => des_cfb64();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_des_cfb1")]
+		public extern static CIPHER* des_cfb1();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_des_cfb8")]
+		public extern static CIPHER* des_cfb8();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_des_ede_cfb64")]
+		public extern static CIPHER* des_ede_cfb64();
+		[Inline]
+		public static CIPHER* des_ede_cfb() => des_ede_cfb64();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_des_ede3_cfb64")]
+		public extern static CIPHER* des_ede3_cfb64();
+		[Inline]
+		public static CIPHER* des_ede3_cfb() => des_ede3_cfb64();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_des_ede3_cfb1")]
+		public extern static CIPHER* des_ede3_cfb1();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_des_ede3_cfb8")]
+		public extern static CIPHER* des_ede3_cfb8();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_des_ofb")]
+		public extern static CIPHER* des_ofb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_des_ede_ofb")]
+		public extern static CIPHER* des_ede_ofb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_des_ede3_ofb")]
+		public extern static CIPHER* des_ede3_ofb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_des_cbc")]
+		public extern static CIPHER* des_cbc();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_des_ede_cbc")]
+		public extern static CIPHER* des_ede_cbc();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_des_ede3_cbc")]
+		public extern static CIPHER* des_ede3_cbc();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_desx_cbc")]
+		public extern static CIPHER* desx_cbc();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_des_ede3_wrap")]
+		public extern static CIPHER* des_ede3_wrap();
 		/*
 		 * This should now be supported through the dev_crypto ENGINE. But also, why
-		 * are rc4 and md5 declarations made here inside a "NO_DES" precompiler
-		 * branch?
+		 * are rc4 and md5 declarations made here inside a "NO_DES" precompiler branch?
 		 */
 #endif
 #if !OPENSSL_NO_RC4
-		public extern static CIPHER* EVP_rc4();
-		public extern static CIPHER* EVP_rc4_40();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_rc4")]
+		public extern static CIPHER* rc4();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_rc4_40")]
+		public extern static CIPHER* rc4_40();
 	#if !OPENSSL_NO_MD5
-		public extern static CIPHER* EVP_rc4_hmac_md5();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_rc4_hmac_md5")]
+		public extern static CIPHER* rc4_hmac_md5();
 	#endif
 #endif
 #if !OPENSSL_NO_IDEA
-		public extern static CIPHER* EVP_idea_ecb();
-		public extern static CIPHER* EVP_idea_cfb64();
-#  define EVP_idea_cfb => EVP_idea_cfb64;
-		public extern static CIPHER* EVP_idea_ofb();
-		public extern static CIPHER* EVP_idea_cbc();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_idea_ecb")]
+		public extern static CIPHER* idea_ecb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_idea_cfb64")]
+		public extern static CIPHER* idea_cfb64();
+		[Inline]
+		public static CIPHER* idea_cfb() => idea_cfb64();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_idea_ofb")]
+		public extern static CIPHER* idea_ofb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_idea_cbc")]
+		public extern static CIPHER* idea_cbc();
 #endif
 #if !OPENSSL_NO_RC2
-		public extern static CIPHER* EVP_rc2_ecb();
-		public extern static CIPHER* EVP_rc2_cbc();
-		public extern static CIPHER* EVP_rc2_40_cbc();
-		public extern static CIPHER* EVP_rc2_64_cbc();
-		public extern static CIPHER* EVP_rc2_cfb64();
-#  define EVP_rc2_cfb => EVP_rc2_cfb64;
-		public extern static CIPHER* EVP_rc2_ofb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_rc2_ecb")]
+		public extern static CIPHER* rc2_ecb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_rc2_cbc")]
+		public extern static CIPHER* rc2_cbc();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_rc2_40_cbc")]
+		public extern static CIPHER* rc2_40_cbc();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_rc2_64_cbc")]
+		public extern static CIPHER* rc2_64_cbc();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_rc2_cfb64")]
+		public extern static CIPHER* rc2_cfb64();
+		[Inline]
+		public static CIPHER* rc2_cfb() => rc2_cfb64();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_rc2_ofb")]
+		public extern static CIPHER* rc2_ofb();
 #endif
 #if !OPENSSL_NO_BF
-		public extern static CIPHER* EVP_bf_ecb();
-		public extern static CIPHER* EVP_bf_cbc();
-		public extern static CIPHER* EVP_bf_cfb64();
-#  define EVP_bf_cfb => EVP_bf_cfb64;
-		public extern static CIPHER* EVP_bf_ofb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_bf_ecb")]
+		public extern static CIPHER* bf_ecb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_bf_cbc")]
+		public extern static CIPHER* bf_cbc();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_bf_cfb64")]
+		public extern static CIPHER* bf_cfb64();
+		[Inline]
+		public static CIPHER* bf_cfb() => bf_cfb64();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_bf_ofb")]
+		public extern static CIPHER* bf_ofb();
 #endif
 #if !OPENSSL_NO_CAST
-		public extern static CIPHER* EVP_cast5_ecb();
-		public extern static CIPHER* EVP_cast5_cbc();
-		public extern static CIPHER* EVP_cast5_cfb64();
-#  define EVP_cast5_cfb => EVP_cast5_cfb64;
-		public extern static CIPHER* EVP_cast5_ofb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_cast5_ecb")]
+		public extern static CIPHER* cast5_ecb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_cast5_cbc")]
+		public extern static CIPHER* cast5_cbc();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_cast5_cfb64")]
+		public extern static CIPHER* cast5_cfb64();
+		[Inline]
+		public static CIPHER* cast5_cfb() => cast5_cfb64();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_cast5_ofb")]
+		public extern static CIPHER* cast5_ofb();
 #endif
 #if !OPENSSL_NO_RC5
-		public extern static CIPHER* EVP_rc5_32_12_16_cbc();
-		public extern static CIPHER* EVP_rc5_32_12_16_ecb();
-		public extern static CIPHER* EVP_rc5_32_12_16_cfb64();
-#  define EVP_rc5_32_12_16_cfb => EVP_rc5_32_12_16_cfb64;
-		public extern static CIPHER* EVP_rc5_32_12_16_ofb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_rc5_32_12_16_cbc")]
+		public extern static CIPHER* rc5_32_12_16_cbc();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_rc5_32_12_16_ecb")]
+		public extern static CIPHER* rc5_32_12_16_ecb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_rc5_32_12_16_cfb64")]
+		public extern static CIPHER* rc5_32_12_16_cfb64();
+		[Inline]
+		public static CIPHER* rc5_32_12_16_cfb() => rc5_32_12_16_cfb64();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_rc5_32_12_16_ofb")]
+		public extern static CIPHER* rc5_32_12_16_ofb();
 #endif
-		public extern static CIPHER* EVP_aes_128_ecb();
-		public extern static CIPHER* EVP_aes_128_cbc();
-		public extern static CIPHER* EVP_aes_128_cfb1();
-		public extern static CIPHER* EVP_aes_128_cfb8();
-		public extern static CIPHER* EVP_aes_128_cfb128();
-# define EVP_aes_128_cfb => EVP_aes_128_cfb128;
-		public extern static CIPHER* EVP_aes_128_ofb();
-		public extern static CIPHER* EVP_aes_128_ctr();
-		public extern static CIPHER* EVP_aes_128_ccm();
-		public extern static CIPHER* EVP_aes_128_gcm();
-		public extern static CIPHER* EVP_aes_128_xts();
-		public extern static CIPHER* EVP_aes_128_wrap();
-		public extern static CIPHER* EVP_aes_128_wrap_pad();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_128_ecb")]
+		public extern static CIPHER* aes_128_ecb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_128_cbc")]
+		public extern static CIPHER* aes_128_cbc();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_128_cfb1")]
+		public extern static CIPHER* aes_128_cfb1();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_128_cfb8")]
+		public extern static CIPHER* aes_128_cfb8();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_128_cfb128")]
+		public extern static CIPHER* aes_128_cfb128();
+		[Inline]
+		public static CIPHER* aes_128_cfb() => aes_128_cfb128();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_128_ofb")]
+		public extern static CIPHER* aes_128_ofb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_128_ctr")]
+		public extern static CIPHER* aes_128_ctr();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_128_ccm")]
+		public extern static CIPHER* aes_128_ccm();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_128_gcm")]
+		public extern static CIPHER* aes_128_gcm();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_128_xts")]
+		public extern static CIPHER* aes_128_xts();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_128_wrap")]
+		public extern static CIPHER* aes_128_wrap();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_128_wrap_pad")]
+		public extern static CIPHER* aes_128_wrap_pad();
 #if !OPENSSL_NO_OCB
-		public extern static CIPHER* EVP_aes_128_ocb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_128_ocb")]
+		public extern static CIPHER* aes_128_ocb();
 #endif
-		public extern static CIPHER* EVP_aes_192_ecb();
-		public extern static CIPHER* EVP_aes_192_cbc();
-		public extern static CIPHER* EVP_aes_192_cfb1();
-		public extern static CIPHER* EVP_aes_192_cfb8();
-		public extern static CIPHER* EVP_aes_192_cfb128();
-# define EVP_aes_192_cfb => EVP_aes_192_cfb128;
-		public extern static CIPHER* EVP_aes_192_ofb();
-		public extern static CIPHER* EVP_aes_192_ctr();
-		public extern static CIPHER* EVP_aes_192_ccm();
-		public extern static CIPHER* EVP_aes_192_gcm();
-		public extern static CIPHER* EVP_aes_192_wrap();
-		public extern static CIPHER* EVP_aes_192_wrap_pad();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_192_ecb")]
+		public extern static CIPHER* aes_192_ecb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_192_cbc")]
+		public extern static CIPHER* aes_192_cbc();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_192_cfb1")]
+		public extern static CIPHER* aes_192_cfb1();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_192_cfb8")]
+		public extern static CIPHER* aes_192_cfb8();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_192_cfb128")]
+		public extern static CIPHER* aes_192_cfb128();
+		[Inline]
+		public static CIPHER* aes_192_cfb() => aes_192_cfb128();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_192_ofb")]
+		public extern static CIPHER* aes_192_ofb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_192_ctr")]
+		public extern static CIPHER* aes_192_ctr();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_192_ccm")]
+		public extern static CIPHER* aes_192_ccm();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_192_gcm")]
+		public extern static CIPHER* aes_192_gcm();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_192_wrap")]
+		public extern static CIPHER* aes_192_wrap();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_192_wrap_pad")]
+		public extern static CIPHER* aes_192_wrap_pad();
 #if !OPENSSL_NO_OCB
-		public extern static CIPHER* EVP_aes_192_ocb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_192_ocb")]
+		public extern static CIPHER* aes_192_ocb();
 #endif
-		public extern static CIPHER* EVP_aes_256_ecb();
-		public extern static CIPHER* EVP_aes_256_cbc();
-		public extern static CIPHER* EVP_aes_256_cfb1();
-		public extern static CIPHER* EVP_aes_256_cfb8();
-		public extern static CIPHER* EVP_aes_256_cfb128();
-# define EVP_aes_256_cfb => EVP_aes_256_cfb128;
-		public extern static CIPHER* EVP_aes_256_ofb();
-		public extern static CIPHER* EVP_aes_256_ctr();
-		public extern static CIPHER* EVP_aes_256_ccm();
-		public extern static CIPHER* EVP_aes_256_gcm();
-		public extern static CIPHER* EVP_aes_256_xts();
-		public extern static CIPHER* EVP_aes_256_wrap();
-		public extern static CIPHER* EVP_aes_256_wrap_pad();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_256_ecb")]
+		public extern static CIPHER* aes_256_ecb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_256_cbc")]
+		public extern static CIPHER* aes_256_cbc();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_256_cfb1")]
+		public extern static CIPHER* aes_256_cfb1();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_256_cfb8")]
+		public extern static CIPHER* aes_256_cfb8();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_256_cfb128")]
+		public extern static CIPHER* aes_256_cfb128();
+		[Inline]
+		public static CIPHER* aes_256_cfb() => aes_256_cfb128();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_256_ofb")]
+		public extern static CIPHER* aes_256_ofb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_256_ctr")]
+		public extern static CIPHER* aes_256_ctr();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_256_ccm")]
+		public extern static CIPHER* aes_256_ccm();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_256_gcm")]
+		public extern static CIPHER* aes_256_gcm();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_256_xts")]
+		public extern static CIPHER* aes_256_xts();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_256_wrap")]
+		public extern static CIPHER* aes_256_wrap();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_256_wrap_pad")]
+		public extern static CIPHER* aes_256_wrap_pad();
 #if !OPENSSL_NO_OCB
-		public extern static CIPHER* EVP_aes_256_ocb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_256_ocb")]
+		public extern static CIPHER* aes_256_ocb();
 #endif
-		public extern static CIPHER* EVP_aes_128_cbc_hmac_sha1();
-		public extern static CIPHER* EVP_aes_256_cbc_hmac_sha1();
-		public extern static CIPHER* EVP_aes_128_cbc_hmac_sha256();
-		public extern static CIPHER* EVP_aes_256_cbc_hmac_sha256();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_128_cbc_hmac_sha1")]
+		public extern static CIPHER* aes_128_cbc_hmac_sha1();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_256_cbc_hmac_sha1")]
+		public extern static CIPHER* aes_256_cbc_hmac_sha1();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_128_cbc_hmac_sha256")]
+		public extern static CIPHER* aes_128_cbc_hmac_sha256();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aes_256_cbc_hmac_sha256")]
+		public extern static CIPHER* aes_256_cbc_hmac_sha256();
 #if !OPENSSL_NO_ARIA
-		public extern static CIPHER* EVP_aria_128_ecb();
-		public extern static CIPHER* EVP_aria_128_cbc();
-		public extern static CIPHER* EVP_aria_128_cfb1();
-		public extern static CIPHER* EVP_aria_128_cfb8();
-		public extern static CIPHER* EVP_aria_128_cfb128();
-#  define EVP_aria_128_cfb => EVP_aria_128_cfb128;
-		public extern static CIPHER* EVP_aria_128_ctr();
-		public extern static CIPHER* EVP_aria_128_ofb();
-		public extern static CIPHER* EVP_aria_128_gcm();
-		public extern static CIPHER* EVP_aria_128_ccm();
-		public extern static CIPHER* EVP_aria_192_ecb();
-		public extern static CIPHER* EVP_aria_192_cbc();
-		public extern static CIPHER* EVP_aria_192_cfb1();
-		public extern static CIPHER* EVP_aria_192_cfb8();
-		public extern static CIPHER* EVP_aria_192_cfb128();
-#  define EVP_aria_192_cfb => EVP_aria_192_cfb128;
-		public extern static CIPHER* EVP_aria_192_ctr();
-		public extern static CIPHER* EVP_aria_192_ofb();
-		public extern static CIPHER* EVP_aria_192_gcm();
-		public extern static CIPHER* EVP_aria_192_ccm();
-		public extern static CIPHER* EVP_aria_256_ecb();
-		public extern static CIPHER* EVP_aria_256_cbc();
-		public extern static CIPHER* EVP_aria_256_cfb1();
-		public extern static CIPHER* EVP_aria_256_cfb8();
-		public extern static CIPHER* EVP_aria_256_cfb128();
-#  define EVP_aria_256_cfb => EVP_aria_256_cfb128;
-		public extern static CIPHER* EVP_aria_256_ctr();
-		public extern static CIPHER* EVP_aria_256_ofb();
-		public extern static CIPHER* EVP_aria_256_gcm();
-		public extern static CIPHER* EVP_aria_256_ccm();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aria_128_ecb")]
+		public extern static CIPHER* aria_128_ecb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aria_128_cbc")]
+		public extern static CIPHER* aria_128_cbc();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aria_128_cfb1")]
+		public extern static CIPHER* aria_128_cfb1();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aria_128_cfb8")]
+		public extern static CIPHER* aria_128_cfb8();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aria_128_cfb128")]
+		public extern static CIPHER* aria_128_cfb128();
+		[Inline]
+		public static CIPHER* aria_128_cfb() => aria_128_cfb128();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aria_128_ctr")]
+		public extern static CIPHER* aria_128_ctr();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aria_128_ofb")]
+		public extern static CIPHER* aria_128_ofb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aria_128_gcm")]
+		public extern static CIPHER* aria_128_gcm();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aria_128_ccm")]
+		public extern static CIPHER* aria_128_ccm();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aria_192_ecb")]
+		public extern static CIPHER* aria_192_ecb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aria_192_cbc")]
+		public extern static CIPHER* aria_192_cbc();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aria_192_cfb1")]
+		public extern static CIPHER* aria_192_cfb1();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aria_192_cfb8")]
+		public extern static CIPHER* aria_192_cfb8();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aria_192_cfb128")]
+		public extern static CIPHER* aria_192_cfb128();
+		[Inline]
+		public static CIPHER* aria_192_cfb() => aria_192_cfb128();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aria_192_ctr")]
+		public extern static CIPHER* aria_192_ctr();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aria_192_ofb")]
+		public extern static CIPHER* aria_192_ofb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aria_192_gcm")]
+		public extern static CIPHER* aria_192_gcm();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aria_192_ccm")]
+		public extern static CIPHER* aria_192_ccm();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aria_256_ecb")]
+		public extern static CIPHER* aria_256_ecb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aria_256_cbc")]
+		public extern static CIPHER* aria_256_cbc();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aria_256_cfb1")]
+		public extern static CIPHER* aria_256_cfb1();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aria_256_cfb8")]
+		public extern static CIPHER* aria_256_cfb8();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aria_256_cfb128")]
+		public extern static CIPHER* aria_256_cfb128();
+		[Inline]
+		public static CIPHER* aria_256_cfb() => aria_256_cfb128();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aria_256_ctr")]
+		public extern static CIPHER* aria_256_ctr();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aria_256_ofb")]
+		public extern static CIPHER* aria_256_ofb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aria_256_gcm")]
+		public extern static CIPHER* aria_256_gcm();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_aria_256_ccm")]
+		public extern static CIPHER* aria_256_ccm();
 #endif
 #if !OPENSSL_NO_CAMELLIA
-		public extern static CIPHER* EVP_camellia_128_ecb();
-		public extern static CIPHER* EVP_camellia_128_cbc();
-		public extern static CIPHER* EVP_camellia_128_cfb1();
-		public extern static CIPHER* EVP_camellia_128_cfb8();
-		public extern static CIPHER* EVP_camellia_128_cfb128();
-#  define EVP_camellia_128_cfb => EVP_camellia_128_cfb128;
-		public extern static CIPHER* EVP_camellia_128_ofb();
-		public extern static CIPHER* EVP_camellia_128_ctr();
-		public extern static CIPHER* EVP_camellia_192_ecb();
-		public extern static CIPHER* EVP_camellia_192_cbc();
-		public extern static CIPHER* EVP_camellia_192_cfb1();
-		public extern static CIPHER* EVP_camellia_192_cfb8();
-		public extern static CIPHER* EVP_camellia_192_cfb128();
-#  define EVP_camellia_192_cfb => EVP_camellia_192_cfb128;
-		public extern static CIPHER* EVP_camellia_192_ofb();
-		public extern static CIPHER* EVP_camellia_192_ctr();
-		public extern static CIPHER* EVP_camellia_256_ecb();
-		public extern static CIPHER* EVP_camellia_256_cbc();
-		public extern static CIPHER* EVP_camellia_256_cfb1();
-		public extern static CIPHER* EVP_camellia_256_cfb8();
-		public extern static CIPHER* EVP_camellia_256_cfb128();
-#  define EVP_camellia_256_cfb => EVP_camellia_256_cfb128;
-		public extern static CIPHER* EVP_camellia_256_ofb();
-		public extern static CIPHER* EVP_camellia_256_ctr();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_camellia_128_ecb")]
+		public extern static CIPHER* camellia_128_ecb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_camellia_128_cbc")]
+		public extern static CIPHER* camellia_128_cbc();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_camellia_128_cfb1")]
+		public extern static CIPHER* camellia_128_cfb1();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_camellia_128_cfb8")]
+		public extern static CIPHER* camellia_128_cfb8();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_camellia_128_cfb128")]
+		public extern static CIPHER* camellia_128_cfb128();
+		[Inline]
+		public static CIPHER* camellia_128_cfb() => camellia_128_cfb128();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_camellia_128_ofb")]
+		public extern static CIPHER* camellia_128_ofb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_camellia_128_ctr")]
+		public extern static CIPHER* camellia_128_ctr();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_camellia_192_ecb")]
+		public extern static CIPHER* camellia_192_ecb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_camellia_192_cbc")]
+		public extern static CIPHER* camellia_192_cbc();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_camellia_192_cfb1")]
+		public extern static CIPHER* camellia_192_cfb1();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_camellia_192_cfb8")]
+		public extern static CIPHER* camellia_192_cfb8();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_camellia_192_cfb128")]
+		public extern static CIPHER* camellia_192_cfb128();
+		[Inline]
+		public static CIPHER* camellia_192_cfb() => camellia_192_cfb128();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_camellia_192_ofb")]
+		public extern static CIPHER* camellia_192_ofb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_camellia_192_ctr")]
+		public extern static CIPHER* camellia_192_ctr();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_camellia_256_ecb")]
+		public extern static CIPHER* camellia_256_ecb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_camellia_256_cbc")]
+		public extern static CIPHER* camellia_256_cbc();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_camellia_256_cfb1")]
+		public extern static CIPHER* camellia_256_cfb1();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_camellia_256_cfb8")]
+		public extern static CIPHER* camellia_256_cfb8();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_camellia_256_cfb128")]
+		public extern static CIPHER* camellia_256_cfb128();
+		[Inline]
+		public static CIPHER* camellia_256_cfb() => camellia_256_cfb128();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_camellia_256_ofb")]
+		public extern static CIPHER* camellia_256_ofb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_camellia_256_ctr")]
+		public extern static CIPHER* camellia_256_ctr();
 #endif
 #if !OPENSSL_NO_CHACHA
-		public extern static CIPHER* EVP_chacha20();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_chacha20")]
+		public extern static CIPHER* chacha20();
 	#if !OPENSSL_NO_POLY1305
-		public extern static CIPHER* EVP_chacha20_poly1305();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_chacha20_poly1305")]
+		public extern static CIPHER* chacha20_poly1305();
 	#endif
 #endif
 
 #if !OPENSSL_NO_SEED
-		public extern static CIPHER* EVP_seed_ecb();
-		public extern static CIPHER* EVP_seed_cbc();
-		public extern static CIPHER* EVP_seed_cfb128();
-#  define EVP_seed_cfb => EVP_seed_cfb128;
-		public extern static CIPHER* EVP_seed_ofb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_seed_ecb")]
+		public extern static CIPHER* seed_ecb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_seed_cbc")]
+		public extern static CIPHER* seed_cbc();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_seed_cfb128")]
+		public extern static CIPHER* seed_cfb128();
+		[Inline]
+		public static CIPHER* seed_cfb() => seed_cfb128();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_seed_ofb")]
+		public extern static CIPHER* seed_ofb();
 #endif
 
 #if !OPENSSL_NO_SM4
-		public extern static CIPHER* EVP_sm4_ecb();
-		public extern static CIPHER* EVP_sm4_cbc();
-		public extern static CIPHER* EVP_sm4_cfb128();
-#  define EVP_sm4_cfb => EVP_sm4_cfb128;
-		public extern static CIPHER* EVP_sm4_ofb();
-		public extern static CIPHER* EVP_sm4_ctr();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_sm4_ecb")]
+		public extern static CIPHER* sm4_ecb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_sm4_cbc")]
+		public extern static CIPHER* sm4_cbc();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_sm4_cfb128")]
+		public extern static CIPHER* sm4_cfb128();
+		[Inline]
+		public static CIPHER* sm4_cfb() => sm4_cfb128();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_sm4_ofb")]
+		public extern static CIPHER* sm4_ofb();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_sm4_ctr")]
+		public extern static CIPHER* sm4_ctr();
 #endif
-
-#  define OPENSSL_add_all_algorithms_conf() => OPENSSL_init_crypto(OPENSSL_INIT_ADD_ALL_CIPHERS | OPENSSL_INIT_ADD_ALL_DIGESTS | OPENSSL_INIT_LOAD_CONFIG, NULL);
-#  define OPENSSL_add_all_algorithms_noconf() => OPENSSL_init_crypto(OPENSSL_INIT_ADD_ALL_CIPHERS | OPENSSL_INIT_ADD_ALL_DIGESTS, NULL);
-
-#if OPENSSL_LOAD_CONF
-#   define OpenSSL_add_all_algorithms() => OPENSSL_add_all_algorithms_conf();
-#else
-#   define OpenSSL_add_all_algorithms() => OPENSSL_add_all_algorithms_noconf();
-#endif
-
-#  define OpenSSL_add_all_ciphers() => OPENSSL_init_crypto(OPENSSL_INIT_ADD_ALL_CIPHERS, NULL);
-#  define OpenSSL_add_all_digests() => OPENSSL_init_crypto(OPENSSL_INIT_ADD_ALL_DIGESTS, NULL);
 
 		[Inline]
 		public static void cleanup() { while(false) continue; }
@@ -1152,156 +1425,237 @@ namespace Beef_Net.OpenSSL
 		public extern static void MD_do_all(function void (MD* ciph, char8* from, char8* to, void* x) fn, void* arg);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_MD_do_all_sorted")]
 		public extern static void MD_do_all_sorted(function void(MD* ciph, char8* from, char8* to, void* x) fn, void* arg);
-
-		public extern static int EVP_PKEY_decrypt_old(uint8* dec_key, uint8* enc_key, int enc_key_len, PKEY* private_key);
-		public extern static int EVP_PKEY_encrypt_old(uint8* enc_key, uint8* key, int key_len, PKEY* pub_key);
-		public extern static int EVP_PKEY_type(int type);
-		public extern static int EVP_PKEY_id(PKEY* pkey);
-		public extern static int EVP_PKEY_base_id(PKEY* pkey);
-		public extern static int EVP_PKEY_bits(PKEY* pkey);
-		public extern static int EVP_PKEY_security_bits(PKEY* pkey);
-		public extern static int EVP_PKEY_size(PKEY* pkey);
-		public extern static int EVP_PKEY_set_type(PKEY* pkey, int type);
-		public extern static int EVP_PKEY_set_type_str(PKEY* pkey, char8* str, int len);
-		public extern static int EVP_PKEY_set_alias_type(PKEY* pkey, int type);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_decrypt_old")]
+		public extern static int PKEY_decrypt_old(uint8* dec_key, uint8* enc_key, int enc_key_len, PKEY* private_key);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_encrypt_old")]
+		public extern static int PKEY_encrypt_old(uint8* enc_key, uint8* key, int key_len, PKEY* pub_key);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_type")]
+		public extern static int PKEY_type(int type);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_id")]
+		public extern static int PKEY_id(PKEY* pkey);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_base_id")]
+		public extern static int PKEY_base_id(PKEY* pkey);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_bits")]
+		public extern static int PKEY_bits(PKEY* pkey);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_security_bits")]
+		public extern static int PKEY_security_bits(PKEY* pkey);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_size")]
+		public extern static int PKEY_size(PKEY* pkey);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_set_type")]
+		public extern static int PKEY_set_type(PKEY* pkey, int type);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_set_type_str")]
+		public extern static int PKEY_set_type_str(PKEY* pkey, char8* str, int len);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_set_alias_type")]
+		public extern static int PKEY_set_alias_type(PKEY* pkey, int type);
 #if !OPENSSL_NO_ENGINE
-		public extern static int EVP_PKEY_set1_engine(PKEY* pkey, Engine.ENGINE* e);
-		public extern static Engine.ENGINE* EVP_PKEY_get0_engine(PKEY* pkey);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_set1_engine")]
+		public extern static int PKEY_set1_engine(PKEY* pkey, Engine.ENGINE* e);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_get0_engine")]
+		public extern static Engine.ENGINE* PKEY_get0_engine(PKEY* pkey);
 #endif
-		public extern static int EVP_PKEY_assign(PKEY* pkey, int type, void* key);
-		public extern static void* EVP_PKEY_get0(PKEY* pkey);
-		public extern static uint8* EVP_PKEY_get0_hmac(PKEY* pkey, uint* len);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_assign")]
+		public extern static int PKEY_assign(PKEY* pkey, int type, void* key);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_get0")]
+		public extern static void* PKEY_get0(PKEY* pkey);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_get0_hmac")]
+		public extern static uint8* PKEY_get0_hmac(PKEY* pkey, uint* len);
 #if !OPENSSL_NO_POLY1305
-		public extern static uint8* EVP_PKEY_get0_poly1305(PKEY* pkey, uint* len);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_get0_poly1305")]
+		public extern static uint8* PKEY_get0_poly1305(PKEY* pkey, uint* len);
 #endif
 #if !OPENSSL_NO_SIPHASH
-		public extern static uint8* EVP_PKEY_get0_siphash(PKEY* pkey, uint* len);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_get0_siphash")]
+		public extern static uint8* PKEY_get0_siphash(PKEY* pkey, uint* len);
 #endif
 
 #if !OPENSSL_NO_RSA
-		public extern static int EVP_PKEY_set1_RSA(PKEY* pkey, RSA.rsa_st* key);
-		public extern static RSA.rsa_st* EVP_PKEY_get0_RSA(PKEY* pkey);
-		public extern static RSA.rsa_st* EVP_PKEY_get1_RSA(PKEY* pkey);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_set1_RSA")]
+		public extern static int PKEY_set1_RSA(PKEY* pkey, RSA.rsa_st* key);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_get0_RSA")]
+		public extern static RSA.rsa_st* PKEY_get0_RSA(PKEY* pkey);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_get1_RSA")]
+		public extern static RSA.rsa_st* PKEY_get1_RSA(PKEY* pkey);
 #endif
 #if !OPENSSL_NO_DSA
-		public extern static int EVP_PKEY_set1_DSA(PKEY* pkey, DSA.dsa_st* key);
-		public extern static DSA.dsa_st* EVP_PKEY_get0_DSA(PKEY* pkey);
-		public extern static DSA.dsa_st* EVP_PKEY_get1_DSA(PKEY* pkey);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_set1_DSA")]
+		public extern static int PKEY_set1_DSA(PKEY* pkey, DSA.dsa_st* key);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_get0_DSA")]
+		public extern static DSA.dsa_st* PKEY_get0_DSA(PKEY* pkey);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_get1_DSA")]
+		public extern static DSA.dsa_st* PKEY_get1_DSA(PKEY* pkey);
 #endif
 #if !OPENSSL_NO_DH
-		public extern static int EVP_PKEY_set1_DH(PKEY* pkey, DH.dh_st* key);
-		public extern static DH.dh_st* EVP_PKEY_get0_DH(PKEY* pkey);
-		public extern static DH.dh_st* EVP_PKEY_get1_DH(PKEY* pkey);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_set1_DH")]
+		public extern static int PKEY_set1_DH(PKEY* pkey, DH.dh_st* key);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_get0_DH")]
+		public extern static DH.dh_st* PKEY_get0_DH(PKEY* pkey);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_get1_DH")]
+		public extern static DH.dh_st* PKEY_get1_DH(PKEY* pkey);
 #endif
 #if !OPENSSL_NO_EC
-		public extern static int EVP_PKEY_set1_EC_KEY(PKEY* pkey, EC.key_st* key);
-		public extern static EC.key_st* EVP_PKEY_get0_EC_KEY(PKEY* pkey);
-		public extern static EC.key_st* EVP_PKEY_get1_EC_KEY(PKEY* pkey);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_set1_EC_KEY")]
+		public extern static int PKEY_set1_EC_KEY(PKEY* pkey, EC.key_st* key);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_get0_EC_KEY")]
+		public extern static EC.key_st* PKEY_get0_EC_KEY(PKEY* pkey);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_get1_EC_KEY")]
+		public extern static EC.key_st* PKEY_get1_EC_KEY(PKEY* pkey);
 #endif
-
-		public extern static PKEY* EVP_PKEY_new();
-		public extern static int EVP_PKEY_up_ref(PKEY* pkey);
-		public extern static void EVP_PKEY_free(PKEY* pkey);
-
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_new")]
+		public extern static PKEY* PKEY_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_up_ref")]
+		public extern static int PKEY_up_ref(PKEY* pkey);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_free")]
+		public extern static void PKEY_free(PKEY* pkey);
+		
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
 		public extern static PKEY* d2i_PublicKey(int type, PKEY** a, uint8** pp, int length);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
 		public extern static int i2d_PublicKey(PKEY* a, uint8** pp);
-
+		
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
 		public extern static PKEY* d2i_PrivateKey(int type, PKEY** a, uint8** pp, int length);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
 		public extern static PKEY* d2i_AutoPrivateKey(PKEY** a, uint8** pp, int length);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
 		public extern static int i2d_PrivateKey(PKEY* a, uint8** pp);
-
-		public extern static int EVP_PKEY_copy_parameters(PKEY* to, PKEY* from);
-		public extern static int EVP_PKEY_missing_parameters(PKEY* pkey);
-		public extern static int EVP_PKEY_save_parameters(PKEY* pkey, int mode);
-		public extern static int EVP_PKEY_cmp_parameters(PKEY* a, PKEY* b);
-
-		public extern static int EVP_PKEY_cmp(PKEY* a, PKEY* b);
-
-		public extern static int EVP_PKEY_print_public(BIO.bio_st* outVal, PKEY* pkey, int indent, ASN1.PCTX* pctx);
-		public extern static int EVP_PKEY_print_private(BIO.bio_st* outVal, PKEY* pkey, int indent, ASN1.PCTX* pctx);
-		public extern static int EVP_PKEY_print_params(BIO.bio_st* outVal, PKEY* pkey, int indent, ASN1.PCTX* pctx);
-
-		public extern static int EVP_PKEY_get_default_digest_nid(PKEY* pkey, int* pnid);
-
-		public extern static int EVP_PKEY_set1_tls_encodedpoint(PKEY* pkey,
-		                                   uint8* pt, uint ptlen);
-		public extern static uint EVP_PKEY_get1_tls_encodedpoint(PKEY* pkey, uint8** ppt);
-
-		public extern static int EVP_CIPHER_type(CIPHER* ctx);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_copy_parameters")]
+		public extern static int PKEY_copy_parameters(PKEY* to, PKEY* from);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_missing_parameters")]
+		public extern static int PKEY_missing_parameters(PKEY* pkey);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_save_parameters")]
+		public extern static int PKEY_save_parameters(PKEY* pkey, int mode);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_cmp_parameters")]
+		public extern static int PKEY_cmp_parameters(PKEY* a, PKEY* b);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_cmp")]
+		public extern static int PKEY_cmp(PKEY* a, PKEY* b);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_print_public")]
+		public extern static int PKEY_print_public(BIO.bio_st* outVal, PKEY* pkey, int indent, ASN1.PCTX* pctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_print_private")]
+		public extern static int PKEY_print_private(BIO.bio_st* outVal, PKEY* pkey, int indent, ASN1.PCTX* pctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_print_params")]
+		public extern static int PKEY_print_params(BIO.bio_st* outVal, PKEY* pkey, int indent, ASN1.PCTX* pctx);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_get_default_digest_nid")]
+		public extern static int PKEY_get_default_digest_nid(PKEY* pkey, int* pnid);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_set1_tls_encodedpoint")]
+		public extern static int PKEY_set1_tls_encodedpoint(PKEY* pkey, uint8* pt, uint ptlen);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_get1_tls_encodedpoint")]
+		public extern static uint PKEY_get1_tls_encodedpoint(PKEY* pkey, uint8** ppt);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CIPHER_type")]
+		public extern static int CIPHER_type(CIPHER* ctx);
 
 		/* calls methods */
-		public extern static int EVP_CIPHER_param_to_asn1(CIPHER_CTX* c, ASN1.TYPE* type);
-		public extern static int EVP_CIPHER_asn1_to_param(CIPHER_CTX* c, ASN1.TYPE* type);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CIPHER_param_to_asn1")]
+		public extern static int CIPHER_param_to_asn1(CIPHER_CTX* c, ASN1.TYPE* type);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CIPHER_asn1_to_param")]
+		public extern static int CIPHER_asn1_to_param(CIPHER_CTX* c, ASN1.TYPE* type);
 
-		/* These are used by EVP_CIPHER methods */
-		public extern static int EVP_CIPHER_set_asn1_iv(CIPHER_CTX* c, ASN1.TYPE* type);
-		public extern static int EVP_CIPHER_get_asn1_iv(CIPHER_CTX* c, ASN1.TYPE* type);
-
-		/* PKCS5 password based encryption */
-		public extern static int PKCS5_PBE_keyivgen(CIPHER_CTX* ctx, char8* pass, int passlen, ASN1.TYPE* param, CIPHER* cipher, MD* md, int en_de);
-		public extern static int PKCS5_PBKDF2_HMAC_SHA1(char8* pass, int passlen, uint8* salt, int saltlen, int iter, int keylen, uint8* outVal);
-		public extern static int PKCS5_PBKDF2_HMAC(char8* pass, int passlen, uint8* salt, int saltlen, int iter, MD* digest, int keylen, uint8* outVal);
-		public extern static int PKCS5_v2_PBE_keyivgen(CIPHER_CTX* ctx, char8* pass, int passlen, ASN1.TYPE* param, CIPHER* cipher, MD* md, int en_de);
+		/* These are used by CIPHER methods */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CIPHER_set_asn1_iv")]
+		public extern static int CIPHER_set_asn1_iv(CIPHER_CTX* c, ASN1.TYPE* type);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_CIPHER_get_asn1_iv")]
+		public extern static int CIPHER_get_asn1_iv(CIPHER_CTX* c, ASN1.TYPE* type);
 
 #if !OPENSSL_NO_SCRYPT
-		public extern static int EVP_PBE_scrypt(char8* pass, uint passlen, uint8* salt, uint saltlen, uint64 N, uint64 r, uint64 p, uint64 maxmem, uint8* key, uint keylen);
-
-		public extern static int PKCS5_v2_scrypt_keyivgen(CIPHER_CTX* ctx, char8* pass, int passlen, ASN1.TYPE* param, CIPHER* c, MD* md, int en_de);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PBE_scrypt")]
+		public extern static int PBE_scrypt(char8* pass, uint passlen, uint8* salt, uint saltlen, uint64 N, uint64 r, uint64 p, uint64 maxmem, uint8* key, uint keylen);
 #endif
 
-		public extern static void PKCS5_PBE_add();
-
-		public extern static int EVP_PBE_CipherInit(ASN1.OBJECT* pbe_obj, char8* pass, int passlen, ASN1.TYPE* param, CIPHER_CTX* ctx, int en_de);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PBE_CipherInit")]
+		public extern static int PBE_CipherInit(ASN1.OBJECT* pbe_obj, char8* pass, int passlen, ASN1.TYPE* param, CIPHER_CTX* ctx, int en_de);
 
 		/* PBE type */
 
 		/* Can appear as the outermost AlgorithmIdentifier */
-		public const int EVP_PBE_TYPE_OUTER = 0x0;
+		public const int PBE_TYPE_OUTER = 0x0;
 		/* Is an PRF type OID */
-		public const int PBE_TYPE_PRF       = 0x1;
+		public const int PBE_TYPE_PRF   = 0x1;
 		/* Is a PKCS#5 v2.0 KDF */
-		public const int PBE_TYPE_KDF       = 0x2;
+		public const int PBE_TYPE_KDF   = 0x2;
 
-		public extern static int EVP_PBE_alg_add_type(int pbe_type, int pbe_nid, int cipher_nid, int md_nid, PBE_KEYGEN* keygen);
-		public extern static int EVP_PBE_alg_add(int nid, CIPHER* cipher, MD* md, PBE_KEYGEN* keygen);
-		public extern static int EVP_PBE_find(int type, int pbe_nid, int* pcnid, int* pmnid, PBE_KEYGEN** pkeygen);
-		public extern static void EVP_PBE_cleanup();
-		public extern static int EVP_PBE_get(int* ptype, int* ppbe_nid, uint num);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PBE_alg_add_type")]
+		public extern static int PBE_alg_add_type(int pbe_type, int pbe_nid, int cipher_nid, int md_nid, PBE_KEYGEN* keygen);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PBE_alg_add")]
+		public extern static int PBE_alg_add(int nid, CIPHER* cipher, MD* md, PBE_KEYGEN* keygen);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PBE_find")]
+		public extern static int PBE_find(int type, int pbe_nid, int* pcnid, int* pmnid, PBE_KEYGEN** pkeygen);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PBE_cleanup")]
+		public extern static void PBE_cleanup();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PBE_get")]
+		public extern static int PBE_get(int* ptype, int* ppbe_nid, uint num);
 
-		public extern static int EVP_PKEY_asn1_get_count();
-		public extern static PKEY_ASN1_METHOD* EVP_PKEY_asn1_get0(int idx);
-		public extern static PKEY_ASN1_METHOD* EVP_PKEY_asn1_find(Engine.ENGINE** pe, int type);
-		public extern static PKEY_ASN1_METHOD* EVP_PKEY_asn1_find_str(Engine.ENGINE** pe, char8* str, int len);
-		public extern static int EVP_PKEY_asn1_add0(PKEY_ASN1_METHOD* ameth);
-		public extern static int EVP_PKEY_asn1_add_alias(int to, int from);
-		public extern static int EVP_PKEY_asn1_get0_info(int* ppkey_id, int* pkey_base_id, int* ppkey_flags, char8** pinfo, char8** ppem_str, PKEY_ASN1_METHOD* ameth);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_asn1_get_count")]
+		public extern static int PKEY_asn1_get_count();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_asn1_get0")]
+		public extern static PKEY_ASN1_METHOD* PKEY_asn1_get0(int idx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_asn1_find")]
+		public extern static PKEY_ASN1_METHOD* PKEY_asn1_find(Engine.ENGINE** pe, int type);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_asn1_find_str")]
+		public extern static PKEY_ASN1_METHOD* PKEY_asn1_find_str(Engine.ENGINE** pe, char8* str, int len);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_asn1_add0")]
+		public extern static int PKEY_asn1_add0(PKEY_ASN1_METHOD* ameth);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_asn1_add_alias")]
+		public extern static int PKEY_asn1_add_alias(int to, int from);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_asn1_get0_info")]
+		public extern static int PKEY_asn1_get0_info(int* ppkey_id, int* pkey_base_id, int* ppkey_flags, char8** pinfo, char8** ppem_str, PKEY_ASN1_METHOD* ameth);
 
-		public extern static PKEY_ASN1_METHOD* EVP_PKEY_get0_asn1(PKEY* pkey);
-		public extern static PKEY_ASN1_METHOD* EVP_PKEY_asn1_new(int id, int flags, char8* pem_str, char8* info);
-		public extern static void EVP_PKEY_asn1_copy(PKEY_ASN1_METHOD* dst, PKEY_ASN1_METHOD* src);
-		public extern static void EVP_PKEY_asn1_free(PKEY_ASN1_METHOD* ameth);
-		public extern static void EVP_PKEY_asn1_set_public(PKEY_ASN1_METHOD* ameth, function int(PKEY* pk, X509.PUBKEY* pub) pub_decode, function int(X509.PUBKEY* pub, PKEY* pk) pub_encode, function int(PKEY* a, PKEY* b) pub_cmp, function int(BIO.bio_st* outVal, PKEY* pkey, int indent, ASN1.PCTX* pctx) pub_print, function int(PKEY* pk) pkey_size, function int(PKEY* pk) pkey_bits);
-		public extern static void EVP_PKEY_asn1_set_private(PKEY_ASN1_METHOD* ameth, function int(PKEY* pk, PKCS8.PRIV_KEY_INFO* p8inf) priv_decode, function int(PKCS8.PRIV_KEY_INFO* p8, PKEY* pk) priv_encode, function int(BIO.bio_st* outVal, PKEY* pkey, int indent, ASN1.PCTX* pctx) priv_print);
-		public extern static void EVP_PKEY_asn1_set_param(PKEY_ASN1_METHOD* ameth, function int(PKEY* pkey, uint8** pder, int derlen) param_decode, function int(PKEY* pkey, uint8** pder) param_encode, function int(PKEY* pk) param_missing, function int(PKEY* to, PKEY* from) param_copy, function int(PKEY* a, PKEY* b) param_cmp, function int(BIO.bio_st* outVal, PKEY* pkey, int indent, ASN1.PCTX* pctx) param_print);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_get0_asn1")]
+		public extern static PKEY_ASN1_METHOD* PKEY_get0_asn1(PKEY* pkey);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_asn1_new")]
+		public extern static PKEY_ASN1_METHOD* PKEY_asn1_new(int id, int flags, char8* pem_str, char8* info);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_asn1_copy")]
+		public extern static void PKEY_asn1_copy(PKEY_ASN1_METHOD* dst, PKEY_ASN1_METHOD* src);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_asn1_free")]
+		public extern static void PKEY_asn1_free(PKEY_ASN1_METHOD* ameth);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_asn1_set_public")]
+		public extern static void PKEY_asn1_set_public(PKEY_ASN1_METHOD* ameth, function int(PKEY* pk, X509.PUBKEY* pub) pub_decode, function int(X509.PUBKEY* pub, PKEY* pk) pub_encode,
+			function int(PKEY* a, PKEY* b) pub_cmp, function int(BIO.bio_st* outVal, PKEY* pkey, int indent, ASN1.PCTX* pctx) pub_print, function int(PKEY* pk) pkey_size, function int(PKEY* pk) pkey_bits);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_asn1_set_private")]
+		public extern static void PKEY_asn1_set_private(PKEY_ASN1_METHOD* ameth, function int(PKEY* pk, PKCS8.PRIV_KEY_INFO* p8inf) priv_decode, function int(PKCS8.PRIV_KEY_INFO* p8, PKEY* pk) priv_encode,
+			function int(BIO.bio_st* outVal, PKEY* pkey, int indent, ASN1.PCTX* pctx) priv_print);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_asn1_set_param")]
+		public extern static void PKEY_asn1_set_param(PKEY_ASN1_METHOD* ameth, function int(PKEY* pkey, uint8** pder, int derlen) param_decode, function int(PKEY* pkey, uint8** pder) param_encode,
+			function int(PKEY* pk) param_missing, function int(PKEY* to, PKEY* from) param_copy, function int(PKEY* a, PKEY* b) param_cmp,
+			function int(BIO.bio_st* outVal, PKEY* pkey, int indent, ASN1.PCTX* pctx) param_print);
 
-		public extern static void EVP_PKEY_asn1_set_free(PKEY_ASN1_METHOD* ameth, function void(PKEY* pkey) pkey_free);
-		public extern static void EVP_PKEY_asn1_set_ctrl(PKEY_ASN1_METHOD* ameth, function int(PKEY* pkey, int op, int arg1, void* arg2) pkey_ctrl);
-		public extern static void EVP_PKEY_asn1_set_item(PKEY_ASN1_METHOD* ameth, function int(MD_CTX* ctx, ASN1.ITEM* it, void* asn, X509.ALGOR* a, ASN1.BIT_STRING* sig, PKEY* pkey) item_verify, function int(MD_CTX* ctx, ASN1.ITEM* it, void* asn, X509.ALGOR* alg1, X509.ALGOR* alg2, ASN1.BIT_STRING* sig) item_sign);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_asn1_set_free")]
+		public extern static void PKEY_asn1_set_free(PKEY_ASN1_METHOD* ameth, function void(PKEY* pkey) pkey_free);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_asn1_set_ctrl")]
+		public extern static void PKEY_asn1_set_ctrl(PKEY_ASN1_METHOD* ameth, function int(PKEY* pkey, int op, int arg1, void* arg2) pkey_ctrl);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_asn1_set_item")]
+		public extern static void PKEY_asn1_set_item(PKEY_ASN1_METHOD* ameth, function int(MD_CTX* ctx, ASN1.ITEM* it, void* asn, X509.ALGOR* a, ASN1.BIT_STRING* sig, PKEY* pkey) item_verify,
+			function int(MD_CTX* ctx, ASN1.ITEM* it, void* asn, X509.ALGOR* alg1, X509.ALGOR* alg2, ASN1.BIT_STRING* sig) item_sign);
 
-		public extern static void EVP_PKEY_asn1_set_siginf(PKEY_ASN1_METHOD* ameth, function int(X509.SIG_INFO* siginf, X509.ALGOR* alg, ASN1.STRING *sig) siginf_set);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_asn1_set_siginf")]
+		public extern static void PKEY_asn1_set_siginf(PKEY_ASN1_METHOD* ameth, function int(X509.SIG_INFO* siginf, X509.ALGOR* alg, ASN1.STRING *sig) siginf_set);
 
-		public extern static void EVP_PKEY_asn1_set_check(PKEY_ASN1_METHOD* ameth, function int(PKEY* pk) pkey_check);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_asn1_set_check")]
+		public extern static void PKEY_asn1_set_check(PKEY_ASN1_METHOD* ameth, function int(PKEY* pk) pkey_check);
 
-		public extern static void EVP_PKEY_asn1_set_public_check(PKEY_ASN1_METHOD* ameth, function int(PKEY* pk) pkey_pub_check);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_asn1_set_public_check")]
+		public extern static void PKEY_asn1_set_public_check(PKEY_ASN1_METHOD* ameth, function int(PKEY* pk) pkey_pub_check);
 
-		public extern static void EVP_PKEY_asn1_set_param_check(PKEY_ASN1_METHOD* ameth, function int(PKEY* pk) pkey_param_check);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_asn1_set_param_check")]
+		public extern static void PKEY_asn1_set_param_check(PKEY_ASN1_METHOD* ameth, function int(PKEY* pk) pkey_param_check);
 
-		public extern static void EVP_PKEY_asn1_set_set_priv_key(PKEY_ASN1_METHOD* ameth, function int(PKEY* pk, uint8* priv, uint len) set_priv_key);
-		public extern static void EVP_PKEY_asn1_set_set_pub_key(PKEY_ASN1_METHOD* ameth, function int(PKEY* pk, uint8* pub, uint len) set_pub_key);
-		public extern static void EVP_PKEY_asn1_set_get_priv_key(PKEY_ASN1_METHOD* ameth, function int(PKEY* pk, uint8* priv, uint* len) get_priv_key);
-		public extern static void EVP_PKEY_asn1_set_get_pub_key(PKEY_ASN1_METHOD* ameth, function int(PKEY* pk, uint8* pub, uint* len) get_pub_key);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_asn1_set_set_priv_key")]
+		public extern static void PKEY_asn1_set_set_priv_key(PKEY_ASN1_METHOD* ameth, function int(PKEY* pk, uint8* priv, uint len) set_priv_key);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_asn1_set_set_pub_key")]
+		public extern static void PKEY_asn1_set_set_pub_key(PKEY_ASN1_METHOD* ameth, function int(PKEY* pk, uint8* pub, uint len) set_pub_key);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_asn1_set_get_priv_key")]
+		public extern static void PKEY_asn1_set_get_priv_key(PKEY_ASN1_METHOD* ameth, function int(PKEY* pk, uint8* priv, uint* len) get_priv_key);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_asn1_set_get_pub_key")]
+		public extern static void PKEY_asn1_set_get_pub_key(PKEY_ASN1_METHOD* ameth, function int(PKEY* pk, uint8* pub, uint* len) get_pub_key);
 
-		public extern static void EVP_PKEY_asn1_set_security_bits(PKEY_ASN1_METHOD* ameth, function int(PKEY* pk) pkey_security_bits);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_asn1_set_security_bits")]
+		public extern static void PKEY_asn1_set_security_bits(PKEY_ASN1_METHOD* ameth, function int(PKEY* pk) pkey_security_bits);
 
 		public const int PKEY_OP_UNDEFINED     = 0;
 		public const int PKEY_OP_PARAMGEN      = 1 << 1;
@@ -1315,19 +1669,17 @@ namespace Beef_Net.OpenSSL
 		public const int PKEY_OP_DECRYPT       = 1 << 9;
 		public const int PKEY_OP_DERIVE        = 1 << 10;
 
-# define EVP_PKEY_OP_TYPE_SIG = (EVP_PKEY_OP_SIGN | EVP_PKEY_OP_VERIFY | EVP_PKEY_OP_VERIFYRECOVER | EVP_PKEY_OP_SIGNCTX | EVP_PKEY_OP_VERIFYCTX);
-
-# define EVP_PKEY_OP_TYPE_CRYPT = (EVP_PKEY_OP_ENCRYPT | EVP_PKEY_OP_DECRYPT);
-
-# define EVP_PKEY_OP_TYPE_NOGEN = (EVP_PKEY_OP_TYPE_SIG | EVP_PKEY_OP_TYPE_CRYPT | EVP_PKEY_OP_DERIVE);
-
-# define EVP_PKEY_OP_TYPE_GEN = (EVP_PKEY_OP_PARAMGEN | EVP_PKEY_OP_KEYGEN);
-
-# define  EVP_PKEY_CTX_set_signature_md(ctx, md) => EVP_PKEY_CTX_ctrl(ctx, -1, EVP_PKEY_OP_TYPE_SIG, EVP_PKEY_CTRL_MD, 0, (void* )(md));
-
-# define  EVP_PKEY_CTX_get_signature_md(ctx, pmd) => EVP_PKEY_CTX_ctrl(ctx, -1, EVP_PKEY_OP_TYPE_SIG, EVP_PKEY_CTRL_GET_MD, 0, (void* )(pmd));
-
-# define  EVP_PKEY_CTX_set_mac_key(ctx, key, len) => EVP_PKEY_CTX_ctrl(ctx, -1, EVP_PKEY_OP_KEYGEN, EVP_PKEY_CTRL_SET_MAC_KEY, len, (void* )(key));
+		public const int PKEY_OP_TYPE_SIG   = PKEY_OP_SIGN | PKEY_OP_VERIFY | PKEY_OP_VERIFYRECOVER | PKEY_OP_SIGNCTX | PKEY_OP_VERIFYCTX;
+		public const int PKEY_OP_TYPE_CRYPT = PKEY_OP_ENCRYPT | PKEY_OP_DECRYPT;
+		public const int PKEY_OP_TYPE_NOGEN = PKEY_OP_TYPE_SIG | PKEY_OP_TYPE_CRYPT | PKEY_OP_DERIVE;
+		public const int PKEY_OP_TYPE_GEN   = PKEY_OP_PARAMGEN | PKEY_OP_KEYGEN;
+		
+		[Inline]
+		public static int PKEY_CTX_set_signature_md(PKEY_CTX* ctx, void* md) => PKEY_CTX_ctrl(ctx, -1, PKEY_OP_TYPE_SIG, PKEY_CTRL_MD, 0, md);
+		[Inline]
+		public static int PKEY_CTX_get_signature_md(PKEY_CTX* ctx, void* pmd) => PKEY_CTX_ctrl(ctx, -1, PKEY_OP_TYPE_SIG, PKEY_CTRL_GET_MD, 0, pmd);
+		[Inline]
+		public static int PKEY_CTX_set_mac_key(PKEY_CTX* ctx, void* key, int len) => PKEY_CTX_ctrl(ctx, -1, PKEY_OP_KEYGEN, PKEY_CTRL_SET_MAC_KEY, len, key);
 
 		public const int PKEY_CTRL_MD              = 1;
 		public const int PKEY_CTRL_PEER_KEY        = 2;
@@ -1362,157 +1714,235 @@ namespace Beef_Net.OpenSSL
 		 */
 		public const int PKEY_FLAG_SIGCTX_CUSTOM   = 4;
 
-		public extern static PKEY_METHOD* EVP_PKEY_meth_find(int type);
-		public extern static PKEY_METHOD* EVP_PKEY_meth_new(int id, int flags);
-		public extern static void EVP_PKEY_meth_get0_info(int* ppkey_id, int* pflags, PKEY_METHOD* meth);
-		public extern static void EVP_PKEY_meth_copy(PKEY_METHOD* dst, PKEY_METHOD* src);
-		public extern static void EVP_PKEY_meth_free(PKEY_METHOD* pmeth);
-		public extern static int EVP_PKEY_meth_add0(PKEY_METHOD* pmeth);
-		public extern static int EVP_PKEY_meth_remove(PKEY_METHOD* pmeth);
-		public extern static uint EVP_PKEY_meth_get_count();
-		public extern static PKEY_METHOD* EVP_PKEY_meth_get0(uint idx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_find")]
+		public extern static PKEY_METHOD* PKEY_meth_find(int type);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_new")]
+		public extern static PKEY_METHOD* PKEY_meth_new(int id, int flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_get0_info")]
+		public extern static void PKEY_meth_get0_info(int* ppkey_id, int* pflags, PKEY_METHOD* meth);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_copy")]
+		public extern static void PKEY_meth_copy(PKEY_METHOD* dst, PKEY_METHOD* src);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_free")]
+		public extern static void PKEY_meth_free(PKEY_METHOD* pmeth);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_add0")]
+		public extern static int PKEY_meth_add0(PKEY_METHOD* pmeth);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_remove")]
+		public extern static int PKEY_meth_remove(PKEY_METHOD* pmeth);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_get_count")]
+		public extern static uint PKEY_meth_get_count();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_get0")]
+		public extern static PKEY_METHOD* PKEY_meth_get0(uint idx);
 
-		public extern static PKEY_CTX* EVP_PKEY_CTX_new(PKEY* pkey, Engine.ENGINE* e);
-		public extern static PKEY_CTX* EVP_PKEY_CTX_new_id(int id, Engine.ENGINE* e);
-		public extern static PKEY_CTX* EVP_PKEY_CTX_dup(PKEY_CTX* ctx);
-		public extern static void EVP_PKEY_CTX_free(PKEY_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_CTX_new")]
+		public extern static PKEY_CTX* PKEY_CTX_new(PKEY* pkey, Engine.ENGINE* e);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_CTX_new_id")]
+		public extern static PKEY_CTX* PKEY_CTX_new_id(int id, Engine.ENGINE* e);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_CTX_dup")]
+		public extern static PKEY_CTX* PKEY_CTX_dup(PKEY_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_CTX_free")]
+		public extern static void PKEY_CTX_free(PKEY_CTX* ctx);
 
-		public extern static int EVP_PKEY_CTX_ctrl(PKEY_CTX* ctx, int keytype, int optype, int cmd, int p1, void* p2);
-		public extern static int EVP_PKEY_CTX_ctrl_str(PKEY_CTX* ctx, char8* type, char8* value);
-		public extern static int EVP_PKEY_CTX_ctrl_uint64(PKEY_CTX* ctx, int keytype, int optype, int cmd, uint64 value);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_CTX_ctrl")]
+		public extern static int PKEY_CTX_ctrl(PKEY_CTX* ctx, int keytype, int optype, int cmd, int p1, void* p2);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_CTX_ctrl_str")]
+		public extern static int PKEY_CTX_ctrl_str(PKEY_CTX* ctx, char8* type, char8* value);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_CTX_ctrl_uint64")]
+		public extern static int PKEY_CTX_ctrl_uint64(PKEY_CTX* ctx, int keytype, int optype, int cmd, uint64 value);
 
-		public extern static int EVP_PKEY_CTX_str2ctrl(PKEY_CTX* ctx, int cmd, char8* str);
-		public extern static int EVP_PKEY_CTX_hex2ctrl(PKEY_CTX* ctx, int cmd, char8* hex);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_CTX_str2ctrl")]
+		public extern static int PKEY_CTX_str2ctrl(PKEY_CTX* ctx, int cmd, char8* str);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_CTX_hex2ctrl")]
+		public extern static int PKEY_CTX_hex2ctrl(PKEY_CTX* ctx, int cmd, char8* hex);
 
-		public extern static int EVP_PKEY_CTX_md(PKEY_CTX* ctx, int optype, int cmd, char8* md);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_CTX_md")]
+		public extern static int PKEY_CTX_md(PKEY_CTX* ctx, int optype, int cmd, char8* md);
 
-		public extern static int EVP_PKEY_CTX_get_operation(PKEY_CTX* ctx);
-		public extern static void EVP_PKEY_CTX_set0_keygen_info(PKEY_CTX* ctx, int* dat, int datlen);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_CTX_get_operation")]
+		public extern static int PKEY_CTX_get_operation(PKEY_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_CTX_set0_keygen_info")]
+		public extern static void PKEY_CTX_set0_keygen_info(PKEY_CTX* ctx, int* dat, int datlen);
 
-		public extern static PKEY* EVP_PKEY_new_mac_key(int type, Engine.ENGINE* e, uint8* key, int keylen);
-		public extern static PKEY* EVP_PKEY_new_raw_private_key(int type, Engine.ENGINE* e, uint8* priv, uint len);
-		public extern static PKEY* EVP_PKEY_new_raw_public_key(int type, Engine.ENGINE* e, uint8* pub, uint len);
-		public extern static int EVP_PKEY_get_raw_private_key(PKEY* pkey, uint8* priv, uint* len);
-		public extern static int EVP_PKEY_get_raw_public_key(PKEY* pkey, uint8* pub, uint* len);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_new_mac_key")]
+		public extern static PKEY* PKEY_new_mac_key(int type, Engine.ENGINE* e, uint8* key, int keylen);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_new_raw_private_key")]
+		public extern static PKEY* PKEY_new_raw_private_key(int type, Engine.ENGINE* e, uint8* priv, uint len);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_new_raw_public_key")]
+		public extern static PKEY* PKEY_new_raw_public_key(int type, Engine.ENGINE* e, uint8* pub, uint len);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_get_raw_private_key")]
+		public extern static int PKEY_get_raw_private_key(PKEY* pkey, uint8* priv, uint* len);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_get_raw_public_key")]
+		public extern static int PKEY_get_raw_public_key(PKEY* pkey, uint8* pub, uint* len);
 
-		public extern static PKEY* EVP_PKEY_new_CMAC_key(Engine.ENGINE* e, uint8* priv, uint len, CIPHER* cipher);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_new_CMAC_key")]
+		public extern static PKEY* PKEY_new_CMAC_key(Engine.ENGINE* e, uint8* priv, uint len, CIPHER* cipher);
 
-		public extern static void EVP_PKEY_CTX_set_data(PKEY_CTX* ctx, void* data);
-		public extern static void* EVP_PKEY_CTX_get_data(PKEY_CTX* ctx);
-		public extern static PKEY* EVP_PKEY_CTX_get0_pkey(PKEY_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_CTX_set_data")]
+		public extern static void PKEY_CTX_set_data(PKEY_CTX* ctx, void* data);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_CTX_get_data")]
+		public extern static void* PKEY_CTX_get_data(PKEY_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_CTX_get0_pkey")]
+		public extern static PKEY* PKEY_CTX_get0_pkey(PKEY_CTX* ctx);
 
-		public extern static PKEY* EVP_PKEY_CTX_get0_peerkey(PKEY_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_CTX_get0_peerkey")]
+		public extern static PKEY* PKEY_CTX_get0_peerkey(PKEY_CTX* ctx);
 
-		public extern static void EVP_PKEY_CTX_set_app_data(PKEY_CTX* ctx, void* data);
-		public extern static void* EVP_PKEY_CTX_get_app_data(PKEY_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_CTX_set_app_data")]
+		public extern static void PKEY_CTX_set_app_data(PKEY_CTX* ctx, void* data);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_CTX_get_app_data")]
+		public extern static void* PKEY_CTX_get_app_data(PKEY_CTX* ctx);
 
-		public extern static int EVP_PKEY_sign_init(PKEY_CTX* ctx);
-		public extern static int EVP_PKEY_sign(PKEY_CTX* ctx, uint8* sig, uint* siglen, uint8* tbs, uint tbslen);
-		public extern static int EVP_PKEY_verify_init(PKEY_CTX* ctx);
-		public extern static int EVP_PKEY_verify(PKEY_CTX* ctx, uint8* sig, uint siglen, uint8* tbs, uint tbslen);
-		public extern static int EVP_PKEY_verify_recover_init(PKEY_CTX* ctx);
-		public extern static int EVP_PKEY_verify_recover(PKEY_CTX* ctx, uint8* rout, uint* routlen, uint8* sig, uint siglen);
-		public extern static int EVP_PKEY_encrypt_init(PKEY_CTX* ctx);
-		public extern static int EVP_PKEY_encrypt(PKEY_CTX* ctx, uint8* outVal, uint* outlen, uint8* inVal, uint inlen);
-		public extern static int EVP_PKEY_decrypt_init(PKEY_CTX* ctx);
-		public extern static int EVP_PKEY_decrypt(PKEY_CTX* ctx, uint8* outVal, uint* outlen, uint8* inVal, uint inlen);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_sign_init")]
+		public extern static int PKEY_sign_init(PKEY_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_sign")]
+		public extern static int PKEY_sign(PKEY_CTX* ctx, uint8* sig, uint* siglen, uint8* tbs, uint tbslen);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_verify_init")]
+		public extern static int PKEY_verify_init(PKEY_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_verify")]
+		public extern static int PKEY_verify(PKEY_CTX* ctx, uint8* sig, uint siglen, uint8* tbs, uint tbslen);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_verify_recover_init")]
+		public extern static int PKEY_verify_recover_init(PKEY_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_verify_recover")]
+		public extern static int PKEY_verify_recover(PKEY_CTX* ctx, uint8* rout, uint* routlen, uint8* sig, uint siglen);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_encrypt_init")]
+		public extern static int PKEY_encrypt_init(PKEY_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_encrypt")]
+		public extern static int PKEY_encrypt(PKEY_CTX* ctx, uint8* outVal, uint* outlen, uint8* inVal, uint inlen);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_decrypt_init")]
+		public extern static int PKEY_decrypt_init(PKEY_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_decrypt")]
+		public extern static int PKEY_decrypt(PKEY_CTX* ctx, uint8* outVal, uint* outlen, uint8* inVal, uint inlen);
 
-		public extern static int EVP_PKEY_derive_init(PKEY_CTX* ctx);
-		public extern static int EVP_PKEY_derive_set_peer(PKEY_CTX* ctx, PKEY* peer);
-		public extern static int EVP_PKEY_derive(PKEY_CTX* ctx, uint8* key, uint* keylen);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_derive_init")]
+		public extern static int PKEY_derive_init(PKEY_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_derive_set_peer")]
+		public extern static int PKEY_derive_set_peer(PKEY_CTX* ctx, PKEY* peer);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_derive")]
+		public extern static int PKEY_derive(PKEY_CTX* ctx, uint8* key, uint* keylen);
 
-		public extern static int EVP_PKEY_paramgen_init(PKEY_CTX* ctx);
-		public extern static int EVP_PKEY_paramgen(PKEY_CTX* ctx, PKEY** ppkey);
-		public extern static int EVP_PKEY_keygen_init(PKEY_CTX* ctx);
-		public extern static int EVP_PKEY_keygen(PKEY_CTX* ctx, PKEY** ppkey);
-		public extern static int EVP_PKEY_check(PKEY_CTX* ctx);
-		public extern static int EVP_PKEY_public_check(PKEY_CTX* ctx);
-		public extern static int EVP_PKEY_param_check(PKEY_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_paramgen_init")]
+		public extern static int PKEY_paramgen_init(PKEY_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_paramgen")]
+		public extern static int PKEY_paramgen(PKEY_CTX* ctx, PKEY** ppkey);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_keygen_init")]
+		public extern static int PKEY_keygen_init(PKEY_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_keygen")]
+		public extern static int PKEY_keygen(PKEY_CTX* ctx, PKEY** ppkey);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_check")]
+		public extern static int PKEY_check(PKEY_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_public_check")]
+		public extern static int PKEY_public_check(PKEY_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_param_check")]
+		public extern static int PKEY_param_check(PKEY_CTX* ctx);
 
-		public extern static void EVP_PKEY_CTX_set_cb(PKEY_CTX* ctx, PKEY_gen_cb cb);
-		public extern static PKEY_gen_cb EVP_PKEY_CTX_get_cb(PKEY_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_CTX_set_cb")]
+		public extern static void PKEY_CTX_set_cb(PKEY_CTX* ctx, PKEY_gen_cb cb);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_CTX_get_cb")]
+		public extern static PKEY_gen_cb PKEY_CTX_get_cb(PKEY_CTX* ctx);
 
-		public extern static int EVP_PKEY_CTX_get_keygen_info(PKEY_CTX* ctx, int idx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_CTX_get_keygen_info")]
+		public extern static int PKEY_CTX_get_keygen_info(PKEY_CTX* ctx, int idx);
 
-		public extern static void EVP_PKEY_meth_set_init(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx) init);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_get_init")]
+		public extern static void PKEY_meth_get_init(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx)* pinit);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_set_init")]
+		public extern static void PKEY_meth_set_init(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx) init);
 
-		public extern static void EVP_PKEY_meth_set_copy(PKEY_METHOD* pmeth, function int(PKEY_CTX* dst, PKEY_CTX* src) copy);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_get_copy")]
+		public extern static void PKEY_meth_get_copy(PKEY_METHOD* pmeth, function int(PKEY_CTX* dst, PKEY_CTX* src)* pcopy);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_set_copy")]
+		public extern static void PKEY_meth_set_copy(PKEY_METHOD* pmeth, function int(PKEY_CTX* dst, PKEY_CTX* src) copy);
 
-		public extern static void EVP_PKEY_meth_set_cleanup(PKEY_METHOD* pmeth, function void(PKEY_CTX* ctx) cleanup);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_get_cleanup")]
+		public extern static void PKEY_meth_get_cleanup(PKEY_METHOD* pmeth, function void(PKEY_CTX* ctx)* pcleanup);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_set_cleanup")]
+		public extern static void PKEY_meth_set_cleanup(PKEY_METHOD* pmeth, function void(PKEY_CTX* ctx) cleanup);
 
-		public extern static void EVP_PKEY_meth_set_paramgen(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx) paramgen_init, function int(PKEY_CTX* ctx, PKEY* pkey) paramgen);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_get_paramgen")]
+		public extern static void PKEY_meth_get_paramgen(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx)* pparamgen_init, function int(PKEY_CTX* ctx, PKEY* pkey)* pparamgen);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_set_paramgen")]
+		public extern static void PKEY_meth_set_paramgen(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx) paramgen_init, function int(PKEY_CTX* ctx, PKEY* pkey) paramgen);
 
-		public extern static void EVP_PKEY_meth_set_keygen(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx) keygen_init, function int(PKEY_CTX* ctx, PKEY* pkey) keygen);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_get_keygen")]
+		public extern static void PKEY_meth_get_keygen(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx)* pkeygen_init, function int(PKEY_CTX* ctx, PKEY* pkey)* pkeygen);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_set_keygen")]
+		public extern static void PKEY_meth_set_keygen(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx) keygen_init, function int(PKEY_CTX* ctx, PKEY* pkey) keygen);
 
-		public extern static void EVP_PKEY_meth_set_sign(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx) sign_init, function int(PKEY_CTX* ctx, uint8* sig, uint* siglen, uint8* tbs, uint tbslen) sign);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_get_sign")]
+		public extern static void PKEY_meth_get_sign(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx)* psign_init, function int(PKEY_CTX* ctx, uint8* sig, uint* siglen, uint8* tbs, uint tbslen)* psign);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_set_sign")]
+		public extern static void PKEY_meth_set_sign(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx) sign_init, function int(PKEY_CTX* ctx, uint8* sig, uint* siglen, uint8* tbs, uint tbslen) sign);
 
-		public extern static void EVP_PKEY_meth_set_verify(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx) verify_init, function int(PKEY_CTX* ctx, uint8* sig, uint siglen, uint8* tbs, uint tbslen) verify);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_get_verify")]
+		public extern static void PKEY_meth_get_verify(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx)* pverify_init, function int(PKEY_CTX* ctx, uint8* sig, uint siglen, uint8* tbs, uint tbslen)* pverify);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_set_verify")]
+		public extern static void PKEY_meth_set_verify(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx) verify_init, function int(PKEY_CTX* ctx, uint8* sig, uint siglen, uint8* tbs, uint tbslen) verify);
 
-		public extern static void EVP_PKEY_meth_set_verify_recover(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx) verify_recover_init, function int(PKEY_CTX* ctx, uint8* sig, uint* siglen, uint8* tbs, uint tbslen) verify_recover);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_get_verify_recover")]
+		public extern static void PKEY_meth_get_verify_recover(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx)* pverify_recover_init, function int(PKEY_CTX* ctx, uint8* sig, uint* siglen, uint8* tbs, uint tbslen)* pverify_recover);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_set_verify_recover")]
+		public extern static void PKEY_meth_set_verify_recover(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx) verify_recover_init, function int(PKEY_CTX* ctx, uint8* sig, uint* siglen, uint8* tbs, uint tbslen) verify_recover);
 
-		public extern static void EVP_PKEY_meth_set_signctx(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx, MD_CTX* mctx) signctx_init, function int(PKEY_CTX* ctx, uint8* sig, uint* siglen, MD_CTX* mctx) signctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_get_signctx")]
+		public extern static void PKEY_meth_get_signctx(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx, MD_CTX* mctx)* psignctx_init, function int(PKEY_CTX* ctx, uint8* sig, uint* siglen, MD_CTX* mctx)* psignctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_set_signctx")]
+		public extern static void PKEY_meth_set_signctx(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx, MD_CTX* mctx) signctx_init, function int(PKEY_CTX* ctx, uint8* sig, uint* siglen, MD_CTX* mctx) signctx);
 
-		public extern static void EVP_PKEY_meth_set_verifyctx(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx, MD_CTX* mctx) verifyctx_init, function int(PKEY_CTX* ctx, uint8* sig, int siglen, MD_CTX* mctx) verifyctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_get_verifyctx")]
+		public extern static void PKEY_meth_get_verifyctx(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx, MD_CTX* mctx)* pverifyctx_init, function int(PKEY_CTX* ctx, uint8* sig, int siglen, MD_CTX* mctx)* pverifyctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_set_verifyctx")]
+		public extern static void PKEY_meth_set_verifyctx(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx, MD_CTX* mctx) verifyctx_init, function int(PKEY_CTX* ctx, uint8* sig, int siglen, MD_CTX* mctx) verifyctx);
 
-		public extern static void EVP_PKEY_meth_set_encrypt(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx) encrypt_init, function int(PKEY_CTX* ctx, uint8* outVal, uint* outlen, uint8* inVal, uint inlen) encryptfn);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_get_encrypt")]
+		public extern static void PKEY_meth_get_encrypt(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx)* pencrypt_init, function int(PKEY_CTX* ctx, uint8* outVal, uint* outlen, uint8* inVal, uint inlen)* pencryptfn);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_set_encrypt")]
+		public extern static void PKEY_meth_set_encrypt(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx) encrypt_init, function int(PKEY_CTX* ctx, uint8* outVal, uint* outlen, uint8* inVal, uint inlen) encryptfn);
 
-		public extern static void EVP_PKEY_meth_set_decrypt(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx) decrypt_init, function int(PKEY_CTX* ctx, uint8* outVal, uint* outlen, uint8* inVal, uint inlen) decrypt);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_get_decrypt")]
+		public extern static void PKEY_meth_get_decrypt(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx)* pdecrypt_init, function int(PKEY_CTX* ctx, uint8* outVal, uint* outlen, uint8* inVal, uint inlen)* pdecrypt);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_set_decrypt")]
+		public extern static void PKEY_meth_set_decrypt(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx) decrypt_init, function int(PKEY_CTX* ctx, uint8* outVal, uint* outlen, uint8* inVal, uint inlen) decrypt);
 
-		public extern static void EVP_PKEY_meth_set_derive(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx) derive_init, function int(PKEY_CTX* ctx, uint8* key, uint* keylen) derive);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_get_derive")]
+		public extern static void PKEY_meth_get_derive(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx)* pderive_init, function int(PKEY_CTX* ctx, uint8* key, uint* keylen)* pderive);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_set_derive")]
+		public extern static void PKEY_meth_set_derive(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx) derive_init, function int(PKEY_CTX* ctx, uint8* key, uint* keylen) derive);
 
-		public extern static void EVP_PKEY_meth_set_ctrl(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx, int type, int p1, void* p2) ctrl, function int(PKEY_CTX* ctx, char8* type, char8* value) ctrl_str);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_get_ctrl")]
+		public extern static void PKEY_meth_get_ctrl(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx, int type, int p1, void* p2)* pctrl, function int(PKEY_CTX* ctx, char8* type, char8* value)* pctrl_str);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_set_ctrl")]
+		public extern static void PKEY_meth_set_ctrl(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx, int type, int p1, void* p2) ctrl, function int(PKEY_CTX* ctx, char8* type, char8* value) ctrl_str);
 
-		public extern static void EVP_PKEY_meth_set_digestsign(PKEY_METHOD* pmeth, function int(MD_CTX* ctx, uint8* sig, uint* siglen, uint8* tbs, uint tbslen) digestsign);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_get_digestsign")]
+		public extern static void PKEY_meth_get_digestsign(PKEY_METHOD* pmeth, function int(MD_CTX* ctx, uint8* sig, uint* siglen, uint8* tbs, uint tbslen)* digestsign);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_set_digestsign")]
+		public extern static void PKEY_meth_set_digestsign(PKEY_METHOD* pmeth, function int(MD_CTX* ctx, uint8* sig, uint* siglen, uint8* tbs, uint tbslen) digestsign);
 
-		public extern static void EVP_PKEY_meth_set_digestverify(PKEY_METHOD* pmeth, function int(MD_CTX* ctx, uint8* sig, uint siglen, uint8* tbs, uint tbslen) digestverify);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_get_digestverify")]
+		public extern static void PKEY_meth_get_digestverify(PKEY_METHOD* pmeth, function int(MD_CTX* ctx, uint8* sig, uint siglen, uint8* tbs, uint tbslen)* digestverify);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_set_digestverify")]
+		public extern static void PKEY_meth_set_digestverify(PKEY_METHOD* pmeth, function int(MD_CTX* ctx, uint8* sig, uint siglen, uint8* tbs, uint tbslen) digestverify);
 
-		public extern static void EVP_PKEY_meth_set_check(PKEY_METHOD* pmeth, function int(PKEY* pkey) check);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_get_check")]
+		public extern static void PKEY_meth_get_check(PKEY_METHOD* pmeth, function int(PKEY* pkey)* pcheck);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_set_check")]
+		public extern static void PKEY_meth_set_check(PKEY_METHOD* pmeth, function int(PKEY* pkey) check);
 
-		public extern static void EVP_PKEY_meth_set_public_check(PKEY_METHOD* pmeth, function int(PKEY* pkey) check);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_get_public_check")]
+		public extern static void PKEY_meth_get_public_check(PKEY_METHOD* pmeth, function int(PKEY* pkey)* pcheck);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_set_public_check")]
+		public extern static void PKEY_meth_set_public_check(PKEY_METHOD* pmeth, function int(PKEY* pkey) check);
 
-		public extern static void EVP_PKEY_meth_set_param_check(PKEY_METHOD* pmeth, function int(PKEY* pkey) check);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_get_param_check")]
+		public extern static void PKEY_meth_get_param_check(PKEY_METHOD* pmeth, function int(PKEY* pkey)* pcheck);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_set_param_check")]
+		public extern static void PKEY_meth_set_param_check(PKEY_METHOD* pmeth, function int(PKEY* pkey) check);
 
-		public extern static void EVP_PKEY_meth_set_digest_custom(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx, MD_CTX* mctx) digest_custom);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_get_digest_custom")]
+		public extern static void PKEY_meth_get_digest_custom(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx, MD_CTX* mctx)* pdigest_custom);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_meth_set_digest_custom")]
+		public extern static void PKEY_meth_set_digest_custom(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx, MD_CTX* mctx) digest_custom);
 
-		public extern static void EVP_PKEY_meth_get_init(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx)* pinit);
-
-		public extern static void EVP_PKEY_meth_get_copy(PKEY_METHOD* pmeth, function int(PKEY_CTX* dst, PKEY_CTX* src)* pcopy);
-
-		public extern static void EVP_PKEY_meth_get_cleanup(PKEY_METHOD* pmeth, function void(PKEY_CTX* ctx)* pcleanup);
-
-		public extern static void EVP_PKEY_meth_get_paramgen(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx)* pparamgen_init, function int(PKEY_CTX* ctx, PKEY* pkey)* pparamgen);
-
-		public extern static void EVP_PKEY_meth_get_keygen(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx)* pkeygen_init, function int(PKEY_CTX* ctx, PKEY* pkey)* pkeygen);
-
-		public extern static void EVP_PKEY_meth_get_sign(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx)* psign_init, function int(PKEY_CTX* ctx, uint8* sig, uint* siglen, uint8* tbs, uint tbslen)* psign);
-
-		public extern static void EVP_PKEY_meth_get_verify(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx)* pverify_init, function int(PKEY_CTX* ctx, uint8* sig, uint siglen, uint8* tbs, uint tbslen)* pverify);
-
-		public extern static void EVP_PKEY_meth_get_verify_recover(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx)* pverify_recover_init, function int(PKEY_CTX* ctx, uint8* sig, uint* siglen, uint8* tbs, uint tbslen)* pverify_recover);
-
-		public extern static void EVP_PKEY_meth_get_signctx(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx, MD_CTX* mctx)* psignctx_init, function int(PKEY_CTX* ctx, uint8* sig, uint* siglen, MD_CTX* mctx)* psignctx);
-
-		public extern static void EVP_PKEY_meth_get_verifyctx(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx, MD_CTX* mctx)* pverifyctx_init, function int(PKEY_CTX* ctx, uint8* sig, int siglen, MD_CTX* mctx)* pverifyctx);
-
-		public extern static void EVP_PKEY_meth_get_encrypt(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx)* pencrypt_init, function int(PKEY_CTX* ctx, uint8* outVal, uint* outlen, uint8* inVal, uint inlen)* pencryptfn);
-
-		public extern static void EVP_PKEY_meth_get_decrypt(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx)* pdecrypt_init, function int(PKEY_CTX* ctx, uint8* outVal, uint* outlen, uint8* inVal, uint inlen)* pdecrypt);
-
-		public extern static void EVP_PKEY_meth_get_derive(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx)* pderive_init, function int(PKEY_CTX* ctx, uint8* key, uint* keylen)* pderive);
-
-		public extern static void EVP_PKEY_meth_get_ctrl(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx, int type, int p1, void* p2)* pctrl, function int(PKEY_CTX* ctx, char8* type, char8* value)* pctrl_str);
-
-		public extern static void EVP_PKEY_meth_get_digestsign(PKEY_METHOD* pmeth, function int(MD_CTX* ctx, uint8* sig, uint* siglen, uint8* tbs, uint tbslen)* digestsign);
-
-		public extern static void EVP_PKEY_meth_get_digestverify(PKEY_METHOD* pmeth, function int(MD_CTX* ctx, uint8* sig, uint siglen, uint8* tbs, uint tbslen)* digestverify);
-
-		public extern static void EVP_PKEY_meth_get_check(PKEY_METHOD* pmeth, function int(PKEY* pkey)* pcheck);
-
-		public extern static void EVP_PKEY_meth_get_public_check(PKEY_METHOD* pmeth, function int(PKEY* pkey)* pcheck);
-
-		public extern static void EVP_PKEY_meth_get_param_check(PKEY_METHOD* pmeth, function int(PKEY* pkey)* pcheck);
-
-		public extern static void EVP_PKEY_meth_get_digest_custom(PKEY_METHOD* pmeth, function int(PKEY_CTX* ctx, MD_CTX* mctx)* pdigest_custom);
-		public extern static void EVP_add_alg_module();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_add_alg_module")]
+		public extern static void add_alg_module();
 	}
 }

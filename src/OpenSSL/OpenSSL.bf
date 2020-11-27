@@ -211,5 +211,23 @@ namespace Beef_Net.OpenSSL
 #endif
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_INIT_free")]
 		public extern static void INIT_free(INIT_SETTINGS* settings);
+
+		[Inline]
+		public static int add_all_algorithms_conf() => init_crypto(INIT_ADD_ALL_CIPHERS | INIT_ADD_ALL_DIGESTS | INIT_LOAD_CONFIG, null);
+		[Inline]
+		public static int add_all_algorithms_noconf() => init_crypto(INIT_ADD_ALL_CIPHERS | INIT_ADD_ALL_DIGESTS, null);
+
+#if OPENSSL_LOAD_CONF
+		[Inline]
+		public static int add_all_algorithms() => add_all_algorithms_conf();
+#else
+		[Inline]
+		public static int add_all_algorithms() => add_all_algorithms_noconf();
+#endif
+
+		[Inline]
+		public static int add_all_ciphers() => init_crypto(INIT_ADD_ALL_CIPHERS, null);
+		[Inline]
+		public static int add_all_digests() => init_crypto(INIT_ADD_ALL_DIGESTS, null);
 	}
 }
