@@ -14,11 +14,31 @@ namespace Beef_Net.OpenSSL
 	[AlwaysInclude]
 	sealed abstract class X509
 	{
+		[CRepr]
+		public struct algor_st
+		{
+		    public ASN1.OBJECT* algorithm;
+		    public ASN1.TYPE* parameter;
+		}
+		public typealias ALGOR = algor_st;
+
+		[CRepr]
+		public struct val_st {
+		    public ASN1.TIME* notBefore;
+		    public ASN1.TIME* notAfter;
+		}
+		public typealias VAL = val_st;
+
+		public struct stack_st_X509 {}
+		public struct stack_st_X509_ALGOR {}
+		public struct stack_st_X509_ATTRIBUTE {}
+		public struct stack_st_X509_CRL {}
 	}
 	
 	[AlwaysInclude]
 	sealed abstract class X509v3
 	{
+		public struct stack_st_GENERAL_NAMES {}
 	}
 	
 	[AlwaysInclude]

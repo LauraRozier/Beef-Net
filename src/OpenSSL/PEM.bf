@@ -11,15 +11,20 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
-	/*
-	libssl-1_1.dll
-		22   15 00001EDD PEM_read_SSL_SESSION
-		23   16 00001DE3 PEM_read_bio_SSL_SESSION
-		24   17 000010B4 PEM_write_SSL_SESSION
-		25   18 0000205E PEM_write_bio_SSL_SESSION
-	*/
 	[AlwaysInclude]
 	sealed abstract class PEM
 	{
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("PEM_write_bio_CMS_stream")]
+		public static extern int write_bio_CMS_stream(BIO.bio_st* outVal, CMS.ContentInfo* cms, BIO.bio_st* inVal, int flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("PEM_write_bio_ASN1_stream")]
+		public static extern int write_bio_ASN1_stream(BIO.bio_st* outVal, ASN1.VALUE* val, BIO.bio_st* inVal, int flags, char8* hdr, ASN1.ITEM* it);
+
+		/*
+		libssl-1_1.dll
+			22   15 00001EDD PEM_read_SSL_SESSION
+			23   16 00001DE3 PEM_read_bio_SSL_SESSION
+			24   17 000010B4 PEM_write_SSL_SESSION
+			25   18 0000205E PEM_write_bio_SSL_SESSION
+		*/
 	}
 }

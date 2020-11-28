@@ -26,7 +26,7 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS5_PBKDF2_HMAC_SHA1")]
 		public extern static int PBKDF2_HMAC_SHA1(char8* pass, int passlen, uint8* salt, int saltlen, int iter, int keylen, uint8* outVal);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS5_PBKDF2_HMAC")]
-		public extern static int PBKDF2_HMAC(char8* pass, int passlen, uint8* salt, int saltlen, int iter, MD* digest, int keylen, uint8* outVal);
+		public extern static int PBKDF2_HMAC(char8* pass, int passlen, uint8* salt, int saltlen, int iter, EVP.MD* digest, int keylen, uint8* outVal);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS5_v2_PBE_keyivgen")]
 		public extern static int v2_PBE_keyivgen(EVP.CIPHER_CTX* ctx, char8* pass, int passlen, ASN1.TYPE* param, EVP.CIPHER* cipher, EVP.MD* md, int en_de);
 

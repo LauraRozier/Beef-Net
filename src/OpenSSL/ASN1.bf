@@ -14,6 +14,330 @@ namespace Beef_Net.OpenSSL
 	[AlwaysInclude]
 	sealed abstract class ASN1
 	{
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int ERR_load_ASN1_strings();
+		
+		/*
+		 * ASN1 function codes.
+		 */
+		public const int F_A2D_ASN1_OBJECT                                     = 100;
+		public const int F_A2I_ASN1_INTEGER                                    = 102;
+		public const int F_A2I_ASN1_STRING                                     = 103;
+		public const int F_APPEND_EXP                                          = 176;
+		public const int F_ASN1_BIO_INIT                                       = 113;
+		public const int F_ASN1_BIT_STRING_SET_BIT                             = 183;
+		public const int F_ASN1_CB                                             = 177;
+		public const int F_ASN1_CHECK_TLEN                                     = 104;
+		public const int F_ASN1_COLLECT                                        = 106;
+		public const int F_ASN1_D2I_EX_PRIMITIVE                               = 108;
+		public const int F_ASN1_D2I_FP                                         = 109;
+		public const int F_ASN1_D2I_READ_BIO                                   = 107;
+		public const int F_ASN1_DIGEST                                         = 184;
+		public const int F_ASN1_DO_ADB                                         = 110;
+		public const int F_ASN1_DO_LOCK                                        = 233;
+		public const int F_ASN1_DUP                                            = 111;
+		public const int F_ASN1_ENC_SAVE                                       = 115;
+		public const int F_ASN1_EX_C2I                                         = 204;
+		public const int F_ASN1_FIND_END                                       = 190;
+		public const int F_ASN1_GENERALIZEDTIME_ADJ                            = 216;
+		public const int F_ASN1_GENERATE_V3                                    = 178;
+		public const int F_ASN1_GET_INT64                                      = 224;
+		public const int F_ASN1_GET_OBJECT                                     = 114;
+		public const int F_ASN1_GET_UINT64                                     = 225;
+		public const int F_ASN1_I2D_BIO                                        = 116;
+		public const int F_ASN1_I2D_FP                                         = 117;
+		public const int F_ASN1_ITEM_D2I_FP                                    = 206;
+		public const int F_ASN1_ITEM_DUP                                       = 191;
+		public const int F_ASN1_ITEM_EMBED_D2I                                 = 120;
+		public const int F_ASN1_ITEM_EMBED_NEW                                 = 121;
+		public const int F_ASN1_ITEM_FLAGS_I2D                                 = 118;
+		public const int F_ASN1_ITEM_I2D_BIO                                   = 192;
+		public const int F_ASN1_ITEM_I2D_FP                                    = 193;
+		public const int F_ASN1_ITEM_PACK                                      = 198;
+		public const int F_ASN1_ITEM_SIGN                                      = 195;
+		public const int F_ASN1_ITEM_SIGN_CTX                                  = 220;
+		public const int F_ASN1_ITEM_UNPACK                                    = 199;
+		public const int F_ASN1_ITEM_VERIFY                                    = 197;
+		public const int F_ASN1_MBSTRING_NCOPY                                 = 122;
+		public const int F_ASN1_OBJECT_NEW                                     = 123;
+		public const int F_ASN1_OUTPUT_DATA                                    = 214;
+		public const int F_ASN1_PCTX_NEW                                       = 205;
+		public const int F_ASN1_PRIMITIVE_NEW                                  = 119;
+		public const int F_ASN1_SCTX_NEW                                       = 221;
+		public const int F_ASN1_SIGN                                           = 128;
+		public const int F_ASN1_STR2TYPE                                       = 179;
+		public const int F_ASN1_STRING_GET_INT64                               = 227;
+		public const int F_ASN1_STRING_GET_UINT64                              = 230;
+		public const int F_ASN1_STRING_SET                                     = 186;
+		public const int F_ASN1_STRING_TABLE_ADD                               = 129;
+		public const int F_ASN1_STRING_TO_BN                                   = 228;
+		public const int F_ASN1_STRING_TYPE_NEW                                = 130;
+		public const int F_ASN1_TEMPLATE_EX_D2I                                = 132;
+		public const int F_ASN1_TEMPLATE_NEW                                   = 133;
+		public const int F_ASN1_TEMPLATE_NOEXP_D2I                             = 131;
+		public const int F_ASN1_TIME_ADJ                                       = 217;
+		public const int F_ASN1_TYPE_GET_INT_OCTETSTRING                       = 134;
+		public const int F_ASN1_TYPE_GET_OCTETSTRING                           = 135;
+		public const int F_ASN1_UTCTIME_ADJ                                    = 218;
+		public const int F_ASN1_VERIFY                                         = 137;
+		public const int F_B64_READ_ASN1                                       = 209;
+		public const int F_B64_WRITE_ASN1                                      = 210;
+		public const int F_BIO_NEW_NDEF                                        = 208;
+		public const int F_BITSTR_CB                                           = 180;
+		public const int F_BN_TO_ASN1_STRING                                   = 229;
+		public const int F_C2I_ASN1_BIT_STRING                                 = 189;
+		public const int F_C2I_ASN1_INTEGER                                    = 194;
+		public const int F_C2I_ASN1_OBJECT                                     = 196;
+		public const int F_C2I_IBUF                                            = 226;
+		public const int F_C2I_UINT64_INT                                      = 101;
+		public const int F_COLLECT_DATA                                        = 140;
+		public const int F_D2I_ASN1_OBJECT                                     = 147;
+		public const int F_D2I_ASN1_UINTEGER                                   = 150;
+		public const int F_D2I_AUTOPRIVATEKEY                                  = 207;
+		public const int F_D2I_PRIVATEKEY                                      = 154;
+		public const int F_D2I_PUBLICKEY                                       = 155;
+		public const int F_DO_BUF                                              = 142;
+		public const int F_DO_CREATE                                           = 124;
+		public const int F_DO_DUMP                                             = 125;
+		public const int F_DO_TCREATE                                          = 222;
+		public const int F_I2A_ASN1_OBJECT                                     = 126;
+		public const int F_I2D_ASN1_BIO_STREAM                                 = 211;
+		public const int F_I2D_ASN1_OBJECT                                     = 143;
+		public const int F_I2D_DSA_PUBKEY                                      = 161;
+		public const int F_I2D_EC_PUBKEY                                       = 181;
+		public const int F_I2D_PRIVATEKEY                                      = 163;
+		public const int F_I2D_PUBLICKEY                                       = 164;
+		public const int F_I2D_RSA_PUBKEY                                      = 165;
+		public const int F_LONG_C2I                                            = 166;
+		public const int F_NDEF_PREFIX                                         = 127;
+		public const int F_NDEF_SUFFIX                                         = 136;
+		public const int F_OID_MODULE_INIT                                     = 174;
+		public const int F_PARSE_TAGGING                                       = 182;
+		public const int F_PKCS5_PBE2_SET_IV                                   = 167;
+		public const int F_PKCS5_PBE2_SET_SCRYPT                               = 231;
+		public const int F_PKCS5_PBE_SET                                       = 202;
+		public const int F_PKCS5_PBE_SET0_ALGOR                                = 215;
+		public const int F_PKCS5_PBKDF2_SET                                    = 219;
+		public const int F_PKCS5_SCRYPT_SET                                    = 232;
+		public const int F_SMIME_READ_ASN1                                     = 212;
+		public const int F_SMIME_TEXT                                          = 213;
+		public const int F_STABLE_GET                                          = 138;
+		public const int F_STBL_MODULE_INIT                                    = 223;
+		public const int F_UINT32_C2I                                          = 105;
+		public const int F_UINT32_NEW                                          = 139;
+		public const int F_UINT64_C2I                                          = 112;
+		public const int F_UINT64_NEW                                          = 141;
+		public const int F_X509_CRL_ADD0_REVOKED                               = 169;
+		public const int F_X509_INFO_NEW                                       = 170;
+		public const int F_X509_NAME_ENCODE                                    = 203;
+		public const int F_X509_NAME_EX_D2I                                    = 158;
+		public const int F_X509_NAME_EX_NEW                                    = 171;
+		public const int F_X509_PKEY_NEW                                       = 173;
+		
+		/*
+		 * ASN1 reason codes.
+		 */
+		public const int R_ADDING_OBJECT                                       = 171;
+		public const int R_ASN1_PARSE_ERROR                                    = 203;
+		public const int R_ASN1_SIG_PARSE_ERROR                                = 204;
+		public const int R_AUX_ERROR                                           = 100;
+		public const int R_BAD_OBJECT_HEADER                                   = 102;
+		public const int R_BMPSTRING_IS_WRONG_LENGTH                           = 214;
+		public const int R_BN_LIB                                              = 105;
+		public const int R_BOOLEAN_IS_WRONG_LENGTH                             = 106;
+		public const int R_BUFFER_TOO_SMALL                                    = 107;
+		public const int R_CIPHER_HAS_NO_OBJECT_IDENTIFIER                     = 108;
+		public const int R_CONTEXT_NOT_INITIALISED                             = 217;
+		public const int R_DATA_IS_WRONG                                       = 109;
+		public const int R_DECODE_ERROR                                        = 110;
+		public const int R_DEPTH_EXCEEDED                                      = 174;
+		public const int R_DIGEST_AND_KEY_TYPE_NOT_SUPPORTED                   = 198;
+		public const int R_ENCODE_ERROR                                        = 112;
+		public const int R_ERROR_GETTING_TIME                                  = 173;
+		public const int R_ERROR_LOADING_SECTION                               = 172;
+		public const int R_ERROR_SETTING_CIPHER_PARAMS                         = 114;
+		public const int R_EXPECTING_AN_INTEGER                                = 115;
+		public const int R_EXPECTING_AN_OBJECT                                 = 116;
+		public const int R_EXPLICIT_LENGTH_MISMATCH                            = 119;
+		public const int R_EXPLICIT_TAG_NOT_CONSTRUCTED                        = 120;
+		public const int R_FIELD_MISSING                                       = 121;
+		public const int R_FIRST_NUM_TOO_LARGE                                 = 122;
+		public const int R_HEADER_TOO_LONG                                     = 123;
+		public const int R_ILLEGAL_BITSTRING_FORMAT                            = 175;
+		public const int R_ILLEGAL_BOOLEAN                                     = 176;
+		public const int R_ILLEGAL_CHARACTERS                                  = 124;
+		public const int R_ILLEGAL_FORMAT                                      = 177;
+		public const int R_ILLEGAL_HEX                                         = 178;
+		public const int R_ILLEGAL_IMPLICIT_TAG                                = 179;
+		public const int R_ILLEGAL_INTEGER                                     = 180;
+		public const int R_ILLEGAL_NEGATIVE_VALUE                              = 226;
+		public const int R_ILLEGAL_NESTED_TAGGING                              = 181;
+		public const int R_ILLEGAL_NULL                                        = 125;
+		public const int R_ILLEGAL_NULL_VALUE                                  = 182;
+		public const int R_ILLEGAL_OBJECT                                      = 183;
+		public const int R_ILLEGAL_OPTIONAL_ANY                                = 126;
+		public const int R_ILLEGAL_OPTIONS_ON_ITEM_TEMPLATE                    = 170;
+		public const int R_ILLEGAL_PADDING                                     = 221;
+		public const int R_ILLEGAL_TAGGED_ANY                                  = 127;
+		public const int R_ILLEGAL_TIME_VALUE                                  = 184;
+		public const int R_ILLEGAL_ZERO_CONTENT                                = 222;
+		public const int R_INTEGER_NOT_ASCII_FORMAT                            = 185;
+		public const int R_INTEGER_TOO_LARGE_FOR_LONG                          = 128;
+		public const int R_INVALID_BIT_STRING_BITS_LEFT                        = 220;
+		public const int R_INVALID_BMPSTRING_LENGTH                            = 129;
+		public const int R_INVALID_DIGIT                                       = 130;
+		public const int R_INVALID_MIME_TYPE                                   = 205;
+		public const int R_INVALID_MODIFIER                                    = 186;
+		public const int R_INVALID_NUMBER                                      = 187;
+		public const int R_INVALID_OBJECT_ENCODING                             = 216;
+		public const int R_INVALID_SCRYPT_PARAMETERS                           = 227;
+		public const int R_INVALID_SEPARATOR                                   = 131;
+		public const int R_INVALID_STRING_TABLE_VALUE                          = 218;
+		public const int R_INVALID_UNIVERSALSTRING_LENGTH                      = 133;
+		public const int R_INVALID_UTF8STRING                                  = 134;
+		public const int R_INVALID_VALUE                                       = 219;
+		public const int R_LIST_ERROR                                          = 188;
+		public const int R_MIME_NO_CONTENT_TYPE                                = 206;
+		public const int R_MIME_PARSE_ERROR                                    = 207;
+		public const int R_MIME_SIG_PARSE_ERROR                                = 208;
+		public const int R_MISSING_EOC                                         = 137;
+		public const int R_MISSING_SECOND_NUMBER                               = 138;
+		public const int R_MISSING_VALUE                                       = 189;
+		public const int R_MSTRING_NOT_UNIVERSAL                               = 139;
+		public const int R_MSTRING_WRONG_TAG                                   = 140;
+		public const int R_NESTED_ASN1_STRING                                  = 197;
+		public const int R_NESTED_TOO_DEEP                                     = 201;
+		public const int R_NON_HEX_CHARACTERS                                  = 141;
+		public const int R_NOT_ASCII_FORMAT                                    = 190;
+		public const int R_NOT_ENOUGH_DATA                                     = 142;
+		public const int R_NO_CONTENT_TYPE                                     = 209;
+		public const int R_NO_MATCHING_CHOICE_TYPE                             = 143;
+		public const int R_NO_MULTIPART_BODY_FAILURE                           = 210;
+		public const int R_NO_MULTIPART_BOUNDARY                               = 211;
+		public const int R_NO_SIG_CONTENT_TYPE                                 = 212;
+		public const int R_NULL_IS_WRONG_LENGTH                                = 144;
+		public const int R_OBJECT_NOT_ASCII_FORMAT                             = 191;
+		public const int R_ODD_NUMBER_OF_CHARS                                 = 145;
+		public const int R_SECOND_NUMBER_TOO_LARGE                             = 147;
+		public const int R_SEQUENCE_LENGTH_MISMATCH                            = 148;
+		public const int R_SEQUENCE_NOT_CONSTRUCTED                            = 149;
+		public const int R_SEQUENCE_OR_SET_NEEDS_CONFIG                        = 192;
+		public const int R_SHORT_LINE                                          = 150;
+		public const int R_SIG_INVALID_MIME_TYPE                               = 213;
+		public const int R_STREAMING_NOT_SUPPORTED                             = 202;
+		public const int R_STRING_TOO_LONG                                     = 151;
+		public const int R_STRING_TOO_SHORT                                    = 152;
+		public const int R_THE_ASN1_OBJECT_IDENTIFIER_IS_NOT_KNOWN_FOR_THIS_MD = 154;
+		public const int R_TIME_NOT_ASCII_FORMAT                               = 193;
+		public const int R_TOO_LARGE                                           = 223;
+		public const int R_TOO_LONG                                            = 155;
+		public const int R_TOO_SMALL                                           = 224;
+		public const int R_TYPE_NOT_CONSTRUCTED                                = 156;
+		public const int R_TYPE_NOT_PRIMITIVE                                  = 195;
+		public const int R_UNEXPECTED_EOC                                      = 159;
+		public const int R_UNIVERSALSTRING_IS_WRONG_LENGTH                     = 215;
+		public const int R_UNKNOWN_FORMAT                                      = 160;
+		public const int R_UNKNOWN_MESSAGE_DIGEST_ALGORITHM                    = 161;
+		public const int R_UNKNOWN_OBJECT_TYPE                                 = 162;
+		public const int R_UNKNOWN_PUBLIC_KEY_TYPE                             = 163;
+		public const int R_UNKNOWN_SIGNATURE_ALGORITHM                         = 199;
+		public const int R_UNKNOWN_TAG                                         = 194;
+		public const int R_UNSUPPORTED_ANY_DEFINED_BY_TYPE                     = 164;
+		public const int R_UNSUPPORTED_CIPHER                                  = 228;
+		public const int R_UNSUPPORTED_PUBLIC_KEY_TYPE                         = 167;
+		public const int R_UNSUPPORTED_TYPE                                    = 196;
+		public const int R_WRONG_INTEGER_TYPE                                  = 225;
+		public const int R_WRONG_PUBLIC_KEY_TYPE                               = 200;
+		public const int R_WRONG_TAG                                           = 168;
+
+		
+#if NO_ASN1_TYPEDEFS
+		#  define INTEGER         = ASN1_STRING;
+		#  define ENUMERATED      = ASN1_STRING;
+		#  define BIT_STRING      = ASN1_STRING;
+		#  define OCTET_STRING    = ASN1_STRING;
+		#  define PRINTABLESTRING = ASN1_STRING;
+		#  define T61STRING       = ASN1_STRING;
+		#  define IA5STRING       = ASN1_STRING;
+		#  define UTCTIME         = ASN1_STRING;
+		#  define GENERALIZEDTIME = ASN1_STRING;
+		#  define TIME            = ASN1_STRING;
+		#  define GENERALSTRING   = ASN1_STRING;
+		#  define UNIVERSALSTRING = ASN1_STRING;
+		#  define BMPSTRING       = ASN1_STRING;
+		#  define VISIBLESTRING   = ASN1_STRING;
+		#  define UTF8STRING      = ASN1_STRING;
+		#  define BOOLEAN         = int;
+		#  define NULL            = int;
+#else
+		public typealias INTEGER = string_st;
+		public typealias ENUMERATED = string_st;
+		public typealias BIT_STRING = string_st;
+		public typealias OCTET_STRING = string_st;
+		public typealias PRINTABLESTRING = string_st;
+		public typealias T61STRING = string_st;
+		public typealias IA5STRING = string_st;
+		public typealias GENERALSTRING = string_st;
+		public typealias UNIVERSALSTRING = string_st;
+		public typealias BMPSTRING = string_st;
+		public typealias UTCTIME = string_st;
+		public typealias TIME = string_st;
+		public typealias GENERALIZEDTIME = string_st;
+		public typealias VISIBLESTRING = string_st;
+		public typealias UTF8STRING = string_st;
+		public typealias STRING = string_st;
+		public typealias BOOLEAN = int;
+		public typealias NULL = int;
+#endif
+
+		[CRepr]
+		public struct object_st {
+		    public char8* sn;
+			public char8* ln;
+		    public int nid;
+		    public int length;
+		    public uint8* data;  /* data remains const after init */
+		    public int flags;                  /* Should we free this one */
+		}
+		public typealias OBJECT = object_st;
+		
+		/* ASN1 print context structure */
+		[CRepr]
+		public struct pctx_st {
+		    public uint flags;
+		    public uint nm_flags;
+		    public uint cert_flags;
+		    public uint oid_flags;
+		    public uint str_flags;
+		}
+		public typealias PCTX = pctx_st;
+
+		[CRepr]
+		public struct sctx_st {
+		    /* The ASN1_ITEM associated with this field */
+		    public ITEM* it;
+		    /* If ASN1_TEMPLATE associated with this field */
+		    public TEMPLATE* tt;
+		    /* Various flags associated with field and context */
+		    public uint flags;
+		    /* If SEQUENCE OF or SET OF, field index */
+		    public int skidx;
+		    /* ASN1 depth of field */
+		    public int depth;
+		    /* Structure and field name */
+		    public char8* sname;
+			public char8* fname;
+		    /* If a primitive type the type of underlying field */
+		    public int prim_type;
+		    /* The field value itself */
+		    public VALUE** field;
+		    /* Callback to pass information to */
+		    public function int(SCTX* ctx) scan_cb;
+		    /* Context specific application data */
+		    public void* app_data;
+		}
+		public typealias SCTX = sctx_st;
+
 		public const int PKEY_ALIAS         = 0x1;
 		public const int PKEY_DYNAMIC       = 0x2;
 		public const int PKEY_SIGPARAM_NULL = 0x4;
@@ -27,5 +351,1082 @@ namespace Beef_Net.OpenSSL
 		
 		public const int PKEY_CTRL_SET1_TLS_ENCPT = 0x9;
 		public const int PKEY_CTRL_GET1_TLS_ENCPT = 0xa;
+
+		/*
+		 * This is the ASN1 template structure that defines a wrapper round the
+		 * actual type. It determines the actual position of the field in the value
+		 * structure, various flags such as OPTIONAL and the field name.
+		 */
+		[CRepr]
+		public struct TEMPLATE_st
+		{
+		    public uint flags;        /* Various flags */
+		    public int tag;           /* tag, not used if no tagging */
+		    public uint offset;       /* Offset of this field in structure */
+		    public char8* field_name; /* Field name */
+		    public ITEM_EXP* item;    /* Relevant ASN1_ITEM or ASN1_ADB */
+		}
+		public typealias TEMPLATE = TEMPLATE_st;
+
+		/* Macro to extract ASN1_ITEM and ASN1_ADB pointer from ASN1_TEMPLATE */
+		/* Am I missing something here?
+		[Inline]
+		public static ITEM* TEMPLATE_item(TEMPLATE t) => (ITEM*)(t.item_ptr);
+		[Inline]
+		public static ADB* TEMPLATE_adb(TEMPLATE t) => (ADB*)(t.item_ptr);
+		*/
+
+		[CRepr]
+		public struct ADB_st
+		{
+		    public uint flags;                     /* Various flags */
+		    public uint offset;                    /* Offset of selector field */
+		    public function int(int* psel) adb_cb; /* Application callback */
+		    public ADB_TABLE* tbl;                 /* Table of possible types */
+		    public int tblcount;                   /* Number of entries in tbl */
+		    public TEMPLATE* default_tt;           /* Type to use if no match */
+		    public TEMPLATE* null_tt;              /* Type to use if selector is NULL */
+		}
+		public typealias ADB = ADB_st ;
+		
+		[CRepr]
+		public struct ADB_TABLE_st
+		{
+		    public int value;   /* NID for an object or value for an int */
+		    public TEMPLATE tt; /* item for this value */
+		}
+		public typealias ADB_TABLE = ADB_TABLE_st;
+
+		/* template flags */
+		
+		/* Field is optional */
+		public const int TFLG_OPTIONAL      = 0x1;
+		
+		/* Field is a SET OF */
+		public const int TFLG_SET_OF        = 0x1 << 1;
+		
+		/* Field is a SEQUENCE OF */
+		public const int TFLG_SEQUENCE_OF   = 0x2 << 1;
+		
+		/*
+		 * Special case: this refers to a SET OF that will be sorted into DER order
+		 * when encoded *and* the corresponding STACK will be modified to match the
+		 * new order.
+		 */
+		public const int TFLG_SET_ORDER     = 0x3 << 1;
+		
+		/* Mask for SET OF or SEQUENCE OF */
+		public const int TFLG_SK_MASK       = 0x3 << 1;
+		
+		/*
+		 * These flags mean the tag should be taken from the tag field. If EXPLICIT
+		 * then the underlying type is used for the inner tag.
+		 */
+		
+		/* IMPLICIT tagging */
+		public const int TFLG_IMPTAG        = 0x1 << 3;
+		
+		/* EXPLICIT tagging, inner tag from underlying type */
+		public const int TFLG_EXPTAG        = 0x2 << 3;
+		
+		public const int TFLG_TAG_MASK      = 0x3 << 3;
+		
+		/* context specific IMPLICIT */
+		public const int TFLG_IMPLICIT      = TFLG_IMPTAG | TFLG_CONTEXT;
+		
+		/* context specific EXPLICIT */
+		public const int TFLG_EXPLICIT      = TFLG_EXPTAG | TFLG_CONTEXT;
+		
+		/*
+		 * If tagging is in force these determine the type of tag to use. Otherwise
+		 * the tag is determined by the underlying type. These values reflect the
+		 * actual octet format.
+		 */
+		/* Universal tag */
+		public const int TFLG_UNIVERSAL     = 0x0 << 6;
+		/* Application tag */
+		public const int TFLG_APPLICATION   = 0x1 << 6;
+		/* Context specific tag */
+		public const int TFLG_CONTEXT       = 0x2 << 6;
+		/* Private tag */
+		public const int TFLG_PRIVATE       = 0x3 << 6;
+		
+		public const int TFLG_TAG_CLASS     = 0x3 << 6;
+		
+		/*
+		 * These are for ANY DEFINED BY type. In this case the 'item' field points to
+		 * an ASN1_ADB structure which contains a table of values to decode the
+		 * relevant type
+		 */
+		public const int TFLG_ADB_MASK      = 0x3 << 8;
+		
+		public const int TFLG_ADB_OID       = 0x1 << 8;
+		
+		public const int TFLG_ADB_INT       = 0x1 << 9;
+		
+		/*
+		 * This flag when present in a SEQUENCE OF, SET OF or EXPLICIT causes
+		 * indefinite length constructed encoding to be used if required.
+		 */
+		public const int TFLG_NDEF          = 0x1 << 11;
+		
+		/* Field is embedded and not a pointer */
+		public const int TFLG_EMBED         = 0x1 << 12;
+		
+		/* This is the actual ASN1 item itself */
+		[CRepr]
+		public struct ITEM_st
+		{
+		    public int8 itype;          /* The item type, primitive, SEQUENCE, CHOICE or extern */
+		    public int utype;           /* underlying type */
+		    public TEMPLATE* templates; /* If SEQUENCE or CHOICE this contains the contents */
+		    public int tcount;          /* Number of templates if SEQUENCE or CHOICE */
+		    public void* funcs;         /* functions that handle this type */
+		    public int size;            /* Structure size (usually) */
+		    public char8* sname;        /* Structure name */
+		}
+		public typealias ITEM = ITEM_st;
+
+		/*-
+		 * These are values for the itype field and determine how the type is interpreted.
+		 *
+		 * For PRIMITIVE types the underlying type determines the behaviour if items is NULL.
+		 *
+		 * Otherwise templates must contain a single template and the type is treated in the same way as the type specified in the template.
+		 *
+		 * For SEQUENCE types the templates field points to the members, the size field is the structure size.
+		 *
+		 * For CHOICE types the templates field points to each possible member (typically a union) and the 'size' field is the offset of the  selector.
+		 *
+		 * The 'funcs' field is used for application specific functions.
+		 *
+		 * The EXTERN type uses a new style d2i/i2d.
+		 * The new style should be used where possible because it avoids things like the d2i IMPLICIT hack.
+		 *
+		 * MSTRING is a multiple string type, it is used for a CHOICE of character strings where the actual strings all occupy an ASN1_STRING structure. In this case the 'utype' field has a special meaning,
+		 * it is used as a mask of acceptable types using the B_ASN1 constants.
+		 *
+		 * NDEF_SEQUENCE is the same as SEQUENCE except that it will use indefinite length constructed encoding if requested.
+		 */
+		public const int ITYPE_PRIMITIVE     = 0x0;
+		public const int ITYPE_SEQUENCE      = 0x1;
+		public const int ITYPE_CHOICE        = 0x2;
+		public const int ITYPE_EXTERN        = 0x4;
+		public const int ITYPE_MSTRING       = 0x5;
+		public const int ITYPE_NDEF_SEQUENCE = 0x6;
+
+		/*
+		 * Cache for ASN1 tag and length, so we don't keep re-reading it for things
+		 * like CHOICE
+		 */
+		[CRepr]
+		public struct TLC_st
+		{
+		    public char8 valid; /* Values below are valid */
+		    public int ret;     /* return value */
+		    public int plen;    /* length */
+		    public int ptag;    /* class value */
+		    public int pclass;  /* class value */
+		    public int hdrlen;  /* header length */
+		}
+		public typealias TLC = TLC_st;
+		
+		/* Typedefs for ASN1 function pointers */
+		public function int ex_d2i(VALUE** pval, uint8** inVal, int len, ITEM* it, int tag, int aclass, char8 opt, TLC* ctx);
+
+		public function int ex_i2d(VALUE** pval, uint8** outVal, ITEM* it, int tag, int aclass);
+		public function int ex_new_func(VALUE** pval, ITEM* it);
+		public function void ex_free_func(VALUE** pval, ITEM* it);
+
+		public function int ex_print_func(BIO.bio_st* outVal, VALUE** pval, int indent, char8* fname, PCTX* pctx);
+
+		public function int primitive_i2c(VALUE** pval, uint8* cont, int* putype, ITEM* it);
+		public function int primitive_c2i(VALUE** pval, uint8* cont, int len, int utype, char8* free_cont, ITEM* it);
+		public function int primitive_print(BIO.bio_st* outVal, VALUE** pval, ITEM* it, int indent, PCTX* pctx);
+
+		[CRepr]
+		public struct EXTERN_FUNCS_st
+		{
+		    public void* app_data;
+		    public ex_new_func* asn1_ex_new;
+		    public ex_free_func* asn1_ex_free;
+		    public ex_free_func* asn1_ex_clear;
+		    public ex_d2i* asn1_ex_d2i;
+		    public ex_i2d* asn1_ex_i2d;
+		    public ex_print_func* asn1_ex_print;
+		}
+		public typealias EXTERN_FUNCS = EXTERN_FUNCS_st;
+
+		[CRepr]
+		public struct PRIMITIVE_FUNCS_st
+		{
+		    public void* app_data;
+		    public uint flags;
+		    public ex_new_func* prim_new;
+		    public ex_free_func* prim_free;
+		    public ex_free_func* prim_clear;
+		    public primitive_c2i* prim_c2i;
+		    public primitive_i2c* prim_i2c;
+		    public primitive_print* prim_print;
+		}
+		public typealias PRIMITIVE_FUNCS = PRIMITIVE_FUNCS_st;
+
+		/*
+		 * This is the ASN1_AUX structure: it handles various miscellaneous
+		 * requirements. For example the use of reference counts and an informational
+		 * callback. The "informational callback" is called at various points during
+		 * the ASN1 encoding and decoding. It can be used to provide minor
+		 * customisation of the structures used. This is most useful where the
+		 * supplied routines *almost* do the right thing but need some extra help at
+		 * a few points. If the callback returns zero then it is assumed a fatal
+		 * error has occurred and the main operation should be abandoned. If major
+		 * changes in the default behaviour are required then an external type is
+		 * more appropriate.
+		 */
+
+		public function int aux_cb(int operation, VALUE** inVal, ITEM* it, void* exarg);
+
+		[CRepr]
+		public struct AUX_st
+		{
+		    public void* app_data;
+		    public int flags;
+		    public int ref_offset;  /* Offset of reference value */
+		    public int ref_lock;    /* Lock type to use */
+		    public aux_cb* asn1_cb;
+		    public int enc_offset;  /* Offset of ASN1_ENCODING structure */
+		}
+		public typealias AUX = AUX_st;
+
+		/* For print related callbacks exarg points to this structure */
+		[CRepr]
+		public struct PRINT_ARG_st
+		{
+		    public BIO.bio_st* outVal;
+		    public int indent;
+		    public PCTX* pctx;
+		}
+		public typealias PRINT_ARG = PRINT_ARG_st;
+
+		/* For streaming related callbacks exarg points to this structure */
+		[CRepr]
+		public struct STREAM_ARG_st
+		{
+		    /* BIO to stream through */
+		    public BIO.bio_st* outVal;
+		    /* BIO with filters appended */
+		    public BIO.bio_st* ndef_bio;
+		    /* Streaming I/O boundary */
+		    public uint8** boundary;
+		}
+		public typealias STREAM_ARG = STREAM_ARG_st;
+
+		/* Flags in ASN1_AUX */
+		
+		/* Use a reference count */
+		public const int AFLG_REFCOUNT    = 1;
+		/* Save the encoding of structure (useful for signatures) */
+		public const int AFLG_ENCODING    = 2;
+		/* The Sequence length is invalid */
+		public const int AFLG_BROKEN      = 4;
+		
+		/* operation values for cb */
+		public const int OP_NEW_PRE       = 0;
+		public const int OP_NEW_POST      = 1;
+		public const int OP_FREE_PRE      = 2;
+		public const int OP_FREE_POST     = 3;
+		public const int OP_D2I_PRE       = 4;
+		public const int OP_D2I_POST      = 5;
+		public const int OP_I2D_PRE       = 6;
+		public const int OP_I2D_POST      = 7;
+		public const int OP_PRINT_PRE     = 8;
+		public const int OP_PRINT_POST    = 9;
+		public const int OP_STREAM_PRE    = 10;
+		public const int OP_STREAM_POST   = 11;
+		public const int OP_DETACHED_PRE  = 12;
+		public const int OP_DETACHED_POST = 13;
+		
+		/* Functions used internally by the ASN1 code */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_item_ex_new")]
+		public static extern int item_ex_new(VALUE** pval, ITEM* it);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_item_ex_free")]
+		public static extern void item_ex_free(VALUE** pval, ITEM* it);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_item_ex_d2i")]
+		public static extern int item_ex_d2i(VALUE** pval, uint8** inVal, int len, ITEM* it, int tag, int aclass, int8 opt, TLC* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_item_ex_i2d")]
+		public static extern int item_ex_i2d(VALUE** pval, uint8** outVal, ITEM* it, int tag, int aclass);
+
+		public const int V_ASN1_UNIVERSAL                = 0x00;
+		public const int V_ASN1_APPLICATION              = 0x40;
+		public const int V_ASN1_CONTEXT_SPECIFIC         = 0x80;
+		public const int V_ASN1_PRIVATE                  = 0xc0;
+		
+		public const int V_ASN1_CONSTRUCTED              = 0x20;
+		public const int V_ASN1_PRIMITIVE_TAG            = 0x1f;
+		public const int V_ASN1_PRIMATIVE_TAG /*compat*/ = V_ASN1_PRIMITIVE_TAG;
+		
+		public const int V_ASN1_APP_CHOOSE               = -2; /* let the recipient choose */
+		public const int V_ASN1_OTHER                    = -3; /* used in TYPE */
+		public const int V_ASN1_ANY                      = -4; /* used in ASN1 template code */
+		
+		public const int V_ASN1_UNDEF                    = -1;
+		/* ASN.1 tag values */
+		public const int V_ASN1_EOC                      = 0;
+		public const int V_ASN1_BOOLEAN                  = 1; /**/
+		public const int V_ASN1_INTEGER                  = 2;
+		public const int V_ASN1_BIT_STRING               = 3;
+		public const int V_ASN1_OCTET_STRING             = 4;
+		public const int V_ASN1_NULL                     = 5;
+		public const int V_ASN1_OBJECT                   = 6;
+		public const int V_ASN1_OBJECT_DESCRIPTOR        = 7;
+		public const int V_ASN1_EXTERNAL                 = 8;
+		public const int V_ASN1_REAL                     = 9;
+		public const int V_ASN1_ENUMERATED               = 10;
+		public const int V_ASN1_UTF8STRING               = 12;
+		public const int V_ASN1_SEQUENCE                 = 16;
+		public const int V_ASN1_SET                      = 17;
+		public const int V_ASN1_NUMERICSTRING            = 18; /**/
+		public const int V_ASN1_PRINTABLESTRING          = 19;
+		public const int V_ASN1_T61STRING                = 20;
+		public const int V_ASN1_TELETEXSTRING            = 20; /* alias */
+		public const int V_ASN1_VIDEOTEXSTRING           = 21; /**/
+		public const int V_ASN1_IA5STRING                = 22;
+		public const int V_ASN1_UTCTIME                  = 23;
+		public const int V_ASN1_GENERALIZEDTIME          = 24; /**/
+		public const int V_ASN1_GRAPHICSTRING            = 25; /**/
+		public const int V_ASN1_ISO64STRING              = 26; /**/
+		public const int V_ASN1_VISIBLESTRING            = 26; /* alias */
+		public const int V_ASN1_GENERALSTRING            = 27; /**/
+		public const int V_ASN1_UNIVERSALSTRING          = 28; /**/
+		public const int V_ASN1_BMPSTRING                = 30;
+
+		/*
+		 * NB the constants below are used internally by ASN1_INTEGER
+		 * and ASN1_ENUMERATED to indicate the sign. They are *not* on
+		 * the wire tag values.
+		 */
+		public const int V_ASN1_NEG             = 0x100;
+		public const int V_ASN1_NEG_INTEGER     = 2 | V_ASN1_NEG;
+		public const int V_ASN1_NEG_ENUMERATED  = 10 | V_ASN1_NEG;
+
+		/* For use with d2i_ASN1_type_bytes() */
+		public const int B_ASN1_NUMERICSTRING   = 0x0001;
+		public const int B_ASN1_PRINTABLESTRING = 0x0002;
+		public const int B_ASN1_T61STRING       = 0x0004;
+		public const int B_ASN1_TELETEXSTRING   = 0x0004;
+		public const int B_ASN1_VIDEOTEXSTRING  = 0x0008;
+		public const int B_ASN1_IA5STRING       = 0x0010;
+		public const int B_ASN1_GRAPHICSTRING   = 0x0020;
+		public const int B_ASN1_ISO64STRING     = 0x0040;
+		public const int B_ASN1_VISIBLESTRING   = 0x0040;
+		public const int B_ASN1_GENERALSTRING   = 0x0080;
+		public const int B_ASN1_UNIVERSALSTRING = 0x0100;
+		public const int B_ASN1_OCTET_STRING    = 0x0200;
+		public const int B_ASN1_BIT_STRING      = 0x0400;
+		public const int B_ASN1_BMPSTRING       = 0x0800;
+		public const int B_ASN1_UNKNOWN         = 0x1000;
+		public const int B_ASN1_UTF8STRING      = 0x2000;
+		public const int B_ASN1_UTCTIME         = 0x4000;
+		public const int B_ASN1_GENERALIZEDTIME = 0x8000;
+		public const int B_ASN1_SEQUENCE        = 0x10000;
+		/* For use with ASN1_mbstring_copy() */
+		public const int MBSTRING_FLAG          = 0x1000;
+		public const int MBSTRING_UTF8          = MBSTRING_FLAG;
+		public const int MBSTRING_ASC           = MBSTRING_FLAG | 1;
+		public const int MBSTRING_BMP           = MBSTRING_FLAG | 2;
+		public const int MBSTRING_UNIV          = MBSTRING_FLAG | 4;
+		public const int SMIME_OLDMIME          = 0x400;
+		public const int SMIME_CRLFEOL          = 0x800;
+		public const int SMIME_STREAM           = 0x1000;
+
+		public const int STRING_FLAG_BITS_LEFT = 0x08; /* Set if 0x07 has bits left value */
+		/*
+		 * This indicates that the ASN1_STRING is not a real value but just a place
+		 * holder for the location where indefinite length constructed data should be
+		 * inserted in the memory buffer
+		 */
+		public const int STRING_FLAG_NDEF      = 0x010;
+		/*
+		 * This flag is used by the CMS code to indicate that a string is not
+		 * complete and is a place holder for content when it had all been accessed.
+		 * The flag will be reset when content has been written to it.
+		 */
+		public const int STRING_FLAG_CONT      = 0x020;
+		/*
+		 * This flag is used by ASN1 code to indicate an ASN1_STRING is an MSTRING
+		 * type.
+		 */
+		public const int STRING_FLAG_MSTRING   = 0x040;
+		/* String is embedded and only content should be freed */
+		public const int STRING_FLAG_EMBED     = 0x080;
+		/* String should be parsed in RFC 5280's time format */
+		public const int STRING_FLAG_X509_TIME = 0x100;
+		/* This is the base type that holds just about everything :-) */
+		[CRepr]
+		public struct string_st {
+		    public int length;
+		    public int type;
+		    public uint8* data;
+		    /*
+		     * The value of the following field depends on the type being held.  It
+		     * is mostly being used for BIT_STRING so if the input data has a
+		     * non-zero 'unused bits' value, it will be handled correctly
+		     */
+		    public int flags;
+		}
+
+		/*
+		 * ASN1_ENCODING structure: this is used to save the received encoding of an
+		 * ASN1 type. This is useful to get round problems with invalid encodings
+		 * which can break signatures.
+		 */
+
+		[CRepr]
+		public struct ENCODING_st
+		{
+		    public uint8* enc;   /* DER encoding */
+		    public int len;      /* Length of encoding */
+		    public int modified; /* set to 1 if 'enc' is invalid */
+		}
+		public typealias ENCODING = ENCODING_st;
+
+		/* Used with ASN1 LONG type: if a long is set to this it is omitted */
+		public const int LONG_UNDEF = 0x7fffffffL;
+		
+		public const int STABLE_FLAGS_MALLOC = 0x01;
+		/*
+		 * A zero passed to ASN1_STRING_TABLE_new_add for the flags is interpreted as "don't change" and STABLE_FLAGS_MALLOC is always set. By setting
+		 * STABLE_FLAGS_MALLOC only we can clear the existing value. Use the alias STABLE_FLAGS_CLEAR to reflect this.
+		 */
+		public const int STABLE_FLAGS_CLEAR = STABLE_FLAGS_MALLOC;
+		public const int STABLE_NO_MASK     = 0x02;
+		public const int DIRSTRING_TYPE     = B_ASN1_PRINTABLESTRING | B_ASN1_T61STRING | B_ASN1_BMPSTRING | B_ASN1_UTF8STRING;
+		public const int PKCS9STRING_TYPE   = DIRSTRING_TYPE | B_ASN1_IA5STRING;
+
+		[CRepr]
+		public struct string_table_st
+		{
+		    public int nid;
+		    public int minsize;
+		    public int maxsize;
+		    public uint mask;
+		    public uint flags;
+		}
+		public typealias STRING_TABLE = string_table_st;
+
+		/* size limits: this stuff is taken straight from RFC2459 */
+		public const int ub_name                   = 32768;
+		public const int ub_common_name            = 64;
+		public const int ub_locality_name          = 128;
+		public const int ub_state_name             = 128;
+		public const int ub_organization_name      = 64;
+		public const int ub_organization_unit_name = 64;
+		public const int ub_title                  = 64;
+		public const int ub_email_address          = 128;
+
+		/* This is just an opaque pointer */
+		public struct VALUE_st {}
+		public typealias VALUE = VALUE_st;
+
+		/*-
+		 * The following macros and typedefs allow an ASN1_ITEM
+		 * to be embedded in a structure and referenced. Since
+		 * the ASN1_ITEM pointers need to be globally accessible
+		 * (possibly from shared libraries) they may exist in
+		 * different forms. On platforms that support it the
+		 * ASN1_ITEM structure itself will be globally exported.
+		 * Other platforms will export a function that returns
+		 * an ASN1_ITEM pointer.
+		 *
+		 * To handle both cases transparently the macros below
+		 * should be used instead of hard coding an ASN1_ITEM
+		 * pointer in a structure.
+		 *
+		 * The structure will look like this:
+		 *
+		 * public typealias SOMETHING_st {
+		 *      ...
+		 *      ITEM_EXP *iptr;
+		 *      ...
+		 * } SOMETHING;
+		 *
+		 * It would be initialised as e.g.:
+		 *
+		 * SOMETHING somevar = {...,ASN1_ITEM_ref(X509),...};
+		 *
+		 * and the actual pointer extracted with:
+		 *
+		 * ITEM* it = ASN1_ITEM_ptr(somevar.iptr);
+		 *
+		 * Finally an ASN1_ITEM pointer can be extracted from an
+		 * appropriate reference with: ASN1_ITEM_rptr(X509). This
+		 * would be used when a function takes an ITEM* argument.
+		 *
+		 */
+
+#if !OPENSSL_EXPORT_VAR_AS_FUNCTION
+		/* ASN1_ITEM pointer exported type */
+		public typealias ITEM_EXP = ITEM*;
+#else
+		/*
+		 * Platforms that can't easily handle shared global variables are declared as
+		 * functions returning ITEM pointers.
+		 */
+		/* ASN1_ITEM pointer exported type */
+		public function ITEM* ITEM_EXP();
+#endif
+
+		/* Parameters used by STRING_print_ex() */
+
+		/*
+		 * These determine which characters to escape: RFC2253 special characters,
+		 * control characters and MSB set characters
+		 */
+		public const int STRFLGS_ESC_2253 = 1;
+		public const int STRFLGS_ESC_CTRL = 2;
+		public const int STRFLGS_ESC_MSB  = 4;
+
+		/*
+		 * This flag determines how we do escaping: normally RC2253 backslash only,
+		 * set this to use backslash and quote.
+		 */
+		public const int STRFLGS_ESC_QUOTE = 8;
+
+		/* These three flags are internal use only. */
+
+		/* Character is a valid PrintableString character */
+		public const int CHARTYPE_PRINTABLESTRING = 0x10;
+		/* Character needs escaping if it is the first character */
+		public const int CHARTYPE_FIRST_ESC_2253  = 0x20;
+		/* Character needs escaping if it is the last character */
+		public const int CHARTYPE_LAST_ESC_2253   = 0x40;
+
+		/*
+		 * NB the internal flags are safely reused below by flags handled at the top
+		 * level.
+		 */
+
+		/*
+		 * If this is set we convert all character strings to UTF8 first
+		 */
+		public const int STRFLGS_UTF8_CONVERT = 0x10;
+
+		/*
+		 * If this is set we don't attempt to interpret content: just assume all
+		 * strings are 1 byte per character. This will produce some pretty odd
+		 * looking output!
+		 */
+		public const int STRFLGS_IGNORE_TYPE  = 0x20;
+
+		/* If this is set we include the string type in the output */
+		public const int STRFLGS_SHOW_TYPE    = 0x40;
+
+		/*
+		 * This determines which strings to display and which to 'dump' (hex dump of
+		 * content octets or DER encoding). We can only dump non character strings or
+		 * everything. If we don't dump 'unknown' they are interpreted as character
+		 * strings with 1 octet per character and are subject to the usual escaping
+		 * options.
+		 */
+		public const int STRFLGS_DUMP_ALL     = 0x80;
+		public const int STRFLGS_DUMP_UNKNOWN = 0x100;
+
+		/*
+		 * These determine what 'dumping' does, we can dump the content octets or the
+		 * DER encoding: both use the RFC2253 #XXXXX notation.
+		 */
+		public const int STRFLGS_DUMP_DER     = 0x200;
+
+		/*
+		 * This flag specifies that RC2254 escaping shall be performed.
+		 */
+		public const int STRFLGS_ESC_2254     = 0x400;
+
+		/*
+		 * All the string flags consistent with RFC2253, escaping control characters
+		 * isn't essential in RFC2253 but it is advisable anyway.
+		 */
+		public const int STRFLGS_RFC2253      = STRFLGS_ESC_2253 | STRFLGS_ESC_CTRL | STRFLGS_ESC_MSB | STRFLGS_UTF8_CONVERT | STRFLGS_DUMP_UNKNOWN | STRFLGS_DUMP_DER;
+		
+		[CRepr]
+		public struct type_st
+		{
+		    public int type;
+		    public value_stuct value;
+
+			[CRepr, Union]
+			public struct value_stuct
+			{
+		        public char8* ptr;
+		        public BOOLEAN boolean;
+		        public STRING* asn1_string;
+		        public OBJECT* object;
+		        public INTEGER* integer;
+		        public ENUMERATED* enumerated;
+		        public BIT_STRING* bit_string;
+		        public OCTET_STRING* octet_string;
+		        public PRINTABLESTRING* printablestring;
+		        public T61STRING* t61string;
+		        public IA5STRING* ia5string;
+		        public GENERALSTRING* generalstring;
+		        public BMPSTRING* bmpstring;
+		        public UNIVERSALSTRING* universalstring;
+		        public UTCTIME* utctime;
+		        public GENERALIZEDTIME* generalizedtime;
+		        public VISIBLESTRING* visiblestring;
+		        public UTF8STRING* utf8string;
+		        /*
+		         * set and sequence are left complete and still contain the set or
+		         * sequence bytes
+		         */
+		        public STRING* set;
+		        public STRING* sequence;
+		        public VALUE* asn1_value;
+			}
+		}
+		public typealias TYPE = type_st;
+		
+		/* This is used to contain a list of bit names */
+		[CRepr]
+		public struct BIT_STRING_BITNAME_st {
+		    public int bitnum;
+		    public char8* lname;
+		    public char8* sname;
+		}
+		public typealias BIT_STRING_BITNAME = BIT_STRING_BITNAME_st;
+		
+		public const int B_ASN1_TIME            = B_ASN1_UTCTIME | B_ASN1_GENERALIZEDTIME;
+		public const int B_ASN1_PRINTABLE       = B_ASN1_NUMERICSTRING | B_ASN1_PRINTABLESTRING | B_ASN1_T61STRING | B_ASN1_IA5STRING | B_ASN1_BIT_STRING | B_ASN1_UNIVERSALSTRING | B_ASN1_BMPSTRING |
+			B_ASN1_UTF8STRING | B_ASN1_SEQUENCE | B_ASN1_UNKNOWN;
+		public const int B_ASN1_DIRECTORYSTRING = B_ASN1_PRINTABLESTRING | B_ASN1_TELETEXSTRING | B_ASN1_BMPSTRING | B_ASN1_UNIVERSALSTRING | B_ASN1_UTF8STRING;
+		public const int B_ASN1_DISPLAYTEXT     = B_ASN1_IA5STRING | B_ASN1_VISIBLESTRING | B_ASN1_BMPSTRING | B_ASN1_UTF8STRING;
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_TYPE_get")]
+		public static extern int TYPE_get(TYPE* a);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_TYPE_set")]
+		public static extern void TYPE_set(TYPE* a, int type, void* value);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_TYPE_set1")]
+		public static extern int TYPE_set1(TYPE* a, int type, void* value);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_TYPE_cmp")]
+		public static extern int TYPE_cmp(TYPE* a, TYPE* b);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_TYPE_pack_sequence")]
+		public static extern TYPE* TYPE_pack_sequence(ITEM* it, void* s, TYPE** t);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_TYPE_unpack_sequence")]
+		public static extern void* TYPE_unpack_sequence(ITEM* it, TYPE* t);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_OBJECT_new")]
+		public static extern OBJECT* OBJECT_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_OBJECT_free")]
+		public static extern void OBJECT_free(OBJECT* a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public static extern int i2d_ASN1_OBJECT(OBJECT* a, uint8** pp);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public static extern OBJECT* d2i_ASN1_OBJECT(OBJECT** a, uint8** pp, int length);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_STRING_new")]
+		public static extern STRING* STRING_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_STRING_free")]
+		public static extern void STRING_free(STRING* a);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_STRING_clear_free")]
+		public static extern void STRING_clear_free(STRING* a);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_STRING_copy")]
+		public static extern int STRING_copy(STRING* dst, STRING* str);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_STRING_dup")]
+		public static extern STRING* STRING_dup(STRING* a);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_STRING_type_new")]
+		public static extern STRING* STRING_type_new(int type);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_STRING_cmp")]
+		public static extern int STRING_cmp(STRING* a, STRING* b);
+		/*
+		 * Since this is used to store all sorts of things, via macros, for now, make its data void* 
+		 */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_STRING_set")]
+		public static extern int STRING_set(STRING* str, void* data, int len);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_STRING_set0")]
+		public static extern void STRING_set0(STRING* str, void* data, int len);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_STRING_length")]
+		public static extern int STRING_length(STRING* x);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_STRING_length_set")]
+		public static extern void STRING_length_set(STRING* x, int n);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_STRING_type")]
+		public static extern int STRING_type(STRING* x);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_STRING_data")]
+		public static extern uint8* STRING_data(STRING* x);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_STRING_get0_data")]
+		public static extern uint8* STRING_get0_data(STRING* x);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_BIT_STRING_set")]
+		public static extern int BIT_STRING_set(BIT_STRING* a, uint8* d, int length);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_BIT_STRING_set_bit")]
+		public static extern int BIT_STRING_set_bit(BIT_STRING* a, int n, int value);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_BIT_STRING_get_bit")]
+		public static extern int BIT_STRING_get_bit(BIT_STRING* a, int n);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_BIT_STRING_check")]
+		public static extern int BIT_STRING_check(BIT_STRING* a, uint8* flags, int flags_len);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_BIT_STRING_name_print")]
+		public static extern int BIT_STRING_name_print(BIO.bio_st* outVal, BIT_STRING* bs, BIT_STRING_BITNAME* tbl, int indent);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_BIT_STRING_num_asc")]
+		public static extern int BIT_STRING_num_asc(char8* name, BIT_STRING_BITNAME* tbl);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_BIT_STRING_set_asc")]
+		public static extern int BIT_STRING_set_asc(BIT_STRING* bs, char8* name, int value, BIT_STRING_BITNAME* tbl);
+		
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public static extern INTEGER* d2i_ASN1_UINTEGER(INTEGER** a, uint8** pp, int length);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_INTEGER_dup")]
+		public static extern INTEGER* INTEGER_dup(INTEGER* x);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_INTEGER_cmp")]
+		public static extern int INTEGER_cmp(INTEGER* x, INTEGER* y);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_UTCTIME_check")]
+		public static extern int UTCTIME_check(UTCTIME* a);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_UTCTIME_set")]
+		public static extern UTCTIME* UTCTIME_set(UTCTIME* s, int64 t);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_UTCTIME_adj")]
+		public static extern UTCTIME* UTCTIME_adj(UTCTIME* s, int64 t, int offset_day, int offset_sec);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_UTCTIME_set_string")]
+		public static extern int UTCTIME_set_string(UTCTIME* s, char8* str);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_UTCTIME_cmp_int64")]
+		public static extern int UTCTIME_cmp_int64(UTCTIME* s, int64 t);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_GENERALIZEDTIME_check")]
+		public static extern int GENERALIZEDTIME_check(GENERALIZEDTIME* a);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_GENERALIZEDTIME_set")]
+		public static extern GENERALIZEDTIME* GENERALIZEDTIME_set(GENERALIZEDTIME* s, int64 t);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_GENERALIZEDTIME_adj")]
+		public static extern GENERALIZEDTIME* GENERALIZEDTIME_adj(GENERALIZEDTIME* s, int64 t, int offset_day, int offset_sec);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_GENERALIZEDTIME_set_string")]
+		public static extern int GENERALIZEDTIME_set_string(GENERALIZEDTIME* s, char8* str);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_TIME_diff")]
+		public static extern int TIME_diff(int* pday, int* psec, TIME* from, TIME* to);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_OCTET_STRING_dup")]
+		public static extern OCTET_STRING* OCTET_STRING_dup(OCTET_STRING* a);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_OCTET_STRING_cmp")]
+		public static extern int OCTET_STRING_cmp(OCTET_STRING* a, OCTET_STRING* b);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_OCTET_STRING_set")]
+		public static extern int OCTET_STRING_set(OCTET_STRING* str, uint8* data, int len);
+		
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public static extern int UTF8_getc(uint8* str, int len, uint* val);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public static extern int UTF8_putc(uint8* str, int len, uint value);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_TIME_set")]
+		public static extern TIME* TIME_set(TIME* s, int64 t);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_TIME_adj")]
+		public static extern TIME* TIME_adj(TIME* s, int64 t, int offset_day, int offset_sec);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_TIME_check")]
+		public static extern int TIME_check(TIME* t);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_TIME_to_generalizedtime")]
+		public static extern GENERALIZEDTIME* TIME_to_generalizedtime(TIME* t, GENERALIZEDTIME** outVal);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_TIME_set_string")]
+		public static extern int TIME_set_string(TIME* s, char8* str);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_TIME_set_string_X509")]
+		public static extern int TIME_set_string_X509(TIME* s, char8* str);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_TIME_to_tm")]
+		public static extern int TIME_to_tm(TIME* s, OSSLType.tm *tm);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_TIME_normalize")]
+		public static extern int TIME_normalize(TIME* s);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_TIME_cmp_time_t")]
+		public static extern int TIME_cmp_time_t(TIME* s, int64 t);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_TIME_compare")]
+		public static extern int TIME_compare(TIME* a, TIME* b);
+		
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public static extern int i2a_ASN1_INTEGER(BIO.bio_st* bp, INTEGER* a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public static extern int a2i_ASN1_INTEGER(BIO.bio_st* bp, INTEGER* bs, char8* buf, int size);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public static extern int i2a_ASN1_ENUMERATED(BIO.bio_st* bp, ENUMERATED* a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public static extern int a2i_ASN1_ENUMERATED(BIO.bio_st* bp, ENUMERATED* bs, char8* buf, int size);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public static extern int i2a_ASN1_OBJECT(BIO.bio_st* bp, OBJECT* a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public static extern int a2i_ASN1_STRING(BIO.bio_st* bp, STRING* bs, char8* buf, int size);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public static extern int i2a_ASN1_STRING(BIO.bio_st* bp, STRING* a, int type);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public static extern int i2t_ASN1_OBJECT(char8* buf, int buf_len, OBJECT* a);
+		
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public static extern int a2d_ASN1_OBJECT(uint8* outVal, int olen, char8* buf, int num);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_OBJECT_create")]
+		public static extern OBJECT* OBJECT_create(int nid, uint8* data, int len, char8* sn, char8* ln);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_INTEGER_get_int64")]
+		public static extern int INTEGER_get_int64(int64* pr, INTEGER* a);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_INTEGER_set_int64")]
+		public static extern int INTEGER_set_int64(INTEGER* a, int64 r);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_INTEGER_get_uint64")]
+		public static extern int INTEGER_get_uint64(uint64* pr, INTEGER* a);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_INTEGER_set_uint64")]
+		public static extern int INTEGER_set_uint64(INTEGER* a, uint64 r);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_INTEGER_set")]
+		public static extern int INTEGER_set(INTEGER* a, int v);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_INTEGER_get")]
+		public static extern int INTEGER_get(INTEGER* a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public static extern INTEGER* BN_to_ASN1_INTEGER(BN.BIGNUM* bn, INTEGER* ai);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_INTEGER_to_BN")]
+		public static extern BN.BIGNUM* INTEGER_to_BN(INTEGER* ai, BN.BIGNUM* bn);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_ENUMERATED_get_int64")]
+		public static extern int ENUMERATED_get_int64(int64* pr, ENUMERATED* a);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_ENUMERATED_set_int64")]
+		public static extern int ENUMERATED_set_int64(ENUMERATED* a, int64 r);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_ENUMERATED_set")]
+		public static extern int ENUMERATED_set(ENUMERATED* a, int v);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_ENUMERATED_get")]
+		public static extern int ENUMERATED_get(ENUMERATED* a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public static extern ENUMERATED* BN_to_ASN1_ENUMERATED(BN.BIGNUM* bn, ENUMERATED* ai);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_ENUMERATED_to_BN")]
+		public static extern BN.BIGNUM* ENUMERATED_to_BN(ENUMERATED* ai, BN.BIGNUM* bn);
+		
+		/* General */
+		/* given a string, return the correct type, max is the maximum length */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_PRINTABLE_type")]
+		public static extern int PRINTABLE_type(uint8* s, int max);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_tag2bit")]
+		public static extern uint tag2bit(int tag);
+		
+		/* SPECIALS */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_get_object")]
+		public static extern int get_object(uint8** pp, int* plength, int* ptag, int* pclass, int omax);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_check_infinite_end")]
+		public static extern int check_infinite_end(uint8** p, int len);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_const_check_infinite_end")]
+		public static extern int const_check_infinite_end(uint8** p, int len);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_put_object")]
+		public static extern void put_object(uint8** pp, int constructed, int length, int tag, int xclass);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_put_eoc")]
+		public static extern int put_eoc(uint8** pp);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_object_size")]
+		public static extern int object_size(int constructed, int length, int tag);
+		
+		/* Used to implement other functions */
+		public function int i2d_of_void(void* p, uint8** n);
+		public function void* d2i_of_void(void** p, uint8** n, int l);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_dup")]
+		public static extern void* dup(i2d_of_void* i2d, d2i_of_void* d2i, void* x);
+
+		/*
+		 * OpenSSL.. Please learn to make portable headers. Thanks.
+		# define ASN1_dup_of(type,i2d,d2i,x) ((type*)ASN1_dup(CHECKED_I2D_OF(type, i2d), CHECKED_D2I_OF(type, d2i), CHECKED_PTR_OF(type, x)))
+		
+		# define ASN1_dup_of_const(type,i2d,d2i,x) ((type*)ASN1_dup(CHECKED_I2D_OF(const type, i2d), CHECKED_D2I_OF(type, d2i), CHECKED_PTR_OF(const type, x)))
+		
+		/* ASN1 alloc/free macros for when a type is only used internally */
+		# define M_ASN1_new_of(type) (type *)ASN1_item_new(ASN1_ITEM_rptr(type))
+		# define M_ASN1_free_of(x, type) ASN1_item_free(CHECKED_PTR_OF(type, x), ASN1_ITEM_rptr(type))
+		
+		#  define ASN1_d2i_fp_of(type,xnew,d2i,in,x)  ((type*)ASN1_d2i_fp(CHECKED_NEW_OF(type, xnew),  CHECKED_D2I_OF(type, d2i),  in, CHECKED_PPTR_OF(type, x)))
+		
+		#  define ASN1_i2d_fp_of(type,i2d,out,x) (ASN1_i2d_fp(CHECKED_I2D_OF(type, i2d), out, CHECKED_PTR_OF(type, x)))
+		
+		#  define ASN1_i2d_fp_of_const(type,i2d,out,x) (ASN1_i2d_fp(CHECKED_I2D_OF(const type, i2d), out, CHECKED_PTR_OF(const type, x)))
+		
+		#  define ASN1_d2i_bio_of(type,xnew,d2i,in,x) ((type*)ASN1_d2i_bio( CHECKED_NEW_OF(type, xnew), CHECKED_D2I_OF(type, d2i), in, CHECKED_PPTR_OF(type, x)))
+		
+		#  define ASN1_i2d_bio_of(type,i2d,out,x) (ASN1_i2d_bio(CHECKED_I2D_OF(type, i2d), out, CHECKED_PTR_OF(type, x)))
+		
+		#  define ASN1_i2d_bio_of_const(type,i2d,out,x) (ASN1_i2d_bio(CHECKED_I2D_OF(const type, i2d), out, CHECKED_PTR_OF(const type, x)))
+		*/
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_item_dup")]
+		public static extern void* item_dup(ITEM* it, void* x);
+		
+#if !OPENSSL_NO_STDIO
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_d2i_fp")]
+		public static extern void* d2i_fp(function void*() xnew, d2i_of_void* d2i, Platform.BfpFile* inVal, void** x);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_item_d2i_fp")]
+		public static extern void* item_d2i_fp(ITEM* it, Platform.BfpFile* inVal, void* x);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_i2d_fp")]
+		public static extern int i2d_fp(i2d_of_void* i2d, Platform.BfpFile* outVal, void* x);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_item_i2d_fp")]
+		public static extern int item_i2d_fp(ITEM* it, Platform.BfpFile* outVal, void* x);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_STRING_print_ex_fp")]
+		public static extern int STRING_print_ex_fp(Platform.BfpFile* fp, STRING* str, uint flags);
+#endif
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_STRING_to_UTF8")]
+		public static extern int STRING_to_UTF8(uint8** outVal, STRING* inVal);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_d2i_bio")]
+		public static extern void* d2i_bio(function void*() xnew, d2i_of_void* d2i, BIO.bio_st* inVal, void** x);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_item_d2i_bio")]
+		public static extern void* item_d2i_bio(ITEM* it, BIO.bio_st* inVal, void* x);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_i2d_bio")]
+		public static extern int i2d_bio(i2d_of_void* i2d, BIO.bio_st* outVal, uint8* x);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_item_i2d_bio")]
+		public static extern int item_i2d_bio(ITEM* it, BIO.bio_st* outVal, void* x);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_UTCTIME_print")]
+		public static extern int UTCTIME_print(BIO.bio_st* fp, UTCTIME* a);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_GENERALIZEDTIME_print")]
+		public static extern int GENERALIZEDTIME_print(BIO.bio_st* fp, GENERALIZEDTIME* a);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_TIME_print")]
+		public static extern int TIME_print(BIO.bio_st* fp, TIME* a);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_STRING_print")]
+		public static extern int STRING_print(BIO.bio_st* bp, STRING* v);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_STRING_print_ex")]
+		public static extern int STRING_print_ex(BIO.bio_st* outVal, STRING* str, uint flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_buf_print")]
+		public static extern int buf_print(BIO.bio_st* bp, uint8* buf, uint buflen, int off);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_bn_print")]
+		public static extern int bn_print(BIO.bio_st* bp, char8* number, BN.BIGNUM* num, uint8* buf, int off);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_parse")]
+		public static extern int parse(BIO.bio_st* bp, uint8* pp, int len, int indent);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_parse_dump")]
+		public static extern int parse_dump(BIO.bio_st* bp, uint8* pp, int len, int indent, int dump);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_tag2str")]
+		public static extern char8* tag2str(int tag);
+		
+		/* Used to load and write Netscape format cert */
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_UNIVERSALSTRING_to_string")]
+		public static extern int UNIVERSALSTRING_to_string(UNIVERSALSTRING* s);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_TYPE_set_octetstring")]
+		public static extern int TYPE_set_octetstring(TYPE* a, uint8* data, int len);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_TYPE_get_octetstring")]
+		public static extern int TYPE_get_octetstring(TYPE* a, uint8* data, int max_len);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_TYPE_set_int_octetstring")]
+		public static extern int TYPE_set_int_octetstring(TYPE* a, int num, uint8* data, int len);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_TYPE_get_int_octetstring")]
+		public static extern int TYPE_get_int_octetstring(TYPE* a, int* num, uint8* data, int max_len);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_item_unpack")]
+		public static extern void* item_unpack(STRING* oct, ITEM* it);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_item_pack")]
+		public static extern STRING* item_pack(void* obj, ITEM* it, OCTET_STRING** oct);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_STRING_set_default_mask")]
+		public static extern void STRING_set_default_mask(uint mask);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_STRING_set_default_mask_asc")]
+		public static extern int STRING_set_default_mask_asc(char8* p);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_STRING_get_default_mask")]
+		public static extern uint STRING_get_default_mask();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_mbstring_copy")]
+		public static extern int mbstring_copy(STRING** outVal, uint8* inVal, int len, int inform, uint mask);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_mbstring_ncopy")]
+		public static extern int mbstring_ncopy(STRING** outVal, uint8* inVal, int len, int inform, uint mask, int minsize, int maxsize);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_STRING_set_by_NID")]
+		public static extern STRING* STRING_set_by_NID(STRING** outVal, uint8* inVal, int inlen, int inform, int nid);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_STRING_TABLE_get")]
+		public static extern STRING_TABLE* STRING_TABLE_get(int nid);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_STRING_TABLE_add")]
+		public static extern int STRING_TABLE_add(int nid, int minsize, int maxsize, uint mask, uint flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_STRING_TABLE_cleanup")]
+		public static extern void STRING_TABLE_cleanup();
+		
+		/* ASN1 template functions */
+		
+		/* Old API compatible functions */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_item_new")]
+		public static extern VALUE* item_new(ITEM* it);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_item_free")]
+		public static extern void item_free(VALUE* val, ITEM* it);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_item_d2i")]
+		public static extern VALUE* item_d2i(VALUE** val, uint8** intVal, int len, ITEM* it);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_item_i2d")]
+		public static extern int item_i2d(VALUE* val, uint8** outVal, ITEM* it);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_item_ndef_i2d")]
+		public static extern int item_ndef_i2d(VALUE* val, uint8** outVal, ITEM* it);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_add_oid_module")]
+		public static extern void add_oid_module();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_add_stable_module")]
+		public static extern void add_stable_module();
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_generate_nconf")]
+		public static extern TYPE* generate_nconf(char8* str, CONF.conf_st* nconf);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_generate_v3")]
+		public static extern TYPE* generate_v3(char8* str, X509V3.CTX* cnf);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_str2mask")]
+		public static extern int str2mask(char8* str, uint* pmask);
+		
+		/* ASN1 Print flags */
+		
+		/* Indicate missing OPTIONAL fields */
+		public const int PCTX_FLAGS_SHOW_ABSENT            = 0x001;
+		/* Mark start and end of SEQUENCE */
+		public const int PCTX_FLAGS_SHOW_SEQUENCE          = 0x002;
+		/* Mark start and end of SEQUENCE/SET OF */
+		public const int PCTX_FLAGS_SHOW_SSOF              = 0x004;
+		/* Show the ASN1 type of primitives */
+		public const int PCTX_FLAGS_SHOW_TYPE              = 0x008;
+		/* Don't show ASN1 type of ANY */
+		public const int PCTX_FLAGS_NO_ANY_TYPE            = 0x010;
+		/* Don't show ASN1 type of MSTRINGs */
+		public const int PCTX_FLAGS_NO_MSTRING_TYPE        = 0x020;
+		/* Don't show field names in SEQUENCE */
+		public const int PCTX_FLAGS_NO_FIELD_NAME          = 0x040;
+		/* Show structure names of each SEQUENCE field */
+		public const int PCTX_FLAGS_SHOW_FIELD_STRUCT_NAME = 0x080;
+		/* Don't show structure name even at top level */
+		public const int PCTX_FLAGS_NO_STRUCT_NAME         = 0x100;
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_item_print")]
+		public static extern int item_print(BIO.bio_st* outVal, VALUE* ifld, int indent, ITEM* it, PCTX* pctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_PCTX_new")]
+		public static extern PCTX* PCTX_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_PCTX_free")]
+		public static extern void PCTX_free(PCTX* p);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_PCTX_get_flags")]
+		public static extern uint PCTX_get_flags(PCTX* p);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_PCTX_set_flags")]
+		public static extern void PCTX_set_flags(PCTX* p, uint flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_PCTX_get_nm_flags")]
+		public static extern uint PCTX_get_nm_flags(PCTX* p);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_PCTX_set_nm_flags")]
+		public static extern void PCTX_set_nm_flags(PCTX* p, uint flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_PCTX_get_cert_flags")]
+		public static extern uint PCTX_get_cert_flags(PCTX* p);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_PCTX_set_cert_flags")]
+		public static extern void PCTX_set_cert_flags(PCTX* p, uint flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_PCTX_get_oid_flags")]
+		public static extern uint PCTX_get_oid_flags(PCTX* p);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_PCTX_set_oid_flags")]
+		public static extern void PCTX_set_oid_flags(PCTX* p, uint flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_PCTX_get_str_flags")]
+		public static extern uint PCTX_get_str_flags(PCTX* p);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_PCTX_set_str_flags")]
+		public static extern void PCTX_set_str_flags(PCTX* p, uint flags);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_SCTX_new")]
+		public static extern SCTX* SCTX_new(function int(SCTX* ctx) scan_cb);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_SCTX_free")]
+		public static extern void SCTX_free(SCTX* p);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_SCTX_get_item")]
+		public static extern ITEM* SCTX_get_item(SCTX* p);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_SCTX_get_template")]
+		public static extern TEMPLATE* SCTX_get_template(SCTX* p);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_SCTX_get_flags")]
+		public static extern uint SCTX_get_flags(SCTX* p);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_SCTX_set_app_data")]
+		public static extern void SCTX_set_app_data(SCTX* p, void* data);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_SCTX_get_app_data")]
+		public static extern void* SCTX_get_app_data(SCTX* p);
+		
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public static extern int i2d_ASN1_bio_stream(BIO.bio_st* outVal, VALUE* val, BIO.bio_st* inVal, int flags, ITEM* it);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_ITEM_lookup")]
+		public static extern ITEM* ITEM_lookup(char8* name);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_ITEM_get")]
+		public static extern ITEM* ITEM_get(uint i);
 	}
 }

@@ -1155,6 +1155,19 @@ namespace Beef_Net.OpenSSL
 		public extern static METHOD* f_reliable();
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_set_cipher")]
 		public extern static int set_cipher(bio_st* b, EVP.CIPHER* c, uint8* k, uint8* i, int enc);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_f_asn1")]
+		public extern static METHOD* f_asn1();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_new_NDEF")]
+		public extern static bio_st* new_NDEF(bio_st* outVal, ASN1.VALUE* val, ASN1.ITEM* it);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_new_CMS")]
+		public extern static bio_st* new_CMS(bio_st* outVal, CMS.ContentInfo* cms);
+
+#if ZLIB
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_f_zlib")]
+		public extern static METHOD* f_zlib();
+#endif
 
 		/*
 		** MOVED for convenience

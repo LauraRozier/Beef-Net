@@ -29,6 +29,8 @@ namespace Beef_Net.OpenSSL
 		}
 		public typealias OPENSSL_STACK = stack_st; /* Use STACK_OF(...) instead */
 		
+		public struct stack_st_X509_ALGOR {}
+		
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_num")]
 		public extern static int sk_num(OPENSSL_STACK* st);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_value")]

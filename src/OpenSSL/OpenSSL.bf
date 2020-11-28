@@ -130,26 +130,12 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_init")]
 		public extern static void init();
 
-		[CRepr]
-		public struct tm
-		{
-		    public int tm_sec;   // seconds after the minute - [0, 60] including leap second
-		    public int tm_min;   // minutes after the hour - [0, 59]
-		    public int tm_hour;  // hours since midnight - [0, 23]
-		    public int tm_mday;  // day of the month - [1, 31]
-		    public int tm_mon;   // months since January - [0, 11]
-		    public int tm_year;  // years since 1900
-		    public int tm_wday;  // days since Sunday - [0, 6]
-		    public int tm_yday;  // days since January 1 - [0, 365]
-		    public int tm_isdst; // daylight savings time flag
-		}
-
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_gmtime")]
-		public extern static tm* gmtime(int64* timer, tm* result);
+		public extern static OSSLType.tm* gmtime(int64* timer, OSSLType.tm* result);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_gmtime_adj")]
-		public extern static int gmtime_adj(tm* tm, int offset_day, int offset_sec);
+		public extern static int gmtime_adj(OSSLType.tm* tm, int offset_day, int offset_sec);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_gmtime_diff")]
-		public extern static int gmtime_diff(int *pday, int* psec, tm* from, tm* to);
+		public extern static int gmtime_diff(int *pday, int* psec, OSSLType.tm* from, OSSLType.tm* to);
 
 		/* Standard initialisation options */
 		public const int INIT_NO_LOAD_CRYPTO_STRINGS = 0x00000001L;
@@ -229,5 +215,14 @@ namespace Beef_Net.OpenSSL
 		public static int add_all_ciphers() => init_crypto(INIT_ADD_ALL_CIPHERS, null);
 		[Inline]
 		public static int add_all_digests() => init_crypto(INIT_ADD_ALL_DIGESTS, null);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_config")]
+		public extern static void config(char8* config_name);
+
+		[Inline]
+		public static int no_config() => init_crypto(INIT_NO_LOAD_CONFIG, null);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_load_builtin_modules")]
+		public extern static void load_builtin_modules();
 	}
 }
