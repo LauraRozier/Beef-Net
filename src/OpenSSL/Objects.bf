@@ -1424,8 +1424,8 @@ namespace Beef_Net.OpenSSL
 		public extern static int add_object(ASN1.OBJECT* obj);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_create")]
 		public extern static int create(char8* oid, char8* sn, char8* ln);
-
-		[Inline]
+		
+		[Inline, Obsolete("No longer available, no-op", true)]
 		public static void cleanup() { while(false) continue; }
 
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_create_objects")]

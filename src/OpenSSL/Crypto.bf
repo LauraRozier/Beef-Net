@@ -131,7 +131,7 @@ namespace Beef_Net.OpenSSL
 		public function int EX_dup(EX_DATA* to, EX_DATA* from, void* from_d, int idx, int argl, void* argp);
 
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_get_ex_new_index")]
-		public extern static int get_ex_new_index(int class_index, int argl, void* argp, EX_new* new_func, EX_dup* dup_func, EX_free* free_func);
+		public extern static int get_ex_new_index(int class_index, int argl, void* argp, EX_new new_func, EX_dup dup_func, EX_free free_func);
 
 		/* No longer use an index. */
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_free_ex_index")]
@@ -163,10 +163,7 @@ namespace Beef_Net.OpenSSL
 		 * potential race-conditions.
 		 */
 		[Inline, Obsolete("No longer available, no-op", true)]
-		public static void cleanup_all_ex_data()
-		{
-			while(false) continue;
-		}
+		public static void cleanup_all_ex_data() { while(false) continue; }
 		
 		/*
 		 * The old locking functions have been removed completely without compatibility

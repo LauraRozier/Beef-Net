@@ -1587,8 +1587,8 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_sm4_ctr")]
 		public extern static CIPHER* sm4_ctr();
 #endif
-
-		[Inline]
+		
+		[Inline, Obsolete("No longer available, no-op", true)]
 		public static void cleanup() { while(false) continue; }
 		
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_add_cipher")]
@@ -2129,5 +2129,97 @@ namespace Beef_Net.OpenSSL
 
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_add_alg_module")]
 		public extern static void add_alg_module();
+
+#if !OPENSSL_NO_DH
+		[Inline]
+		public static int PKEY_CTX_set_dh_paramgen_prime_len(PKEY_CTX* ctx, int len) => PKEY_CTX_ctrl(ctx, PKEY_DH, PKEY_OP_PARAMGEN, PKEY_CTRL_DH_PARAMGEN_PRIME_LEN, len, null);
+		
+		[Inline]
+		public static int PKEY_CTX_set_dh_paramgen_subprime_len(PKEY_CTX* ctx, int len) => PKEY_CTX_ctrl(ctx, PKEY_DH, PKEY_OP_PARAMGEN, PKEY_CTRL_DH_PARAMGEN_SUBPRIME_LEN, len, null);
+		
+		[Inline]
+		public static int PKEY_CTX_set_dh_paramgen_type(PKEY_CTX* ctx, int typ) => PKEY_CTX_ctrl(ctx, PKEY_DH, PKEY_OP_PARAMGEN, PKEY_CTRL_DH_PARAMGEN_TYPE, typ, null);
+		
+		[Inline]
+		public static int PKEY_CTX_set_dh_paramgen_generator(PKEY_CTX* ctx, int gen) => PKEY_CTX_ctrl(ctx, PKEY_DH, PKEY_OP_PARAMGEN, PKEY_CTRL_DH_PARAMGEN_GENERATOR, gen, null);
+		
+		[Inline]
+		public static int PKEY_CTX_set_dh_rfc5114(PKEY_CTX* ctx, int gen) => PKEY_CTX_ctrl(ctx, PKEY_DHX, PKEY_OP_PARAMGEN, PKEY_CTRL_DH_RFC5114, gen, null);
+		
+		[Inline]
+		public static int PKEY_CTX_set_dhx_rfc5114(PKEY_CTX* ctx, int gen) => PKEY_CTX_ctrl(ctx, PKEY_DHX, PKEY_OP_PARAMGEN, PKEY_CTRL_DH_RFC5114, gen, null);
+		
+		[Inline]
+		public static int PKEY_CTX_set_dh_nid(PKEY_CTX* ctx, int nid) => PKEY_CTX_ctrl(ctx, PKEY_DH, PKEY_OP_PARAMGEN | PKEY_OP_KEYGEN, PKEY_CTRL_DH_NID, nid, null);
+		
+		[Inline]
+		public static int PKEY_CTX_set_dh_pad(PKEY_CTX* ctx, int pad) => PKEY_CTX_ctrl(ctx, PKEY_DH, PKEY_OP_DERIVE, PKEY_CTRL_DH_PAD, pad, null);
+		
+		[Inline]
+		public static int PKEY_CTX_set_dh_kdf_type(PKEY_CTX* ctx, int kdf) => PKEY_CTX_ctrl(ctx, PKEY_DHX, PKEY_OP_DERIVE, PKEY_CTRL_DH_KDF_TYPE, kdf, null);
+		
+		[Inline]
+		public static int PKEY_CTX_get_dh_kdf_type(PKEY_CTX* ctx) => PKEY_CTX_ctrl(ctx, PKEY_DHX, PKEY_OP_DERIVE, PKEY_CTRL_DH_KDF_TYPE, -2, null);
+		
+		[Inline]
+		public static int PKEY_CTX_set0_dh_kdf_oid(PKEY_CTX* ctx, int32[] oid) => PKEY_CTX_ctrl(ctx, PKEY_DHX, PKEY_OP_DERIVE, PKEY_CTRL_DH_KDF_OID, 0, &oid[0]);
+		
+		[Inline]
+		public static int PKEY_CTX_get0_dh_kdf_oid(PKEY_CTX* ctx, int32* poid) => PKEY_CTX_ctrl(ctx, PKEY_DHX, PKEY_OP_DERIVE, PKEY_CTRL_GET_DH_KDF_OID, 0, poid);
+		
+		[Inline]
+		public static int PKEY_CTX_set_dh_kdf_md(PKEY_CTX* ctx, void* md) => PKEY_CTX_ctrl(ctx, PKEY_DHX, PKEY_OP_DERIVE, PKEY_CTRL_DH_KDF_MD, 0, md);
+		
+		[Inline]
+		public static int PKEY_CTX_get_dh_kdf_md(PKEY_CTX* ctx, void* pmd) => PKEY_CTX_ctrl(ctx, PKEY_DHX, PKEY_OP_DERIVE, PKEY_CTRL_GET_DH_KDF_MD, 0, pmd);
+		
+		[Inline]
+		public static int PKEY_CTX_set_dh_kdf_outlen(PKEY_CTX* ctx, int len) => PKEY_CTX_ctrl(ctx, PKEY_DHX, PKEY_OP_DERIVE, PKEY_CTRL_DH_KDF_OUTLEN, len, null);
+		
+		[Inline]
+		public static int PKEY_CTX_get_dh_kdf_outlen(PKEY_CTX* ctx, int* plen) => PKEY_CTX_ctrl(ctx, PKEY_DHX, PKEY_OP_DERIVE, PKEY_CTRL_GET_DH_KDF_OUTLEN, 0, plen);
+		
+		[Inline]
+		public static int PKEY_CTX_set0_dh_kdf_ukm(PKEY_CTX* ctx, void* p, int plen) => PKEY_CTX_ctrl(ctx, PKEY_DHX, PKEY_OP_DERIVE, PKEY_CTRL_DH_KDF_UKM, plen, p);
+
+		[Inline]
+		public static int PKEY_CTX_get0_dh_kdf_ukm(PKEY_CTX* ctx, void* p) => PKEY_CTX_ctrl(ctx, PKEY_DHX, PKEY_OP_DERIVE, PKEY_CTRL_GET_DH_KDF_UKM, 0, p);
+		
+		public const int PKEY_CTRL_DH_PARAMGEN_PRIME_LEN    = PKEY_ALG_CTRL + 1;
+		public const int PKEY_CTRL_DH_PARAMGEN_GENERATOR    = PKEY_ALG_CTRL + 2;
+		public const int PKEY_CTRL_DH_RFC5114               = PKEY_ALG_CTRL + 3;
+		public const int PKEY_CTRL_DH_PARAMGEN_SUBPRIME_LEN = PKEY_ALG_CTRL + 4;
+		public const int PKEY_CTRL_DH_PARAMGEN_TYPE         = PKEY_ALG_CTRL + 5;
+		public const int PKEY_CTRL_DH_KDF_TYPE              = PKEY_ALG_CTRL + 6;
+		public const int PKEY_CTRL_DH_KDF_MD                = PKEY_ALG_CTRL + 7;
+		public const int PKEY_CTRL_GET_DH_KDF_MD            = PKEY_ALG_CTRL + 8;
+		public const int PKEY_CTRL_DH_KDF_OUTLEN            = PKEY_ALG_CTRL + 9;
+		public const int PKEY_CTRL_GET_DH_KDF_OUTLEN        = PKEY_ALG_CTRL + 10;
+		public const int PKEY_CTRL_DH_KDF_UKM               = PKEY_ALG_CTRL + 11;
+		public const int PKEY_CTRL_GET_DH_KDF_UKM           = PKEY_ALG_CTRL + 12;
+		public const int PKEY_CTRL_DH_KDF_OID               = PKEY_ALG_CTRL + 13;
+		public const int PKEY_CTRL_GET_DH_KDF_OID           = PKEY_ALG_CTRL + 14;
+		public const int PKEY_CTRL_DH_NID                   = PKEY_ALG_CTRL + 15;
+		public const int PKEY_CTRL_DH_PAD                   = PKEY_ALG_CTRL + 16;
+
+		/* KDF types */
+		public const int PKEY_DH_KDF_NONE  = 1;
+	#if !OPENSSL_NO_CMS
+		public const int PKEY_DH_KDF_X9_42 = 2;
+	#endif
+#endif
+
+#if !OPENSSL_NO_DSA
+		[Inline]
+		public static int PKEY_CTX_set_dsa_paramgen_bits(PKEY_CTX* ctx, int nbits) => PKEY_CTX_ctrl(ctx, PKEY_DSA, PKEY_OP_PARAMGEN, PKEY_CTRL_DSA_PARAMGEN_BITS, nbits, null);
+		[Inline]
+		public static int PKEY_CTX_set_dsa_paramgen_q_bits(PKEY_CTX* ctx, int qbits) => PKEY_CTX_ctrl(ctx, PKEY_DSA, PKEY_OP_PARAMGEN, PKEY_CTRL_DSA_PARAMGEN_Q_BITS, qbits, null);
+		[Inline]
+		public static int PKEY_CTX_set_dsa_paramgen_md(PKEY_CTX* ctx, void* md) => PKEY_CTX_ctrl(ctx, PKEY_DSA, PKEY_OP_PARAMGEN, PKEY_CTRL_DSA_PARAMGEN_MD, 0, md);
+
+		public const int PKEY_CTRL_DSA_PARAMGEN_BITS   = PKEY_ALG_CTRL + 1;
+		public const int PKEY_CTRL_DSA_PARAMGEN_Q_BITS = PKEY_ALG_CTRL + 2;
+		public const int PKEY_CTRL_DSA_PARAMGEN_MD     = PKEY_ALG_CTRL + 3;
+#endif
 	}
 }

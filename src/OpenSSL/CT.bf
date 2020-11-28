@@ -164,7 +164,7 @@ namespace Beef_Net.OpenSSL
 	{
 #if !OPENSSL_NO_CT
 		/* Minimum RSA key size, from RFC6962 */
-		public const int SCT_MIN_RSA_BITS = 2048;
+		public const int MIN_RSA_BITS = 2048;
 
 		[CRepr]
 		public struct ctlog_st {
@@ -192,7 +192,7 @@ namespace Beef_Net.OpenSSL
 		 * Should be deleted by the caller using CTLOG_free when no longer needed.
 		 */
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("CTLOG_new")]
-		public extern static ctlog_st* new_(EVP.PKEY *public_key, char8* name);
+		public extern static ctlog_st* new_(EVP.PKEY* public_key, char8* name);
 
 		/*
 		 * Creates a new CTLOG instance with the base64-encoded SubjectPublicKeyInfo DER
@@ -593,7 +593,7 @@ namespace Beef_Net.OpenSSL
 		 * not defined.
 		 */
 		[Import(OPENSSL_LIB_CRYPTO), CLink]
-		public extern static stack_st_SCT *o2i_SCT_LIST(stack_st_SCT** a, uint8** pp, uint len);
+		public extern static stack_st_SCT* o2i_SCT_LIST(stack_st_SCT** a, uint8** pp, uint len);
 
 		/*
 		 * Serialize (to DER format) a stack of SCTs and return the length.

@@ -184,7 +184,7 @@ namespace Beef_Net.OpenSSL
 		public extern static void modules_unload(int all);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("CONF_modules_finish")]
 		public extern static void modules_finish();
-		[Inline]
+		[Inline, Obsolete("No longer available, no-op", true)]
 		public static void modules_free() { while(false) continue; }
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("CONF_module_add")]
 		public extern static int module_add(char8* name, conf_init_func* ifunc, conf_finish_func* ffunc);

@@ -1233,24 +1233,30 @@ namespace Beef_Net.OpenSSL
 		
 		#  define ASN1_i2d_fp_of_const(type,i2d,out,x) (ASN1_i2d_fp(CHECKED_I2D_OF(const type, i2d), out, CHECKED_PTR_OF(const type, x)))
 		
-		#  define ASN1_d2i_bio_of(type,xnew,d2i,in,x) ((type*)ASN1_d2i_bio( CHECKED_NEW_OF(type, xnew), CHECKED_D2I_OF(type, d2i), in, CHECKED_PPTR_OF(type, x)))
+		#  define ASN1_d2i_bio_of(type,xnew,d2i,in,x) ((type*)ASN1_d2i_bio(CHECKED_NEW_OF(type, xnew),  CHECKED_D2I_OF(type, d2i), in, CHECKED_PPTR_OF(type, x)))
 		
 		#  define ASN1_i2d_bio_of(type,i2d,out,x) (ASN1_i2d_bio(CHECKED_I2D_OF(type, i2d), out, CHECKED_PTR_OF(type, x)))
 		
 		#  define ASN1_i2d_bio_of_const(type,i2d,out,x) (ASN1_i2d_bio(CHECKED_I2D_OF(const type, i2d), out, CHECKED_PTR_OF(const type, x)))
-		*/
+
+		[Inline]
+		public static T* d2i_bio_of<T>(function T*() xnew, d2i_of_void d2i, BIO.bio_st* inVal, T** x)
+		{
+			void* innetF() => (void*)xnew();
+			return d2i_bio(=> innetF, d2i, inVal, (void**)x);
+		}*/
 
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_item_dup")]
 		public static extern void* item_dup(ITEM* it, void* x);
 		
 #if !OPENSSL_NO_STDIO
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_d2i_fp")]
-		public static extern void* d2i_fp(function void*() xnew, d2i_of_void* d2i, Platform.BfpFile* inVal, void** x);
+		public static extern void* d2i_fp(function void*() xnew, d2i_of_void d2i, Platform.BfpFile* inVal, void** x);
 		
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_item_d2i_fp")]
 		public static extern void* item_d2i_fp(ITEM* it, Platform.BfpFile* inVal, void* x);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_i2d_fp")]
-		public static extern int i2d_fp(i2d_of_void* i2d, Platform.BfpFile* outVal, void* x);
+		public static extern int i2d_fp(i2d_of_void i2d, Platform.BfpFile* outVal, void* x);
 		
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_item_i2d_fp")]
 		public static extern int item_i2d_fp(ITEM* it, Platform.BfpFile* outVal, void* x);
@@ -1262,12 +1268,12 @@ namespace Beef_Net.OpenSSL
 		public static extern int STRING_to_UTF8(uint8** outVal, STRING* inVal);
 		
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_d2i_bio")]
-		public static extern void* d2i_bio(function void*() xnew, d2i_of_void* d2i, BIO.bio_st* inVal, void** x);
+		public static extern void* d2i_bio(function void*() xnew, d2i_of_void d2i, BIO.bio_st* inVal, void** x);
 		
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_item_d2i_bio")]
 		public static extern void* item_d2i_bio(ITEM* it, BIO.bio_st* inVal, void* x);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_i2d_bio")]
-		public static extern int i2d_bio(i2d_of_void* i2d, BIO.bio_st* outVal, uint8* x);
+		public static extern int i2d_bio(i2d_of_void i2d, BIO.bio_st* outVal, uint8* x);
 		
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_item_i2d_bio")]
 		public static extern int item_i2d_bio(ITEM* it, BIO.bio_st* outVal, void* x);

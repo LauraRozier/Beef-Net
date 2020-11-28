@@ -19,8 +19,13 @@ namespace Beef_Net.OpenSSL
 		// extern const unsigned char os_toebcdic[256];
 
 		[Import(OPENSSL_LIB_CRYPTO), CLink]
-		public extern static void *ebcdic2ascii(void* dest, void* srce, uint count);
+		public extern static void* ebcdic2ascii(void* dest, void* srce, uint count);
+		[Inline]
+		public static void* _openssl_ebcdic2ascii(void* dest, void* srce, uint count) => ebcdic2ascii(dest, srce, count);
+
 		[Import(OPENSSL_LIB_CRYPTO), CLink]
-		public extern static void *ascii2ebcdic(void* dest, void* srce, uint count);
+		public extern static void* ascii2ebcdic(void* dest, void* srce, uint count);
+		[Inline]
+		public static void* _openssl_ascii2ebcdic(void* dest, void* srce, uint count) => ascii2ebcdic(dest, srce, count);
 	}
 }

@@ -224,5 +224,15 @@ namespace Beef_Net.OpenSSL
 
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_load_builtin_modules")]
 		public extern static void load_builtin_modules();
+
+#if !OPENSSL_DH_MAX_MODULUS_BITS
+		public const int DH_MAX_MODULUS_BITS      = 10000;
+#endif
+		public const int DH_FIPS_MIN_MODULUS_BITS = 1024;
+		
+#if !OPENSSL_DSA_MAX_MODULUS_BITS
+		public const int DSA_MAX_MODULUS_BITS      = 10000;
+#endif
+		public const int DSA_FIPS_MIN_MODULUS_BITS = 1024;
 	}
 }

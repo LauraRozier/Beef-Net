@@ -78,8 +78,8 @@ namespace Beef_Net.OpenSSL
 		
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("COMP_zlib")]
 		public extern static METHOD* zlib();
-
-		[Inline]
+		
+		[Inline, Obsolete("No longer available, no-op", true)]
 		public static void zlib_cleanup() { while(false) continue; }
 #endif
 	}

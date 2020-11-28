@@ -15,6 +15,398 @@ namespace Beef_Net.OpenSSL
 	sealed abstract class DH
 	{
 #if !OPENSSL_NO_DH
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int ERR_load_DH_strings();
+		
+		/*
+		 * DH function codes.
+		 */
+		public const int F_COMPUTE_KEY               = 102;
+		public const int F_DHPARAMS_PRINT_FP         = 101;
+		public const int F_DH_BUILTIN_GENPARAMS      = 106;
+		public const int F_DH_CHECK_EX               = 121;
+		public const int F_DH_CHECK_PARAMS_EX        = 122;
+		public const int F_DH_CHECK_PUB_KEY_EX       = 123;
+		public const int F_DH_CMS_DECRYPT            = 114;
+		public const int F_DH_CMS_SET_PEERKEY        = 115;
+		public const int F_DH_CMS_SET_SHARED_INFO    = 116;
+		public const int F_DH_METH_DUP               = 117;
+		public const int F_DH_METH_NEW               = 118;
+		public const int F_DH_METH_SET1_NAME         = 119;
+		public const int F_DH_NEW_BY_NID             = 104;
+		public const int F_DH_NEW_METHOD             = 105;
+		public const int F_DH_PARAM_DECODE           = 107;
+		public const int F_DH_PKEY_PUBLIC_CHECK      = 124;
+		public const int F_DH_PRIV_DECODE            = 110;
+		public const int F_DH_PRIV_ENCODE            = 111;
+		public const int F_DH_PUB_DECODE             = 108;
+		public const int F_DH_PUB_ENCODE             = 109;
+		public const int F_DO_DH_PRINT               = 100;
+		public const int F_GENERATE_KEY              = 103;
+		public const int F_PKEY_DH_CTRL_STR          = 120;
+		public const int F_PKEY_DH_DERIVE            = 112;
+		public const int F_PKEY_DH_INIT              = 125;
+		public const int F_PKEY_DH_KEYGEN            = 113;
+		
+		/*
+		 * DH reason codes.
+		 */
+		public const int R_BAD_GENERATOR             = 101;
+		public const int R_BN_DECODE_ERROR           = 109;
+		public const int R_BN_ERROR                  = 106;
+		public const int R_CHECK_INVALID_J_VALUE     = 115;
+		public const int R_CHECK_INVALID_Q_VALUE     = 116;
+		public const int R_CHECK_PUBKEY_INVALID      = 122;
+		public const int R_CHECK_PUBKEY_TOO_LARGE    = 123;
+		public const int R_CHECK_PUBKEY_TOO_SMALL    = 124;
+		public const int R_CHECK_P_NOT_PRIME         = 117;
+		public const int R_CHECK_P_NOT_SAFE_PRIME    = 118;
+		public const int R_CHECK_Q_NOT_PRIME         = 119;
+		public const int R_DECODE_ERROR              = 104;
+		public const int R_INVALID_PARAMETER_NAME    = 110;
+		public const int R_INVALID_PARAMETER_NID     = 114;
+		public const int R_INVALID_PUBKEY            = 102;
+		public const int R_KDF_PARAMETER_ERROR       = 112;
+		public const int R_KEYS_NOT_SET              = 108;
+		public const int R_MISSING_PUBKEY            = 125;
+		public const int R_MODULUS_TOO_LARGE         = 103;
+		public const int R_NOT_SUITABLE_GENERATOR    = 120;
+		public const int R_NO_PARAMETERS_SET         = 107;
+		public const int R_NO_PRIVATE_VALUE          = 100;
+		public const int R_PARAMETER_ENCODING_ERROR  = 105;
+		public const int R_PEER_KEY_ERROR            = 111;
+		public const int R_SHARED_INFO_ERROR         = 113;
+		public const int R_UNABLE_TO_CHECK_GENERATOR = 121;
+		
+		[CRepr]
+		public struct dh_st {
+		    /*
+		     * This first argument is used to pick up errors when a DH is passed
+		     * instead of a EVP_PKEY
+		     */
+		    public int pad;
+		    public int version;
+		    public BN.BIGNUM* p;
+		    public BN.BIGNUM* g;
+		    public int32 length;                 /* optional */
+		    public BN.BIGNUM* pub_key;           /* g^x % p */
+		    public BN.BIGNUM* priv_key;          /* x */
+		    public int flags;
+		    public BN.MONT_CTX* method_mont_p;
+		    /* Place holders if we want to do X9.42 DH */
+		    public BN.BIGNUM* q;
+		    public BN.BIGNUM* j;
+		    public uint8* seed;
+		    public int seedlen;
+		    public BN.BIGNUM* counter;
+		    public Crypto.REF_COUNT references;
+		    public Crypto.EX_DATA ex_data;
+		    public METHOD* meth;
+		    public Engine.ENGINE* engine;
+		    public Crypto.RWLOCK* lock;
+		}
+
+		[CRepr]
+		public struct method_st {
+		    public char8* name;
+		    /* Methods here */
+		    public function int(dh_st* dh) generate_key;
+		    public function int(uint8* key, BN.BIGNUM* pub_key, dh_st* dh) compute_key;
+
+		    /* Can be null */
+		    public function int(dh_st* dh, BN.BIGNUM* r, BN.BIGNUM* a, BN.BIGNUM* p, BN.BIGNUM* m, BN.CTX* ctx, BN.MONT_CTX* m_ctx) bn_mod_exp;
+		    public function int(dh_st* dh) init;
+		    public function int(dh_st* dh) finish;
+		    public int flags;
+		    public char8* app_data;
+		    /* If this is non-NULL, it will be used to generate parameters */
+		    public function int(dh_st* dh, int prime_len, int generator, BN.GENCB* cb) generate_params;
+		}
+		typealias METHOD = method_st;
+		
+		public const int FLAG_CACHE_MONT_P     = 0x01;
+		/*
+		 * Does nothing. Previously this switched off constant time behaviour.
+		 */
+		public const int FLAG_NO_EXP_CONSTTIME = 0x00;
+		/*
+		 * If this flag is set the DH method is FIPS compliant and can be used in
+		 * FIPS mode. This is set in the validated module method. If an application
+		 * sets this flag in its own methods it is its responsibility to ensure the
+		 * result is compliant.
+		 */
+		public const int FLAG_FIPS_METHOD      = 0x0400;
+		/*
+		 * If this flag is set the operations normally disabled in FIPS mode are
+		 * permitted it is then the applications responsibility to ensure that the
+		 * usage is compliant.
+		 */
+		public const int FLAG_NON_FIPS_ALLOW   = 0x0400;
+
+		/* Already defined in ossl_typ.h */
+		/* typedef struct dh_st DH; */
+		/* typedef struct dh_method DH_METHOD; */
+
+		public const int GENERATOR_2 = 2;
+		/* public const int GENERATOR_3 = 3; */
+		public const int GENERATOR_5 = 5;
+
+		/* DH_check error codes */
+		public const int CHECK_P_NOT_PRIME         = 0x01;
+		public const int CHECK_P_NOT_SAFE_PRIME    = 0x02;
+		public const int UNABLE_TO_CHECK_GENERATOR = 0x04;
+		public const int NOT_SUITABLE_GENERATOR    = 0x08;
+		public const int CHECK_Q_NOT_PRIME         = 0x10;
+		public const int CHECK_INVALID_Q_VALUE     = 0x20;
+		public const int CHECK_INVALID_J_VALUE     = 0x40;
+
+		/* DH_check_pub_key error codes */
+		public const int CHECK_PUBKEY_TOO_SMALL    = 0x01;
+		public const int CHECK_PUBKEY_TOO_LARGE    = 0x02;
+		public const int CHECK_PUBKEY_INVALID      = 0x04;
+
+		/*
+		 * primes p where (p-1)/2 is prime too are called "safe"; we define this for
+		 * backward compatibility:
+		 */
+		public const int CHECK_P_NOT_STRONG_PRIME = CHECK_P_NOT_SAFE_PRIME;
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_OpenSSL")]
+		public extern static METHOD* OpenSSL();
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_set_default_method")]
+		public extern static void set_default_method(METHOD* meth);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_get_default_method")]
+		public extern static METHOD* get_default_method();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_set_method")]
+		public extern static int set_method(dh_st* dh, METHOD* meth);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_new_method")]
+		public extern static dh_st* new_method(Engine.ENGINE* engine);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_new")]
+		public extern static dh_st* new_();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_free")]
+		public extern static void free(dh_st* dh);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_up_ref")]
+		public extern static int up_ref(dh_st* dh);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_bits")]
+		public extern static int bits(dh_st* dh);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_size")]
+		public extern static int size(dh_st* dh);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_security_bits")]
+		public extern static int security_bits(dh_st* dh);
+		[Inline]
+		public static int get_ex_new_index(int l, void* p, Crypto.EX_new* newf, Crypto.EX_dup* dupf, Crypto.EX_free* freef) =>
+			Crypto.get_ex_new_index(Crypto.EX_INDEX_DH, l, p, newf, dupf, freef);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_set_ex_data")]
+		public extern static int set_ex_data(dh_st* d, int idx, void* arg);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_get_ex_data")]
+		public extern static void* get_ex_data(dh_st* d, int idx);
+
+		/* Deprecated version */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_generate_parameters")]
+		public extern static dh_st* generate_parameters(int prime_len, int generator, function void(int, int, void*) callback, void* cb_arg);
+
+		/* New version */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_generate_parameters_ex")]
+		public extern static int generate_parameters_ex(dh_st* dh, int prime_len, int generator, BN.GENCB* cb);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_check_params_ex")]
+		public extern static int check_params_ex(dh_st* dh);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_check_ex")]
+		public extern static int check_ex(dh_st* dh);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_check_pub_key_ex")]
+		public extern static int check_pub_key_ex(dh_st* dh, BN.BIGNUM* pub_key);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_check_params")]
+		public extern static int check_params(dh_st* dh, int* ret);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_check")]
+		public extern static int check(dh_st* dh, int* codes);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_check_pub_key")]
+		public extern static int check_pub_key(dh_st* dh, BN.BIGNUM* pub_key, int* codes);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_generate_key")]
+		public extern static int generate_key(dh_st* dh);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_compute_key")]
+		public extern static int compute_key(uint8* key, BN.BIGNUM* pub_key, dh_st* dh);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_compute_key_padded")]
+		public extern static int compute_key_padded(uint8* key, BN.BIGNUM* pub_key, dh_st* dh);
+
+		/* RFC 5114 parameters */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_get_1024_160")]
+		public extern static dh_st* get_1024_160();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_get_2048_224")]
+		public extern static dh_st* get_2048_224();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_get_2048_256")]
+		public extern static dh_st* get_2048_256();
+
+		/* Named parameters, currently RFC7919 */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_new_by_nid")]
+		public extern static dh_st* new_by_nid(int nid);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_get_nid")]
+		public extern static int get_nid(dh_st* dh);
+
+	#if !OPENSSL_NO_CMS
+		/* RFC2631 KDF */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_KDF_X9_42")]
+		public extern static int KDF_X9_42(uint8* outVal, uint outlen, uint8* Z, uint Zlen, ASN1.OBJECT* key_oid, uint8* ukm, uint ukmlen, EVP.MD* md);
+	#endif
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_get0_pqg")]
+		public extern static void get0_pqg(dh_st* dh, BN.BIGNUM** p, BN.BIGNUM** q, BN.BIGNUM** g);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_set0_pqg")]
+		public extern static int set0_pqg(dh_st* dh, BN.BIGNUM* p, BN.BIGNUM* q, BN.BIGNUM* g);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_get0_key")]
+		public extern static void get0_key(dh_st* dh, BN.BIGNUM** pub_key, BN.BIGNUM** priv_key);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_set0_key")]
+		public extern static int set0_key(dh_st* dh, BN.BIGNUM* pub_key, BN.BIGNUM* priv_key);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_get0_p")]
+		public extern static BN.BIGNUM* get0_p(dh_st* dh);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_get0_q")]
+		public extern static BN.BIGNUM* get0_q(dh_st* dh);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_get0_g")]
+		public extern static BN.BIGNUM* get0_g(dh_st* dh);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_get0_priv_key")]
+		public extern static BN.BIGNUM* get0_priv_key(dh_st* dh);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_get0_pub_key")]
+		public extern static BN.BIGNUM* get0_pub_key(dh_st* dh);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_clear_flags")]
+		public extern static void clear_flags(dh_st* dh, int flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_test_flags")]
+		public extern static int test_flags(dh_st* dh, int flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_set_flags")]
+		public extern static void set_flags(dh_st* dh, int flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_get0_engine")]
+		public extern static Engine.ENGINE* get0_engine(dh_st* d);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_get_length")]
+		public extern static int get_length(dh_st* dh);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_set_length")]
+		public extern static int set_length(dh_st* dh, int length);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_meth_new")]
+		public extern static METHOD* meth_new(char8* name, int flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_meth_free")]
+		public extern static void meth_free(METHOD* dhm);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_meth_dup")]
+		public extern static METHOD* meth_dup(METHOD* dhm);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_meth_get0_name")]
+		public extern static char8* meth_get0_name(METHOD* dhm);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_meth_set1_name")]
+		public extern static int meth_set1_name(METHOD* dhm, char8* name);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_meth_get_flags")]
+		public extern static int meth_get_flags(METHOD* dhm);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_meth_set_flags")]
+		public extern static int meth_set_flags(METHOD* dhm, int flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_meth_get0_app_data")]
+		public extern static void* meth_get0_app_data(METHOD* dhm);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_meth_set0_app_data")]
+		public extern static int meth_set0_app_data(METHOD* dhm, void* app_data);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_meth_get_generate_key")]
+		public extern static function int(dh_st*) meth_get_generate_key(METHOD* dhm);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_meth_set_generate_key")]
+		public extern static int meth_set_generate_key(METHOD* dhm, function int(dh_st*) generate_key);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_meth_get_compute_key")]
+		public extern static function int(uint8* key, BN.BIGNUM* pub_key, dh_st* dh) meth_get_compute_key(METHOD* dhm);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_meth_set_compute_key")]
+		public extern static int meth_set_compute_key(METHOD* dhm, function int(uint8* key, BN.BIGNUM* pub_key, dh_st* dh) compute_key);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_meth_get_bn_mod_exp")]
+		public extern static function int(dh_st*, BN.BIGNUM*, BN.BIGNUM*, BN.BIGNUM*, BN.BIGNUM*, BN.CTX*, BN.MONT_CTX*) meth_get_bn_mod_exp(METHOD* dhm);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_meth_set_bn_mod_exp")]
+		public extern static int meth_set_bn_mod_exp(METHOD* dhm, function int(dh_st*, BN.BIGNUM*, BN.BIGNUM*, BN.BIGNUM*, BN.BIGNUM*, BN.CTX*, BN.MONT_CTX*) bn_mod_exp);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_meth_get_init")]
+		public extern static function int(dh_st*) meth_get_init(METHOD* dhm);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_meth_set_init")]
+		public extern static int meth_set_init(METHOD* dhm, function int(dh_st*) init);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_meth_get_finish")]
+		public extern static function int(dh_st*) meth_get_finish(METHOD* dhm);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_meth_set_finish")]
+		public extern static int meth_set_finish(METHOD* dhm, function int(dh_st*) finish);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_meth_get_generate_params")]
+		public extern static function int(dh_st*, int, int, BN.GENCB*) meth_get_generate_params(METHOD* dhm);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_meth_set_generate_params")]
+		public extern static int meth_set_generate_params(METHOD* dhm, function int(dh_st*, int, int, BN.GENCB*) generate_params);
+#endif
+	}
+
+	[AlwaysInclude]
+	sealed abstract class DHparams
+	{
+#if !OPENSSL_NO_DH
+		/*
+		 * DHparams
+		 */
+		[Inline]
+		public static DH.dh_st* d2i_DHparams_fp(Platform.BfpFile* fp, DH.dh_st** x)
+		{
+			void* innerF1() => (void*)DH.new_();
+			void* innerF2(void** p, uint8** n, int l) => (void*)d2i_DHparams((DH.dh_st**)p, n, l);
+			return (DH.dh_st*)ASN1.d2i_fp(=> innerF1, => innerF2, fp, (void**)x);
+		}
+		[Inline]
+		public static int i2d_DHparams_fp(Platform.BfpFile* fp, DH.dh_st* x)
+		{
+			int innerF(void* p, uint8** n) => i2d_DHparams((DH.dh_st*)p, n);
+			return ASN1.i2d_fp(=> innerF, fp, (uint8*)x);
+		}
+		[Inline]
+		public static DH.dh_st* d2i_DHparams_bio(BIO.bio_st* bp, DH.dh_st** x)
+		{
+			void* innerF1() => (void*)DH.new_();
+			void* innerF2(void** p, uint8** n, int l) => (void*)d2i_DHparams((DH.dh_st**)p, n, l);
+			return (DH.dh_st*)ASN1.d2i_bio(=> innerF1, => innerF2, bp, (void**)x);
+		}
+		[Inline]
+		public static int i2d_DHparams_bio(BIO.bio_st* bp, DH.dh_st* x)
+		{
+			int innerFunc(void* p, uint8** n) => i2d_DHparams((DH.dh_st*)p, n);
+			return ASN1.i2d_bio(=> innerFunc, bp, (uint8*)x);
+		}
+
+		/*
+		 * DHxparams
+		 */
+		[Inline]
+		public static DH.dh_st* d2i_DHxparams_fp(Platform.BfpFile* fp, DH.dh_st** x)
+		{
+			void* innerF1() => (void*)DH.new_();
+			void* innerF2(void** p, uint8** n, int l) => (void*)d2i_DHxparams((DH.dh_st**)p, n, l);
+			return (DH.dh_st*)ASN1.d2i_fp(=> innerF1, => innerF2, fp, (void**)x);
+		}
+		[Inline]
+		public static int i2d_DHxparams_fp(Platform.BfpFile* fp, DH.dh_st* x)
+		{
+			int innerF(void* p, uint8** n) => i2d_DHxparams((DH.dh_st*)p, n);
+			return ASN1.i2d_fp(=> innerF, fp, (uint8*)x);
+		}
+		[Inline]
+		public static DH.dh_st* d2i_DHxparams_bio(BIO.bio_st* bp, DH.dh_st* x)
+		{
+			void* innerF1() => (void*)DH.new_();
+			void* innerF2(void** p, uint8** n, int l) => (void*)d2i_DHxparams((DH.dh_st**)p, n, l);
+			return (DH.dh_st*)ASN1.d2i_bio(=> innerF1, => innerF2, bp, (void**)x);
+		}
+		[Inline]
+		public static int i2d_DHxparams_bio(BIO.bio_st* bp, DH.dh_st* x)
+		{
+			int innerFunc(void* p, uint8** n) => i2d_DHxparams((DH.dh_st*)p, n);
+			return ASN1.i2d_bio(=> innerFunc, bp, (uint8*)x);
+		}
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DHparams_dup")]
+		public extern static DH.dh_st* dup(DH.dh_st* a);
+
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static DH.dh_st* d2i_DHparams(DH.dh_st** a, uint8** pp, int length);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int i2d_DHparams(DH.dh_st* a, uint8** pp);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static DH.dh_st* d2i_DHxparams(DH.dh_st** a, uint8** pp, int length);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int i2d_DHxparams(DH.dh_st* a, uint8** pp);
+	#if !OPENSSL_NO_STDIO
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DHparams_print_fp")]
+		public extern static int print_fp(Platform.BfpFile* fp, DH.dh_st* x);
+	#endif
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("DHparams_print")]
+		public extern static int print(BIO.bio_st* bp, DH.dh_st* x);
 #endif
 	}
 }
