@@ -751,7 +751,7 @@ namespace Beef_Net.OpenSSL
 		public static uint dgram_get_mtu_overhead(bio_st* b) => (uint)ctrl(b, CTRL_DGRAM_GET_MTU_OVERHEAD, 0, null);
 
 		[Inline]
-		public static int get_ex_new_index(int argl, void* argp, Crypto.EX_new* new_func, Crypto.EX_dup* dup_func, Crypto.EX_free* free_func) =>
+		public static int get_ex_new_index(int argl, void* argp, Crypto.EX_new new_func, Crypto.EX_dup dup_func, Crypto.EX_free free_func) =>
 		    Crypto.get_ex_new_index(Crypto.EX_INDEX_BIO, argl, argp, new_func, dup_func, free_func);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_set_ex_data")]
 		public extern static int set_ex_data(bio_st* bio, int idx, void* data);

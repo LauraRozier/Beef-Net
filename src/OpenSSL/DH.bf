@@ -122,7 +122,7 @@ namespace Beef_Net.OpenSSL
 		    /* If this is non-NULL, it will be used to generate parameters */
 		    public function int(dh_st* dh, int prime_len, int generator, BN.GENCB* cb) generate_params;
 		}
-		typealias METHOD = method_st;
+		public typealias METHOD = method_st;
 		
 		public const int FLAG_CACHE_MONT_P     = 0x01;
 		/*
@@ -196,7 +196,7 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_security_bits")]
 		public extern static int security_bits(dh_st* dh);
 		[Inline]
-		public static int get_ex_new_index(int l, void* p, Crypto.EX_new* newf, Crypto.EX_dup* dupf, Crypto.EX_free* freef) =>
+		public static int get_ex_new_index(int l, void* p, Crypto.EX_new newf, Crypto.EX_dup dupf, Crypto.EX_free freef) =>
 			Crypto.get_ex_new_index(Crypto.EX_INDEX_DH, l, p, newf, dupf, freef);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_set_ex_data")]
 		public extern static int set_ex_data(dh_st* d, int idx, void* arg);

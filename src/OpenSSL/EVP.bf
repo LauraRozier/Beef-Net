@@ -2133,55 +2133,38 @@ namespace Beef_Net.OpenSSL
 #if !OPENSSL_NO_DH
 		[Inline]
 		public static int PKEY_CTX_set_dh_paramgen_prime_len(PKEY_CTX* ctx, int len) => PKEY_CTX_ctrl(ctx, PKEY_DH, PKEY_OP_PARAMGEN, PKEY_CTRL_DH_PARAMGEN_PRIME_LEN, len, null);
-		
 		[Inline]
 		public static int PKEY_CTX_set_dh_paramgen_subprime_len(PKEY_CTX* ctx, int len) => PKEY_CTX_ctrl(ctx, PKEY_DH, PKEY_OP_PARAMGEN, PKEY_CTRL_DH_PARAMGEN_SUBPRIME_LEN, len, null);
-		
 		[Inline]
 		public static int PKEY_CTX_set_dh_paramgen_type(PKEY_CTX* ctx, int typ) => PKEY_CTX_ctrl(ctx, PKEY_DH, PKEY_OP_PARAMGEN, PKEY_CTRL_DH_PARAMGEN_TYPE, typ, null);
-		
 		[Inline]
 		public static int PKEY_CTX_set_dh_paramgen_generator(PKEY_CTX* ctx, int gen) => PKEY_CTX_ctrl(ctx, PKEY_DH, PKEY_OP_PARAMGEN, PKEY_CTRL_DH_PARAMGEN_GENERATOR, gen, null);
-		
 		[Inline]
 		public static int PKEY_CTX_set_dh_rfc5114(PKEY_CTX* ctx, int gen) => PKEY_CTX_ctrl(ctx, PKEY_DHX, PKEY_OP_PARAMGEN, PKEY_CTRL_DH_RFC5114, gen, null);
-		
 		[Inline]
 		public static int PKEY_CTX_set_dhx_rfc5114(PKEY_CTX* ctx, int gen) => PKEY_CTX_ctrl(ctx, PKEY_DHX, PKEY_OP_PARAMGEN, PKEY_CTRL_DH_RFC5114, gen, null);
-		
 		[Inline]
 		public static int PKEY_CTX_set_dh_nid(PKEY_CTX* ctx, int nid) => PKEY_CTX_ctrl(ctx, PKEY_DH, PKEY_OP_PARAMGEN | PKEY_OP_KEYGEN, PKEY_CTRL_DH_NID, nid, null);
-		
 		[Inline]
 		public static int PKEY_CTX_set_dh_pad(PKEY_CTX* ctx, int pad) => PKEY_CTX_ctrl(ctx, PKEY_DH, PKEY_OP_DERIVE, PKEY_CTRL_DH_PAD, pad, null);
-		
 		[Inline]
 		public static int PKEY_CTX_set_dh_kdf_type(PKEY_CTX* ctx, int kdf) => PKEY_CTX_ctrl(ctx, PKEY_DHX, PKEY_OP_DERIVE, PKEY_CTRL_DH_KDF_TYPE, kdf, null);
-		
 		[Inline]
 		public static int PKEY_CTX_get_dh_kdf_type(PKEY_CTX* ctx) => PKEY_CTX_ctrl(ctx, PKEY_DHX, PKEY_OP_DERIVE, PKEY_CTRL_DH_KDF_TYPE, -2, null);
-		
 		[Inline]
 		public static int PKEY_CTX_set0_dh_kdf_oid(PKEY_CTX* ctx, int32[] oid) => PKEY_CTX_ctrl(ctx, PKEY_DHX, PKEY_OP_DERIVE, PKEY_CTRL_DH_KDF_OID, 0, &oid[0]);
-		
 		[Inline]
 		public static int PKEY_CTX_get0_dh_kdf_oid(PKEY_CTX* ctx, int32* poid) => PKEY_CTX_ctrl(ctx, PKEY_DHX, PKEY_OP_DERIVE, PKEY_CTRL_GET_DH_KDF_OID, 0, poid);
-		
 		[Inline]
 		public static int PKEY_CTX_set_dh_kdf_md(PKEY_CTX* ctx, void* md) => PKEY_CTX_ctrl(ctx, PKEY_DHX, PKEY_OP_DERIVE, PKEY_CTRL_DH_KDF_MD, 0, md);
-		
 		[Inline]
 		public static int PKEY_CTX_get_dh_kdf_md(PKEY_CTX* ctx, void* pmd) => PKEY_CTX_ctrl(ctx, PKEY_DHX, PKEY_OP_DERIVE, PKEY_CTRL_GET_DH_KDF_MD, 0, pmd);
-		
 		[Inline]
 		public static int PKEY_CTX_set_dh_kdf_outlen(PKEY_CTX* ctx, int len) => PKEY_CTX_ctrl(ctx, PKEY_DHX, PKEY_OP_DERIVE, PKEY_CTRL_DH_KDF_OUTLEN, len, null);
-		
 		[Inline]
 		public static int PKEY_CTX_get_dh_kdf_outlen(PKEY_CTX* ctx, int* plen) => PKEY_CTX_ctrl(ctx, PKEY_DHX, PKEY_OP_DERIVE, PKEY_CTRL_GET_DH_KDF_OUTLEN, 0, plen);
-		
 		[Inline]
 		public static int PKEY_CTX_set0_dh_kdf_ukm(PKEY_CTX* ctx, void* p, int plen) => PKEY_CTX_ctrl(ctx, PKEY_DHX, PKEY_OP_DERIVE, PKEY_CTRL_DH_KDF_UKM, plen, p);
-
 		[Inline]
 		public static int PKEY_CTX_get0_dh_kdf_ukm(PKEY_CTX* ctx, void* p) => PKEY_CTX_ctrl(ctx, PKEY_DHX, PKEY_OP_DERIVE, PKEY_CTRL_GET_DH_KDF_UKM, 0, p);
 		
@@ -2220,6 +2203,64 @@ namespace Beef_Net.OpenSSL
 		public const int PKEY_CTRL_DSA_PARAMGEN_BITS   = PKEY_ALG_CTRL + 1;
 		public const int PKEY_CTRL_DSA_PARAMGEN_Q_BITS = PKEY_ALG_CTRL + 2;
 		public const int PKEY_CTRL_DSA_PARAMGEN_MD     = PKEY_ALG_CTRL + 3;
+#endif
+		
+#if !OPENSSL_NO_EC
+		[Inline]
+		public static int PKEY_CTX_set_ec_paramgen_curve_nid(PKEY_CTX* ctx, int nid) => PKEY_CTX_ctrl(ctx, PKEY_EC, PKEY_OP_PARAMGEN | PKEY_OP_KEYGEN, PKEY_CTRL_EC_PARAMGEN_CURVE_NID, nid, null);
+		[Inline]
+		public static int PKEY_CTX_set_ec_param_enc(PKEY_CTX* ctx, int flag) => PKEY_CTX_ctrl(ctx, PKEY_EC, PKEY_OP_PARAMGEN | PKEY_OP_KEYGEN, PKEY_CTRL_EC_PARAM_ENC, flag, null);
+		[Inline]
+		public static int PKEY_CTX_set_ecdh_cofactor_mode(PKEY_CTX* ctx, int flag) => PKEY_CTX_ctrl(ctx, PKEY_EC, PKEY_OP_DERIVE, PKEY_CTRL_EC_ECDH_COFACTOR, flag, null);
+		[Inline]
+		public static int PKEY_CTX_get_ecdh_cofactor_mode(PKEY_CTX* ctx) => PKEY_CTX_ctrl(ctx, PKEY_EC, PKEY_OP_DERIVE, PKEY_CTRL_EC_ECDH_COFACTOR, -2, null);
+		[Inline]
+		public static int PKEY_CTX_set_ecdh_kdf_type(PKEY_CTX* ctx, int kdf) => PKEY_CTX_ctrl(ctx, PKEY_EC, PKEY_OP_DERIVE, PKEY_CTRL_EC_KDF_TYPE, kdf, null);
+		[Inline]
+		public static int PKEY_CTX_get_ecdh_kdf_type(PKEY_CTX* ctx) => PKEY_CTX_ctrl(ctx, PKEY_EC, PKEY_OP_DERIVE, PKEY_CTRL_EC_KDF_TYPE, -2, null);
+		[Inline]
+		public static int PKEY_CTX_set_ecdh_kdf_md(PKEY_CTX* ctx, void* md) => PKEY_CTX_ctrl(ctx, PKEY_EC, PKEY_OP_DERIVE, PKEY_CTRL_EC_KDF_MD, 0, md);
+		[Inline]
+		public static int PKEY_CTX_get_ecdh_kdf_md(PKEY_CTX* ctx, void* pmd) => PKEY_CTX_ctrl(ctx, PKEY_EC, PKEY_OP_DERIVE, PKEY_CTRL_GET_EC_KDF_MD, 0, pmd);
+		[Inline]
+		public static int PKEY_CTX_set_ecdh_kdf_outlen(PKEY_CTX* ctx, int len) => PKEY_CTX_ctrl(ctx, PKEY_EC, PKEY_OP_DERIVE, PKEY_CTRL_EC_KDF_OUTLEN, len, null);
+		[Inline]
+		public static int PKEY_CTX_get_ecdh_kdf_outlen(PKEY_CTX* ctx, void* plen) => PKEY_CTX_ctrl(ctx, PKEY_EC, PKEY_OP_DERIVE, PKEY_CTRL_GET_EC_KDF_OUTLEN, 0, plen);
+		[Inline]
+		public static int PKEY_CTX_set0_ecdh_kdf_ukm(PKEY_CTX* ctx, void* p, int plen) => PKEY_CTX_ctrl(ctx, PKEY_EC, PKEY_OP_DERIVE, PKEY_CTRL_EC_KDF_UKM, plen, p);
+		[Inline]
+		public static int PKEY_CTX_get0_ecdh_kdf_ukm(PKEY_CTX* ctx, void* p) => PKEY_CTX_ctrl(ctx, PKEY_EC, PKEY_OP_DERIVE, PKEY_CTRL_GET_EC_KDF_UKM, 0, p);
+
+		/* SM2 will skip the operation check so no need to pass operation here */
+		[Inline]
+		public static int PKEY_CTX_set1_id(PKEY_CTX* ctx, void* id, int id_len) => PKEY_CTX_ctrl(ctx, -1, -1, PKEY_CTRL_SET1_ID, id_len, id);
+		[Inline]
+		public static int PKEY_CTX_get1_id(PKEY_CTX* ctx, void* id) => PKEY_CTX_ctrl(ctx, -1, -1, PKEY_CTRL_GET1_ID, 0, id);
+		[Inline]
+		public static int PKEY_CTX_get1_id_len(PKEY_CTX* ctx, void* id_len) => PKEY_CTX_ctrl(ctx, -1, -1, PKEY_CTRL_GET1_ID_LEN, 0, id_len);
+
+		public const int PKEY_CTRL_EC_PARAMGEN_CURVE_NID = PKEY_ALG_CTRL + 1;
+		public const int PKEY_CTRL_EC_PARAM_ENC          = PKEY_ALG_CTRL + 2;
+		public const int PKEY_CTRL_EC_ECDH_COFACTOR      = PKEY_ALG_CTRL + 3;
+		public const int PKEY_CTRL_EC_KDF_TYPE           = PKEY_ALG_CTRL + 4;
+		public const int PKEY_CTRL_EC_KDF_MD             = PKEY_ALG_CTRL + 5;
+		public const int PKEY_CTRL_GET_EC_KDF_MD         = PKEY_ALG_CTRL + 6;
+		public const int PKEY_CTRL_EC_KDF_OUTLEN         = PKEY_ALG_CTRL + 7;
+		public const int PKEY_CTRL_GET_EC_KDF_OUTLEN     = PKEY_ALG_CTRL + 8;
+		public const int PKEY_CTRL_EC_KDF_UKM            = PKEY_ALG_CTRL + 9;
+		public const int PKEY_CTRL_GET_EC_KDF_UKM        = PKEY_ALG_CTRL + 10;
+		public const int PKEY_CTRL_SET1_ID               = PKEY_ALG_CTRL + 11;
+		public const int PKEY_CTRL_GET1_ID               = PKEY_ALG_CTRL + 12;
+		public const int PKEY_CTRL_GET1_ID_LEN           = PKEY_ALG_CTRL + 13;
+		/* KDF types */
+		public const int PKEY_ECDH_KDF_NONE              = 1;
+		public const int PKEY_ECDH_KDF_X9_63             = 2;
+		/** The old name for EVP_PKEY_ECDH_KDF_X9_63
+		 *  The ECDH KDF specification has been mistakingly attributed to ANSI X9.62,
+		 *  it is actually specified in ANSI X9.63.
+		 *  This identifier is retained for backwards compatibility
+		 */
+		public const int PKEY_ECDH_KDF_X9_62             = PKEY_ECDH_KDF_X9_63;
 #endif
 	}
 }

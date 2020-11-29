@@ -229,10 +229,15 @@ namespace Beef_Net.OpenSSL
 		public const int DH_MAX_MODULUS_BITS      = 10000;
 #endif
 		public const int DH_FIPS_MIN_MODULUS_BITS = 1024;
-		
+
 #if !OPENSSL_DSA_MAX_MODULUS_BITS
 		public const int DSA_MAX_MODULUS_BITS      = 10000;
 #endif
 		public const int DSA_FIPS_MIN_MODULUS_BITS = 1024;
+
+		public const int EC_EXPLICIT_CURVE = 0x000;
+		public const int EC_NAMED_CURVE    = 0x001;
+
+		public const int ECC_MAX_FIELD_BITS = 661;
 	}
 }

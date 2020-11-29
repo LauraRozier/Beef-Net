@@ -1215,7 +1215,7 @@ namespace Beef_Net.OpenSSL
 		public function int i2d_of_void(void* p, uint8** n);
 		public function void* d2i_of_void(void** p, uint8** n, int l);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_dup")]
-		public static extern void* dup(i2d_of_void* i2d, d2i_of_void* d2i, void* x);
+		public static extern void* dup(i2d_of_void i2d, d2i_of_void d2i, void* x);
 
 		/*
 		 * OpenSSL.. Please learn to make portable headers. Thanks.
