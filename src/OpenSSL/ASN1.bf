@@ -1000,6 +1000,17 @@ namespace Beef_Net.OpenSSL
 			B_ASN1_UTF8STRING | B_ASN1_SEQUENCE | B_ASN1_UNKNOWN;
 		public const int B_ASN1_DIRECTORYSTRING = B_ASN1_PRINTABLESTRING | B_ASN1_TELETEXSTRING | B_ASN1_BMPSTRING | B_ASN1_UNIVERSALSTRING | B_ASN1_UTF8STRING;
 		public const int B_ASN1_DISPLAYTEXT     = B_ASN1_IA5STRING | B_ASN1_VISIBLESTRING | B_ASN1_BMPSTRING | B_ASN1_UTF8STRING;
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_TYPE_new")]
+		public static extern TYPE* TYPE_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_TYPE_free")]
+		public static extern void TYPE_free(TYPE* a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public static extern TYPE* d2i_ASN1_TYPE(TYPE** a, uint8** inVal, int len);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public static extern int i2d_ASN1_TYPE(TYPE* a, uint8** outVal);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_ANY_it")]
+		public static extern ITEM* ANY_it();
 		
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_TYPE_get")]
 		public static extern int TYPE_get(TYPE* a);
@@ -1023,6 +1034,12 @@ namespace Beef_Net.OpenSSL
 		public static extern int i2d_ASN1_OBJECT(OBJECT* a, uint8** pp);
 		[Import(OPENSSL_LIB_CRYPTO), CLink]
 		public static extern OBJECT* d2i_ASN1_OBJECT(OBJECT** a, uint8** pp, int length);
+
+		/*
+		DECLARE_ASN1_ITEM(ASN1_OBJECT)
+		
+		DEFINE_STACK_OF(ASN1_OBJECT)
+		*/
 
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_STRING_new")]
 		public static extern STRING* STRING_new();
@@ -1055,7 +1072,21 @@ namespace Beef_Net.OpenSSL
 		public static extern uint8* STRING_data(STRING* x);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_STRING_get0_data")]
 		public static extern uint8* STRING_get0_data(STRING* x);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_BIT_STRING_new")]
+		public static extern BIT_STRING* BIT_STRING_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_BIT_STRING_free")]
+		public static extern void BIT_STRING_free(BIT_STRING* a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public static extern BIT_STRING* d2i_ASN1_BIT_STRING(BIT_STRING** a, uint8** inVal, int len);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public static extern int i2d_ASN1_BIT_STRING(BIT_STRING* a, uint8** outVal);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_BIT_STRING_it")]
+		public static extern ITEM* BIT_STRING_it();
 		
+		/*
+		DECLARE_ASN1_FUNCTIONS(ASN1_BIT_STRING)
+		*/
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_BIT_STRING_set")]
 		public static extern int BIT_STRING_set(BIT_STRING* a, uint8* d, int length);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_BIT_STRING_set_bit")]
@@ -1072,6 +1103,9 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_BIT_STRING_set_asc")]
 		public static extern int BIT_STRING_set_asc(BIT_STRING* bs, char8* name, int value, BIT_STRING_BITNAME* tbl);
 		
+		/*
+		DECLARE_ASN1_FUNCTIONS(ASN1_INTEGER)
+		*/
 		[Import(OPENSSL_LIB_CRYPTO), CLink]
 		public static extern INTEGER* d2i_ASN1_UINTEGER(INTEGER** a, uint8** pp, int length);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_INTEGER_dup")]
@@ -1079,6 +1113,9 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_INTEGER_cmp")]
 		public static extern int INTEGER_cmp(INTEGER* x, INTEGER* y);
 		
+		/*
+		DECLARE_ASN1_FUNCTIONS(ASN1_ENUMERATED)
+		*/
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_UTCTIME_check")]
 		public static extern int UTCTIME_check(UTCTIME* a);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_UTCTIME_set")]
@@ -1102,6 +1139,9 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_TIME_diff")]
 		public static extern int TIME_diff(int* pday, int* psec, TIME* from, TIME* to);
 		
+		/*
+		DECLARE_ASN1_FUNCTIONS(ASN1_OCTET_STRING)
+		*/
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_OCTET_STRING_dup")]
 		public static extern OCTET_STRING* OCTET_STRING_dup(OCTET_STRING* a);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_OCTET_STRING_cmp")]
@@ -1109,10 +1149,34 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_OCTET_STRING_set")]
 		public static extern int OCTET_STRING_set(OCTET_STRING* str, uint8* data, int len);
 		
+		/*
+		DECLARE_ASN1_FUNCTIONS(ASN1_VISIBLESTRING)
+		DECLARE_ASN1_FUNCTIONS(ASN1_UNIVERSALSTRING)
+		DECLARE_ASN1_FUNCTIONS(ASN1_UTF8STRING)
+		DECLARE_ASN1_FUNCTIONS(ASN1_NULL)
+		DECLARE_ASN1_FUNCTIONS(ASN1_BMPSTRING)
+		*/
+
 		[Import(OPENSSL_LIB_CRYPTO), CLink]
 		public static extern int UTF8_getc(uint8* str, int len, uint* val);
 		[Import(OPENSSL_LIB_CRYPTO), CLink]
 		public static extern int UTF8_putc(uint8* str, int len, uint value);
+
+		/*
+		DECLARE_ASN1_FUNCTIONS_name(ASN1_STRING, ASN1_PRINTABLE)
+		
+		DECLARE_ASN1_FUNCTIONS_name(ASN1_STRING, DIRECTORYSTRING)
+		DECLARE_ASN1_FUNCTIONS_name(ASN1_STRING, DISPLAYTEXT)
+		DECLARE_ASN1_FUNCTIONS(ASN1_PRINTABLESTRING)
+		DECLARE_ASN1_FUNCTIONS(ASN1_T61STRING)
+		DECLARE_ASN1_FUNCTIONS(ASN1_IA5STRING)
+		DECLARE_ASN1_FUNCTIONS(ASN1_GENERALSTRING)
+		DECLARE_ASN1_FUNCTIONS(ASN1_UTCTIME)
+		DECLARE_ASN1_FUNCTIONS(ASN1_GENERALIZEDTIME)
+		DECLARE_ASN1_FUNCTIONS(ASN1_TIME)
+		
+		DECLARE_ASN1_ITEM(ASN1_OCTET_STRING_NDEF)
+		*/
 		
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_TIME_set")]
 		public static extern TIME* TIME_set(TIME* s, int64 t);
@@ -1434,5 +1498,28 @@ namespace Beef_Net.OpenSSL
 		public static extern ITEM* ITEM_lookup(char8* name);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_ITEM_get")]
 		public static extern ITEM* ITEM_get(uint i);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_verify")]
+		public static extern int verify(i2d_of_void* i2d, X509.ALGOR* algor1, BIT_STRING* signature, char8* data, EVP.PKEY* pkey);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_digest")]
+		public static extern int digest(i2d_of_void* i2d, EVP.MD* type, char8* data, uint8* md, uint* len);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_sign")]
+		public static extern int sign(i2d_of_void* i2d, X509.ALGOR* algor1, X509.ALGOR* algor2, BIT_STRING* signature, char8* data, EVP.PKEY* pkey, EVP.MD* type);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_item_digest")]
+		public static extern int item_digest(ITEM* it, EVP.MD* type, void *data, uint8* md, uint* len);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_item_verify")]
+		public static extern int item_verify(ITEM* it, X509.ALGOR* algor1, BIT_STRING* signature, void *data, EVP.PKEY* pkey);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_item_sign")]
+		public static extern int item_sign(ITEM* it, X509.ALGOR* algor1, X509.ALGOR* algor2, BIT_STRING* signature, void *data, EVP.PKEY* pkey, EVP.MD* type);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_item_sign_ctx")]
+		public static extern int item_sign_ctx(ITEM* it, X509.ALGOR* algor1, X509.ALGOR* algor2, BIT_STRING* signature, void *asn, EVP.MD_CTX* ctx);
+
+		[Inline]
+		public static int BIT_STRING_digest(char8* data, EVP.MD* type, uint8* md, uint* len) => item_digest(BIT_STRING_it(), type, data, md, len);
 	}
 }

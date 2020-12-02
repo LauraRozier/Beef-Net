@@ -19,6 +19,44 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("PEM_write_bio_ASN1_stream")]
 		public static extern int write_bio_ASN1_stream(BIO.bio_st* outVal, ASN1.VALUE* val, BIO.bio_st* inVal, int flags, char8* hdr, ASN1.ITEM* it);
 
+		public function int password_cb(char8* buf, int size, int rwflag, void* userdata);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("PEM_ASN1_read_bio")]
+		public static extern void* ASN1_read_bio(ASN1.d2i_of_void d2i, char8* name, BIO.bio_st* bp, void** x, password_cb cb, void* u);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("PEM_ASN1_write_bio")]
+		public static extern int ASN1_write_bio(ASN1.i2d_of_void i2d, char8* name, BIO.bio_st* bp, void* x, EVP.CIPHER* enc, uint8* kstr, int klen, password_cb cb, void* u);
+		
+		public const char8* STRING_OCSP_REQUEST  = "OCSP REQUEST";
+		public const char8* STRING_OCSP_RESPONSE = "OCSP RESPONSE";
+		
+		[Inline]
+		public static OCSP.REQUEST* read_bio_OCSP_REQUEST(BIO.bio_st* bp, OCSP.REQUEST** x, password_cb cb)
+		{
+			void* internalF(void** a, uint8** outVal, int len) => (void*)OCSP.d2i_OCSP_REQUEST((OCSP.REQUEST**)a, outVal, len);
+			return (OCSP.REQUEST*)ASN1_read_bio(=> internalF, STRING_OCSP_REQUEST, bp, (void**)x, cb, null);
+		}
+		
+		[Inline]
+		public static OCSP.REQUEST* read_bio_OCSP_RESPONSE(BIO.bio_st* bp, OCSP.RESPONSE** x, password_cb cb)
+		{
+			void* internalF(void** a, uint8** outVal, int len) => (void*)OCSP.d2i_OCSP_RESPONSE((OCSP.RESPONSE**)a, outVal, len);
+			return (OCSP.REQUEST*)ASN1_read_bio(=> internalF, STRING_OCSP_RESPONSE, bp, (void**)x, cb, null);
+		}
+		
+		[Inline]
+		public static int write_bio_OCSP_REQUEST(BIO.bio_st* bp, OCSP.REQUEST* o)
+		{
+			int internalF(void* a, uint8** outVal) => OCSP.i2d_OCSP_REQUEST((OCSP.REQUEST*)a, outVal);
+			return ASN1_write_bio(=> internalF, STRING_OCSP_REQUEST, bp, (char8*)o, null, null, 0, null, null);
+		}
+		
+		[Inline]
+		public static int write_bio_OCSP_RESPONSE(BIO.bio_st* bp, OCSP.RESPONSE* o)
+		{
+			int internalF(void* a, uint8** outVal) => OCSP.i2d_OCSP_RESPONSE((OCSP.RESPONSE*)a, outVal);
+			return ASN1_write_bio(=> internalF, STRING_OCSP_RESPONSE, bp, (char8*)o, null, null, 0, null, null);
+		}
+
 		/*
 		libssl-1_1.dll
 			22   15 00001EDD PEM_read_SSL_SESSION

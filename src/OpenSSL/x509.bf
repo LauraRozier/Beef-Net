@@ -33,11 +33,14 @@ namespace Beef_Net.OpenSSL
 		public struct stack_st_X509_ALGOR {}
 		public struct stack_st_X509_ATTRIBUTE {}
 		public struct stack_st_X509_CRL {}
+		public struct stack_st_X509_EXTENSION {}
+		public struct stack_st_X509_NAME {}
 	}
 	
 	[AlwaysInclude]
 	sealed abstract class X509v3
 	{
+		public struct GENERAL_NAME {}
 		public struct stack_st_GENERAL_NAMES {}
 	}
 	

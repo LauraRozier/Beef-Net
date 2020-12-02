@@ -15,6 +15,691 @@ namespace Beef_Net.OpenSSL
 	sealed abstract class OCSP
 	{
 #if !OPENSSL_NO_OCSP
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int ERR_load_OCSP_strings();
+		
+		/*
+		 * OCSP function codes.
+		 */
+		public const int F_D2I_OCSP_NONCE                         = 102;
+		public const int F_OCSP_BASIC_ADD1_STATUS                 = 103;
+		public const int F_OCSP_BASIC_SIGN                        = 104;
+		public const int F_OCSP_BASIC_SIGN_CTX                    = 119;
+		public const int F_OCSP_BASIC_VERIFY                      = 105;
+		public const int F_OCSP_CERT_ID_NEW                       = 101;
+		public const int F_OCSP_CHECK_DELEGATED                   = 106;
+		public const int F_OCSP_CHECK_IDS                         = 107;
+		public const int F_OCSP_CHECK_ISSUER                      = 108;
+		public const int F_OCSP_CHECK_VALIDITY                    = 115;
+		public const int F_OCSP_MATCH_ISSUERID                    = 109;
+		public const int F_OCSP_PARSE_URL                         = 114;
+		public const int F_OCSP_REQUEST_SIGN                      = 110;
+		public const int F_OCSP_REQUEST_VERIFY                    = 116;
+		public const int F_OCSP_RESPONSE_GET1_BASIC               = 111;
+		public const int F_PARSE_HTTP_LINE1                       = 118;
+		
+		/*
+		 * OCSP reason codes.
+		 */
+		public const int R_CERTIFICATE_VERIFY_ERROR               = 101;
+		public const int R_DIGEST_ERR                             = 102;
+		public const int R_ERROR_IN_NEXTUPDATE_FIELD              = 122;
+		public const int R_ERROR_IN_THISUPDATE_FIELD              = 123;
+		public const int R_ERROR_PARSING_URL                      = 121;
+		public const int R_MISSING_OCSPSIGNING_USAGE              = 103;
+		public const int R_NEXTUPDATE_BEFORE_THISUPDATE           = 124;
+		public const int R_NOT_BASIC_RESPONSE                     = 104;
+		public const int R_NO_CERTIFICATES_IN_CHAIN               = 105;
+		public const int R_NO_RESPONSE_DATA                       = 108;
+		public const int R_NO_REVOKED_TIME                        = 109;
+		public const int R_NO_SIGNER_KEY                          = 130;
+		public const int R_PRIVATE_KEY_DOES_NOT_MATCH_CERTIFICATE = 110;
+		public const int R_REQUEST_NOT_SIGNED                     = 128;
+		public const int R_RESPONSE_CONTAINS_NO_REVOCATION_DATA   = 111;
+		public const int R_ROOT_CA_NOT_TRUSTED                    = 112;
+		public const int R_SERVER_RESPONSE_ERROR                  = 114;
+		public const int R_SERVER_RESPONSE_PARSE_ERROR            = 115;
+		public const int R_SIGNATURE_FAILURE                      = 117;
+		public const int R_SIGNER_CERTIFICATE_NOT_FOUND           = 118;
+		public const int R_STATUS_EXPIRED                         = 125;
+		public const int R_STATUS_NOT_YET_VALID                   = 126;
+		public const int R_STATUS_TOO_OLD                         = 127;
+		public const int R_UNKNOWN_MESSAGE_DIGEST                 = 119;
+		public const int R_UNKNOWN_NID                            = 120;
+		public const int R_UNSUPPORTED_REQUESTORNAME_TYPE         = 129;
+
+		/* Various flags and values */
+		public const int DEFAULT_NONCE_LENGTH = 16;
+		
+		public const int NOCERTS              = 0x1;
+		public const int NOINTERN             = 0x2;
+		public const int NOSIGS               = 0x4;
+		public const int NOCHAIN              = 0x8;
+		public const int NOVERIFY             = 0x10;
+		public const int NOEXPLICIT           = 0x20;
+		public const int NOCASIGN             = 0x40;
+		public const int NODELEGATED          = 0x80;
+		public const int NOCHECKS             = 0x100;
+		public const int TRUSTOTHER           = 0x200;
+		public const int RESPID_KEY           = 0x400;
+		public const int NOTIME               = 0x800;
+
+		public struct stack_st_OCSP_ONEREQ {}
+		public struct stack_st_OCSP_SINGLERESP {}
+		public struct stack_st_ACCESS_DESCRIPTION {}
+		
+		/*-  CertID ::= SEQUENCE {
+		 *       hashAlgorithm            AlgorithmIdentifier,
+		 *       issuerNameHash     OCTET STRING, -- Hash of Issuer's DN
+		 *       issuerKeyHash      OCTET STRING, -- Hash of Issuers public key (excluding the tag & length fields)
+		 *       serialNumber       CertificateSerialNumber }
+		 */
+		[CRepr]
+		public struct cert_id_st
+		{
+		    public X509.ALGOR hashAlgorithm;
+		    public ASN1.OCTET_STRING issuerNameHash;
+		    public ASN1.OCTET_STRING issuerKeyHash;
+		    public ASN1.INTEGER serialNumber;
+		}
+		public typealias CERTID = cert_id_st;
+		
+		/*-  Request ::=     SEQUENCE {
+		 *       reqCert                    CertID,
+		 *       singleRequestExtensions    [0] EXPLICIT Extensions OPTIONAL }
+		 */
+		[CRepr]
+		public struct one_request_st
+		{
+		    public CERTID* reqCert;
+		    public X509.stack_st_X509_EXTENSION* singleRequestExtensions;
+		}
+		public typealias ONEREQ = one_request_st;
+		/*-  TBSRequest      ::=     SEQUENCE {
+		 *       version             [0] EXPLICIT Version DEFAULT v1,
+		 *       requestorName       [1] EXPLICIT GeneralName OPTIONAL,
+		 *       requestList             SEQUENCE OF Request,
+		 *       requestExtensions   [2] EXPLICIT Extensions OPTIONAL }
+		 */
+		[CRepr]
+		public struct req_info_st
+		{
+		    public ASN1.INTEGER* version;
+		    public X509v3.GENERAL_NAME* requestorName;
+		    public stack_st_OCSP_ONEREQ* requestList;
+		    public X509.stack_st_X509_EXTENSION* requestExtensions;
+		}
+		public typealias REQINFO = req_info_st;
+		/*-  Signature       ::=     SEQUENCE {
+		 *       signatureAlgorithm   AlgorithmIdentifier,
+		 *       signature            BIT STRING,
+		 *       certs                [0] EXPLICIT SEQUENCE OF Certificate OPTIONAL }
+		 */
+		[CRepr]
+		public struct signature_st
+		{
+		    public X509.ALGOR signatureAlgorithm;
+		    public ASN1.BIT_STRING* signature;
+		    public X509.stack_st_X509* certs;
+		}
+		public typealias SIGNATURE = signature_st;
+		/*-  OCSPRequest     ::=     SEQUENCE {
+		 *       tbsRequest                  TBSRequest,
+		 *       optionalSignature   [0]     EXPLICIT Signature OPTIONAL }
+		 */
+		[CRepr]
+		public struct request_st
+		{
+		    public REQINFO tbsRequest;
+		    public SIGNATURE* optionalSignature; /* OPTIONAL */
+		}
+		public typealias REQUEST = request_st;
+		
+		public const int RESPONSE_STATUS_SUCCESSFUL       = 0;
+		public const int RESPONSE_STATUS_MALFORMEDREQUEST = 1;
+		public const int RESPONSE_STATUS_INTERNALERROR    = 2;
+		public const int RESPONSE_STATUS_TRYLATER         = 3;
+		public const int RESPONSE_STATUS_SIGREQUIRED      = 5;
+		public const int RESPONSE_STATUS_UNAUTHORIZED     = 6;
+
+		/*-  OCSPResponseStatus ::= ENUMERATED {
+		 *       successful            (0),      --Response has valid confirmations
+		 *       malformedRequest      (1),      --Illegal confirmation request
+		 *       internalError         (2),      --Internal error in issuer
+		 *       tryLater              (3),      --Try again later
+		 *                                       --(4) is not used
+		 *       sigRequired           (5),      --Must sign the request
+		 *       unauthorized          (6)       --Request unauthorized
+		 *   }
+		 */
+
+		/*-  ResponseBytes ::=       SEQUENCE {
+		 *       responseType   OBJECT IDENTIFIER,
+		 *       response       OCTET STRING }
+		 */
+		[CRepr]
+		public struct resp_bytes_st
+		{
+		    public ASN1.OBJECT* responseType;
+		    public ASN1.OCTET_STRING* response;
+		}
+		public typealias RESPBYTES = resp_bytes_st;
+		/*-  OCSPResponse ::= SEQUENCE {
+		 *      responseStatus         OCSPResponseStatus,
+		 *      responseBytes          [0] EXPLICIT ResponseBytes OPTIONAL }
+		 */
+		[CRepr]
+		public struct response_st
+		{
+		    public ASN1.ENUMERATED* responseStatus;
+		    public RESPBYTES* responseBytes;
+		}
+		public typealias RESPONSE = response_st;
+		[CRepr]
+		public struct req_ctx_st
+		{
+		    public int state;         /* Current I/O state */
+		    public uint8* iobuf;      /* Line buffer */
+		    public int iobuflen;      /* Line buffer length */
+		    public BIO.bio_st* io;    /* BIO to perform I/O with */
+		    public BIO.bio_st* mem;   /* Memory BIO response is built into */
+		    public uint asn1_len;     /* ASN1 length of response */
+		    public uint max_resp_len; /* Maximum length of response */
+		}
+		public typealias REQ_CTX = req_ctx_st;
+		/*-  ResponderID ::= CHOICE {
+		 *      byName   [1] Name,
+		 *      byKey    [2] KeyHash }
+		 */
+		[CRepr]
+		public struct responder_id_st
+		{
+		    public int type;
+		    public value_struct value;
+			
+			[CRepr, Union]
+			public struct value_struct
+			{
+		        public X509.NAME* byName;
+		        public ASN1.OCTET_STRING* byKey;
+			}
+		}
+		public typealias RESPID = responder_id_st;
+		
+		public const int V_OCSP_RESPID_NAME = 0;
+		public const int V_OCSP_RESPID_KEY  = 1;
+
+		/*-  RevokedInfo ::= SEQUENCE {
+		 *       revocationTime              GeneralizedTime,
+		 *       revocationReason    [0]     EXPLICIT CRLReason OPTIONAL }
+		 */
+		[CRepr]
+		public struct revoked_info_st
+		{
+		    public ASN1.GENERALIZEDTIME* revocationTime;
+		    public ASN1.ENUMERATED* revocationReason;
+		}
+		public typealias REVOKEDINFO = revoked_info_st;
+		
+		public const int V_OCSP_CERTSTATUS_GOOD    = 0;
+		public const int V_OCSP_CERTSTATUS_REVOKED = 1;
+		public const int V_OCSP_CERTSTATUS_UNKNOWN = 2;
+
+		/*-  CertStatus ::= CHOICE {
+		 *       good                [0]     IMPLICIT NULL,
+		 *       revoked             [1]     IMPLICIT RevokedInfo,
+		 *       unknown             [2]     IMPLICIT UnknownInfo }
+		 */
+		[CRepr]
+		public struct cert_status_st
+		{
+		    public int type;
+		    public value_struct value;
+
+			[CRepr, Union]
+			public struct value_struct
+			{
+		        public ASN1.NULL* good;
+		        public REVOKEDINFO* revoked;
+		        public ASN1.NULL* unknown;
+			}
+		}
+		public typealias CERTSTATUS = cert_status_st;
+		/*-  SingleResponse ::= SEQUENCE {
+		 *      certID                       CertID,
+		 *      certStatus                   CertStatus,
+		 *      thisUpdate                   GeneralizedTime,
+		 *      nextUpdate           [0]     EXPLICIT GeneralizedTime OPTIONAL,
+		 *      singleExtensions     [1]     EXPLICIT Extensions OPTIONAL }
+		 */
+		[CRepr]
+		public struct single_response_st
+		{
+		    public CERTID* certId;
+		    public CERTSTATUS* certStatus;
+		    public ASN1.GENERALIZEDTIME* thisUpdate;
+		    public ASN1.GENERALIZEDTIME* nextUpdate;
+		    public X509.stack_st_X509_EXTENSION* singleExtensions;
+		}
+		public typealias SINGLERESP = single_response_st;
+
+		/*-  ResponseData ::= SEQUENCE {
+		 *      version              [0] EXPLICIT Version DEFAULT v1,
+		 *      responderID              ResponderID,
+		 *      producedAt               GeneralizedTime,
+		 *      responses                SEQUENCE OF SingleResponse,
+		 *      responseExtensions   [1] EXPLICIT Extensions OPTIONAL }
+		 */
+		[CRepr]
+		public struct response_data_st
+		{
+		    public ASN1.INTEGER* version;
+		    public RESPID responderId;
+		    public ASN1.GENERALIZEDTIME* producedAt;
+		    public stack_st_OCSP_SINGLERESP* responses;
+		    public X509.stack_st_X509_EXTENSION* responseExtensions;
+		}
+		public typealias RESPDATA = response_data_st;
+
+		/*-  BasicOCSPResponse       ::= SEQUENCE {
+		 *      tbsResponseData      ResponseData,
+		 *      signatureAlgorithm   AlgorithmIdentifier,
+		 *      signature            BIT STRING,
+		 *      certs                [0] EXPLICIT SEQUENCE OF Certificate OPTIONAL }
+		 */
+		  /*
+		   * Note 1: The value for "signature" is specified in the OCSP rfc2560 as
+		   * follows: "The value for the signature SHALL be computed on the hash of
+		   * the DER encoding ResponseData." This means that you must hash the
+		   * DER-encoded tbsResponseData, and then run it through a crypto-signing
+		   * function, which will (at least w/RSA) do a hash-'n'-private-encrypt
+		   * operation.  This seems a bit odd, but that's the spec.  Also note that
+		   * the data structures do not leave anywhere to independently specify the
+		   * algorithm used for the initial hash. So, we look at the
+		   * signature-specification algorithm, and try to do something intelligent.
+		   * -- Kathy Weinhold, CertCo
+		   */
+		  /*
+		   * Note 2: It seems that the mentioned passage from RFC 2560 (section
+		   * 4.2.1) is open for interpretation.  I've done tests against another
+		   * responder, and found that it doesn't do the double hashing that the RFC
+		   * seems to say one should.  Therefore, all relevant functions take a flag
+		   * saying which variant should be used.  -- Richard Levitte, OpenSSL team
+		   * and CeloCom
+		   */
+		[CRepr]
+		public struct basic_response_st
+		{
+		    public RESPDATA tbsResponseData;
+		    public X509.ALGOR signatureAlgorithm;
+		    public ASN1.BIT_STRING* signature;
+		    public X509.stack_st_X509* certs;
+		}
+		public typealias BASICRESP = basic_response_st;
+
+		/*-
+		 * CrlID ::= SEQUENCE {
+		 *     crlUrl               [0]     EXPLICIT IA5String OPTIONAL,
+		 *     crlNum               [1]     EXPLICIT INTEGER OPTIONAL,
+		 *     crlTime              [2]     EXPLICIT GeneralizedTime OPTIONAL }
+		 */
+		[CRepr]
+		public struct crl_id_st
+		{
+		    public ASN1.IA5STRING* crlUrl;
+		    public ASN1.INTEGER* crlNum;
+		    public ASN1.GENERALIZEDTIME* crlTime;
+		}
+		public typealias CRLID = crl_id_st;
+		/*-
+		 * ServiceLocator ::= SEQUENCE {
+		 *      issuer    Name,
+		 *      locator   AuthorityInfoAccessSyntax OPTIONAL }
+		 */
+		[CRepr]
+		public struct service_locator_st
+		{
+		    public X509.NAME* issuer;
+		    public stack_st_ACCESS_DESCRIPTION* locator;
+		}
+		public typealias SERVICELOC = service_locator_st;
+		
+		[Inline]
+		public static REQUEST* d2i_OCSP_REQUEST_bio(BIO.bio_st* bp, REQUEST* p)
+		{
+			void* internalF1() => (void*)REQUEST_new();
+			void* internalF2(void** a, uint8** inVal, int len) => (void*)d2i_OCSP_REQUEST((REQUEST**)a, inVal, len);
+			return (REQUEST*)ASN1.d2i_bio(=> internalF1, => internalF2, bp, (void**)p);
+		}
+		
+		[Inline]
+		public static RESPONSE* d2i_OCSP_RESPONSE_bio(BIO.bio_st* bp, RESPONSE* p)
+		{
+			void* internalF1() => (void*)RESPONSE_new();
+			void* internalF2(void** a, uint8** inVal, int len) => (void*)d2i_OCSP_RESPONSE((RESPONSE**)a, inVal, len);
+			return (RESPONSE*)ASN1.d2i_bio(=> internalF1, => internalF2, bp, (void**)p);
+		}
+		
+		[Inline]
+		public static int i2d_OCSP_RESPONSE_bio(BIO.bio_st* bp, RESPONSE* o)
+		{
+			int internalF(void* p, uint8** n) => i2d_OCSP_RESPONSE((RESPONSE*)p, n);
+			return ASN1.i2d_bio(=> internalF, bp, (uint8*)o);
+		}
+		
+		[Inline]
+		public static int i2d_OCSP_REQUEST_bio(BIO.bio_st* bp, REQUEST* o)
+		{
+			int internalF(void* p, uint8** n) => i2d_OCSP_REQUEST((REQUEST*)p, n);
+			return ASN1.i2d_bio(=> internalF, bp, (uint8*)o);
+		}
+
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static SINGLERESP* SINGLERESP_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_SINGLERESP_free")]
+		public extern static void SINGLERESP_free(SINGLERESP* a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static SINGLERESP* d2i_OCSP_SINGLERESP(SINGLERESP** a, uint8** inVal, int len);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int i2d_OCSP_SINGLERESP(SINGLERESP* a, uint8** outVal);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static ASN1.ITEM* SINGLERESP_it();
+
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static CERTSTATUS* CERTSTATUS_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_CERTSTATUS_free")]
+		public extern static void CERTSTATUS_free(CERTSTATUS* a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static CERTSTATUS* d2i_OCSP_CERTSTATUS(CERTSTATUS** a, uint8** inVal, int len);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int i2d_OCSP_CERTSTATUS(CERTSTATUS* a, uint8** outVal);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static ASN1.ITEM* CERTSTATUS_it();
+
+		/* TODO: Complete these ports, same 5 methods as above
+		REVOKEDINFO
+		BASICRESP
+		RESPDATA
+		RESPID
+		*/
+
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static RESPONSE* RESPONSE_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_RESPONSE_free")]
+		public extern static void RESPONSE_free(RESPONSE* a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static RESPONSE* d2i_OCSP_RESPONSE(RESPONSE** a, uint8** inVal, int len);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int i2d_OCSP_RESPONSE(RESPONSE* a, uint8** outVal);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static ASN1.ITEM* RESPONSE_it();
+
+		/*
+		RESPBYTES
+		ONEREQ
+		CERTID
+		*/
+
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static REQUEST* REQUEST_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_REQUEST_free")]
+		public extern static void REQUEST_free(REQUEST* a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static REQUEST* d2i_OCSP_REQUEST(REQUEST** a, uint8** inVal, int len);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int i2d_OCSP_REQUEST(REQUEST* a, uint8** outVal);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static ASN1.ITEM* REQUEST_it();
+
+		/*
+		SIGNATURE
+		REQINFO
+		CRLID
+		SERVICELOC
+		*/
+
+		[Inline]
+		public static CERTSTATUS* CERTSTATUS_dup(CERTID* cs)
+		{
+			int internalF1(void* a, uint8** outVal) => i2d_OCSP_CERTSTATUS((CERTSTATUS*)a, outVal);
+			void* internalF2(void** a, uint8** inVal, int len) => (void*)d2i_OCSP_CERTSTATUS((CERTSTATUS**)a, inVal, len);
+			return (CERTSTATUS*)ASN1.dup(=> internalF1, => internalF2, (void*)cs);
+		}
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_CERTID_dup")]
+		public extern static CERTID* CERTID_dup(CERTID* id);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static RESPONSE* OCSP_sendreq_bio(BIO.bio_st* b, char8* path, REQUEST* req);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static REQ_CTX* OCSP_sendreq_new(BIO.bio_st* io, char8* path, REQUEST* req, int maxline);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_REQ_CTX_nbio(REQ_CTX* rctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_sendreq_nbio(RESPONSE** presp, REQ_CTX* rctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static REQ_CTX* OCSP_REQ_CTX_new(BIO.bio_st* io, int maxline);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static void OCSP_REQ_CTX_free(REQ_CTX* rctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static void OCSP_set_max_response_length(REQ_CTX *rctx, uint len);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_REQ_CTX_i2d(REQ_CTX* rctx, ASN1.ITEM* it, ASN1.VALUE* val);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_REQ_CTX_nbio_d2i(REQ_CTX* rctx, ASN1.VALUE** pval, ASN1.ITEM* it);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static BIO *OCSP_REQ_CTX_get0_mem_bio(REQ_CTX* rctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_REQ_CTX_http(REQ_CTX* rctx, char8* op, char8* path);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_REQ_CTX_set1_req(REQ_CTX* rctx, REQUEST* req);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_REQ_CTX_add1_header(REQ_CTX* rctx, char8* name, char8* value);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_cert_to_id")]
+		public extern static CERTID* cert_to_id(EVP.MD* dgst, X509.x509_st* subject, X509.x509_st* issuer);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_cert_id_new")]
+		public extern static CERTID* cert_id_new(EVP.MD* dgst, X509.NAME* issuerName, ASN1.BIT_STRING* issuerKey, ASN1.INTEGER* serialNumber);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_request_add0_id")]
+		public extern static ONEREQ* request_add0_id(REQUEST* req, CERTID* cid);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_request_add1_nonce")]
+		public extern static int request_add1_nonce(REQUEST* req, uint8* val, int len);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_basic_add1_nonce")]
+		public extern static int basic_add1_nonce(BASICRESP* resp, uint8* val, int len);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_check_nonce")]
+		public extern static int check_nonce(REQUEST* req, BASICRESP* bs);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_copy_nonce")]
+		public extern static int copy_nonce(BASICRESP* resp, REQUEST* req);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_request_set1_name")]
+		public extern static int request_set1_name(REQUEST* req, X509.NAME* nm);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_request_add1_cert")]
+		public extern static int request_add1_cert(REQUEST* req, X509.x509_st* cert);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_request_sign")]
+		public extern static int request_sign(REQUEST* req, X509.x509_st* signer, EVP.PKEY* key, EVP.MD* dgst, X509.stack_st_X509* certs, uint flags);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_response_status")]
+		public extern static int response_status(RESPONSE* resp);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_response_get1_basic")]
+		public extern static BASICRESP* response_get1_basic(RESPONSE* resp);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static ASN1.OCTET_STRING* OCSP_resp_get0_signature(BASICRESP* bs);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static X509.ALGOR* OCSP_resp_get0_tbs_sigalg(BASICRESP* bs);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static RESPDATA* OCSP_resp_get0_respdata(BASICRESP* bs);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_resp_get0_signer(BASICRESP* bs, X509.x509_st** signer, X509.stack_st_X509* extra_certs);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_resp_count(BASICRESP* bs);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static SINGLERESP* OCSP_resp_get0(BASICRESP* bs, int idx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static ASN1.GENERALIZEDTIME* OCSP_resp_get0_produced_at(BASICRESP* bs);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static X509.stack_st_X509* OCSP_resp_get0_certs(BASICRESP* bs);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_resp_get0_id(BASICRESP* bs, ASN1.OCTET_STRING** pid, X509.NAME** pname);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_resp_get1_id(BASICRESP* bs, ASN1.OCTET_STRING** pid, X509.NAME** pname);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_resp_find(BASICRESP* bs, CERTID* id, int last);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_single_get0_status(SINGLERESP* single, int* reason, ASN1.GENERALIZEDTIME** revtime, ASN1.GENERALIZEDTIME** thisupd, ASN1.GENERALIZEDTIME** nextupd);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_resp_find_status(BASICRESP* bs, CERTID* id, int* status, int* reason, ASN1.GENERALIZEDTIME** revtime, ASN1.GENERALIZEDTIME** thisupd, ASN1.GENERALIZEDTIME** nextupd);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_check_validity(ASN1.GENERALIZEDTIME* thisupd, ASN1.GENERALIZEDTIME* nextupd, int sec, int maxsec);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_request_verify")]
+		public extern static int request_verify(REQUEST* req, X509.stack_st_X509* certs, X509.STORE* store, uint flags);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_parse_url")]
+		public extern static int parse_url(char8* url, char8** phost, char8** pport, char8** ppath, int* pssl);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_id_issuer_cmp")]
+		public extern static int id_issuer_cmp(CERTID* a, CERTID* b);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_id_cmp")]
+		public extern static int id_cmp(CERTID* a, CERTID* b);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_request_onereq_count(REQUEST* req);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static ONEREQ* OCSP_request_onereq_get0(REQUEST* req, int i);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static CERTID* OCSP_onereq_get0_id(ONEREQ* one);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_id_get0_info(ASN1.OCTET_STRING** piNameHash, ASN1.OBJECT** pmd, ASN1.OCTET_STRING** pikeyHash, ASN1.INTEGER** pserial, CERTID* cid);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_request_is_signed(REQUEST* req);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static RESPONSE* OCSP_response_create(int status, BASICRESP* bs);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static SINGLERESP* OCSP_basic_add1_status(BASICRESP* rsp, CERTID* cid, int status, int reason, ASN1.TIME* revtime, ASN1.TIME* thisupd, ASN1.TIME* nextupd);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_basic_add1_cert(BASICRESP* resp, X509.x509_st* cert);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_basic_sign(BASICRESP* brsp, X509.x509_st* signer, EVP.PKEY* key, EVP.MD* dgst, X509.stack_st_X509* certs, uint flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_basic_sign_ctx(BASICRESP* brsp, X509.x509_st* signer, EVP.MD_CTX* ctx, X509.stack_st_X509* certs, uint flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_RESPID_set_by_name(RESPID* respid, X509.x509_st* cert);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_RESPID_set_by_key(RESPID* respid, X509.x509_st* cert);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_RESPID_match(RESPID* respid, X509.x509_st* cert);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_crlID_new")]
+		public extern static X509.EXTENSION* crlID_new(char8* url, int* n, char8* tim);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_accept_responses_new")]
+		public extern static X509.EXTENSION* accept_responses_new(char8** oids);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_archive_cutoff_new")]
+		public extern static X509.EXTENSION* archive_cutoff_new(char8* tim);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_url_svcloc_new")]
+		public extern static X509.EXTENSION* url_svcloc_new(X509.NAME* issuer, char8** urls);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_REQUEST_get_ext_count(REQUEST* x);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_REQUEST_get_ext_by_NID(REQUEST* x, int nid, int lastpos);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_REQUEST_get_ext_by_OBJ(REQUEST* x, ASN1.OBJECT* obj, int lastpos);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_REQUEST_get_ext_by_critical(REQUEST* x, int crit, int lastpos);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static X509.EXTENSION* OCSP_REQUEST_get_ext(REQUEST* x, int loc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static X509.EXTENSION* OCSP_REQUEST_delete_ext(REQUEST* x, int loc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static void* OCSP_REQUEST_get1_ext_d2i(REQUEST* x, int nid, int* crit, int* idx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_REQUEST_add1_ext_i2d(REQUEST* x, int nid, void* value, int crit, uint flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_REQUEST_add_ext(REQUEST* x, X509.EXTENSION* ex, int loc);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_ONEREQ_get_ext_count(ONEREQ* x);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_ONEREQ_get_ext_by_NID(ONEREQ* x, int nid, int lastpos);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_ONEREQ_get_ext_by_OBJ(ONEREQ* x, ASN1.OBJECT* obj, int lastpos);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_ONEREQ_get_ext_by_critical(ONEREQ* x, int crit, int lastpos);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static X509.EXTENSION* OCSP_ONEREQ_get_ext(ONEREQ* x, int loc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static X509.EXTENSION* OCSP_ONEREQ_delete_ext(ONEREQ* x, int loc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static void* OCSP_ONEREQ_get1_ext_d2i(ONEREQ* x, int nid, int* crit, int* idx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_ONEREQ_add1_ext_i2d(ONEREQ* x, int nid, void* value, int crit, uint flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_ONEREQ_add_ext(ONEREQ* x, X509.EXTENSION* ex, int loc);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_BASICRESP_get_ext_count(BASICRESP* x);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_BASICRESP_get_ext_by_NID(BASICRESP* x, int nid, int lastpos);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_BASICRESP_get_ext_by_OBJ(BASICRESP* x, ASN1.OBJECT* obj, int lastpos);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_BASICRESP_get_ext_by_critical(BASICRESP* x, int crit, int lastpos);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static X509.EXTENSION* OCSP_BASICRESP_get_ext(BASICRESP* x, int loc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static X509.EXTENSION* OCSP_BASICRESP_delete_ext(BASICRESP* x, int loc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static void* OCSP_BASICRESP_get1_ext_d2i(BASICRESP* x, int nid, int* crit, int* idx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_BASICRESP_add1_ext_i2d(BASICRESP* x, int nid, void* value, int crit, uint flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_BASICRESP_add_ext(BASICRESP* x, X509.EXTENSION* ex, int loc);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_SINGLERESP_get_ext_count(SINGLERESP* x);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_SINGLERESP_get_ext_by_NID(SINGLERESP* x, int nid, int lastpos);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_SINGLERESP_get_ext_by_OBJ(SINGLERESP* x, ASN1.OBJECT* obj, int lastpos);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_SINGLERESP_get_ext_by_critical(SINGLERESP* x, int crit, int lastpos);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static X509.EXTENSION* OCSP_SINGLERESP_get_ext(SINGLERESP* x, int loc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static X509.EXTENSION* OCSP_SINGLERESP_delete_ext(SINGLERESP* x, int loc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static void* OCSP_SINGLERESP_get1_ext_d2i(SINGLERESP* x, int nid, int* crit, int* idx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_SINGLERESP_add1_ext_i2d(SINGLERESP* x, int nid, void* value, int crit, uint flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static int OCSP_SINGLERESP_add_ext(SINGLERESP* x, X509.EXTENSION* ex, int loc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static CERTID* OCSP_SINGLERESP_get0_id(SINGLERESP* x);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_response_status_str")]
+		public extern static char8* response_status_str(int s);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_cert_status_str")]
+		public extern static char8* cert_status_str(int s);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_crl_reason_str")]
+		public extern static char8* crl_reason_str(int s);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_REQUEST_print")]
+		public extern static int REQUEST_print(BIO.bio_st* bp, REQUEST* a, uint flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_RESPONSE_print")]
+		public extern static int RESPONSE_print(BIO.bio_st* bp, RESPONSE* o, uint flags);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_basic_verify")]
+		public extern static int basic_verify(BASICRESP* bs, X509.stack_st_X509* certs, X509.STORE* st, uint flags);
 #endif
 	}
 }

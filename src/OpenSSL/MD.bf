@@ -15,6 +15,31 @@ namespace Beef_Net.OpenSSL
 	sealed abstract class MD2
 	{
 #if !OPENSSL_NO_MD2
+		public typealias INT = uint8;
+		
+		public const int DIGEST_LENGTH = 16;
+		public const int BLOCK         = 16;
+
+		[CRepr]
+		public struct state_st
+		{
+		    public uint num;
+		    public uint8[BLOCK] data;
+		    public INT[BLOCK] cksm;
+		    public INT[BLOCK] state;
+		}
+		public typealias CTX = state_st;
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("MD2_options")]
+		public extern static char8* options();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("MD2_Init")]
+		public extern static int Init(CTX* c);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("MD2_Update")]
+		public extern static int Update(CTX* c, uint8* data, uint len);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("MD2_Final")]
+		public extern static int Final(uint8* md, CTX* c);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("MD2")]
+		public extern static uint8* MD2_(uint8* d, uint n, uint8* md);
 #endif
 	}
 	
@@ -22,6 +47,41 @@ namespace Beef_Net.OpenSSL
 	sealed abstract class MD4
 	{
 #if !OPENSSL_NO_MD4
+		/*-
+		 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		 * ! MD4_LONG has to be at least 32 bits wide.                     !
+		 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		 */
+		public typealias LONG = uint;
+		
+		public const int CBLOCK        = 64;
+		public const int LBLOCK        = CBLOCK / 4;
+		public const int DIGEST_LENGTH = 16;
+
+		[CRepr]
+		public struct state_st
+		{
+		    public LONG A;
+			public LONG B;
+			public LONG C;
+			public LONG D;
+		    public LONG Nl;
+			public LONG Nh;
+		    public LONG[LBLOCK] data;
+		    public uint num;
+		}
+		public typealias CTX = state_st;
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("MD4_Init")]
+		public extern static int Init(CTX* c);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("MD4_Update")]
+		public extern static int Update(CTX* c, void* data, uint len);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("MD4_Final")]
+		public extern static int Final(uint8* md, CTX* c);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("MD4")]
+		public extern static uint8* MD4_(uint8* d, uint n, uint8* md);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("MD4_Transform")]
+		public extern static void Transform(CTX* c, uint8* b);
 #endif
 	}
 	
@@ -29,6 +89,70 @@ namespace Beef_Net.OpenSSL
 	sealed abstract class MD5
 	{
 #if !OPENSSL_NO_MD5
+		/*
+		 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		 * ! MD5_LONG has to be at least 32 bits wide.                     !
+		 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		 */
+		public typealias LONG = uint;
+		
+		public const int CBLOCK        = 64;
+		public const int LBLOCK        = CBLOCK / 4;
+		public const int DIGEST_LENGTH = 16;
+
+		[CRepr]
+		public struct state_st
+		{
+		    public LONG A;
+			public LONG B;
+			public LONG C;
+			public LONG D;
+		    public LONG Nl;
+			public LONG Nh;
+		    public LONG[LBLOCK] data;
+		    public uint num;
+		}
+		public typealias CTX = state_st;
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("MD5_Init")]
+		public extern static int Init(CTX* c);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("MD5_Update")]
+		public extern static int Update(CTX* c, void* data, uint len);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("MD5_Final")]
+		public extern static int Final(uint8* md, CTX* c);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("MD5")]
+		public extern static uint8* MD5_(uint8* d, uint n, uint8* md);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("MD5_Transform")]
+		public extern static void Transform(CTX* c, uint8* b);
+#endif
+	}
+	
+	[AlwaysInclude]
+	sealed abstract class MDC2
+	{
+#if !OPENSSL_NO_MDC2
+		public const int BLOCK         = 8;
+		public const int DIGEST_LENGTH = 16;
+
+		[CRepr]
+		public struct ctx_st
+		{
+		    public uint num;
+		    public uint8[BLOCK] data;
+		    public DES.cblock h;
+		    public DES.cblock hh;
+		    public int pad_type;      /* either 1 or 2, default 1 */
+		}
+		public typealias CTX = ctx_st;
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("MDC2_Init")]
+		public extern static int Init(CTX*c );
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("MDC2_Update")]
+		public extern static int Update(CTX* c, uint8* data, uint len);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("MDC2_Final")]
+		public extern static int Final(uint8* md, CTX* c);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("MDC2")]
+		public extern static uint8* MDC2_(uint8* d, uint n, uint8* md);
 #endif
 	}
 }

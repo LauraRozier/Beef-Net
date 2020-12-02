@@ -473,6 +473,7 @@ namespace Beef_Net.OpenSSL
 	[AlwaysInclude]
 	sealed abstract class SSL
 	{
+		public function int CLIENT_CERT_PTR(Engine.engine_st* e, ssl_st* ssl, X509.stack_st_X509_NAME* ca_dn, X509.x509_st** pcert, EVP.PKEY** pkey, X509.stack_st_X509** pother, UI.METHOD* ui_method, void* callback_data);
 		/* Not even going to port this, hell no. Feel free to contrib */
 		[CRepr]
 		public struct method_st { }

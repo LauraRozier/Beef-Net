@@ -2130,6 +2130,68 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_add_alg_module")]
 		public extern static void add_alg_module();
 
+		public const int PKEY_CTRL_TLS_MD                   = PKEY_ALG_CTRL;
+		public const int PKEY_CTRL_TLS_SECRET               = PKEY_ALG_CTRL + 1;
+		public const int PKEY_CTRL_TLS_SEED                 = PKEY_ALG_CTRL + 2;
+		public const int PKEY_CTRL_HKDF_MD                  = PKEY_ALG_CTRL + 3;
+		public const int PKEY_CTRL_HKDF_SALT                = PKEY_ALG_CTRL + 4;
+		public const int PKEY_CTRL_HKDF_KEY                 = PKEY_ALG_CTRL + 5;
+		public const int PKEY_CTRL_HKDF_INFO                = PKEY_ALG_CTRL + 6;
+		public const int PKEY_CTRL_HKDF_MODE                = PKEY_ALG_CTRL + 7;
+		public const int PKEY_CTRL_PASS                     = PKEY_ALG_CTRL + 8;
+		public const int PKEY_CTRL_SCRYPT_SALT              = PKEY_ALG_CTRL + 9;
+		public const int PKEY_CTRL_SCRYPT_N                 = PKEY_ALG_CTRL + 10;
+		public const int PKEY_CTRL_SCRYPT_R                 = PKEY_ALG_CTRL + 11;
+		public const int PKEY_CTRL_SCRYPT_P                 = PKEY_ALG_CTRL + 12;
+		public const int PKEY_CTRL_SCRYPT_MAXMEM_BYTES      = PKEY_ALG_CTRL + 13;
+		
+		public const int PKEY_HKDEF_MODE_EXTRACT_AND_EXPAND = 0;
+		public const int PKEY_HKDEF_MODE_EXTRACT_ONLY       = 1;
+		public const int PKEY_HKDEF_MODE_EXPAND_ONLY        = 2;
+		
+		[Inline]
+		public static int PKEY_CTX_set_tls1_prf_md(PKEY_CTX* pctx, void* md) =>
+			PKEY_CTX_ctrl(pctx, -1, PKEY_OP_DERIVE, PKEY_CTRL_TLS_MD, 0, md);
+		[Inline]
+		public static int PKEY_CTX_set1_tls1_prf_secret(PKEY_CTX* pctx, void* sec, int seclen) =>
+			PKEY_CTX_ctrl(pctx, -1, PKEY_OP_DERIVE, PKEY_CTRL_TLS_SECRET, seclen, sec);
+		[Inline]
+		public static int PKEY_CTX_add1_tls1_prf_seed(PKEY_CTX* pctx, void* seed, int seedlen) =>
+			PKEY_CTX_ctrl(pctx, -1, PKEY_OP_DERIVE, PKEY_CTRL_TLS_SEED, seedlen, seed);
+		[Inline]
+		public static int PKEY_CTX_set_hkdf_md(PKEY_CTX* pctx, void* md) =>
+			PKEY_CTX_ctrl(pctx, -1, PKEY_OP_DERIVE, PKEY_CTRL_HKDF_MD, 0, md);
+		[Inline]
+		public static int PKEY_CTX_set1_hkdf_salt(PKEY_CTX* pctx, void* salt, int saltlen) =>
+			PKEY_CTX_ctrl(pctx, -1, PKEY_OP_DERIVE, PKEY_CTRL_HKDF_SALT, saltlen, salt);
+		[Inline]
+		public static int PKEY_CTX_set1_hkdf_key(PKEY_CTX* pctx, void* key, int keylen) =>
+			PKEY_CTX_ctrl(pctx, -1, PKEY_OP_DERIVE, PKEY_CTRL_HKDF_KEY, keylen, key);
+		[Inline]
+		public static int PKEY_CTX_add1_hkdf_info(PKEY_CTX* pctx, void* info, int infolen) =>
+			PKEY_CTX_ctrl(pctx, -1, PKEY_OP_DERIVE, PKEY_CTRL_HKDF_INFO, infolen, info);
+		[Inline]
+		public static int PKEY_CTX_hkdf_mode(PKEY_CTX* pctx, int mode) =>
+			PKEY_CTX_ctrl(pctx, -1, PKEY_OP_DERIVE, PKEY_CTRL_HKDF_MODE, mode, null);
+		[Inline]
+		public static int PKEY_CTX_set1_pbe_pass(PKEY_CTX* pctx, void* pass, int passlen) =>
+			PKEY_CTX_ctrl(pctx, -1, PKEY_OP_DERIVE, PKEY_CTRL_PASS, passlen, pass);
+		[Inline]
+		public static int PKEY_CTX_set1_scrypt_salt(PKEY_CTX* pctx, void* salt, int saltlen) =>
+			PKEY_CTX_ctrl(pctx, -1, PKEY_OP_DERIVE, PKEY_CTRL_SCRYPT_SALT, saltlen, salt);
+		[Inline]
+		public static int PKEY_CTX_set_scrypt_N(PKEY_CTX* pctx, uint64 n) =>
+			PKEY_CTX_ctrl_uint64(pctx, -1, PKEY_OP_DERIVE, PKEY_CTRL_SCRYPT_N, n);
+		[Inline]
+		public static int PKEY_CTX_set_scrypt_r(PKEY_CTX* pctx, uint64 r) =>
+			PKEY_CTX_ctrl_uint64(pctx, -1, PKEY_OP_DERIVE, PKEY_CTRL_SCRYPT_R, r);
+		[Inline]
+		public static int PKEY_CTX_set_scrypt_p(PKEY_CTX* pctx, uint64 p) =>
+			PKEY_CTX_ctrl_uint64(pctx, -1, PKEY_OP_DERIVE, PKEY_CTRL_SCRYPT_P, p);
+		[Inline]
+		public static int PKEY_CTX_set_scrypt_maxmem_bytes(PKEY_CTX* pctx, uint64 maxmem_bytes) =>
+			PKEY_CTX_ctrl_uint64(pctx, -1, PKEY_OP_DERIVE, PKEY_CTRL_SCRYPT_MAXMEM_BYTES, maxmem_bytes);
+
 #if !OPENSSL_NO_DH
 		[Inline]
 		public static int PKEY_CTX_set_dh_paramgen_prime_len(PKEY_CTX* ctx, int len) => PKEY_CTX_ctrl(ctx, PKEY_DH, PKEY_OP_PARAMGEN, PKEY_CTRL_DH_PARAMGEN_PRIME_LEN, len, null);

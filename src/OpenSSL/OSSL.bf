@@ -12,6 +12,15 @@ using System;
 namespace Beef_Net.OpenSSL
 {
 	[AlwaysInclude]
+	sealed abstract class OSSL
+	{
+		/* Binary/behaviour compatibility levels */
+		public const uint DYNAMIC_VERSION = 0x00030000U;
+		/* Binary versions older than this are too old for us (whether we're a loader or a loadee) */
+		public const uint DYNAMIC_OLDEST  = 0x00030000U;
+	}
+
+	[AlwaysInclude]
 	sealed abstract class OSSLType
 	{
 		[CRepr]

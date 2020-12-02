@@ -37,47 +37,81 @@ namespace Beef_Net.OpenSSL
 		public const int DIR         = 4;
 		public const int ENGINES_DIR = 5;
 
+		/*-
+		 * Numeric release version identifier:
+		 * MNNFFPPS: major minor fix patch status
+		 * The status nibble has one of the values 0 for development, 1 to e for betas
+		 * 1 to 14, and f for release.  The patch level is exactly that.
+		 * For example:
+		 * 0.9.3-dev      0x00903000
+		 * 0.9.3-beta1    0x00903001
+		 * 0.9.3-beta2-dev 0x00903002
+		 * 0.9.3-beta2    0x00903002 (same as ...beta2-dev)
+		 * 0.9.3          0x0090300f
+		 * 0.9.3a         0x0090301f
+		 * 0.9.4          0x0090400f
+		 * 1.2.3z         0x102031af
+		 *
+		 * For continuity reasons (because 0.9.5 is already out, and is coded
+		 * 0x00905100), between 0.9.5 and 0.9.6 the coding of the patch level
+		 * part is slightly different, by setting the highest bit.  This means
+		 * that 0.9.5a looks like this: 0x0090581f.  At 0.9.6, we can start
+		 * with 0x0090600S...
+		 *
+		 * (Prior to 0.9.3-dev a different scheme was used: 0.9.2b is 0x0922.)
+		 * (Prior to 0.9.5a beta1, a different scheme was used: MMNNFFRBB for
+		 *  major minor fix final patch/beta)
+		 */
+		public const int VERSION_NUMBER  = 0x1010108FL;
+		public const char8* VERSION_TEXT = "OpenSSL 1.1.1h  22 Sep 2020";
+
+		public const int MIN_API         = 0;
+		public const int API_COMPAT      = MIN_API;
+
+		public const char8* FILE         = "";
+		public const int LINE            = 0;
+
 		[Inline, Obsolete("No longer needed, so this is a no-op", true)]
 		public static void malloc_init() { while(false) continue; }
 
 		[Inline]
-		public static void* malloc(uint num) => Crypto.malloc(num, OPENSSL_FILE, OPENSSL_LINE);
+		public static void* malloc(uint num) => Crypto.malloc(num, FILE, LINE);
 
 		[Inline]
-		public static void* zalloc(uint num) => Crypto.zalloc(num, OPENSSL_FILE, OPENSSL_LINE);
+		public static void* zalloc(uint num) => Crypto.zalloc(num, FILE, LINE);
 
 		[Inline]
-		public static void* realloc(void* addr, uint num) => Crypto.realloc(addr, num, OPENSSL_FILE, OPENSSL_LINE);
+		public static void* realloc(void* addr, uint num) => Crypto.realloc(addr, num, FILE, LINE);
 
 		[Inline]
-		public static void* clear_realloc(void* addr, uint old_num, uint num) => Crypto.clear_realloc(addr, old_num, num, OPENSSL_FILE, OPENSSL_LINE);
+		public static void* clear_realloc(void* addr, uint old_num, uint num) => Crypto.clear_realloc(addr, old_num, num, FILE, LINE);
 
 		[Inline]
-		public static void clear_free(void* addr, uint num) => Crypto.clear_free(addr, num, OPENSSL_FILE, OPENSSL_LINE);
+		public static void clear_free(void* addr, uint num) => Crypto.clear_free(addr, num, FILE, LINE);
 
 		[Inline]
-		public static void free(void* addr) => Crypto.free(addr, OPENSSL_FILE, OPENSSL_LINE);
+		public static void free(void* addr) => Crypto.free(addr, FILE, LINE);
 
 		[Inline]
-		public static void* memdup(void* data, uint size) => Crypto.memdup(data, size, OPENSSL_FILE, OPENSSL_LINE);
+		public static void* memdup(void* data, uint size) => Crypto.memdup(data, size, FILE, LINE);
 
 		[Inline]
-		public static char8* strdup(char8* str) => Crypto.strdup(str, OPENSSL_FILE, OPENSSL_LINE);
+		public static char8* strdup(char8* str) => Crypto.strdup(str, FILE, LINE);
 
 		[Inline]
-		public static char8* strndup(char8* str, uint n) => Crypto.strndup(str, n, OPENSSL_FILE, OPENSSL_LINE);
+		public static char8* strndup(char8* str, uint n) => Crypto.strndup(str, n, FILE, LINE);
 
 		[Inline]
-		public static void* secure_malloc(uint num) => Crypto.secure_malloc(num, OPENSSL_FILE, OPENSSL_LINE);
+		public static void* secure_malloc(uint num) => Crypto.secure_malloc(num, FILE, LINE);
 
 		[Inline]
-		public static void* secure_zalloc(uint num) => Crypto.secure_zalloc(num, OPENSSL_FILE, OPENSSL_LINE);
+		public static void* secure_zalloc(uint num) => Crypto.secure_zalloc(num, FILE, LINE);
 
 		[Inline]
-		public static void secure_free(void* addr) => Crypto.secure_free(addr, OPENSSL_FILE, OPENSSL_LINE);
+		public static void secure_free(void* addr) => Crypto.secure_free(addr, FILE, LINE);
 
 		[Inline]
-		public static void secure_clear_free(void* addr, uint num) => Crypto.secure_clear_free(addr, num, OPENSSL_FILE, OPENSSL_LINE);
+		public static void secure_clear_free(void* addr, uint num) => Crypto.secure_clear_free(addr, num, FILE, LINE);
 
 		[Inline]
 		public static uint secure_actual_size(void* ptr) => Crypto.secure_actual_size(ptr);
@@ -107,7 +141,7 @@ namespace Beef_Net.OpenSSL
 		public extern static int issetugid();
 
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_cleanse")]
-		public extern static void cleanse(void *ptr, uint len);
+		public extern static void cleanse(void* ptr, uint len);
 
 		/* die if we have to */
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_die"), NoReturn]
@@ -120,7 +154,7 @@ namespace Beef_Net.OpenSSL
 			if (!check) {
 				String tmp = scope:: .();
 				tmp.AppendF("assertion failed: {}", msg);
-				die(tmp.CStr(),  OPENSSL_FILE,  OPENSSL_LINE);
+				die(tmp.CStr(), FILE, LINE);
 			}
 		}
 
@@ -135,7 +169,7 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_gmtime_adj")]
 		public extern static int gmtime_adj(OSSLType.tm* tm, int offset_day, int offset_sec);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_gmtime_diff")]
-		public extern static int gmtime_diff(int *pday, int* psec, OSSLType.tm* from, OSSLType.tm* to);
+		public extern static int gmtime_diff(int* pday, int* psec, OSSLType.tm* from, OSSLType.tm* to);
 
 		/* Standard initialisation options */
 		public const int INIT_NO_LOAD_CRYPTO_STRINGS = 0x00000001L;
@@ -239,5 +273,53 @@ namespace Beef_Net.OpenSSL
 		public const int EC_NAMED_CURVE    = 0x001;
 
 		public const int ECC_MAX_FIELD_BITS = 661;
+
+		public function int LH_COMPFUNC(void* a, void* b);
+		public function uint LH_HASHFUNC(void* p);
+		public function void LH_DOALL_FUNC(void* p);
+		public function void LH_DOALL_FUNCARG(void* a, void* b);
+
+		public typealias LHASH = LHash.lhash_st;
+		public typealias LH_NODE = LHash.node_st;
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_LH_error")]
+		public extern static int LH_error(LHash.lhash_st* lh);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_LH_new")]
+		public extern static LHash.lhash_st* LH_new(LH_HASHFUNC h, LH_COMPFUNC c);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_LH_free")]
+		public extern static void LH_free(LHash.lhash_st* lh);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_LH_insert")]
+		public extern static void* LH_insert(LHash.lhash_st* lh, void* data);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_LH_delete")]
+		public extern static void* LH_delete(LHash.lhash_st* lh, void* data);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_LH_retrieve")]
+		public extern static void* LH_retrieve(LHash.lhash_st* lh, void* data);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_LH_doall")]
+		public extern static void LH_doall(LHash.lhash_st* lh, LH_DOALL_FUNC func);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_LH_doall_arg")]
+		public extern static void LH_doall_arg(LHash.lhash_st* lh, LH_DOALL_FUNCARG func, void* arg);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_LH_strhash")]
+		public extern static uint LH_strhash(char8* c);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_LH_num_items")]
+		public extern static uint LH_num_items(LHash.lhash_st* lh);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_LH_get_down_load")]
+		public extern static uint LH_get_down_load(LHash.lhash_st* lh);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_LH_set_down_load")]
+		public extern static void LH_set_down_load(LHash.lhash_st* lh, uint down_load);
+
+#if !OPENSSL_NO_STDIO
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_LH_stats")]
+		public extern static void LH_stats(LHash.lhash_st* lh, Platform.BfpFile* fp);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_LH_node_stats")]
+		public extern static void LH_node_stats(LHash.lhash_st* lh, Platform.BfpFile* fp);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_LH_node_usage_stats")]
+		public extern static void LH_node_usage_stats(LHash.lhash_st* lh, Platform.BfpFile* fp);
+#endif
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_LH_stats_bio")]
+		public extern static void LH_stats_bio(LHash.lhash_st* lh, BIO.bio_st* outVal);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_LH_node_stats_bio")]
+		public extern static void LH_node_stats_bio(LHash.lhash_st* lh, BIO.bio_st* outVal);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_LH_node_usage_stats_bio")]
+		public extern static void LH_node_usage_stats_bio(LHash.lhash_st* lh, BIO.bio_st* outVal);
 	}
 }
