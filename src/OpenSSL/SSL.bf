@@ -532,7 +532,7 @@ namespace Beef_Net.OpenSSL
 		    public function int(ssl_st* s, int type, void* buf_, uint len, uint* written) ssl_write_bytes;
 		    public function int(ssl_st* s) ssl_dispatch_alert;
 		    public function int(ssl_st* s, int cmd, int larg, void* parg) ssl_ctrl;
-		    public function int(SSL_CTX* ctx, int cmd, int larg, void* parg) ssl_ctx_ctrl;
+		    public function int(CTX* ctx, int cmd, int larg, void* parg) ssl_ctx_ctrl;
 		    public function CIPHER*(uint8* ptr) get_cipher_by_char;
 		    public function int(CIPHER* cipher, WPACKET* pkt,  uint* len) put_cipher_by_char;
 		    public function uint(ssl_st* s) ssl_pending;
@@ -542,7 +542,7 @@ namespace Beef_Net.OpenSSL
 		    public SSL3.enc_method* ssl3_enc; /* Extra SSLv3/TLS stuff */
 		    public function int() ssl_version;
 		    public function int(ssl_st* s, int cb_id, function void() fp) ssl_callback_ctrl;
-		    public function int(SSL_CTX* s, int cb_id, function void() fp) ssl_ctx_callback_ctrl;
+		    public function int(CTX* s, int cb_id, function void() fp) ssl_ctx_callback_ctrl;
 		}
 		public typealias METHOD = method_st;
 		
@@ -580,8 +580,20 @@ namespace Beef_Net.OpenSSL
 
 		/** FIXME: Not even going to port this, hell no. Feel free to contrib. **/
 		[CRepr]
-		public struct ssl_ctx_st { }
-		public typealias SSL_CTX = ssl_ctx_st;
+		public struct ctx_st { }
+		public typealias CTX = ctx_st;
+
+#if !OPENSSL_NO_SRTP
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("SSL_CTX_set_tlsext_use_srtp")]
+		public extern static int CTX_set_tlsext_use_srtp(CTX* ctx, char8* profiles);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("SSL_set_tlsext_use_srtp")]
+		public extern static int set_tlsext_use_srtp(ssl_st* ssl, char8* profiles);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("SSL_get_srtp_profiles")]
+		public extern static SRTP.stack_st_SRTP_PROTECTION_PROFILE* get_srtp_profiles(ssl_st* ssl);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("SSL_get_selected_srtp_profile")]
+		public extern static SRTP.PROTECTION_PROFILE* get_selected_srtp_profile(ssl_st* s);
+#endif
 	}
 	
 	[AlwaysInclude]

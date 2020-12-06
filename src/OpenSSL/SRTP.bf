@@ -14,7 +14,26 @@ namespace Beef_Net.OpenSSL
 	[AlwaysInclude]
 	sealed abstract class SRTP
 	{
+		public const int AES128_CM_SHA1_80 = 0x0001;
+		public const int AES128_CM_SHA1_32 = 0x0002;
+		public const int AES128_F8_SHA1_80 = 0x0003;
+		public const int AES128_F8_SHA1_32 = 0x0004;
+		public const int NULL_SHA1_80      = 0x0005;
+		public const int NULL_SHA1_32      = 0x0006;
+		
+		/* AEAD SRTP protection profiles from RFC 7714 */
+		public const int AEAD_AES_128_GCM  = 0x0007;
+		public const int AEAD_AES_256_GCM  = 0x0008;
+
 #if !OPENSSL_NO_SRTP
+		[CRepr]
+		public struct protection_profile_st
+		{
+		    public char8* name;
+		    public uint id;
+		}
+		public typealias PROTECTION_PROFILE = protection_profile_st;
+		public struct stack_st_SRTP_PROTECTION_PROFILE {}
 #endif
 	}
 }

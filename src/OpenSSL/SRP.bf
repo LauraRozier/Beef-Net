@@ -17,8 +17,8 @@ namespace Beef_Net.OpenSSL
 #if !OPENSSL_NO_SRP
 		[CRepr]
 		public struct gN_cache_st {
-		    char8* b64_bn;
-		    BN.BIGNUM* bn;
+		    public char8* b64_bn;
+		    public BN.BIGNUM* bn;
 		}
 		public typealias gN_cache = gN_cache_st;
 
@@ -26,14 +26,14 @@ namespace Beef_Net.OpenSSL
 		public struct user_pwd_st
 		{
 		    /* Owned by us. */
-		    char8* id;
-		    BN.BIGNUM* s;
-		    BN.BIGNUM* v;
+		    public char8* id;
+		    public BN.BIGNUM* s;
+		    public BN.BIGNUM* v;
 		    /* Not owned by us. */
-		    BN.BIGNUM* g;
-		    BN.BIGNUM* N;
+		    public BN.BIGNUM* g;
+		    public BN.BIGNUM* N;
 		    /* Owned by us. */
-		    char8* info;
+		    public char8* info;
 		}
 		public typealias user_pwd = user_pwd_st;
 
@@ -42,8 +42,8 @@ namespace Beef_Net.OpenSSL
 
 		[CRepr]
 		public struct VBASE_st {
-		    user_pwd* users_pwd;
-		    gN_cache* gN_cache;
+		    public user_pwd* users_pwd;
+		    public gN_cache* gN_cache;
 			/* to simulate a user */
 		    public char8* seed_key;
 		    public BN.BIGNUM* default_g;
@@ -56,9 +56,9 @@ namespace Beef_Net.OpenSSL
 		 */
 		[CRepr]
 		public struct gN_st {
-		    char8* id;
-		    BN.BIGNUM* g;
-		    BN.BIGNUM* N;
+		    public char8* id;
+		    public BN.BIGNUM* g;
+		    public BN.BIGNUM* N;
 		}
 		public typealias gN = gN_st;
 
@@ -176,25 +176,25 @@ namespace Beef_Net.OpenSSL
 # endif
 
 		[Import(OPENSSL_LIB_SSL), CLink]
-		public extern static int SSL_CTX_SRP_CTX_init(SSL.SSL_CTX* ctx);
+		public extern static int SSL_CTX_SRP_CTX_init(SSL.CTX* ctx);
 		[Import(OPENSSL_LIB_SSL), CLink]
-		public extern static int SSL_CTX_SRP_CTX_free(SSL.SSL_CTX* ctx);
+		public extern static int SSL_CTX_SRP_CTX_free(SSL.CTX* ctx);
 
 #if !OPENSSL_NO_SRP
 		[Import(OPENSSL_LIB_SSL), CLink]
-		public extern static int SSL_CTX_set_srp_username(SSL.SSL_CTX* ctx, char8* name);
+		public extern static int SSL_CTX_set_srp_username(SSL.CTX* ctx, char8* name);
 		[Import(OPENSSL_LIB_SSL), CLink]
-		public extern static int SSL_CTX_set_srp_password(SSL.SSL_CTX* ctx, char8* password);
+		public extern static int SSL_CTX_set_srp_password(SSL.CTX* ctx, char8* password);
 		[Import(OPENSSL_LIB_SSL), CLink]
-		public extern static int SSL_CTX_set_srp_strength(SSL.SSL_CTX* ctx, int strength);
+		public extern static int SSL_CTX_set_srp_strength(SSL.CTX* ctx, int strength);
 		[Import(OPENSSL_LIB_SSL), CLink]
-		public extern static int SSL_CTX_set_srp_client_pwd_callback(SSL.SSL_CTX* ctx, function char8*(SSL.ssl_st*, void*) cb);
+		public extern static int SSL_CTX_set_srp_client_pwd_callback(SSL.CTX* ctx, function char8*(SSL.ssl_st*, void*) cb);
 		[Import(OPENSSL_LIB_SSL), CLink]
-		public extern static int SSL_CTX_set_srp_verify_param_callback(SSL.SSL_CTX* ctx, function int(SSL.ssl_st*, void*) cb);
+		public extern static int SSL_CTX_set_srp_verify_param_callback(SSL.CTX* ctx, function int(SSL.ssl_st*, void*) cb);
 		[Import(OPENSSL_LIB_SSL), CLink]
-		public extern static int SSL_CTX_set_srp_username_callback(SSL.SSL_CTX* ctx, function int(SSL.ssl_st*, int*, void*) cb);
+		public extern static int SSL_CTX_set_srp_username_callback(SSL.CTX* ctx, function int(SSL.ssl_st*, int*, void*) cb);
 		[Import(OPENSSL_LIB_SSL), CLink]
-		public extern static int SSL_CTX_set_srp_cb_arg(SSL.SSL_CTX* ctx, void* arg);
+		public extern static int SSL_CTX_set_srp_cb_arg(SSL.CTX* ctx, void* arg);
 # endif
 	}
 }

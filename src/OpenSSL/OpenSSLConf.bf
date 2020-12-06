@@ -29,8 +29,6 @@ namespace Beef_Net.OpenSSL
 #else
 	#error Unsupported platform
 #endif
-
-		public typealias RC4_INT = uint;
 		
 		/*-
 		 * The macros below are to be used for shared library (.so, .dll, ...)

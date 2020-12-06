@@ -15,13 +15,59 @@ namespace Beef_Net.OpenSSL
 	sealed abstract class RC2
 	{
 #if !OPENSSL_NO_RC2
+		public typealias INT = uint;
+		
+		public const int ENCRYPT    = 1;
+		public const int DECRYPT    = 0;
+		
+		public const int BLOCK      = 8;
+		public const int KEY_LENGTH = 16;
+
+		[CRepr]
+		public struct key_st
+		{
+		    public INT[64] data;
+		}
+		public typealias KEY = key_st;
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RC2_set_key")]
+		public extern static void set_key(KEY* key, int len, uint8* data, int bits);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RC2_ecb_encrypt")]
+		public extern static void ecb_encrypt(uint8* inVal, uint8* outVal, KEY* key, int enc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RC2_encrypt")]
+		public extern static void encrypt(uint* data, KEY* key);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RC2_decrypt")]
+		public extern static void decrypt(uint* data, KEY* key);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RC2_cbc_encrypt")]
+		public extern static void cbc_encrypt(uint8* inVal, uint8* outVal, int length, KEY* ks, uint8* iv, int enc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RC2_cfb64_encrypt")]
+		public extern static void cfb64_encrypt(uint8* inVal, uint8* outVal, int length, KEY* schedule, uint8* ivec, int* num, int enc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RC2_ofb64_encrypt")]
+		public extern static void ofb64_encrypt(uint8* inVal, uint8* outVal, int length, KEY* schedule, uint8* ivec, int* num);
 #endif
 	}
 	
 	[AlwaysInclude]
 	sealed abstract class RC4
 	{
+		public typealias INT = uint;
+
 #if !OPENSSL_NO_RC4
+		[CRepr]
+		public struct key_st
+		{
+		    public INT x;
+			public INT y;
+		    public INT[256] data;
+		}
+		public typealias KEY = key_st;
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RC4_options")]
+		public extern static char8* options();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RC4_set_key")]
+		public extern static void set_key(KEY* key, int len, uint8* data);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RC4")]
+		public extern static void RC4_(KEY* key, uint len, uint8* indata, uint8* outdata);
 #endif
 	}
 	
@@ -29,6 +75,44 @@ namespace Beef_Net.OpenSSL
 	sealed abstract class RC5
 	{
 #if !OPENSSL_NO_RC5
+		public const int ENCRYPT = 1;
+		public const int DECRYPT = 0;
+		
+		public typealias INT_32 = uint;
+		
+		public const int BLOCK_32      = 8;
+		public const int KEY_LENGTH_32 = 16; /* This is a default, max is 255 */
+		
+		/*
+		 * This are the only values supported.  Tweak the code if you want more The most supported modes will be RC5-32/12/16 RC5-32/16/8
+		 */
+		public const int ROUNDS_8  = 8;
+		public const int ROUNDS_12 = 12;
+		public const int ROUNDS_16 = 16;
+		
+		[CRepr]
+		public struct key_st
+		{
+		    /* Number of rounds */
+		    public int rounds;
+		    public INT_32[2 * (ROUNDS_16 + 1)] data;
+		}
+		public typealias KEY_32 = key_st;
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RC5_32_set_key")]
+		public extern static void set_key_32(KEY_32* key, int len, uint8* data, int rounds);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RC5_32_ecb_encrypt")]
+		public extern static void ecb_encrypt_32(uint8* inVal, uint8* outVal, KEY_32* key, int enc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RC5_32_encrypt")]
+		public extern static void encrypt_32(uint* data, KEY_32* key);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RC5_32_decrypt")]
+		public extern static void decrypt_32(uint* data, KEY_32* key);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RC5_32_cbc_encrypt")]
+		public extern static void cbc_encrypt_32(uint8* inVal, uint8* outVal, int length, KEY_32* ks, uint8* iv, int enc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RC5_32_cfb64_encrypt")]
+		public extern static void cfb64_encrypt_32(uint8* inVal, uint8* outVal, int length, KEY_32* schedule, uint8* ivec, int* num, int enc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RC5_32_ofb64_encrypt")]
+		public extern static void ofb64_encrypt_32(uint8* inVal, uint8* outVal, int length, KEY_32* schedule, uint8* ivec, int* num);
 #endif
 	}
 }
