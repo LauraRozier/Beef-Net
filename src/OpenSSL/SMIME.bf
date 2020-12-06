@@ -27,5 +27,24 @@ namespace Beef_Net.OpenSSL
 		public extern static CMS.ContentInfo* read_CMS(BIO.bio_st* bio, BIO.bio_st** bcont);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("SMIME_write_CMS")]
 		public extern static int write_CMS(BIO.bio_st* bio, CMS.ContentInfo* cms, BIO.bio_st* data, int flags);
+
+		/* Flags: for compatibility with older code */
+		public const int TEXT      = PKCS7.TEXT;
+		public const int NOCERTS   = PKCS7.NOCERTS;
+		public const int NOSIGS    = PKCS7.NOSIGS;
+		public const int NOCHAIN   = PKCS7.NOCHAIN;
+		public const int NOINTERN  = PKCS7.NOINTERN;
+		public const int NOVERIFY  = PKCS7.NOVERIFY;
+		public const int DETACHED  = PKCS7.DETACHED;
+		public const int BINARY    = PKCS7.BINARY;
+		public const int NOATTR    = PKCS7.NOATTR;
+
+		/* CRLF ASCII canonicalisation */
+		public const int ASCIICRLF = 0x80000;
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("SMIME_write_PKCS7")]
+		public extern static int write_PKCS7(BIO.bio_st* bio, PKCS7.pkcs7_st* p7, BIO.bio_st* data, int flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("SMIME_read_PKCS7")]
+		public extern static PKCS7.pkcs7_st* read_PKCS7(BIO.bio_st* bio, BIO.bio_st** bcont);
 	}
 }

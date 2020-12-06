@@ -474,10 +474,114 @@ namespace Beef_Net.OpenSSL
 	sealed abstract class SSL
 	{
 		public function int CLIENT_CERT_PTR(Engine.engine_st* e, ssl_st* ssl, X509.stack_st_X509_NAME* ca_dn, X509.x509_st** pcert, EVP.PKEY** pkey, X509.stack_st_X509** pother, UI.METHOD* ui_method, void* callback_data);
-		/* Not even going to port this, hell no. Feel free to contrib */
+
+		/* Writeable packets */
 		[CRepr]
-		public struct method_st { }
+		public struct wpacket_sub
+		{
+		    /* The parent WPACKET_SUB if we have one or NULL otherwise */
+		    public WPACKET_SUB* parent;
+		    /* Offset into the buffer where the length of this WPACKET goes. We use an offset in case the buffer grows and gets reallocated. */
+		    public uint packet_len;
+		    /* Number of bytes in the packet_len or 0 if we don't write the length */
+		    public uint lenbytes;
+		    /* Number of bytes written to the buf prior to this packet starting */
+		    public uint pwritten;
+		    /* Flags for this sub-packet */
+		    public uint flags;
+		}
+		public typealias WPACKET_SUB = wpacket_sub;
+
+		[CRepr]
+		public struct wpacket_st
+		{
+		    /* The buffer where we store the output data */
+		    public Buffer.MEM* buf;
+		    /* Fixed sized buffer which can be used as an alternative to buf */
+		    public uint8* staticbuf;
+		    /* Offset into the buffer where we are currently writing. We use an offset in case the buffer grows and gets reallocated. */
+		    public uint curr;
+		    /* Number of bytes written so far */
+		    public uint written;
+		    /* Maximum number of bytes we will allow to be written to this WPACKET */
+		    public uint maxsize;
+		    /* Our sub-packets (always at least one if not finished) */
+		    public WPACKET_SUB* subs;
+		}
+		public typealias WPACKET = wpacket_st;
+
+		/* Used to hold SSL/TLS functions */
+		[CRepr]
+		public struct method_st
+		{
+		    public int version;
+		    public uint flags;
+		    public uint mask;
+		    public function int(ssl_st* s) ssl_new;
+		    public function int(ssl_st* s) ssl_clear;
+		    public function void(ssl_st* s) ssl_free;
+		    public function int(ssl_st* s) ssl_accept;
+		    public function int(ssl_st* s) ssl_connect;
+		    public function int(ssl_st* s, void* buf, uint len, uint* readbytes) ssl_read;
+		    public function int(ssl_st* s, void* buf, uint len, uint* readbytes) ssl_peek;
+		    public function int(ssl_st* s, void* buf, uint len, uint* written) ssl_write;
+		    public function int(ssl_st* s) ssl_shutdown;
+		    public function int(ssl_st* s) ssl_renegotiate;
+		    public function int(ssl_st* s, int) ssl_renegotiate_check;
+		    public function int(ssl_st* s, int type, int* recvd_type, uint8* buf, uint len, int peek, uint* readbytes) ssl_read_bytes;
+		    public function int(ssl_st* s, int type, void* buf_, uint len, uint* written) ssl_write_bytes;
+		    public function int(ssl_st* s) ssl_dispatch_alert;
+		    public function int(ssl_st* s, int cmd, int larg, void* parg) ssl_ctrl;
+		    public function int(SSL_CTX* ctx, int cmd, int larg, void* parg) ssl_ctx_ctrl;
+		    public function CIPHER*(uint8* ptr) get_cipher_by_char;
+		    public function int(CIPHER* cipher, WPACKET* pkt,  uint* len) put_cipher_by_char;
+		    public function uint(ssl_st* s) ssl_pending;
+		    public function int() num_ciphers;
+		    public function CIPHER*(uint ncipher) get_cipher;
+		    public function int() get_timeout;
+		    public SSL3.enc_method* ssl3_enc; /* Extra SSLv3/TLS stuff */
+		    public function int() ssl_version;
+		    public function int(ssl_st* s, int cb_id, function void() fp) ssl_callback_ctrl;
+		    public function int(SSL_CTX* s, int cb_id, function void() fp) ssl_ctx_callback_ctrl;
+		}
 		public typealias METHOD = method_st;
+		
+		/* used to hold info on the particular ciphers used */
+		[CRepr]
+		public struct cipher_st
+		{
+		    public uint32 valid;
+		    public char8* name;           /* text name */
+		    public char8* stdname;        /* RFC name */
+		    public uint32 id;             /* id, 4 bytes, first is version */
+		    /*
+		     * changed in 1.0.0: these four used to be portions of a single value
+		     * 'algorithms'
+		     */
+		    public uint32 algorithm_mkey; /* key exchange algorithm */
+		    public uint32 algorithm_auth; /* server authentication */
+		    public uint32 algorithm_enc;  /* symmetric encryption */
+		    public uint32 algorithm_mac;  /* symmetric authentication */
+		    public int min_tls;           /* minimum SSL/TLS protocol version */
+		    public int max_tls;           /* maximum SSL/TLS protocol version */
+		    public int min_dtls;          /* minimum DTLS protocol version */
+		    public int max_dtls;          /* maximum DTLS protocol version */
+		    public uint32 algo_strength;  /* strength and export flags */
+		    public uint32 algorithm2;     /* Extra flags */
+		    public int32 strength_bits;   /* Number of bits really used */
+		    public uint32 alg_bits;       /* Number of bits for algorithm */
+		}
+		public typealias CIPHER = cipher_st;
+
+		/** FIXME: Not even going to port this, hell no. Feel free to contrib. **/
+		[CRepr]
+		public struct ssl_st { }
+		public typealias SSL = ssl_st;
+
+		/** FIXME: Not even going to port this, hell no. Feel free to contrib. **/
+		[CRepr]
+		public struct ssl_ctx_st { }
+		public typealias SSL_CTX = ssl_ctx_st;
 	}
 	
 	[AlwaysInclude]

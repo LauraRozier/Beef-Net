@@ -15,7 +15,7 @@ namespace Beef_Net.OpenSSL
 	sealed abstract class SSLeay
 	{
 		/* SSLeay compat */
-		public const int VERSION_NUMBER = OPENSSL_VERSION_NUMBER;
+		public const int VERSION_NUMBER = OpenSSL.VERSION_NUMBER;
 
 		public const int VERSION        = OpenSSL.VERSION;
 		public const int CFLAGS         = OpenSSL.CFLAGS;
@@ -321,5 +321,14 @@ namespace Beef_Net.OpenSSL
 		public extern static void LH_node_stats_bio(LHash.lhash_st* lh, BIO.bio_st* outVal);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_LH_node_usage_stats_bio")]
 		public extern static void LH_node_usage_stats_bio(LHash.lhash_st* lh, BIO.bio_st* outVal);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_asc2uni")]
+		public extern static uint8* asc2uni(char8* asc, int asclen, uint8** uni, int* unilen);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_uni2asc")]
+		public extern static char8* uni2asc(uint8* uni, int unilen);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_utf82uni")]
+		public extern static uint8* utf82uni(char8* asc, int asclen, uint8** uni, int* unilen);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_uni2utf8")]
+		public extern static char8* uni2utf8(uint8* uni, int unilen);
 	}
 }

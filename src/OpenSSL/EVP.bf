@@ -2324,5 +2324,29 @@ namespace Beef_Net.OpenSSL
 		 */
 		public const int PKEY_ECDH_KDF_X9_62             = PKEY_ECDH_KDF_X9_63;
 #endif
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_get_attr_count")]
+		public extern static int PKEY_get_attr_count(PKEY* key);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_get_attr_by_NID")]
+		public extern static int PKEY_get_attr_by_NID(PKEY* key, int nid, int lastpos);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_get_attr_by_OBJ")]
+		public extern static int PKEY_get_attr_by_OBJ(PKEY* key, ASN1.OBJECT* obj, int lastpos);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_get_attr")]
+		public extern static X509.ATTRIBUTE* PKEY_get_attr(PKEY* key, int loc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_delete_attr")]
+		public extern static X509.ATTRIBUTE* PKEY_delete_attr(PKEY* key, int loc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_add1_attr")]
+		public extern static int PKEY_add1_attr(PKEY* key, X509.ATTRIBUTE* attr);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_add1_attr_by_OBJ")]
+		public extern static int PKEY_add1_attr_by_OBJ(PKEY* key, ASN1.OBJECT* obj, int type, uint8* bytes, int len);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_add1_attr_by_NID")]
+		public extern static int PKEY_add1_attr_by_NID(PKEY* key, int nid, int type, uint8* bytes, int len);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY_add1_attr_by_txt")]
+		public extern static int PKEY_add1_attr_by_txt(PKEY* key, char8* attrname, int type, uint8* bytes, int len);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKCS82PKEY")]
+		public extern static PKEY* PKCS82PKEY(PKCS8.PRIV_KEY_INFO* p8);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY2PKCS8")]
+		public extern static PKCS8.PRIV_KEY_INFO* PKEY2PKCS8(PKEY* pkey);
 	}
 }

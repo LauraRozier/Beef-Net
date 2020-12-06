@@ -53,9 +53,9 @@ namespace Beef_Net.OpenSSL
 		public const int CTRL_GET_LINK_MIN_MTU = 121;
 
 		[Inline]
-		public static int DTLS_set_link_mtu(OSSLType.SSL* ssl, int mtu) => SSL.ctrl(ssl, CTRL_SET_LINK_MTU, mtu, null);
+		public static int DTLS_set_link_mtu(SSL.ssl_st* ssl, int mtu) => SSL.ctrl(ssl, CTRL_SET_LINK_MTU, mtu, null);
 		[Inline]
-		public static int DTLS_get_link_min_mtu(OSSLType.SSL* ssl) => SSL.ctrl(ssl, CTRL_GET_LINK_MIN_MTU, 0, null);
+		public static int DTLS_get_link_min_mtu(SSL.ssl_st* ssl) => SSL.ctrl(ssl, CTRL_GET_LINK_MIN_MTU, 0, null);
 
 		/*
 		** MOVED for convenience
@@ -73,12 +73,12 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_SSL), LinkName("DTLS_client_method")]
 		public extern static SSL.METHOD* client_method();         /* DTLS 1.0 and 1.2 */
 		
-		public function uint timer_cb(OSSLType.SSL* s, uint timer_us);
+		public function uint timer_cb(SSL.ssl_st* s, uint timer_us);
 
 		[Import(OPENSSL_LIB_SSL), LinkName("DTLS_set_timer_cb")]
-		public extern static void set_timer_cb(OSSLType.SSL *s, timer_cb cb);
+		public extern static void set_timer_cb(SSL.ssl_st* s, timer_cb cb);
 		[Import(OPENSSL_LIB_SSL), LinkName("DTLS_get_data_mtu")]
-		public extern static uint get_data_mtu(OSSLType.SSL *s);
+		public extern static uint get_data_mtu(SSL.ssl_st* s);
 	}
 
 	sealed abstract class DTLS1
@@ -86,9 +86,9 @@ namespace Beef_Net.OpenSSL
 		public const int VERSION = 0xFEFF;
 
 		[Inline]
-		public static int get_timeout(OSSLType.SSL* ssl, void* arg) => SSL.ctrl(ssl, DTLS.CTRL_GET_TIMEOUT, 0, arg);
+		public static int get_timeout(SSL.ssl_st* ssl, void* arg) => SSL.ctrl(ssl, DTLS.CTRL_GET_TIMEOUT, 0, arg);
 		[Inline]
-		public static int handle_timeout(OSSLType.SSL* ssl) => SSL.ctrl(ssl, DTLS.CTRL_HANDLE_TIMEOUT, 0, null);
+		public static int handle_timeout(SSL.ssl_st* ssl) => SSL.ctrl(ssl, DTLS.CTRL_HANDLE_TIMEOUT, 0, null);
 
 		/*
 		** MOVED for convenience
@@ -108,7 +108,7 @@ namespace Beef_Net.OpenSSL
 #endif
 #if !OPENSSL_NO_SOCK
 		[Import(OPENSSL_LIB_SSL), LinkName("DTLSv1_listen")]
-		public extern static int listen(OSSLType.SSL *s, BIO.ADDR* client);
+		public extern static int listen(SSL.ssl_st* s, BIO.ADDR* client);
 #endif
 	}
 

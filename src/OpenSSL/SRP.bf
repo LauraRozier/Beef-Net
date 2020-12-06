@@ -152,49 +152,49 @@ namespace Beef_Net.OpenSSL
 		**   458  1C9 000018FC SSL_srp_server_param_with_username
 		*/
 		[Import(OPENSSL_LIB_SSL), CLink]
-		public extern static int SSL_SRP_CTX_init(OSSLType.SSL* s);
+		public extern static int SSL_SRP_CTX_init(SSL.ssl_st* s);
 		[Import(OPENSSL_LIB_SSL), CLink]
-		public extern static int SSL_SRP_CTX_free(OSSLType.SSL* ctx);
+		public extern static int SSL_SRP_CTX_free(SSL.ssl_st* ctx);
 
 		[Import(OPENSSL_LIB_SSL), CLink]
-		public extern static int SSL_srp_server_param_with_username(OSSLType.SSL* s, int* ad);
+		public extern static int SSL_srp_server_param_with_username(SSL.ssl_st* s, int* ad);
 		[Import(OPENSSL_LIB_SSL), CLink]
-		public extern static int SRP_Calc_A_param(OSSLType.SSL* s);
+		public extern static int SRP_Calc_A_param(SSL.ssl_st* s);
 #if !OPENSSL_NO_SRP
 		[Import(OPENSSL_LIB_SSL), CLink]
-		public extern static int SSL_set_srp_server_param(OSSLType.SSL* s, BN.BIGNUM* N, BN.BIGNUM* g, BN.BIGNUM* sa, BN.BIGNUM* v, char8* info);
+		public extern static int SSL_set_srp_server_param(SSL.ssl_st* s, BN.BIGNUM* N, BN.BIGNUM* g, BN.BIGNUM* sa, BN.BIGNUM* v, char8* info);
 		[Import(OPENSSL_LIB_SSL), CLink]
-		public extern static int SSL_set_srp_server_param_pw(OSSLType.SSL* s, char8* user, char8* pass, char8* grp);
+		public extern static int SSL_set_srp_server_param_pw(SSL.ssl_st* s, char8* user, char8* pass, char8* grp);
 		[Import(OPENSSL_LIB_SSL), CLink]
-		public extern static BN.BIGNUM* SSL_get_srp_g(OSSLType.SSL* s);
+		public extern static BN.BIGNUM* SSL_get_srp_g(SSL.ssl_st* s);
 		[Import(OPENSSL_LIB_SSL), CLink]
-		public extern static BN.BIGNUM* SSL_get_srp_N(OSSLType.SSL* s);
+		public extern static BN.BIGNUM* SSL_get_srp_N(SSL.ssl_st* s);
 		[Import(OPENSSL_LIB_SSL), CLink]
-		public extern static char8* SSL_get_srp_username(OSSLType.SSL* s);
+		public extern static char8* SSL_get_srp_username(SSL.ssl_st* s);
 		[Import(OPENSSL_LIB_SSL), CLink]
-		public extern static char8* SSL_get_srp_userinfo(OSSLType.SSL* s);
+		public extern static char8* SSL_get_srp_userinfo(SSL.ssl_st* s);
 # endif
 
 		[Import(OPENSSL_LIB_SSL), CLink]
-		public extern static int SSL_CTX_SRP_CTX_init(OSSLType.SSL_CTX* ctx);
+		public extern static int SSL_CTX_SRP_CTX_init(SSL.SSL_CTX* ctx);
 		[Import(OPENSSL_LIB_SSL), CLink]
-		public extern static int SSL_CTX_SRP_CTX_free(OSSLType.SSL_CTX* ctx);
+		public extern static int SSL_CTX_SRP_CTX_free(SSL.SSL_CTX* ctx);
 
 #if !OPENSSL_NO_SRP
 		[Import(OPENSSL_LIB_SSL), CLink]
-		public extern static int SSL_CTX_set_srp_username(OSSLType.SSL_CTX* ctx, char8* name);
+		public extern static int SSL_CTX_set_srp_username(SSL.SSL_CTX* ctx, char8* name);
 		[Import(OPENSSL_LIB_SSL), CLink]
-		public extern static int SSL_CTX_set_srp_password(OSSLType.SSL_CTX* ctx, char8* password);
+		public extern static int SSL_CTX_set_srp_password(SSL.SSL_CTX* ctx, char8* password);
 		[Import(OPENSSL_LIB_SSL), CLink]
-		public extern static int SSL_CTX_set_srp_strength(OSSLType.SSL_CTX* ctx, int strength);
+		public extern static int SSL_CTX_set_srp_strength(SSL.SSL_CTX* ctx, int strength);
 		[Import(OPENSSL_LIB_SSL), CLink]
-		public extern static int SSL_CTX_set_srp_client_pwd_callback(OSSLType.SSL_CTX* ctx, function char8*(OSSLType.SSL*, void*) cb);
+		public extern static int SSL_CTX_set_srp_client_pwd_callback(SSL.SSL_CTX* ctx, function char8*(SSL.ssl_st*, void*) cb);
 		[Import(OPENSSL_LIB_SSL), CLink]
-		public extern static int SSL_CTX_set_srp_verify_param_callback(OSSLType.SSL_CTX* ctx, function int(OSSLType.SSL*, void*) cb);
+		public extern static int SSL_CTX_set_srp_verify_param_callback(SSL.SSL_CTX* ctx, function int(SSL.ssl_st*, void*) cb);
 		[Import(OPENSSL_LIB_SSL), CLink]
-		public extern static int SSL_CTX_set_srp_username_callback(OSSLType.SSL_CTX* ctx, function int(OSSLType.SSL*, int*, void*) cb);
+		public extern static int SSL_CTX_set_srp_username_callback(SSL.SSL_CTX* ctx, function int(SSL.ssl_st*, int*, void*) cb);
 		[Import(OPENSSL_LIB_SSL), CLink]
-		public extern static int SSL_CTX_set_srp_cb_arg(OSSLType.SSL_CTX* ctx, void* arg);
+		public extern static int SSL_CTX_set_srp_cb_arg(SSL.SSL_CTX* ctx, void* arg);
 # endif
 	}
 }

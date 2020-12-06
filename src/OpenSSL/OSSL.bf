@@ -196,15 +196,5 @@ namespace Beef_Net.OpenSSL
 #endif
 		[Inline]
 		public static char8* h_addr(hostent h) => h.h_addr_list[0];
-
-		/** FIXME: Not even going to port this, hell no. Feel free to contrib. **/
-		[CRepr]
-		public struct ssl_st { }
-		public typealias SSL = ssl_st;
-
-		/** FIXME: Not even going to port this, hell no. Feel free to contrib. **/
-		[CRepr]
-		public struct ssl_ctx_st { }
-		public typealias SSL_CTX = ssl_ctx_st;
 	}
 }

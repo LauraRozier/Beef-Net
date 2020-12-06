@@ -1169,6 +1169,9 @@ namespace Beef_Net.OpenSSL
 		public extern static METHOD* f_zlib();
 #endif
 
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_new_PKCS7")]
+		public extern static bio_st* new_PKCS7(bio_st* outVal, PKCS7.pkcs7_st* p7);
+
 		/*
 		** MOVED for convenience
 		** libssl-1_1.dll
@@ -1182,11 +1185,11 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_SSL), LinkName("BIO_f_ssl")]
 		public extern static METHOD* f_ssl();
 		[Import(OPENSSL_LIB_SSL), LinkName("BIO_new_buffer_ssl_connect")]
-		public extern static bio_st* new_buffer_ssl_connect(OSSLType.SSL_CTX* ctx);
+		public extern static bio_st* new_buffer_ssl_connect(SSL.SSL_CTX* ctx);
 		[Import(OPENSSL_LIB_SSL), LinkName("BIO_new_ssl")]
-		public extern static bio_st* new_ssl(OSSLType.SSL_CTX* ctx, int client);
+		public extern static bio_st* new_ssl(SSL.SSL_CTX* ctx, int client);
 		[Import(OPENSSL_LIB_SSL), LinkName("BIO_new_ssl_connect")]
-		public extern static bio_st* new_ssl_connect(OSSLType.SSL_CTX* ctx);
+		public extern static bio_st* new_ssl_connect(SSL.SSL_CTX* ctx);
 		[Import(OPENSSL_LIB_SSL), LinkName("BIO_ssl_copy_session_id")]
 		public extern static int ssl_copy_session_id(bio_st* to, bio_st* from);
 		[Import(OPENSSL_LIB_SSL), LinkName("BIO_ssl_shutdown")]

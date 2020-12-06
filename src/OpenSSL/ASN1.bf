@@ -763,7 +763,8 @@ namespace Beef_Net.OpenSSL
 		public const int STRING_FLAG_X509_TIME = 0x100;
 		/* This is the base type that holds just about everything :-) */
 		[CRepr]
-		public struct string_st {
+		public struct string_st
+		{
 		    public int length;
 		    public int type;
 		    public uint8* data;
@@ -985,10 +986,12 @@ namespace Beef_Net.OpenSSL
 			}
 		}
 		public typealias TYPE = type_st;
+		public struct stack_st_ASN1_TYPE {}
 		
 		/* This is used to contain a list of bit names */
 		[CRepr]
-		public struct BIT_STRING_BITNAME_st {
+		public struct BIT_STRING_BITNAME_st
+		{
 		    public int bitnum;
 		    public char8* lname;
 		    public char8* sname;
@@ -1037,9 +1040,8 @@ namespace Beef_Net.OpenSSL
 
 		/*
 		DECLARE_ASN1_ITEM(ASN1_OBJECT)
-		
-		DEFINE_STACK_OF(ASN1_OBJECT)
 		*/
+		public struct stack_st_ASN1_OBJECT {}
 
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_STRING_new")]
 		public static extern STRING* STRING_new();
@@ -1422,9 +1424,9 @@ namespace Beef_Net.OpenSSL
 		public static extern void add_stable_module();
 		
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_generate_nconf")]
-		public static extern TYPE* generate_nconf(char8* str, CONF.conf_st* nconf);
+		public static extern TYPE* generate_nconf(char8* str, Conf.conf_st* nconf);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_generate_v3")]
-		public static extern TYPE* generate_v3(char8* str, X509V3.CTX* cnf);
+		public static extern TYPE* generate_v3(char8* str, X509v3.CTX* cnf);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_str2mask")]
 		public static extern int str2mask(char8* str, uint* pmask);
 		
@@ -1501,23 +1503,18 @@ namespace Beef_Net.OpenSSL
 
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_verify")]
 		public static extern int verify(i2d_of_void* i2d, X509.ALGOR* algor1, BIT_STRING* signature, char8* data, EVP.PKEY* pkey);
-
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_digest")]
 		public static extern int digest(i2d_of_void* i2d, EVP.MD* type, char8* data, uint8* md, uint* len);
-
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_sign")]
 		public static extern int sign(i2d_of_void* i2d, X509.ALGOR* algor1, X509.ALGOR* algor2, BIT_STRING* signature, char8* data, EVP.PKEY* pkey, EVP.MD* type);
-
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_item_digest")]
 		public static extern int item_digest(ITEM* it, EVP.MD* type, void *data, uint8* md, uint* len);
-
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_item_verify")]
 		public static extern int item_verify(ITEM* it, X509.ALGOR* algor1, BIT_STRING* signature, void *data, EVP.PKEY* pkey);
-
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_item_sign")]
-		public static extern int item_sign(ITEM* it, X509.ALGOR* algor1, X509.ALGOR* algor2, BIT_STRING* signature, void *data, EVP.PKEY* pkey, EVP.MD* type);
+		public static extern int item_sign(ITEM* it, X509.ALGOR* algor1, X509.ALGOR* algor2, BIT_STRING* signature, void* data, EVP.PKEY* pkey, EVP.MD* type);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_item_sign_ctx")]
-		public static extern int item_sign_ctx(ITEM* it, X509.ALGOR* algor1, X509.ALGOR* algor2, BIT_STRING* signature, void *asn, EVP.MD_CTX* ctx);
+		public static extern int item_sign_ctx(ITEM* it, X509.ALGOR* algor1, X509.ALGOR* algor2, BIT_STRING* signature, void* asn, EVP.MD_CTX* ctx);
 
 		[Inline]
 		public static int BIT_STRING_digest(char8* data, EVP.MD* type, uint8* md, uint* len) => item_digest(BIT_STRING_it(), type, data, md, len);

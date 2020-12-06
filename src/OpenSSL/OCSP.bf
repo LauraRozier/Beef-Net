@@ -416,12 +416,49 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_CRYPTO), CLink]
 		public extern static ASN1.ITEM* CERTSTATUS_it();
 
-		/* TODO: Complete these ports, same 5 methods as above
-		REVOKEDINFO
-		BASICRESP
-		RESPDATA
-		RESPID
-		*/
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static REVOKEDINFO* REVOKEDINFO_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_REVOKEDINFO_free")]
+		public extern static void REVOKEDINFO_free(REVOKEDINFO* a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static REVOKEDINFO* d2i_OCSP_REVOKEDINFO(REVOKEDINFO** a, uint8** inVal, int len);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int i2d_OCSP_REVOKEDINFO(REVOKEDINFO* a, uint8** outVal);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static ASN1.ITEM* REVOKEDINFO_it();
+
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static BASICRESP* BASICRESP_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_BASICRESP_free")]
+		public extern static void BASICRESP_free(BASICRESP* a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static BASICRESP* d2i_OCSP_BASICRESP(BASICRESP** a, uint8** inVal, int len);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int i2d_OCSP_BASICRESP(BASICRESP* a, uint8** outVal);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static ASN1.ITEM* BASICRESP_it();
+
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static RESPDATA* RESPDATA_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_RESPDATA_free")]
+		public extern static void RESPDATA_free(RESPDATA* a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static RESPDATA* d2i_OCSP_RESPDATA(RESPDATA** a, uint8** inVal, int len);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int i2d_OCSP_RESPDATA(RESPDATA* a, uint8** outVal);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static ASN1.ITEM* RESPDATA_it();
+
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static RESPID* RESPID_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_RESPID_free")]
+		public extern static void RESPID_free(RESPID* a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static RESPID* d2i_OCSP_RESPID(RESPID** a, uint8** inVal, int len);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int i2d_OCSP_RESPID(RESPID* a, uint8** outVal);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static ASN1.ITEM* RESPID_it();
 
 		[Import(OPENSSL_LIB_CRYPTO), CLink]
 		public extern static RESPONSE* RESPONSE_new();
@@ -434,11 +471,38 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_CRYPTO), CLink]
 		public extern static ASN1.ITEM* RESPONSE_it();
 
-		/*
-		RESPBYTES
-		ONEREQ
-		CERTID
-		*/
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static RESPBYTES* RESPBYTES_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_RESPBYTES_free")]
+		public extern static void RESPBYTES_free(RESPBYTES* a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static RESPBYTES* d2i_OCSP_RESPBYTES(RESPBYTES** a, uint8** inVal, int len);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int i2d_OCSP_RESPBYTES(RESPBYTES* a, uint8** outVal);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static ASN1.ITEM* RESPBYTES_it();
+
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static ONEREQ* ONEREQ_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_ONEREQ_free")]
+		public extern static void ONEREQ_free(ONEREQ* a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static ONEREQ* d2i_OCSP_ONEREQ(ONEREQ** a, uint8** inVal, int len);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int i2d_OCSP_ONEREQ(ONEREQ* a, uint8** outVal);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static ASN1.ITEM* ONEREQ_it();
+
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static CERTID* CERTID_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_CERTID_free")]
+		public extern static void CERTID_free(CERTID* a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static CERTID* d2i_OCSP_CERTID(CERTID** a, uint8** inVal, int len);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int i2d_OCSP_CERTID(CERTID* a, uint8** outVal);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static ASN1.ITEM* CERTID_it();
 
 		[Import(OPENSSL_LIB_CRYPTO), CLink]
 		public extern static REQUEST* REQUEST_new();
@@ -451,12 +515,49 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_CRYPTO), CLink]
 		public extern static ASN1.ITEM* REQUEST_it();
 
-		/*
-		SIGNATURE
-		REQINFO
-		CRLID
-		SERVICELOC
-		*/
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static SIGNATURE* SIGNATURE_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_SIGNATURE_free")]
+		public extern static void SIGNATURE_free(SIGNATURE* a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static SIGNATURE* d2i_OCSP_SIGNATURE(SIGNATURE** a, uint8** inVal, int len);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int i2d_OCSP_SIGNATURE(SIGNATURE* a, uint8** outVal);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static ASN1.ITEM* SIGNATURE_it();
+
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static REQINFO* REQINFO_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_REQINFO_free")]
+		public extern static void REQINFO_free(REQINFO* a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static REQINFO* d2i_OCSP_REQINFO(REQINFO** a, uint8** inVal, int len);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int i2d_OCSP_REQINFO(REQINFO* a, uint8** outVal);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static ASN1.ITEM* REQINFO_it();
+
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static CRLID* CRLID_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_CRLID_free")]
+		public extern static void CRLID_free(CRLID* a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static CRLID* d2i_OCSP_CRLID(CRLID** a, uint8** inVal, int len);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int i2d_OCSP_CRLID(CRLID* a, uint8** outVal);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static ASN1.ITEM* CRLID_it();
+
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static SERVICELOC* SERVICELOC_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_SERVICELOC_free")]
+		public extern static void SERVICELOC_free(SERVICELOC* a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static SERVICELOC* d2i_OCSP_SERVICELOC(SERVICELOC** a, uint8** inVal, int len);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int i2d_OCSP_SERVICELOC(SERVICELOC* a, uint8** outVal);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static ASN1.ITEM* SERVICELOC_it();
 
 		[Inline]
 		public static CERTSTATUS* CERTSTATUS_dup(CERTID* cs)
@@ -469,32 +570,32 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_CERTID_dup")]
 		public extern static CERTID* CERTID_dup(CERTID* id);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static RESPONSE* OCSP_sendreq_bio(BIO.bio_st* b, char8* path, REQUEST* req);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static REQ_CTX* OCSP_sendreq_new(BIO.bio_st* io, char8* path, REQUEST* req, int maxline);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_REQ_CTX_nbio(REQ_CTX* rctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_sendreq_nbio(RESPONSE** presp, REQ_CTX* rctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static REQ_CTX* OCSP_REQ_CTX_new(BIO.bio_st* io, int maxline);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static void OCSP_REQ_CTX_free(REQ_CTX* rctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static void OCSP_set_max_response_length(REQ_CTX *rctx, uint len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_REQ_CTX_i2d(REQ_CTX* rctx, ASN1.ITEM* it, ASN1.VALUE* val);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_REQ_CTX_nbio_d2i(REQ_CTX* rctx, ASN1.VALUE** pval, ASN1.ITEM* it);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static BIO *OCSP_REQ_CTX_get0_mem_bio(REQ_CTX* rctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_REQ_CTX_http(REQ_CTX* rctx, char8* op, char8* path);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_REQ_CTX_set1_req(REQ_CTX* rctx, REQUEST* req);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_REQ_CTX_add1_header(REQ_CTX* rctx, char8* name, char8* value);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_sendreq_bio")]
+		public extern static RESPONSE* sendreq_bio(BIO.bio_st* b, char8* path, REQUEST* req);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_sendreq_new")]
+		public extern static REQ_CTX* sendreq_new(BIO.bio_st* io, char8* path, REQUEST* req, int maxline);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_REQ_CTX_nbio")]
+		public extern static int REQ_CTX_nbio(REQ_CTX* rctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_sendreq_nbio")]
+		public extern static int sendreq_nbio(RESPONSE** presp, REQ_CTX* rctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_REQ_CTX_new")]
+		public extern static REQ_CTX* REQ_CTX_new(BIO.bio_st* io, int maxline);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_REQ_CTX_free")]
+		public extern static void REQ_CTX_free(REQ_CTX* rctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_set_max_response_length")]
+		public extern static void set_max_response_length(REQ_CTX *rctx, uint len);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_REQ_CTX_i2d")]
+		public extern static int REQ_CTX_i2d(REQ_CTX* rctx, ASN1.ITEM* it, ASN1.VALUE* val);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_REQ_CTX_nbio_d2i")]
+		public extern static int REQ_CTX_nbio_d2i(REQ_CTX* rctx, ASN1.VALUE** pval, ASN1.ITEM* it);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_REQ_CTX_get0_mem_bio")]
+		public extern static BIO.bio_st* REQ_CTX_get0_mem_bio(REQ_CTX* rctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_REQ_CTX_http")]
+		public extern static int REQ_CTX_http(REQ_CTX* rctx, char8* op, char8* path);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_REQ_CTX_set1_req")]
+		public extern static int REQ_CTX_set1_req(REQ_CTX* rctx, REQUEST* req);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_REQ_CTX_add1_header")]
+		public extern static int REQ_CTX_add1_header(REQ_CTX* rctx, char8* name, char8* value);
 		
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_cert_to_id")]
 		public extern static CERTID* cert_to_id(EVP.MD* dgst, X509.x509_st* subject, X509.x509_st* issuer);
@@ -527,36 +628,36 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_response_get1_basic")]
 		public extern static BASICRESP* response_get1_basic(RESPONSE* resp);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static ASN1.OCTET_STRING* OCSP_resp_get0_signature(BASICRESP* bs);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static X509.ALGOR* OCSP_resp_get0_tbs_sigalg(BASICRESP* bs);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static RESPDATA* OCSP_resp_get0_respdata(BASICRESP* bs);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_resp_get0_signer(BASICRESP* bs, X509.x509_st** signer, X509.stack_st_X509* extra_certs);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_resp_get0_signature")]
+		public extern static ASN1.OCTET_STRING* resp_get0_signature(BASICRESP* bs);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_resp_get0_tbs_sigalg")]
+		public extern static X509.ALGOR* resp_get0_tbs_sigalg(BASICRESP* bs);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_resp_get0_respdata")]
+		public extern static RESPDATA* resp_get0_respdata(BASICRESP* bs);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_resp_get0_signer")]
+		public extern static int resp_get0_signer(BASICRESP* bs, X509.x509_st** signer, X509.stack_st_X509* extra_certs);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_resp_count(BASICRESP* bs);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static SINGLERESP* OCSP_resp_get0(BASICRESP* bs, int idx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static ASN1.GENERALIZEDTIME* OCSP_resp_get0_produced_at(BASICRESP* bs);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static X509.stack_st_X509* OCSP_resp_get0_certs(BASICRESP* bs);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_resp_get0_id(BASICRESP* bs, ASN1.OCTET_STRING** pid, X509.NAME** pname);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_resp_get1_id(BASICRESP* bs, ASN1.OCTET_STRING** pid, X509.NAME** pname);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_resp_count")]
+		public extern static int resp_count(BASICRESP* bs);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_resp_get0")]
+		public extern static SINGLERESP* resp_get0(BASICRESP* bs, int idx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_resp_get0_produced_at")]
+		public extern static ASN1.GENERALIZEDTIME* resp_get0_produced_at(BASICRESP* bs);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_resp_get0_certs")]
+		public extern static X509.stack_st_X509* resp_get0_certs(BASICRESP* bs);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_resp_get0_id")]
+		public extern static int resp_get0_id(BASICRESP* bs, ASN1.OCTET_STRING** pid, X509.NAME** pname);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_resp_get1_id")]
+		public extern static int resp_get1_id(BASICRESP* bs, ASN1.OCTET_STRING** pid, X509.NAME** pname);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_resp_find(BASICRESP* bs, CERTID* id, int last);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_single_get0_status(SINGLERESP* single, int* reason, ASN1.GENERALIZEDTIME** revtime, ASN1.GENERALIZEDTIME** thisupd, ASN1.GENERALIZEDTIME** nextupd);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_resp_find_status(BASICRESP* bs, CERTID* id, int* status, int* reason, ASN1.GENERALIZEDTIME** revtime, ASN1.GENERALIZEDTIME** thisupd, ASN1.GENERALIZEDTIME** nextupd);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_check_validity(ASN1.GENERALIZEDTIME* thisupd, ASN1.GENERALIZEDTIME* nextupd, int sec, int maxsec);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_resp_find")]
+		public extern static int resp_find(BASICRESP* bs, CERTID* id, int last);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_single_get0_status")]
+		public extern static int single_get0_status(SINGLERESP* single, int* reason, ASN1.GENERALIZEDTIME** revtime, ASN1.GENERALIZEDTIME** thisupd, ASN1.GENERALIZEDTIME** nextupd);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_resp_find_status")]
+		public extern static int resp_find_status(BASICRESP* bs, CERTID* id, int* status, int* reason, ASN1.GENERALIZEDTIME** revtime, ASN1.GENERALIZEDTIME** thisupd, ASN1.GENERALIZEDTIME** nextupd);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_check_validity")]
+		public extern static int check_validity(ASN1.GENERALIZEDTIME* thisupd, ASN1.GENERALIZEDTIME* nextupd, int sec, int maxsec);
 		
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_request_verify")]
 		public extern static int request_verify(REQUEST* req, X509.stack_st_X509* certs, X509.STORE* store, uint flags);
@@ -569,32 +670,32 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_id_cmp")]
 		public extern static int id_cmp(CERTID* a, CERTID* b);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_request_onereq_count(REQUEST* req);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static ONEREQ* OCSP_request_onereq_get0(REQUEST* req, int i);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static CERTID* OCSP_onereq_get0_id(ONEREQ* one);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_id_get0_info(ASN1.OCTET_STRING** piNameHash, ASN1.OBJECT** pmd, ASN1.OCTET_STRING** pikeyHash, ASN1.INTEGER** pserial, CERTID* cid);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_request_is_signed(REQUEST* req);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static RESPONSE* OCSP_response_create(int status, BASICRESP* bs);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static SINGLERESP* OCSP_basic_add1_status(BASICRESP* rsp, CERTID* cid, int status, int reason, ASN1.TIME* revtime, ASN1.TIME* thisupd, ASN1.TIME* nextupd);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_basic_add1_cert(BASICRESP* resp, X509.x509_st* cert);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_basic_sign(BASICRESP* brsp, X509.x509_st* signer, EVP.PKEY* key, EVP.MD* dgst, X509.stack_st_X509* certs, uint flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_basic_sign_ctx(BASICRESP* brsp, X509.x509_st* signer, EVP.MD_CTX* ctx, X509.stack_st_X509* certs, uint flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_RESPID_set_by_name(RESPID* respid, X509.x509_st* cert);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_RESPID_set_by_key(RESPID* respid, X509.x509_st* cert);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_RESPID_match(RESPID* respid, X509.x509_st* cert);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_request_onereq_count")]
+		public extern static int request_onereq_count(REQUEST* req);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_request_onereq_get0")]
+		public extern static ONEREQ* request_onereq_get0(REQUEST* req, int i);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_onereq_get0_id")]
+		public extern static CERTID* onereq_get0_id(ONEREQ* one);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_id_get0_info")]
+		public extern static int id_get0_info(ASN1.OCTET_STRING** piNameHash, ASN1.OBJECT** pmd, ASN1.OCTET_STRING** pikeyHash, ASN1.INTEGER** pserial, CERTID* cid);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_request_is_signed")]
+		public extern static int request_is_signed(REQUEST* req);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_response_create")]
+		public extern static RESPONSE* response_create(int status, BASICRESP* bs);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_basic_add1_status")]
+		public extern static SINGLERESP* basic_add1_status(BASICRESP* rsp, CERTID* cid, int status, int reason, ASN1.TIME* revtime, ASN1.TIME* thisupd, ASN1.TIME* nextupd);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_basic_add1_cert")]
+		public extern static int basic_add1_cert(BASICRESP* resp, X509.x509_st* cert);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_basic_sign")]
+		public extern static int basic_sign(BASICRESP* brsp, X509.x509_st* signer, EVP.PKEY* key, EVP.MD* dgst, X509.stack_st_X509* certs, uint flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_basic_sign_ctx")]
+		public extern static int basic_sign_ctx(BASICRESP* brsp, X509.x509_st* signer, EVP.MD_CTX* ctx, X509.stack_st_X509* certs, uint flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_RESPID_set_by_name")]
+		public extern static int RESPID_set_by_name(RESPID* respid, X509.x509_st* cert);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_RESPID_set_by_key")]
+		public extern static int RESPID_set_by_key(RESPID* respid, X509.x509_st* cert);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_RESPID_match")]
+		public extern static int RESPID_match(RESPID* respid, X509.x509_st* cert);
 		
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_crlID_new")]
 		public extern static X509.EXTENSION* crlID_new(char8* url, int* n, char8* tim);
@@ -608,83 +709,83 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_url_svcloc_new")]
 		public extern static X509.EXTENSION* url_svcloc_new(X509.NAME* issuer, char8** urls);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_REQUEST_get_ext_count(REQUEST* x);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_REQUEST_get_ext_by_NID(REQUEST* x, int nid, int lastpos);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_REQUEST_get_ext_by_OBJ(REQUEST* x, ASN1.OBJECT* obj, int lastpos);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_REQUEST_get_ext_by_critical(REQUEST* x, int crit, int lastpos);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static X509.EXTENSION* OCSP_REQUEST_get_ext(REQUEST* x, int loc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static X509.EXTENSION* OCSP_REQUEST_delete_ext(REQUEST* x, int loc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static void* OCSP_REQUEST_get1_ext_d2i(REQUEST* x, int nid, int* crit, int* idx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_REQUEST_add1_ext_i2d(REQUEST* x, int nid, void* value, int crit, uint flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_REQUEST_add_ext(REQUEST* x, X509.EXTENSION* ex, int loc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_REQUEST_get_ext_count")]
+		public extern static int REQUEST_get_ext_count(REQUEST* x);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_REQUEST_get_ext_by_NID")]
+		public extern static int REQUEST_get_ext_by_NID(REQUEST* x, int nid, int lastpos);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_REQUEST_get_ext_by_OBJ")]
+		public extern static int REQUEST_get_ext_by_OBJ(REQUEST* x, ASN1.OBJECT* obj, int lastpos);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_REQUEST_get_ext_by_critical")]
+		public extern static int REQUEST_get_ext_by_critical(REQUEST* x, int crit, int lastpos);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_REQUEST_get_ext")]
+		public extern static X509.EXTENSION* REQUEST_get_ext(REQUEST* x, int loc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_REQUEST_delete_ext")]
+		public extern static X509.EXTENSION* REQUEST_delete_ext(REQUEST* x, int loc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_REQUEST_get1_ext_d2i")]
+		public extern static void* REQUEST_get1_ext_d2i(REQUEST* x, int nid, int* crit, int* idx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_REQUEST_add1_ext_i2d")]
+		public extern static int REQUEST_add1_ext_i2d(REQUEST* x, int nid, void* value, int crit, uint flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_REQUEST_add_ext")]
+		public extern static int REQUEST_add_ext(REQUEST* x, X509.EXTENSION* ex, int loc);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_ONEREQ_get_ext_count(ONEREQ* x);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_ONEREQ_get_ext_by_NID(ONEREQ* x, int nid, int lastpos);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_ONEREQ_get_ext_by_OBJ(ONEREQ* x, ASN1.OBJECT* obj, int lastpos);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_ONEREQ_get_ext_by_critical(ONEREQ* x, int crit, int lastpos);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static X509.EXTENSION* OCSP_ONEREQ_get_ext(ONEREQ* x, int loc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static X509.EXTENSION* OCSP_ONEREQ_delete_ext(ONEREQ* x, int loc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static void* OCSP_ONEREQ_get1_ext_d2i(ONEREQ* x, int nid, int* crit, int* idx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_ONEREQ_add1_ext_i2d(ONEREQ* x, int nid, void* value, int crit, uint flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_ONEREQ_add_ext(ONEREQ* x, X509.EXTENSION* ex, int loc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_ONEREQ_get_ext_count")]
+		public extern static int ONEREQ_get_ext_count(ONEREQ* x);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_ONEREQ_get_ext_by_NID")]
+		public extern static int ONEREQ_get_ext_by_NID(ONEREQ* x, int nid, int lastpos);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_ONEREQ_get_ext_by_OBJ")]
+		public extern static int ONEREQ_get_ext_by_OBJ(ONEREQ* x, ASN1.OBJECT* obj, int lastpos);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_ONEREQ_get_ext_by_critical")]
+		public extern static int ONEREQ_get_ext_by_critical(ONEREQ* x, int crit, int lastpos);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_ONEREQ_get_ext")]
+		public extern static X509.EXTENSION* ONEREQ_get_ext(ONEREQ* x, int loc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_ONEREQ_delete_ext")]
+		public extern static X509.EXTENSION* ONEREQ_delete_ext(ONEREQ* x, int loc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_ONEREQ_get1_ext_d2i")]
+		public extern static void* ONEREQ_get1_ext_d2i(ONEREQ* x, int nid, int* crit, int* idx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_ONEREQ_add1_ext_i2d")]
+		public extern static int ONEREQ_add1_ext_i2d(ONEREQ* x, int nid, void* value, int crit, uint flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_ONEREQ_add_ext")]
+		public extern static int ONEREQ_add_ext(ONEREQ* x, X509.EXTENSION* ex, int loc);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_BASICRESP_get_ext_count(BASICRESP* x);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_BASICRESP_get_ext_by_NID(BASICRESP* x, int nid, int lastpos);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_BASICRESP_get_ext_by_OBJ(BASICRESP* x, ASN1.OBJECT* obj, int lastpos);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_BASICRESP_get_ext_by_critical(BASICRESP* x, int crit, int lastpos);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static X509.EXTENSION* OCSP_BASICRESP_get_ext(BASICRESP* x, int loc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static X509.EXTENSION* OCSP_BASICRESP_delete_ext(BASICRESP* x, int loc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static void* OCSP_BASICRESP_get1_ext_d2i(BASICRESP* x, int nid, int* crit, int* idx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_BASICRESP_add1_ext_i2d(BASICRESP* x, int nid, void* value, int crit, uint flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_BASICRESP_add_ext(BASICRESP* x, X509.EXTENSION* ex, int loc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_BASICRESP_get_ext_count")]
+		public extern static int BASICRESP_get_ext_count(BASICRESP* x);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_BASICRESP_get_ext_by_NID")]
+		public extern static int BASICRESP_get_ext_by_NID(BASICRESP* x, int nid, int lastpos);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_BASICRESP_get_ext_by_OBJ")]
+		public extern static int BASICRESP_get_ext_by_OBJ(BASICRESP* x, ASN1.OBJECT* obj, int lastpos);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_BASICRESP_get_ext_by_critical")]
+		public extern static int BASICRESP_get_ext_by_critical(BASICRESP* x, int crit, int lastpos);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_BASICRESP_get_ext")]
+		public extern static X509.EXTENSION* BASICRESP_get_ext(BASICRESP* x, int loc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_BASICRESP_delete_ext")]
+		public extern static X509.EXTENSION* BASICRESP_delete_ext(BASICRESP* x, int loc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_BASICRESP_get1_ext_d2i")]
+		public extern static void* BASICRESP_get1_ext_d2i(BASICRESP* x, int nid, int* crit, int* idx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_BASICRESP_add1_ext_i2d")]
+		public extern static int BASICRESP_add1_ext_i2d(BASICRESP* x, int nid, void* value, int crit, uint flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_BASICRESP_add_ext")]
+		public extern static int BASICRESP_add_ext(BASICRESP* x, X509.EXTENSION* ex, int loc);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_SINGLERESP_get_ext_count(SINGLERESP* x);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_SINGLERESP_get_ext_by_NID(SINGLERESP* x, int nid, int lastpos);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_SINGLERESP_get_ext_by_OBJ(SINGLERESP* x, ASN1.OBJECT* obj, int lastpos);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_SINGLERESP_get_ext_by_critical(SINGLERESP* x, int crit, int lastpos);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static X509.EXTENSION* OCSP_SINGLERESP_get_ext(SINGLERESP* x, int loc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static X509.EXTENSION* OCSP_SINGLERESP_delete_ext(SINGLERESP* x, int loc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static void* OCSP_SINGLERESP_get1_ext_d2i(SINGLERESP* x, int nid, int* crit, int* idx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_SINGLERESP_add1_ext_i2d(SINGLERESP* x, int nid, void* value, int crit, uint flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static int OCSP_SINGLERESP_add_ext(SINGLERESP* x, X509.EXTENSION* ex, int loc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
-		public extern static CERTID* OCSP_SINGLERESP_get0_id(SINGLERESP* x);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_SINGLERESP_get_ext_count")]
+		public extern static int SINGLERESP_get_ext_count(SINGLERESP* x);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_SINGLERESP_get_ext_by_NID")]
+		public extern static int SINGLERESP_get_ext_by_NID(SINGLERESP* x, int nid, int lastpos);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_SINGLERESP_get_ext_by_OBJ")]
+		public extern static int SINGLERESP_get_ext_by_OBJ(SINGLERESP* x, ASN1.OBJECT* obj, int lastpos);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_SINGLERESP_get_ext_by_critical")]
+		public extern static int SINGLERESP_get_ext_by_critical(SINGLERESP* x, int crit, int lastpos);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_SINGLERESP_get_ext")]
+		public extern static X509.EXTENSION* SINGLERESP_get_ext(SINGLERESP* x, int loc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_SINGLERESP_delete_ext")]
+		public extern static X509.EXTENSION* SINGLERESP_delete_ext(SINGLERESP* x, int loc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_SINGLERESP_get1_ext_d2i")]
+		public extern static void* SINGLERESP_get1_ext_d2i(SINGLERESP* x, int nid, int* crit, int* idx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_SINGLERESP_add1_ext_i2d")]
+		public extern static int SINGLERESP_add1_ext_i2d(SINGLERESP* x, int nid, void* value, int crit, uint flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_SINGLERESP_add_ext")]
+		public extern static int SINGLERESP_add_ext(SINGLERESP* x, X509.EXTENSION* ex, int loc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_SINGLERESP_get0_id")]
+		public extern static CERTID* SINGLERESP_get0_id(SINGLERESP* x);
 		
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("OCSP_response_status_str")]
 		public extern static char8* response_status_str(int s);

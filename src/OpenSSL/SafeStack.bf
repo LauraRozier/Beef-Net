@@ -29,11 +29,14 @@ namespace Beef_Net.OpenSSL
 		 * string at all.
 		 */
 		public typealias OPENSSL_STRING = char8*;
+		public struct stack_st_OPENSSL_STRING {}
 		public typealias OPENSSL_CSTRING = char8*;
+		public struct stack_st_OPENSSL_CSTRING {}
 		/*
 		 * Similarly, we sometimes use a block of characters, NOT nul-terminated.
 		 * These should also be distinguished from "normal" stacks.
 		 */
 		public typealias OPENSSL_BLOCK = void*;
+		public struct stack_st_OPENSSL_BLOCK {}
 	}
 }
