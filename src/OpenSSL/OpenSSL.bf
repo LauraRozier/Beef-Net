@@ -330,5 +330,14 @@ namespace Beef_Net.OpenSSL
 		public extern static uint8* utf82uni(char8* asc, int asclen, uint8** uni, int* unilen);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_uni2utf8")]
 		public extern static char8* uni2utf8(uint8* uni, int unilen);
+		
+#if !OPENSSL_NO_RSA
+		/* The types RSA and RSA_METHOD are defined in ossl_typ.h */
+		public const int RSA_MAX_MODULUS_BITS      = 16384;
+		public const int RSA_FIPS_MIN_MODULUS_BITS = 1024;
+		public const int RSA_SMALL_MODULUS_BITS    = 3072;
+		/* exponent limit enforced for "large" modulus only */
+		public const int RSA_MAX_PUBEXP_BITS       = 64;
+#endif
 	}
 }

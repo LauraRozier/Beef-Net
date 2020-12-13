@@ -2348,5 +2348,59 @@ namespace Beef_Net.OpenSSL
 		public extern static PKEY* PKCS82PKEY(PKCS8.PRIV_KEY_INFO* p8);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("EVP_PKEY2PKCS8")]
 		public extern static PKCS8.PRIV_KEY_INFO* PKEY2PKCS8(PKEY* pkey);
+		
+#if !OPENSSL_NO_RSA
+		[Inline]
+		public static int PKEY_CTX_set_rsa_padding(PKEY_CTX* ctx, int pad) => RSA.pkey_ctx_ctrl(ctx, -1, PKEY_CTRL_RSA_PADDING, pad, null);
+		[Inline]
+		public static int PKEY_CTX_get_rsa_padding(PKEY_CTX* ctx, void* ppad) => RSA.pkey_ctx_ctrl(ctx, -1, PKEY_CTRL_GET_RSA_PADDING, 0, ppad);
+		[Inline]
+		public static int PKEY_CTX_set_rsa_pss_saltlen(PKEY_CTX* ctx, int len) => RSA.pkey_ctx_ctrl(ctx, PKEY_OP_SIGN | PKEY_OP_VERIFY, PKEY_CTRL_RSA_PSS_SALTLEN, len, null);
+		[Inline]
+		public static int PKEY_CTX_set_rsa_pss_keygen_saltlen(PKEY_CTX* ctx, int len) => PKEY_CTX_ctrl(ctx, PKEY_RSA_PSS, PKEY_OP_KEYGEN, PKEY_CTRL_RSA_PSS_SALTLEN, len, null);
+		[Inline]
+		public static int PKEY_CTX_get_rsa_pss_saltlen(PKEY_CTX* ctx, void* plen) => RSA.pkey_ctx_ctrl(ctx, PKEY_OP_SIGN | PKEY_OP_VERIFY, PKEY_CTRL_GET_RSA_PSS_SALTLEN, 0, plen);
+		[Inline]
+		public static int PKEY_CTX_set_rsa_keygen_bits(PKEY_CTX* ctx, int bits) => RSA.pkey_ctx_ctrl(ctx, PKEY_OP_KEYGEN, PKEY_CTRL_RSA_KEYGEN_BITS, bits, null);
+		[Inline]
+		public static int PKEY_CTX_set_rsa_keygen_pubexp(PKEY_CTX* ctx, void* pubexp) => RSA.pkey_ctx_ctrl(ctx, PKEY_OP_KEYGEN, PKEY_CTRL_RSA_KEYGEN_PUBEXP, 0, pubexp);
+		[Inline]
+		public static int PKEY_CTX_set_rsa_keygen_primes(PKEY_CTX* ctx, int primes) => RSA.pkey_ctx_ctrl(ctx, PKEY_OP_KEYGEN, PKEY_CTRL_RSA_KEYGEN_PRIMES, primes, null);
+		[Inline]
+		public static int PKEY_CTX_set_rsa_mgf1_md(PKEY_CTX* ctx, void* md) => RSA.pkey_ctx_ctrl(ctx, PKEY_OP_TYPE_SIG | PKEY_OP_TYPE_CRYPT, PKEY_CTRL_RSA_MGF1_MD, 0, md);
+		[Inline]
+		public static int PKEY_CTX_set_rsa_pss_keygen_mgf1_md(PKEY_CTX* ctx, void* md) => PKEY_CTX_ctrl(ctx, PKEY_RSA_PSS, PKEY_OP_KEYGEN, PKEY_CTRL_RSA_MGF1_MD, 0, md);
+		[Inline]
+		public static int PKEY_CTX_set_rsa_oaep_md(PKEY_CTX* ctx, void* md) => PKEY_CTX_ctrl(ctx, PKEY_RSA, PKEY_OP_TYPE_CRYPT, PKEY_CTRL_RSA_OAEP_MD, 0, md);
+		[Inline]
+		public static int PKEY_CTX_get_rsa_mgf1_md(PKEY_CTX* ctx, void* pmd) => RSA.pkey_ctx_ctrl(ctx, PKEY_OP_TYPE_SIG | PKEY_OP_TYPE_CRYPT, PKEY_CTRL_GET_RSA_MGF1_MD, 0, pmd);
+		[Inline]
+		public static int PKEY_CTX_get_rsa_oaep_md(PKEY_CTX* ctx, void* pmd) => PKEY_CTX_ctrl(ctx, PKEY_RSA, PKEY_OP_TYPE_CRYPT, PKEY_CTRL_GET_RSA_OAEP_MD, 0, pmd);
+		[Inline]
+		public static int PKEY_CTX_set0_rsa_oaep_label(PKEY_CTX* ctx, void* l, int llen) => PKEY_CTX_ctrl(ctx, PKEY_RSA, PKEY_OP_TYPE_CRYPT, PKEY_CTRL_RSA_OAEP_LABEL, llen, l);
+		[Inline]
+		public static int PKEY_CTX_get0_rsa_oaep_label(PKEY_CTX* ctx, void* l) => PKEY_CTX_ctrl(ctx, PKEY_RSA, PKEY_OP_TYPE_CRYPT, PKEY_CTRL_GET_RSA_OAEP_LABEL, 0, l);
+		[Inline]
+		public static int PKEY_CTX_set_rsa_pss_keygen_md(PKEY_CTX* ctx, void* md) => PKEY_CTX_ctrl(ctx, PKEY_RSA_PSS, PKEY_OP_KEYGEN, PKEY_CTRL_MD, 0, md);
+
+		public const int PKEY_CTRL_RSA_PADDING         = PKEY_ALG_CTRL + 1;
+		public const int PKEY_CTRL_RSA_PSS_SALTLEN     = PKEY_ALG_CTRL + 2;
+
+		public const int PKEY_CTRL_RSA_KEYGEN_BITS     = PKEY_ALG_CTRL + 3;
+		public const int PKEY_CTRL_RSA_KEYGEN_PUBEXP   = PKEY_ALG_CTRL + 4;
+		public const int PKEY_CTRL_RSA_MGF1_MD         = PKEY_ALG_CTRL + 5;
+
+		public const int PKEY_CTRL_GET_RSA_PADDING     = PKEY_ALG_CTRL + 6;
+		public const int PKEY_CTRL_GET_RSA_PSS_SALTLEN = PKEY_ALG_CTRL + 7;
+		public const int PKEY_CTRL_GET_RSA_MGF1_MD     = PKEY_ALG_CTRL + 8;
+
+		public const int PKEY_CTRL_RSA_OAEP_MD         = PKEY_ALG_CTRL + 9;
+		public const int PKEY_CTRL_RSA_OAEP_LABEL      = PKEY_ALG_CTRL + 10;
+
+		public const int PKEY_CTRL_GET_RSA_OAEP_MD     = PKEY_ALG_CTRL + 11;
+		public const int PKEY_CTRL_GET_RSA_OAEP_LABEL  = PKEY_ALG_CTRL + 12;
+
+		public const int PKEY_CTRL_RSA_KEYGEN_PRIMES   = PKEY_ALG_CTRL + 13;
+#endif
 	}
 }

@@ -12,6 +12,15 @@ using System;
 namespace Beef_Net.OpenSSL
 {
 	[AlwaysInclude]
+	sealed abstract class PKCS1
+	{
+#if !OPENSSL_NO_RSA
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS1_MGF1")]
+		public extern static int MGF1(uint8* mask, int len, uint8* seed, int seedlen, EVP.MD* dgst);
+#endif
+	}
+
+	[AlwaysInclude]
 	sealed abstract class PKCS5
 	{
 		public const int SALT_LEN     = 8;

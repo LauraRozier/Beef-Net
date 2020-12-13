@@ -14,7 +14,588 @@ namespace Beef_Net.OpenSSL
 	[AlwaysInclude]
 	sealed abstract class RSA
 	{
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int ERR_load_RSA_strings();
+		
+		/*
+		 * RSA function codes.
+		 */
+		public const int F_CHECK_PADDING_MD                                    = 140;
+		public const int F_ENCODE_PKCS1                                        = 146;
+		public const int F_INT_RSA_VERIFY                                      = 145;
+		public const int F_OLD_RSA_PRIV_DECODE                                 = 147;
+		public const int F_PKEY_PSS_INIT                                       = 165;
+		public const int F_PKEY_RSA_CTRL                                       = 143;
+		public const int F_PKEY_RSA_CTRL_STR                                   = 144;
+		public const int F_PKEY_RSA_SIGN                                       = 142;
+		public const int F_PKEY_RSA_VERIFY                                     = 149;
+		public const int F_PKEY_RSA_VERIFYRECOVER                              = 141;
+		public const int F_RSA_ALGOR_TO_MD                                     = 156;
+		public const int F_RSA_BUILTIN_KEYGEN                                  = 129;
+		public const int F_RSA_CHECK_KEY                                       = 123;
+		public const int F_RSA_CHECK_KEY_EX                                    = 160;
+		public const int F_RSA_CMS_DECRYPT                                     = 159;
+		public const int F_RSA_CMS_VERIFY                                      = 158;
+		public const int F_RSA_ITEM_VERIFY                                     = 148;
+		public const int F_RSA_METH_DUP                                        = 161;
+		public const int F_RSA_METH_NEW                                        = 162;
+		public const int F_RSA_METH_SET1_NAME                                  = 163;
+		public const int F_RSA_MGF1_TO_MD                                      = 157;
+		public const int F_RSA_MULTIP_INFO_NEW                                 = 166;
+		public const int F_RSA_NEW_METHOD                                      = 106;
+		public const int F_RSA_NULL                                            = 124;
+		public const int F_RSA_NULL_PRIVATE_DECRYPT                            = 132;
+		public const int F_RSA_NULL_PRIVATE_ENCRYPT                            = 133;
+		public const int F_RSA_NULL_PUBLIC_DECRYPT                             = 134;
+		public const int F_RSA_NULL_PUBLIC_ENCRYPT                             = 135;
+		public const int F_RSA_OSSL_PRIVATE_DECRYPT                            = 101;
+		public const int F_RSA_OSSL_PRIVATE_ENCRYPT                            = 102;
+		public const int F_RSA_OSSL_PUBLIC_DECRYPT                             = 103;
+		public const int F_RSA_OSSL_PUBLIC_ENCRYPT                             = 104;
+		public const int F_RSA_PADDING_ADD_NONE                                = 107;
+		public const int F_RSA_PADDING_ADD_PKCS1_OAEP                          = 121;
+		public const int F_RSA_PADDING_ADD_PKCS1_OAEP_MGF1                     = 154;
+		public const int F_RSA_PADDING_ADD_PKCS1_PSS                           = 125;
+		public const int F_RSA_PADDING_ADD_PKCS1_PSS_MGF1                      = 152;
+		public const int F_RSA_PADDING_ADD_PKCS1_TYPE_1                        = 108;
+		public const int F_RSA_PADDING_ADD_PKCS1_TYPE_2                        = 109;
+		public const int F_RSA_PADDING_ADD_SSLV23                              = 110;
+		public const int F_RSA_PADDING_ADD_X931                                = 127;
+		public const int F_RSA_PADDING_CHECK_NONE                              = 111;
+		public const int F_RSA_PADDING_CHECK_PKCS1_OAEP                        = 122;
+		public const int F_RSA_PADDING_CHECK_PKCS1_OAEP_MGF1                   = 153;
+		public const int F_RSA_PADDING_CHECK_PKCS1_TYPE_1                      = 112;
+		public const int F_RSA_PADDING_CHECK_PKCS1_TYPE_2                      = 113;
+		public const int F_RSA_PADDING_CHECK_SSLV23                            = 114;
+		public const int F_RSA_PADDING_CHECK_X931                              = 128;
+		public const int F_RSA_PARAM_DECODE                                    = 164;
+		public const int F_RSA_PRINT                                           = 115;
+		public const int F_RSA_PRINT_FP                                        = 116;
+		public const int F_RSA_PRIV_DECODE                                     = 150;
+		public const int F_RSA_PRIV_ENCODE                                     = 138;
+		public const int F_RSA_PSS_GET_PARAM                                   = 151;
+		public const int F_RSA_PSS_TO_CTX                                      = 155;
+		public const int F_RSA_PUB_DECODE                                      = 139;
+		public const int F_RSA_SETUP_BLINDING                                  = 136;
+		public const int F_RSA_SIGN                                            = 117;
+		public const int F_RSA_SIGN_ASN1_OCTET_STRING                          = 118;
+		public const int F_RSA_VERIFY                                          = 119;
+		public const int F_RSA_VERIFY_ASN1_OCTET_STRING                        = 120;
+		public const int F_RSA_VERIFY_PKCS1_PSS_MGF1                           = 126;
+		public const int F_SETUP_TBUF                                          = 167;
+		
+		/*
+		 * RSA reason codes.
+		 */
+		public const int R_ALGORITHM_MISMATCH                                  = 100;
+		public const int R_BAD_E_VALUE                                         = 101;
+		public const int R_BAD_FIXED_HEADER_DECRYPT                            = 102;
+		public const int R_BAD_PAD_BYTE_COUNT                                  = 103;
+		public const int R_BAD_SIGNATURE                                       = 104;
+		public const int R_BLOCK_TYPE_IS_NOT_01                                = 106;
+		public const int R_BLOCK_TYPE_IS_NOT_02                                = 107;
+		public const int R_DATA_GREATER_THAN_MOD_LEN                           = 108;
+		public const int R_DATA_TOO_LARGE                                      = 109;
+		public const int R_DATA_TOO_LARGE_FOR_KEY_SIZE                         = 110;
+		public const int R_DATA_TOO_LARGE_FOR_MODULUS                          = 132;
+		public const int R_DATA_TOO_SMALL                                      = 111;
+		public const int R_DATA_TOO_SMALL_FOR_KEY_SIZE                         = 122;
+		public const int R_DIGEST_DOES_NOT_MATCH                               = 158;
+		public const int R_DIGEST_NOT_ALLOWED                                  = 145;
+		public const int R_DIGEST_TOO_BIG_FOR_RSA_KEY                          = 112;
+		public const int R_DMP1_NOT_CONGRUENT_TO_D                             = 124;
+		public const int R_DMQ1_NOT_CONGRUENT_TO_D                             = 125;
+		public const int R_D_E_NOT_CONGRUENT_TO_1                              = 123;
+		public const int R_FIRST_OCTET_INVALID                                 = 133;
+		public const int R_ILLEGAL_OR_UNSUPPORTED_PADDING_MODE                 = 144;
+		public const int R_INVALID_DIGEST                                      = 157;
+		public const int R_INVALID_DIGEST_LENGTH                               = 143;
+		public const int R_INVALID_HEADER                                      = 137;
+		public const int R_INVALID_LABEL                                       = 160;
+		public const int R_INVALID_MESSAGE_LENGTH                              = 131;
+		public const int R_INVALID_MGF1_MD                                     = 156;
+		public const int R_INVALID_MULTI_PRIME_KEY                             = 167;
+		public const int R_INVALID_OAEP_PARAMETERS                             = 161;
+		public const int R_INVALID_PADDING                                     = 138;
+		public const int R_INVALID_PADDING_MODE                                = 141;
+		public const int R_INVALID_PSS_PARAMETERS                              = 149;
+		public const int R_INVALID_PSS_SALTLEN                                 = 146;
+		public const int R_INVALID_SALT_LENGTH                                 = 150;
+		public const int R_INVALID_TRAILER                                     = 139;
+		public const int R_INVALID_X931_DIGEST                                 = 142;
+		public const int R_IQMP_NOT_INVERSE_OF_Q                               = 126;
+		public const int R_KEY_PRIME_NUM_INVALID                               = 165;
+		public const int R_KEY_SIZE_TOO_SMALL                                  = 120;
+		public const int R_LAST_OCTET_INVALID                                  = 134;
+		public const int R_MISSING_PRIVATE_KEY                                 = 179;
+		public const int R_MGF1_DIGEST_NOT_ALLOWED                             = 152;
+		public const int R_MODULUS_TOO_LARGE                                   = 105;
+		public const int R_MP_COEFFICIENT_NOT_INVERSE_OF_R                     = 168;
+		public const int R_MP_EXPONENT_NOT_CONGRUENT_TO_D                      = 169;
+		public const int R_MP_R_NOT_PRIME                                      = 170;
+		public const int R_NO_PUBLIC_EXPONENT                                  = 140;
+		public const int R_NULL_BEFORE_BLOCK_MISSING                           = 113;
+		public const int R_N_DOES_NOT_EQUAL_PRODUCT_OF_PRIMES                  = 172;
+		public const int R_N_DOES_NOT_EQUAL_P_Q                                = 127;
+		public const int R_OAEP_DECODING_ERROR                                 = 121;
+		public const int R_OPERATION_NOT_SUPPORTED_FOR_THIS_KEYTYPE            = 148;
+		public const int R_PADDING_CHECK_FAILED                                = 114;
+		public const int R_PKCS_DECODING_ERROR                                 = 159;
+		public const int R_PSS_SALTLEN_TOO_SMALL                               = 164;
+		public const int R_P_NOT_PRIME                                         = 128;
+		public const int R_Q_NOT_PRIME                                         = 129;
+		public const int R_RSA_OPERATIONS_NOT_SUPPORTED                        = 130;
+		public const int R_SLEN_CHECK_FAILED                                   = 136;
+		public const int R_SLEN_RECOVERY_FAILED                                = 135;
+		public const int R_SSLV3_ROLLBACK_ATTACK                               = 115;
+		public const int R_THE_ASN1_OBJECT_IDENTIFIER_IS_NOT_KNOWN_FOR_THIS_MD = 116;
+		public const int R_UNKNOWN_ALGORITHM_TYPE                              = 117;
+		public const int R_UNKNOWN_DIGEST                                      = 166;
+		public const int R_UNKNOWN_MASK_DIGEST                                 = 151;
+		public const int R_UNKNOWN_PADDING_TYPE                                = 118;
+		public const int R_UNSUPPORTED_ENCRYPTION_TYPE                         = 162;
+		public const int R_UNSUPPORTED_LABEL_SOURCE                            = 163;
+		public const int R_UNSUPPORTED_MASK_ALGORITHM                          = 153;
+		public const int R_UNSUPPORTED_MASK_PARAMETER                          = 154;
+		public const int R_UNSUPPORTED_SIGNATURE_TYPE                          = 155;
+		public const int R_VALUE_MISSING                                       = 147;
+		public const int R_WRONG_SIGNATURE_LENGTH                              = 119;
+
 #if !OPENSSL_NO_RSA
+		public struct stack_st_RSA_PRIME_INFO {}
+
+		[CRepr]
+		public struct rsa_st
+		{
+		    /* The first parameter is used to pickup errors where this is passed instead of an EVP.PKEY, it is set to 0 */
+		    public int pad;
+		    public int32 version;
+		    public METHOD* meth;
+		    /* functional reference if 'meth' is ENGINE-provided */
+		    public Engine.ENGINE* engine;
+		    public BN.BIGNUM* n;
+		    public BN.BIGNUM* e;
+		    public BN.BIGNUM* d;
+		    public BN.BIGNUM* p;
+		    public BN.BIGNUM* q;
+		    public BN.BIGNUM* dmp1;
+		    public BN.BIGNUM* dmq1;
+		    public BN.BIGNUM* iqmp;
+		    /* for multi-prime RSA, defined in RFC 8017 */
+		    public stack_st_RSA_PRIME_INFO* prime_infos;
+		    /* If a PSS only key this contains the parameter restrictions */
+		    public PSS_PARAMS* pss;
+		    /* be careful using this if the RSA structure is shared */
+		    public Crypto.EX_DATA ex_data;
+		    public Crypto.REF_COUNT references;
+		    public int flags;
+		    /* Used to cache montgomery values */
+		    public BN.MONT_CTX* _method_mod_n;
+		    public BN.MONT_CTX* _method_mod_p;
+		    public BN.MONT_CTX* _method_mod_q;
+		    /* all BIGNUM values are actually in the following data, if it is not NULL */
+		    public char8* bignum_data;
+		    public BN.BLINDING* blinding;
+		    public BN.BLINDING* mt_blinding;
+		    public Crypto.RWLOCK* lock;
+		}
+		public typealias RSA = rsa_st;
+
+		[CRepr]
+		public struct meth_st
+		{
+		    public char8* name;
+		    public function int(int flen, uint8* from, uint8* to, rsa_st* rsa, int padding) rsa_pub_enc;
+		    public function int(int flen, uint8* from, uint8* to, rsa_st* rsa, int padding) rsa_pub_dec;
+		    public function int(int flen, uint8* from, uint8* to, rsa_st* rsa, int padding) rsa_priv_enc;
+		    public function int(int flen, uint8* from, uint8* to, rsa_st* rsa, int padding) rsa_priv_dec;
+		    /* Can be null */
+		    public function int(BN.BIGNUM* r0, BN.BIGNUM* I, rsa_st* rsa, BN.CTX* ctx) rsa_mod_exp;
+		    /* Can be null */
+		    public function int(BN.BIGNUM* r, BN.BIGNUM* a, BN.BIGNUM* p, BN.BIGNUM* m, BN.CTX* ctx, BN.MONT_CTX* m_ctx) bn_mod_exp;
+		    /* called at new */
+		    public function int(rsa_st* rsa) init;
+		    /* called at free */
+		    public function int(rsa_st* rsa) finish;
+		    /* METHOD_FLAG_* things */
+		    public int flags;
+		    /* may be needed! */
+		    public char8* app_data;
+		    /*
+		     * New sign and verify functions: some libraries don't allow arbitrary data to be signed/verified: this allows them to be used. Note: for this to work the public_decrypt() and private_encrypt() should
+		     * *NOT* be used sign(), verify() should be used instead.
+		     */
+		    public function int(int type, uint8* m, uint m_length, uint8* sigret, uint* siglen, rsa_st* rsa) rsa_sign;
+		    public function int(int dtype, uint8* m, uint m_length, uint8* sigbuf, uint siglen, rsa_st* rsa) rsa_verify;
+		    /*
+		     * If this callback is NULL, the builtin software RSA key-gen will be used. This is for behavioural compatibility whilst the code gets rewired, but one day it would be nice to assume there are no such
+		     * things as "builtin software" implementations.
+		     */
+		    public function int(rsa_st* rsa, int bits, BN.BIGNUM* e, BN.GENCB* cb) rsa_keygen;
+		    public function int(rsa_st* rsa, int bits, int primes, BN.BIGNUM* e, BN.GENCB* cb) rsa_multi_prime_keygen;
+		}
+		public typealias METHOD = meth_st;
+
+		public const int RSA_3  = 0x3L;
+		public const int RSA_F4 = 0x10001L;
+
+		/* based on RFC 8017 appendix A.1.2 */
+		public const int ASN1_VERSION_DEFAULT  = 0;
+		public const int ASN1_VERSION_MULTI    = 1;
+
+		public const int DEFAULT_PRIME_NUM     = 2;
+
+		public const int METHOD_FLAG_NO_CHECK  = 0x0001; /* don't check pub/private match */
+
+		public const int FLAG_CACHE_PUBLIC     = 0x0002;
+		public const int FLAG_CACHE_PRIVATE    = 0x0004;
+		public const int FLAG_BLINDING         = 0x0008;
+		public const int FLAG_THREAD_SAFE      = 0x0010;
+		/*
+		 * This flag means the private key operations will be handled by rsa_mod_exp and that they do not depend on the private key components being present:
+		 * for example a key stored in external hardware. Without this flag bn_mod_exp gets called when private key components are absent.
+		 */
+		public const int FLAG_EXT_PKEY         = 0x0020;
+
+		/* new with 0.9.6j and 0.9.7b; the built-in RSA implementation now uses blinding by default (ignoring FLAG_BLINDING), but other engines might not need it */
+		public const int FLAG_NO_BLINDING      = 0x0080;
+		/* Does nothing. Previously this switched off constant time behaviour. */
+		public const int FLAG_NO_CONSTTIME     = 0x0000;
+		/* deprecated name for the flag*/
+		/*
+		 * new with 0.9.7h; the built-in RSA implementation now uses constant time modular exponentiation for secret exponents by default.
+		 * This flag causes the faster variable sliding window method to be used for all exponents.
+		 */
+		public const int FLAG_NO_EXP_CONSTTIME = FLAG_NO_CONSTTIME;
+
+		/* Salt length matches digest */
+		public const int PSS_SALTLEN_DIGEST   = -1;
+		/* Verify only: auto detect salt length */
+		public const int PSS_SALTLEN_AUTO     = -2;
+		/* Set salt length to maximum possible */
+		public const int PSS_SALTLEN_MAX      = -3;
+		/* Old compatible max salt length for sign only */
+		public const int PSS_SALTLEN_MAX_SIGN = -2;
+		
+		public const int PKCS1_PADDING      = 1;
+		public const int SSLV23_PADDING     = 2;
+		public const int NO_PADDING         = 3;
+		public const int PKCS1_OAEP_PADDING = 4;
+		public const int X931_PADDING       = 5;
+		/* EVP_PKEY_ only */
+		public const int PKCS1_PSS_PADDING  = 6;
+		
+		public const int PKCS1_PADDING_SIZE = 11;
+		
+		[Inline]
+		public static int set_app_data(rsa_st* s, void* arg) => set_ex_data(s, 0, arg);
+		[Inline]
+		public static void* get_app_data(rsa_st* s) => get_ex_data(s, 0);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_new")]
+		public extern static rsa_st* new_();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_new_method")]
+		public extern static rsa_st* new_method(Engine.ENGINE* engine);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_bits")]
+		public extern static int bits(rsa_st* rsa);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_size")]
+		public extern static int size(rsa_st* rsa);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_security_bits")]
+		public extern static int security_bits(rsa_st* rsa);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_set0_key")]
+		public extern static int set0_key(rsa_st* r, BN.BIGNUM* n, BN.BIGNUM* e, BN.BIGNUM* d);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_set0_factors")]
+		public extern static int set0_factors(rsa_st* r, BN.BIGNUM* p, BN.BIGNUM* q);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_set0_crt_params")]
+		public extern static int set0_crt_params(rsa_st* r,BN.BIGNUM* dmp1, BN.BIGNUM* dmq1, BN.BIGNUM* iqmp);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_set0_multi_prime_params")]
+		public extern static int set0_multi_prime_params(rsa_st* r, BN.BIGNUM*[] primes, BN.BIGNUM*[] exps, BN.BIGNUM*[] coeffs, int pnum);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get0_key")]
+		public extern static void get0_key(rsa_st* r, BN.BIGNUM** n, BN.BIGNUM** e, BN.BIGNUM** d);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get0_factors")]
+		public extern static void get0_factors(rsa_st* r, BN.BIGNUM** p, BN.BIGNUM** q);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get_multi_prime_extra_count")]
+		public extern static int get_multi_prime_extra_count(rsa_st* r);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get0_multi_prime_factors")]
+		public extern static int get0_multi_prime_factors(rsa_st* r, BN.BIGNUM*[] primes);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get0_crt_params")]
+		public extern static void get0_crt_params(rsa_st* r, BN.BIGNUM** dmp1, BN.BIGNUM** dmq1, BN.BIGNUM** iqmp);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get0_multi_prime_crt_params")]
+		public extern static int get0_multi_prime_crt_params(rsa_st* r, BN.BIGNUM*[] exps, BN.BIGNUM*[] coeffs);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get0_n")]
+		public extern static BN.BIGNUM* get0_n(rsa_st* d);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get0_e")]
+		public extern static BN.BIGNUM* get0_e(rsa_st* d);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get0_d")]
+		public extern static BN.BIGNUM* get0_d(rsa_st* d);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get0_p")]
+		public extern static BN.BIGNUM* get0_p(rsa_st* d);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get0_q")]
+		public extern static BN.BIGNUM* get0_q(rsa_st* d);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get0_dmp1")]
+		public extern static BN.BIGNUM* get0_dmp1(rsa_st* r);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get0_dmq1")]
+		public extern static BN.BIGNUM* get0_dmq1(rsa_st* r);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get0_iqmp")]
+		public extern static BN.BIGNUM* get0_iqmp(rsa_st* r);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get0_pss_params")]
+		public extern static PSS_PARAMS* get0_pss_params(rsa_st* r);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_clear_flags")]
+		public extern static void clear_flags(rsa_st* r, int flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_test_flags")]
+		public extern static int test_flags(rsa_st* r, int flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_set_flags")]
+		public extern static void set_flags(rsa_st* r, int flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get_version")]
+		public extern static int get_version(rsa_st* r);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get0_engine")]
+		public extern static Engine.ENGINE* get0_engine(rsa_st* r);
+		
+		/* Deprecated version */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_generate_key")]
+		public extern static rsa_st* generate_key(int bits, uint e, function void(int, int, void*) callback, void* cb_arg);
+		
+		/* New version */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_generate_key_ex")]
+		public extern static int generate_key_ex(rsa_st* rsa, int bits, BN.BIGNUM* e, BN.GENCB* cb);
+		/* Multi-prime version */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_generate_multi_prime_key")]
+		public extern static int generate_multi_prime_key(rsa_st* rsa, int bits, int primes, BN.BIGNUM* e, BN.GENCB* cb);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_X931_derive_ex")]
+		public extern static int X931_derive_ex(rsa_st* rsa, BN.BIGNUM* p1, BN.BIGNUM* p2, BN.BIGNUM* q1, BN.BIGNUM* q2, BN.BIGNUM* Xp1, BN.BIGNUM* Xp2, BN.BIGNUM* Xp, BN.BIGNUM* Xq1, BN.BIGNUM* Xq2, BN.BIGNUM* Xq,
+			BN.BIGNUM* e, BN.GENCB* cb);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_X931_generate_key_ex")]
+		public extern static int X931_generate_key_ex(rsa_st* rsa, int bits, BN.BIGNUM* e, BN.GENCB* cb);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_check_key")]
+		public extern static int check_key(rsa_st* rsa);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_check_key_ex")]
+		public extern static int check_key_ex(rsa_st* rsa, BN.GENCB* cb);
+		/* next 4 return -1 on error */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_public_encrypt")]
+		public extern static int public_encrypt(int flen, uint8* from, uint8* to, rsa_st* rsa, int padding);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_private_encrypt")]
+		public extern static int private_encrypt(int flen, uint8* from, uint8* to, rsa_st* rsa, int padding);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_public_decrypt")]
+		public extern static int public_decrypt(int flen, uint8* from, uint8* to, rsa_st* rsa, int padding);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_private_decrypt")]
+		public extern static int private_decrypt(int flen, uint8* from, uint8* to, rsa_st* rsa, int padding);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_free")]
+		public extern static void free(rsa_st* rsa);
+		/* "up" the RSA object's reference count */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_up_ref")]
+		public extern static int up_ref(rsa_st* rsa);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_flags")]
+		public extern static int flags(rsa_st* rsa);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_set_default_method")]
+		public extern static void set_default_method(METHOD* meth);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get_default_method")]
+		public extern static METHOD* get_default_method();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_null_method")]
+		public extern static METHOD* null_method();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get_method")]
+		public extern static METHOD* get_method(rsa_st* rsa);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_set_method")]
+		public extern static int set_method(rsa_st* rsa, METHOD* meth);
+		
+		/* these are the actual RSA functions */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_PKCS1_OpenSSL")]
+		public extern static METHOD* PKCS1_OpenSSL();
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_pkey_ctx_ctrl")]
+		public extern static int pkey_ctx_ctrl(EVP.PKEY_CTX* ctx, int optype, int cmd, int p1, void* p2);
+		
+		// DECLARE_ASN1_ENCODE_FUNCTIONS_const(RSA, RSAPublicKey)
+		// DECLARE_ASN1_ENCODE_FUNCTIONS_const(RSA, RSAPrivateKey)
+		
+		[CRepr]
+		public struct pss_params_st
+		{
+		    public X509.ALGOR* hashAlgorithm;
+		    public X509.ALGOR* maskGenAlgorithm;
+		    public ASN1.INTEGER* saltLength;
+		    public ASN1.INTEGER* trailerField;
+		    /* Decoded hash algorithm from maskGenAlgorithm */
+		    public X509.ALGOR* maskHash;
+		}
+		public typealias PSS_PARAMS = pss_params_st;
+		
+		// DECLARE_ASN1_FUNCTIONS(RSA_PSS_PARAMS)
+
+		[CRepr]
+		public struct oaep_params_st
+		{
+		    public X509.ALGOR* hashFunc;
+		    public X509.ALGOR* maskGenFunc;
+		    public X509.ALGOR* pSourceFunc;
+		    /* Decoded hash algorithm from maskGenFunc */
+		    public X509.ALGOR* maskHash;
+		}
+		public typealias OAEP_PARAMS = oaep_params_st;
+		
+		// DECLARE_ASN1_FUNCTIONS(RSA_OAEP_PARAMS)
+		
+	#if !OPENSSL_NO_STDIO
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_print_fp")]
+		public extern static int print_fp(Platform.BfpFile* fp, rsa_st* r, int offset);
+	#endif
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_print")]
+		public extern static int print(BIO.bio_st* bp, rsa_st* r, int offset);
+		
+		/* The following 2 functions sign and verify a X509.SIG ASN1 object inside PKCS#1 padded RSA encryption */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_sign")]
+		public extern static int sign(int type, uint8* m, uint m_length, uint8* sigret, uint *siglen, rsa_st* rsa);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_verify")]
+		public extern static int verify(int type, uint8* m, uint m_length, uint8* sigbuf, uint siglen, rsa_st* rsa);
+		
+		/* The following 2 function sign and verify a ASN1.OCTET_STRING object inside PKCS#1 padded RSA encryption */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_sign_ASN1_OCTET_STRING")]
+		public extern static int sign_ASN1_OCTET_STRING(int type, uint8* m, uint m_length, uint8* sigret, uint* siglen, rsa_st* rsa);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_verify_ASN1_OCTET_STRING")]
+		public extern static int verify_ASN1_OCTET_STRING(int type, uint8* m, uint m_length, uint8* sigbuf, uint siglen, rsa_st* rsa);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_blinding_on")]
+		public extern static int blinding_on(rsa_st* rsa, BN.CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_blinding_off")]
+		public extern static void blinding_off(rsa_st* rsa);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_setup_blinding")]
+		public extern static BN.BLINDING* setup_blinding(rsa_st* rsa, BN.CTX* ctx);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_padding_add_PKCS1_type_1")]
+		public extern static int padding_add_PKCS1_type_1(uint8* to, int tlen, uint8* f, int fl);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_padding_check_PKCS1_type_1")]
+		public extern static int padding_check_PKCS1_type_1(uint8* to, int tlen, uint8* f, int fl, int rsa_len);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_padding_add_PKCS1_type_2")]
+		public extern static int padding_add_PKCS1_type_2(uint8* to, int tlen, uint8* f, int fl);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_padding_check_PKCS1_type_2")]
+		public extern static int padding_check_PKCS1_type_2(uint8* to, int tlen, uint8* f, int fl, int rsa_len);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_padding_add_PKCS1_OAEP")]
+		public extern static int padding_add_PKCS1_OAEP(uint8* to, int tlen, uint8* f, int fl, uint8* p, int pl);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_padding_check_PKCS1_OAEP")]
+		public extern static int padding_check_PKCS1_OAEP(uint8* to, int tlen, uint8* f, int fl, int rsa_len, uint8* p, int pl);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_padding_add_PKCS1_OAEP_mgf1")]
+		public extern static int padding_add_PKCS1_OAEP_mgf1(uint8* to, int tlen, uint8* from, int flen, uint8* param, int plen, EVP.MD* md, EVP.MD* mgf1md);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_padding_check_PKCS1_OAEP_mgf1")]
+		public extern static int padding_check_PKCS1_OAEP_mgf1(uint8* to, int tlen, uint8* from, int flen, int num, uint8* param, int plen, EVP.MD* md, EVP.MD* mgf1md);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_padding_add_SSLv23")]
+		public extern static int padding_add_SSLv23(uint8* to, int tlen, uint8* f, int fl);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_padding_check_SSLv23")]
+		public extern static int padding_check_SSLv23(uint8* to, int tlen, uint8* f, int fl, int rsa_len);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_padding_add_none")]
+		public extern static int padding_add_none(uint8* to, int tlen, uint8* f, int fl);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_padding_check_none")]
+		public extern static int padding_check_none(uint8* to, int tlen, uint8* f, int fl, int rsa_len);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_padding_add_X931")]
+		public extern static int padding_add_X931(uint8* to, int tlen, uint8* f, int fl);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_padding_check_X931")]
+		public extern static int padding_check_X931(uint8* to, int tlen, uint8* f, int fl, int rsa_len);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_X931_hash_id")]
+		public extern static int X931_hash_id(int nid);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_verify_PKCS1_PSS")]
+		public extern static int verify_PKCS1_PSS(rsa_st* rsa, uint8* mHash, EVP.MD* Hash, uint8* EM, int sLen);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_padding_add_PKCS1_PSS")]
+		public extern static int padding_add_PKCS1_PSS(rsa_st* rsa, uint8* EM, uint8* mHash, EVP.MD* Hash, int sLen);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_verify_PKCS1_PSS_mgf1")]
+		public extern static int verify_PKCS1_PSS_mgf1(rsa_st* rsa, uint8* mHash, EVP.MD* Hash, EVP.MD* mgf1Hash, uint8* EM, int sLen);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_padding_add_PKCS1_PSS_mgf1")]
+		public extern static int padding_add_PKCS1_PSS_mgf1(rsa_st* rsa, uint8* EM, uint8* mHash, EVP.MD* Hash, EVP.MD* mgf1Hash, int sLen);
+		
+		[Inline]
+		public static int get_ex_new_index(int l, void* p, Crypto.EX_new newf, Crypto.EX_dup dupf, Crypto.EX_free freef) => Crypto.get_ex_new_index(Crypto.EX_INDEX_RSA, l, p, newf, dupf, freef);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_set_ex_data")]
+		public extern static int set_ex_data(rsa_st* r, int idx, void* arg);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get_ex_data")]
+		public extern static void* get_ex_data(rsa_st* r, int idx);
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSAPublicKey_dup")]
+		public extern static rsa_st* PublicKey_dup(rsa_st* rsa);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSAPrivateKey_dup")]
+		public extern static rsa_st* PrivateKey_dup(rsa_st* rsa);
+		
+		/*
+		 * If this flag is set the RSA method is FIPS compliant and can be used in FIPS mode. This is set in the validated module method. If an application sets this flag in its own methods it is its responsibility to ensure the
+		 * result is compliant.
+		 */
+		public const int FLAG_FIPS_METHOD    = 0x0400;
+		/* If this flag is set the operations normally disabled in FIPS mode are permitted it is then the applications responsibility to ensure that the usage is compliant. */
+		public const int FLAG_NON_FIPS_ALLOW = 0x0400;
+		/* Application has decided PRNG is good enough to generate a key: don't check. */
+		public const int FLAG_CHECKED        = 0x0800;
+		
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_new")]
+		public extern static METHOD* meth_new(char8* name, int flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_free")]
+		public extern static void meth_free(METHOD* meth);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_dup")]
+		public extern static METHOD* meth_dup(METHOD* meth);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_get0_name")]
+		public extern static char8* meth_get0_name(METHOD* meth);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_set1_name")]
+		public extern static int meth_set1_name(METHOD* meth, char8* name);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_get_flags")]
+		public extern static int meth_get_flags(METHOD* meth);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_set_flags")]
+		public extern static int meth_set_flags(METHOD* meth, int flags);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_get0_app_data")]
+		public extern static void* meth_get0_app_data(METHOD* meth);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_set0_app_data")]
+		public extern static int meth_set0_app_data(METHOD* meth, void* app_data);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_get_pub_enc")]
+		public extern static function int(int flen, uint8* from, uint8* to, rsa_st* rsa, int padding) meth_get_pub_enc(METHOD* meth);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_set_pub_enc")]
+		public extern static int meth_set_pub_enc(METHOD* rsa, function int(int flen, uint8* from, uint8* to, rsa_st* rsa, int padding) pub_enc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_get_pub_dec")]
+		public extern static function int(int flen, uint8* from, uint8* to, rsa_st* rsa, int padding) meth_get_pub_dec(METHOD* meth);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_set_pub_dec")]
+		public extern static int meth_set_pub_dec(METHOD* rsa, function int(int flen, uint8* from, uint8* to, rsa_st* rsa, int padding) pub_dec);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_get_priv_enc")]
+		public extern static function int(int flen, uint8* from, uint8* to, rsa_st* rsa, int padding) meth_get_priv_enc(METHOD* meth);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_set_priv_enc")]
+		public extern static int meth_set_priv_enc(METHOD* rsa, function int(int flen, uint8* from, uint8* to, rsa_st* rsa, int padding) priv_enc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_get_priv_dec")]
+		public extern static function int(int flen, uint8* from, uint8* to, rsa_st* rsa, int padding) meth_get_priv_dec(METHOD* meth);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_set_priv_dec")]
+		public extern static int meth_set_priv_dec(METHOD* rsa, function int(int flen, uint8* from, uint8* to, rsa_st* rsa, int padding) priv_dec);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_get_mod_exp")]
+		public extern static function int(BN.BIGNUM* r0, BN.BIGNUM* i, rsa_st* rsa, BN.CTX* ctx) meth_get_mod_exp(METHOD* meth);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_set_mod_exp")]
+		public extern static int meth_set_mod_exp(METHOD* rsa, function int(BN.BIGNUM* r0, BN.BIGNUM* i, rsa_st* rsa, BN.CTX* ctx) mod_exp);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_get_bn_mod_exp")]
+		public extern static function int(BN.BIGNUM* r, BN.BIGNUM* a, BN.BIGNUM* p, BN.BIGNUM* m, BN.CTX* ctx, BN.MONT_CTX* m_ctx) meth_get_bn_mod_exp(METHOD* meth);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_set_bn_mod_exp")]
+		public extern static int meth_set_bn_mod_exp(METHOD* rsa, function int(BN.BIGNUM* r, BN.BIGNUM* a, BN.BIGNUM* p, BN.BIGNUM* m, BN.CTX* ctx, BN.MONT_CTX* m_ctx) bn_mod_exp);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_get_init")]
+		public extern static function int(rsa_st* rsa) meth_get_init(METHOD* meth);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_set_init")]
+		public extern static int meth_set_init(METHOD* rsa, function int(rsa_st* rsa) init);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_get_finish")]
+		public extern static function int(rsa_st* rsa) meth_get_finish(METHOD* meth);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_set_finish")]
+		public extern static int meth_set_finish(METHOD* rsa, function int(rsa_st* rsa) finish);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_get_sign")]
+		public extern static function int(int type, uint8* m, uint m_length, uint8* sigret, uint *siglen, rsa_st* rsa) meth_get_sign(METHOD* meth);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_set_sign")]
+		public extern static int meth_set_sign(METHOD* rsa, function int(int type, uint8* m, uint m_length, uint8* sigret, uint *siglen, rsa_st* rsa) sign);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_get_verify")]
+		public extern static function int(int dtype, uint8* m, uint m_length, uint8* sigbuf, uint siglen, rsa_st* rsa) meth_get_verify(METHOD* meth);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_set_verify")]
+		public extern static int meth_set_verify(METHOD* rsa, function int(int dtype, uint8* m, uint m_length, uint8* sigbuf, uint siglen, rsa_st* rsa) verify);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_get_keygen")]
+		public extern static function int(rsa_st* rsa, int bits, BN.BIGNUM* e, BN.GENCB* cb) meth_get_keygen(METHOD* meth);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_set_keygen")]
+		public extern static int meth_set_keygen(METHOD* rsa, function int(rsa_st* rsa, int bits, BN.BIGNUM* e, BN.GENCB* cb) keygen);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_get_multi_prime_keygen")]
+		public extern static function int(rsa_st* rsa, int bits, int primes, BN.BIGNUM* e, BN.GENCB* cb) meth_get_multi_prime_keygen(METHOD* meth);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_set_multi_prime_keygen")]
+		public extern static int meth_set_multi_prime_keygen(METHOD* meth, function int(rsa_st* rsa, int bits, int primes, BN.BIGNUM* e, BN.GENCB* cb) keygen);
 #endif
 	}
 }

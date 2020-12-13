@@ -188,9 +188,9 @@ namespace Beef_Net.OpenSSL
 		public extern static int ctrl(ui_st* ui, int cmd, int i, void* p, function void() f);
 		
 		/* The commands */
-		/* Use UI_CONTROL_PRINT_ERRORS with the value 1 to have UI_process print the OpenSSL error stack before printing any info or added error messages and before any prompting. */
+		/* Use CONTROL_PRINT_ERRORS with the value 1 to have process print the OpenSSL error stack before printing any info or added error messages and before any prompting. */
 		public const int CTRL_PRINT_ERRORS = 1;
-		/* Check if a UI_process() is possible to do again with the same instance of a user interface.  This makes UI_ctrl() return 1 if it is redoable, and 0 if not. */
+		/* Check if a process() is possible to do again with the same instance of a user interface.  This makes ctrl() return 1 if it is redoable, and 0 if not. */
 		public const int CTRL_IS_REDOABLE  = 2;
 		
 		/* Some methods may use extra data */
@@ -244,11 +244,11 @@ namespace Beef_Net.OpenSSL
 		        -1      on out-of-band events, for example if some prompting has been canceled (by pressing Ctrl-C, for example).  This is only checked when returned by the flusher or the reader.
 		
 		   The way this is used, the opener is first called, then the writer for all strings, then the flusher, then the reader for all strings and finally the closer.
-		   Note that if you want to prompt from a terminal or other command line interface, the best is to have the reader also write the prompts instead of having the writer do it.  If you want to prompt from a dialog
-		   box, the writer can be used to build up the contents of the box, and the flusher to actually display the box and run the event loop until all data has been given, after which the reader only grabs the given data and puts
-		   them back into the UI strings.
+		   Note that if you want to prompt from a terminal or other command line interface, the best is to have the reader also write the prompts instead of having the writer do it.
+		   If you want to prompt from a dialog box, the writer can be used to build up the contents of the box, and the flusher to actually display the box and run the event loop until all data has been given,
+		   after which the reader only grabs the given data and puts them back into the UI strings.
 		
-		   All method functions take a UI as argument.  Additionally, the writer and the reader take a UI_STRING.
+		   All method functions take a UI as argument.  Additionally, the writer and the reader take a STRING.
 		*/
 		[CRepr]
 		public struct method_st
