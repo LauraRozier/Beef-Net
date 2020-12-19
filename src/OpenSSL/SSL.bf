@@ -11,468 +11,766 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
-	/*
-	libssl-1_1.dll
-		19   12 00001A1E ERR_load_SSL_strings
-		20   13 0000180C OPENSSL_cipher_name
-		21   14 00002059 OPENSSL_init_ssl
-
-		 27   1A 0000253B SSL_CIPHER_description
-		 28   1B 00001AAA SSL_CIPHER_find
-		 29   1C 0000221B SSL_CIPHER_get_auth_nid
-		 30   1D 0000222F SSL_CIPHER_get_bits
-		 31   1E 00001EBF SSL_CIPHER_get_cipher_nid
-		 32   1F 00001848 SSL_CIPHER_get_digest_nid
-		 33   20 00001F5F SSL_CIPHER_get_handshake_digest
-		 34   21 00002559 SSL_CIPHER_get_id
-		 35   22 000023E2 SSL_CIPHER_get_kx_nid
-		 36   23 000022ED SSL_CIPHER_get_name
-		 37   24 000011B8 SSL_CIPHER_get_protocol_id
-		 38   25 00001B04 SSL_CIPHER_get_version
-		 39   26 0000210D SSL_CIPHER_is_aead
-		 40   27 00001FB4 SSL_CIPHER_standard_name
-
-		 41   28 00001AFF SSL_COMP_add_compression_method
-		 42   29 000010F5 SSL_COMP_get0_name
-		 43   2A 00001E33 SSL_COMP_get_compression_methods
-		 44   2B 00001532 SSL_COMP_get_id
-		 45   2C 000013DE SSL_COMP_get_name
-		 46   2D 00001FC3 SSL_COMP_set0_compression_methods
-		 47   2E 000023EC SSL_CONF_CTX_clear_flags
-		 48   2F 000016C2 SSL_CONF_CTX_finish
-		 49   30 0000176C SSL_CONF_CTX_free
-		 50   31 00001DC0 SSL_CONF_CTX_new
-		 51   32 00001EAB SSL_CONF_CTX_set1_prefix
-		 52   33 00001A05 SSL_CONF_CTX_set_flags
-		 53   34 0000209F SSL_CONF_CTX_set_ssl
-		 54   35 000023AB SSL_CONF_CTX_set_ssl_ctx
-		 55   36 00001465 SSL_CONF_cmd
-		 56   37 00001AF0 SSL_CONF_cmd_argv
-		 57   38 0000102D SSL_CONF_cmd_value_type
-
-		 60   3B 00001235 SSL_CTX_add1_to_CA_list
-		 61   3C 000022CF SSL_CTX_add_client_CA
-		 62   3D 00001677 SSL_CTX_add_client_custom_ext
-		 63   3E 0000155A SSL_CTX_add_custom_ext
-		 64   3F 0000254F SSL_CTX_add_server_custom_ext
-		 65   40 00002202 SSL_CTX_add_session
-		 66   41 00001965 SSL_CTX_callback_ctrl
-		 67   42 00001CFD SSL_CTX_check_private_key
-		 68   43 00001CA3 SSL_CTX_clear_options
-		 69   44 000022E8 SSL_CTX_config
-		 70   45 0000107D SSL_CTX_ct_is_enabled
-		 71   46 00002338 SSL_CTX_ctrl
-		 72   47 00002135 SSL_CTX_dane_clear_flags
-		 73   48 00002252 SSL_CTX_dane_enable
-		 74   49 0000213F SSL_CTX_dane_mtype_set
-		 75   4A 000017FD SSL_CTX_dane_set_flags
-		 76   4B 00002207 SSL_CTX_enable_ct
-		 77   4C 00001B45 SSL_CTX_flush_sessions
-		 78   4D 0000243C SSL_CTX_free
-		 79   4E 000010C3 SSL_CTX_get0_CA_list
-		 80   4F 00001FEB SSL_CTX_get0_certificate
-		 81   50 0000129E SSL_CTX_get0_ctlog_store
-		 82   51 00001406 SSL_CTX_get0_param
-		 83   52 0000199C SSL_CTX_get0_privatekey
-		 84   53 0000137F SSL_CTX_get0_security_ex_data
-		 85   54 00001B1D SSL_CTX_get_cert_store
-		 86   55 000021B7 SSL_CTX_get_ciphers
-		 87   56 000016C7 SSL_CTX_get_client_CA_list
-		 88   57 00001ED8 SSL_CTX_get_client_cert_cb
-		 89   58 000020EF SSL_CTX_get_default_passwd_cb
-		 90   59 00001DA7 SSL_CTX_get_default_passwd_cb_userdata
-		 91   5A 0000134D SSL_CTX_get_ex_data
-		 92   5B 00001E3D SSL_CTX_get_info_callback
-		 93   5C 0000183E SSL_CTX_get_keylog_callback
-		 94   5D 00001492 SSL_CTX_get_max_early_data
-		 95   5E 0000154B SSL_CTX_get_num_tickets
-		 96   5F 00001429 SSL_CTX_get_options
-		 97   60 000020D1 SSL_CTX_get_quiet_shutdown
-		 98   61 00001794 SSL_CTX_get_record_padding_callback_arg
-		 99   62 00001A73 SSL_CTX_get_recv_max_early_data
-		100   63 00001E9C SSL_CTX_get_security_callback
-		101   64 000014A6 SSL_CTX_get_security_level
-		102   65 00001F28 SSL_CTX_get_ssl_method
-		103   66 000013C0 SSL_CTX_get_timeout
-		104   67 0000130C SSL_CTX_get_verify_callback
-		105   68 000020DB SSL_CTX_get_verify_depth
-		106   69 00002068 SSL_CTX_get_verify_mode
-		107   6A 00001CBC SSL_CTX_has_client_custom_ext
-		108   6B 00001992 SSL_CTX_load_verify_locations
-		109   6C 00001BF4 SSL_CTX_new
-		110   6D 0000195B SSL_CTX_remove_session
-		111   6E 00001DFC SSL_CTX_sess_get_get_cb
-		112   6F 000014F6 SSL_CTX_sess_get_new_cb
-		113   70 00001910 SSL_CTX_sess_get_remove_cb
-		114   71 00001217 SSL_CTX_sess_set_get_cb
-		115   72 0000233D SSL_CTX_sess_set_new_cb
-		116   73 00001F23 SSL_CTX_sess_set_remove_cb
-		117   74 00001834 SSL_CTX_sessions
-		118   75 00001118 SSL_CTX_set0_CA_list
-		119   76 00002351 SSL_CTX_set0_ctlog_store
-		120   77 00001D7F SSL_CTX_set0_security_ex_data
-		121   78 00002171 SSL_CTX_set1_cert_store
-		122   79 00001AF5 SSL_CTX_set1_param
-		123   7A 00001E4C SSL_CTX_set_allow_early_data_cb
-		124   7B 00002437 SSL_CTX_set_alpn_protos
-		125   7C 000020B8 SSL_CTX_set_alpn_select_cb
-		126   7D 00001190 SSL_CTX_set_block_padding
-		127   7E 000013A2 SSL_CTX_set_cert_cb
-		128   7F 00002527 SSL_CTX_set_cert_store
-		129   80 000020FE SSL_CTX_set_cert_verify_callback
-		130   81 00001384 SSL_CTX_set_cipher_list
-		131   82 000017F3 SSL_CTX_set_ciphersuites
-		132   83 00001BEF SSL_CTX_set_client_CA_list
-		133   84 00001226 SSL_CTX_set_client_cert_cb
-		134   85 00001622 SSL_CTX_set_client_cert_engine
-		135   86 00001424 SSL_CTX_set_client_hello_cb
-		136   87 00002469 SSL_CTX_set_cookie_generate_cb
-		137   88 0000225C SSL_CTX_set_cookie_verify_cb
-		138   89 000022BB SSL_CTX_set_ct_validation_callback
-		139   8A 00001334 SSL_CTX_set_ctlog_list_file
-		140   8B 00001343 SSL_CTX_set_default_ctlog_list_file
-		141   8C 00001A6E SSL_CTX_set_default_passwd_cb
-		142   8D 00001EA6 SSL_CTX_set_default_passwd_cb_userdata
-		143   8E 00002531 SSL_CTX_set_default_read_buffer_len
-		144   8F 000019BF SSL_CTX_set_default_verify_dir
-		145   90 00001BE5 SSL_CTX_set_default_verify_file
-		146   91 00001CB7 SSL_CTX_set_default_verify_paths
-		147   92 000020A9 SSL_CTX_set_ex_data
-		148   93 00001695 SSL_CTX_set_generate_session_id
-		149   94 0000245F SSL_CTX_set_info_callback
-		150   95 000017E9 SSL_CTX_set_keylog_callback
-		151   96 00001CB2 SSL_CTX_set_max_early_data
-		152   97 00001CEE SSL_CTX_set_msg_callback
-		153   98 00001FDC SSL_CTX_set_next_proto_select_cb
-		154   99 00001078 SSL_CTX_set_next_protos_advertised_cb
-		155   9A 00001DED SSL_CTX_set_not_resumable_session_callback
-		156   9B 00001DAC SSL_CTX_set_num_tickets
-		157   9C 0000137A SSL_CTX_set_options
-		158   9D 00002342 SSL_CTX_set_post_handshake_auth
-		159   9E 00001451 SSL_CTX_set_psk_client_callback
-		160   9F 000021E4 SSL_CTX_set_psk_find_session_callback
-		161   A0 00001A91 SSL_CTX_set_psk_server_callback
-		162   A1 000012FD SSL_CTX_set_psk_use_session_callback
-		163   A2 0000111D SSL_CTX_set_purpose
-		164   A3 000023C9 SSL_CTX_set_quiet_shutdown
-		165   A4 0000145B SSL_CTX_set_record_padding_callback
-		166   A5 0000230B SSL_CTX_set_record_padding_callback_arg
-		167   A6 000021CB SSL_CTX_set_recv_max_early_data
-		168   A7 00001F4B SSL_CTX_set_security_callback
-		169   A8 00002405 SSL_CTX_set_security_level
-		170   A9 0000182F SSL_CTX_set_session_id_context
-		171   AA 000022A7 SSL_CTX_set_session_ticket_cb
-		179   B2 00002518 SSL_CTX_set_ssl_version
-		180   B3 00001447 SSL_CTX_set_stateless_cookie_generate_cb
-		181   B4 000011D1 SSL_CTX_set_stateless_cookie_verify_cb
-		182   B5 000013C5 SSL_CTX_set_timeout
-		183   B6 00001442 SSL_CTX_set_tlsext_max_fragment_length
-		184   B7 00001C0D SSL_CTX_set_tlsext_use_srtp
-		185   B8 00001C26 SSL_CTX_set_tmp_dh_callback
-		186   B9 000019F1 SSL_CTX_set_trust
-		187   BA 000018F2 SSL_CTX_set_verify
-		188   BB 0000148D SSL_CTX_set_verify_depth
-		189   BC 000012EE SSL_CTX_up_ref
-		190   BD 00001AD7 SSL_CTX_use_PrivateKey
-		191   BE 00001D3E SSL_CTX_use_PrivateKey_ASN1
-		192   BF 000010E6 SSL_CTX_use_PrivateKey_file
-		193   C0 000021FD SSL_CTX_use_RSAPrivateKey
-		194   C1 0000251D SSL_CTX_use_RSAPrivateKey_ASN1
-		195   C2 000024FF SSL_CTX_use_RSAPrivateKey_file
-		196   C3 00001195 SSL_CTX_use_cert_and_key
-		197   C4 00001244 SSL_CTX_use_certificate
-		198   C5 0000146F SSL_CTX_use_certificate_ASN1
-		199   C6 0000175D SSL_CTX_use_certificate_chain_file
-		200   C7 00001951 SSL_CTX_use_certificate_file
-		201   C8 000022C0 SSL_CTX_use_psk_identity_hint
-		202   C9 000017B2 SSL_CTX_use_serverinfo
-		203   CA 00001519 SSL_CTX_use_serverinfo_ex
-		204   CB 00002248 SSL_CTX_use_serverinfo_file
-
-		205   CC 00001F32 SSL_SESSION_dup
-		206   CD 00002397 SSL_SESSION_free
-		207   CE 000016A4 SSL_SESSION_get0_alpn_selected
-		208   CF 00001F19 SSL_SESSION_get0_cipher
-		209   D0 000014E2 SSL_SESSION_get0_hostname
-		210   D1 000022A2 SSL_SESSION_get0_id_context
-		211   D2 000013F2 SSL_SESSION_get0_peer
-		212   D3 0000200E SSL_SESSION_get0_ticket
-		213   D4 0000177B SSL_SESSION_get0_ticket_appdata
-		214   D5 0000185C SSL_SESSION_get_compress_id
-		215   D6 0000132F SSL_SESSION_get_ex_data
-		216   D7 00001361 SSL_SESSION_get_id
-		217   D8 00002298 SSL_SESSION_get_master_key
-		218   D9 00002176 SSL_SESSION_get_max_early_data
-		219   DA 00002301 SSL_SESSION_get_max_fragment_length
-		220   DB 000016CC SSL_SESSION_get_protocol_version
-		221   DC 00001EB0 SSL_SESSION_get_ticket_lifetime_hint
-		222   DD 00001537 SSL_SESSION_get_time
-		223   DE 00001FD7 SSL_SESSION_get_timeout
-		224   DF 00001A82 SSL_SESSION_has_ticket
-		225   E0 00001E92 SSL_SESSION_is_resumable
-		226   E1 00001ACD SSL_SESSION_new
-		227   E2 000013D9 SSL_SESSION_print
-		228   E3 0000151E SSL_SESSION_print_fp
-		229   E4 00001CE9 SSL_SESSION_print_keylog
-		230   E5 00001F64 SSL_SESSION_set1_alpn_selected
-		231   E6 00001C08 SSL_SESSION_set1_hostname
-		232   E7 0000123F SSL_SESSION_set1_id
-		233   E8 000013BB SSL_SESSION_set1_id_context
-		234   E9 000023BA SSL_SESSION_set1_master_key
-		235   EA 00001686 SSL_SESSION_set1_ticket_appdata
-		236   EB 00002540 SSL_SESSION_set_cipher
-		237   EC 00001857 SSL_SESSION_set_ex_data
-		238   ED 00001EBA SSL_SESSION_set_max_early_data
-		239   EE 000018DE SSL_SESSION_set_protocol_version
-		240   EF 0000218A SSL_SESSION_set_time
-		241   F0 00001546 SSL_SESSION_set_timeout
-		242   F1 000013B1 SSL_SESSION_up_ref
-
-		245   F4 00001A32 SSL_accept
-		246   F5 000016DB SSL_add1_host
-		247   F6 00001E8D SSL_add1_to_CA_list
-		248   F7 00001F55 SSL_add_client_CA
-		249   F8 000011EA SSL_add_dir_cert_subjects_to_stack
-		250   F9 0000156E SSL_add_file_cert_subjects_to_stack
-		251   FA 00001668 SSL_add_ssl_module
-		252   FB 00001131 SSL_alert_desc_string
-		253   FC 0000132A SSL_alert_desc_string_long
-		254   FD 00001F46 SSL_alert_type_string
-		255   FE 00001D20 SSL_alert_type_string_long
-		256   FF 000011E0 SSL_alloc_buffers
-		257  100 00001D93 SSL_bytes_to_cipher_list
-		258  101 000013E3 SSL_callback_ctrl
-		259  102 000020BD SSL_certs_clear
-		260  103 00001FAA SSL_check_chain
-		261  104 0000245A SSL_check_private_key
-		262  105 0000190B SSL_clear
-		263  106 00002077 SSL_clear_options
-
-		264  107 00002063 SSL_client_hello_get0_ciphers
-		265  108 00001D52 SSL_client_hello_get0_compression_methods
-		266  109 0000106E SSL_client_hello_get0_ext
-		267  10A 00001E1F SSL_client_hello_get0_legacy_version
-		268  10B 00001FBE SSL_client_hello_get0_random
-		269  10C 000024BE SSL_client_hello_get0_session_id
-		270  10D 000019EC SSL_client_hello_get1_extensions_present
-		271  10E 000016FE SSL_client_hello_isv2
-		272  10F 000014DD SSL_client_version
-
-		273  110 00001A69 SSL_config
-		274  111 00001F96 SSL_connect
-		275  112 00001DDE SSL_copy_session_id
-		276  113 00001712 SSL_ct_is_enabled
-		277  114 00001159 SSL_ctrl
-		278  115 00001F14 SSL_dane_clear_flags
-		279  116 00001C49 SSL_dane_enable
-		280  117 00002090 SSL_dane_set_flags
-		281  118 0000103C SSL_dane_tlsa_add
-		282  119 000014CE SSL_do_handshake
-		283  11A 0000191F SSL_dup
-		284  11B 000017A8 SSL_dup_CA_list
-		285  11C 00001A50 SSL_enable_ct
-		286  11D 00001AE6 SSL_export_keying_material
-		287  11E 00001D1B SSL_export_keying_material_early
-		288  11F 000020F4 SSL_extension_supported
-		289  120 0000125D SSL_free
-		290  121 000015B4 SSL_free_buffers
-
-		291  122 000023C4 SSL_get0_CA_list
-		292  123 00001EE2 SSL_get0_alpn_selected
-		293  124 00001938 SSL_get0_dane
-		294  125 000019A1 SSL_get0_dane_authority
-		295  126 0000142E SSL_get0_dane_tlsa
-		296  127 00001014 SSL_get0_next_proto_negotiated
-		297  128 000016E0 SSL_get0_param
-		298  129 00001A28 SSL_get0_peer_CA_list
-		299  12A 000024DC SSL_get0_peer_scts
-		300  12B 000018D4 SSL_get0_peername
-		301  12C 00001956 SSL_get0_security_ex_data
-		302  12D 00002275 SSL_get0_verified_chain
-		303  12E 000020EA SSL_get1_session
-		304  12F 00001F82 SSL_get1_supported_ciphers
-		305  130 00001FB9 SSL_get_SSL_CTX
-		306  131 0000173F SSL_get_all_async_fds
-		307  132 00001055 SSL_get_certificate
-		308  133 00001082 SSL_get_changed_async_fds
-		309  134 0000108C SSL_get_cipher_list
-		310  135 00001703 SSL_get_ciphers
-		311  136 0000229D SSL_get_client_CA_list
-		312  137 0000100A SSL_get_client_ciphers
-		313  138 0000252C SSL_get_client_random
-		314  139 00001505 SSL_get_current_cipher
-		315  13A 00001F9B SSL_get_current_compression
-		316  13B 00002347 SSL_get_current_expansion
-		317  13C 000019F6 SSL_get_default_passwd_cb
-		318  13D 000010AF SSL_get_default_passwd_cb_userdata
-		319  13E 00001C76 SSL_get_default_timeout
-		320  13F 000024B9 SSL_get_early_data_status
-		321  140 000022B6 SSL_get_error
-		322  141 000010B9 SSL_get_ex_data
-		323  142 00001FC8 SSL_get_ex_data_X509_STORE_CTX_idx
-		324  143 000016EA SSL_get_fd
-		325  144 00002270 SSL_get_finished
-		326  145 000011F4 SSL_get_info_callback
-		327  146 00002388 SSL_get_key_update_type
-		328  147 000020E0 SSL_get_max_early_data
-		329  148 0000222A SSL_get_num_tickets
-		330  149 000012A8 SSL_get_options
-		331  14A 00001640 SSL_get_peer_cert_chain
-		332  14B 00001E01 SSL_get_peer_certificate
-		333  14C 00001D7A SSL_get_peer_finished
-		334  14D 000011C2 SSL_get_peer_signature_type_nid
-		335  14E 00001587 SSL_get_pending_cipher
-		336  14F 00001FFF SSL_get_privatekey
-		337  150 00001A2D SSL_get_psk_identity
-		338  151 00001839 SSL_get_psk_identity_hint
-		339  152 0000220C SSL_get_quiet_shutdown
-		340  153 00001596 SSL_get_rbio
-		341  154 00001767 SSL_get_read_ahead
-		342  155 00001C03 SSL_get_record_padding_callback_arg
-		343  156 000014B5 SSL_get_recv_max_early_data
-		344  157 0000149C SSL_get_rfd
-		345  158 000015FA SSL_get_security_callback
-		346  159 000013E8 SSL_get_security_level
-		347  15A 000019B0 SSL_get_selected_srtp_profile
-		348  15B 00001E1A SSL_get_server_random
-		349  15C 00002315 SSL_get_servername
-		350  15D 00001325 SSL_get_servername_type
-		351  15E 00001875 SSL_get_session
-		352  15F 0000171C SSL_get_shared_ciphers
-		353  160 00001E83 SSL_get_shared_sigalgs
-		354  161 00001393 SSL_get_shutdown
-		355  162 00001FFA SSL_get_sigalgs
-		356  163 00001631 SSL_get_signature_type_nid
-		361  168 00001717 SSL_get_srtp_profiles
-		362  169 00001B63 SSL_get_ssl_method
-		363  16A 0000186B SSL_get_state
-		364  16B 000010BE SSL_get_verify_callback
-		365  16C 0000123A SSL_get_verify_depth
-		366  16D 00001F05 SSL_get_verify_mode
-		367  16E 00002121 SSL_get_verify_result
-		368  16F 00001933 SSL_get_version
-		369  170 000011BD SSL_get_wbio
-		370  171 0000218F SSL_get_wfd
-
-		371  172 00002545 SSL_has_matching_session_id
-		372  173 0000100F SSL_has_pending
-		373  174 00001A3C SSL_in_before
-		374  175 000021A3 SSL_in_init
-		375  176 00002022 SSL_is_dtls
-		376  177 000013D4 SSL_is_init_finished
-		377  178 000010AA SSL_is_server
-		378  179 00002216 SSL_key_update
-		379  17A 000010DC SSL_load_client_CA_file
-		380  17B 00001E29 SSL_new
-		381  17C 00001B8B SSL_peek
-		382  17D 00001645 SSL_peek_ex
-		383  17E 00002243 SSL_pending
-		384  17F 000016D6 SSL_read
-		385  180 000019C4 SSL_read_early_data
-		386  181 00002455 SSL_read_ex
-		387  182 00002333 SSL_renegotiate
-		388  183 000012A3 SSL_renegotiate_abbreviated
-		389  184 00002473 SSL_renegotiate_pending
-		390  185 00001654 SSL_rstate_string
-		391  186 000021D5 SSL_rstate_string_long
-		392  187 0000255E SSL_select_next_proto
-		393  188 00002086 SSL_session_reused
-
-		394  189 000016D1 SSL_set0_CA_list
-		395  18A 000014C4 SSL_set0_rbio
-		396  18B 0000228E SSL_set0_security_ex_data
-		397  18C 0000240F SSL_set0_wbio
-		398  18D 00002450 SSL_set1_host
-		399  18E 000022F7 SSL_set1_param
-		400  18F 00001CA8 SSL_set_SSL_CTX
-		401  190 00002383 SSL_set_accept_state
-		402  191 000020C2 SSL_set_allow_early_data_cb
-		403  192 00001500 SSL_set_alpn_protos
-		404  193 0000131B SSL_set_bio
-		405  194 00001CD5 SSL_set_block_padding
-		406  195 00002199 SSL_set_cert_cb
-		407  196 000018F7 SSL_set_cipher_list
-		408  197 00001A8C SSL_set_ciphersuites
-		409  198 00002167 SSL_set_client_CA_list
-		410  199 00001708 SSL_set_connect_state
-		411  19A 00001960 SSL_set_ct_validation_callback
-		412  19B 00001B86 SSL_set_debug
-		413  19C 00001F69 SSL_set_default_passwd_cb
-		414  19D 00002356 SSL_set_default_passwd_cb_userdata
-		415  19E 00002027 SSL_set_default_read_buffer_len
-		416  19F 000011AE SSL_set_ex_data
-		417  1A0 00001604 SSL_set_fd
-		418  1A1 000017B7 SSL_set_generate_session_id
-		419  1A2 00001366 SSL_set_hostflags
-		420  1A3 000016AE SSL_set_info_callback
-		421  1A4 000021A8 SSL_set_max_early_data
-		422  1A5 000014EC SSL_set_msg_callback
-		423  1A6 0000209A SSL_set_not_resumable_session_callback
-		424  1A7 00001A87 SSL_set_num_tickets
-		425  1A8 00001979 SSL_set_options
-		426  1A9 00002374 SSL_set_post_handshake_auth
-		427  1AA 000018E3 SSL_set_psk_client_callback
-		428  1AB 0000240A SSL_set_psk_find_session_callback
-		429  1AC 00001816 SSL_set_psk_server_callback
-		430  1AD 00002018 SSL_set_psk_use_session_callback
-		431  1AE 0000246E SSL_set_purpose
-		432  1AF 000014AB SSL_set_quiet_shutdown
-		433  1B0 00002220 SSL_set_read_ahead
-		434  1B1 0000141A SSL_set_record_padding_callback
-		435  1B2 00001F78 SSL_set_record_padding_callback_arg
-		436  1B3 0000167C SSL_set_recv_max_early_data
-		437  1B4 00001415 SSL_set_rfd
-		438  1B5 0000187A SSL_set_security_callback
-		439  1B6 0000226B SSL_set_security_level
-		440  1B7 0000121C SSL_set_session
-		441  1B8 000021EE SSL_set_session_id_context
-		442  1B9 000012C6 SSL_set_session_secret_cb
-		443  1BA 0000150A SSL_set_session_ticket_ext
-		444  1BB 00001401 SSL_set_session_ticket_ext_cb
-		445  1BC 00001785 SSL_set_shutdown
-		448  1BF 0000234C SSL_set_ssl_method
-		449  1C0 00001569 SSL_set_tlsext_max_fragment_length
-		450  1C1 000024F5 SSL_set_tlsext_use_srtp
-		451  1C2 00002031 SSL_set_tmp_dh_callback
-		452  1C3 000011F9 SSL_set_trust
-		453  1C4 00001DF7 SSL_set_verify
-		454  1C5 00001884 SSL_set_verify_depth
-		455  1C6 00001541 SSL_set_verify_result
-		456  1C7 00001929 SSL_set_wfd
-
-		457  1C8 00001203 SSL_shutdown
-		459  1CA 00002009 SSL_state_string
-		460  1CB 00001947 SSL_state_string_long
-		461  1CC 00001B2C SSL_stateless
-		462  1CD 00001A37 SSL_up_ref
-
-		463  1CE 00001168 SSL_use_PrivateKey
-		464  1CF 00002360 SSL_use_PrivateKey_ASN1
-		465  1D0 00002392 SSL_use_PrivateKey_file
-		466  1D1 00001E6F SSL_use_RSAPrivateKey
-		467  1D2 00001F73 SSL_use_RSAPrivateKey_ASN1
-		468  1D3 00001B22 SSL_use_RSAPrivateKey_file
-		469  1D4 000023D8 SSL_use_cert_and_key
-		470  1D5 0000133E SSL_use_certificate
-		471  1D6 0000146A SSL_use_certificate_ASN1
-		472  1D7 000021DA SSL_use_certificate_chain_file
-		473  1D8 000017DA SSL_use_certificate_file
-		474  1D9 000018C5 SSL_use_psk_identity_hint
-
-		475  1DA 00001E97 SSL_verify_client_post_handshake
-		476  1DB 00002446 SSL_version
-		477  1DC 00001113 SSL_waiting_for_async
-		478  1DD 00001398 SSL_want
-		479  1DE 000013A7 SSL_write
-		480  1DF 00001609 SSL_write_early_data
-		481  1E0 000020CC SSL_write_ex
-
-		494  1ED 00001410 d2i_SSL_SESSION
-		495  1EE 00001659 i2d_SSL_SESSION
-	*/
 	[AlwaysInclude]
 	sealed abstract class SSL
 	{
+		/*
+		** libssl-1_1.dll
+		**	  19   12 00001A1E ERR_load_SSL_strings
+		*/
+		[Import(OPENSSL_LIB_SSL), CLink]
+		public extern static int ERR_load_SSL_strings();
+
+		/*
+		 * SSL function codes.
+		 */
+		public const int F_ADD_CLIENT_KEY_SHARE_EXT                       = 438;
+		public const int F_ADD_KEY_SHARE                                  = 512;
+		public const int F_BYTES_TO_CIPHER_LIST                           = 519;
+		public const int F_CHECK_SUITEB_CIPHER_LIST                       = 331;
+		public const int F_CIPHERSUITE_CB                                 = 622;
+		public const int F_CONSTRUCT_CA_NAMES                             = 552;
+		public const int F_CONSTRUCT_KEY_EXCHANGE_TBS                     = 553;
+		public const int F_CONSTRUCT_STATEFUL_TICKET                      = 636;
+		public const int F_CONSTRUCT_STATELESS_TICKET                     = 637;
+		public const int F_CREATE_SYNTHETIC_MESSAGE_HASH                  = 539;
+		public const int F_CREATE_TICKET_PREQUEL                          = 638;
+		public const int F_CT_MOVE_SCTS                                   = 345;
+		public const int F_CT_STRICT                                      = 349;
+		public const int F_CUSTOM_EXT_ADD                                 = 554;
+		public const int F_CUSTOM_EXT_PARSE                               = 555;
+		public const int F_D2I_SSL_SESSION                                = 103;
+		public const int F_DANE_CTX_ENABLE                                = 347;
+		public const int F_DANE_MTYPE_SET                                 = 393;
+		public const int F_DANE_TLSA_ADD                                  = 394;
+		public const int F_DERIVE_SECRET_KEY_AND_IV                       = 514;
+		public const int F_DO_DTLS1_WRITE                                 = 245;
+		public const int F_DO_SSL3_WRITE                                  = 104;
+		public const int F_DTLS1_BUFFER_RECORD                            = 247;
+		public const int F_DTLS1_CHECK_TIMEOUT_NUM                        = 318;
+		public const int F_DTLS1_HEARTBEAT                                = 305;
+		public const int F_DTLS1_HM_FRAGMENT_NEW                          = 623;
+		public const int F_DTLS1_PREPROCESS_FRAGMENT                      = 288;
+		public const int F_DTLS1_PROCESS_BUFFERED_RECORDS                 = 424;
+		public const int F_DTLS1_PROCESS_RECORD                           = 257;
+		public const int F_DTLS1_READ_BYTES                               = 258;
+		public const int F_DTLS1_READ_FAILED                              = 339;
+		public const int F_DTLS1_RETRANSMIT_MESSAGE                       = 390;
+		public const int F_DTLS1_WRITE_APP_DATA_BYTES                     = 268;
+		public const int F_DTLS1_WRITE_BYTES                              = 545;
+		public const int F_DTLSV1_LISTEN                                  = 350;
+		public const int F_DTLS_CONSTRUCT_CHANGE_CIPHER_SPEC              = 371;
+		public const int F_DTLS_CONSTRUCT_HELLO_VERIFY_REQUEST            = 385;
+		public const int F_DTLS_GET_REASSEMBLED_MESSAGE                   = 370;
+		public const int F_DTLS_PROCESS_HELLO_VERIFY                      = 386;
+		public const int F_DTLS_RECORD_LAYER_NEW                          = 635;
+		public const int F_DTLS_WAIT_FOR_DRY                              = 592;
+		public const int F_EARLY_DATA_COUNT_OK                            = 532;
+		public const int F_FINAL_EARLY_DATA                               = 556;
+		public const int F_FINAL_EC_PT_FORMATS                            = 485;
+		public const int F_FINAL_EMS                                      = 486;
+		public const int F_FINAL_KEY_SHARE                                = 503;
+		public const int F_FINAL_MAXFRAGMENTLEN                           = 557;
+		public const int F_FINAL_RENEGOTIATE                              = 483;
+		public const int F_FINAL_SERVER_NAME                              = 558;
+		public const int F_FINAL_SIG_ALGS                                 = 497;
+		public const int F_GET_CERT_VERIFY_TBS_DATA                       = 588;
+		public const int F_NSS_KEYLOG_INT                                 = 500;
+		public const int F_OPENSSL_INIT_SSL                               = 342;
+		public const int F_OSSL_STATEM_CLIENT13_READ_TRANSITION           = 436;
+		public const int F_OSSL_STATEM_CLIENT13_WRITE_TRANSITION          = 598;
+		public const int F_OSSL_STATEM_CLIENT_CONSTRUCT_MESSAGE           = 430;
+		public const int F_OSSL_STATEM_CLIENT_POST_PROCESS_MESSAGE        = 593;
+		public const int F_OSSL_STATEM_CLIENT_PROCESS_MESSAGE             = 594;
+		public const int F_OSSL_STATEM_CLIENT_READ_TRANSITION             = 417;
+		public const int F_OSSL_STATEM_CLIENT_WRITE_TRANSITION            = 599;
+		public const int F_OSSL_STATEM_SERVER13_READ_TRANSITION           = 437;
+		public const int F_OSSL_STATEM_SERVER13_WRITE_TRANSITION          = 600;
+		public const int F_OSSL_STATEM_SERVER_CONSTRUCT_MESSAGE           = 431;
+		public const int F_OSSL_STATEM_SERVER_POST_PROCESS_MESSAGE        = 601;
+		public const int F_OSSL_STATEM_SERVER_POST_WORK                   = 602;
+		public const int F_OSSL_STATEM_SERVER_PRE_WORK                    = 640;
+		public const int F_OSSL_STATEM_SERVER_PROCESS_MESSAGE             = 603;
+		public const int F_OSSL_STATEM_SERVER_READ_TRANSITION             = 418;
+		public const int F_OSSL_STATEM_SERVER_WRITE_TRANSITION            = 604;
+		public const int F_PARSE_CA_NAMES                                 = 541;
+		public const int F_PITEM_NEW                                      = 624;
+		public const int F_PQUEUE_NEW                                     = 625;
+		public const int F_PROCESS_KEY_SHARE_EXT                          = 439;
+		public const int F_READ_STATE_MACHINE                             = 352;
+		public const int F_SET_CLIENT_CIPHERSUITE                         = 540;
+		public const int F_SRP_GENERATE_CLIENT_MASTER_SECRET              = 595;
+		public const int F_SRP_GENERATE_SERVER_MASTER_SECRET              = 589;
+		public const int F_SRP_VERIFY_SERVER_PARAM                        = 596;
+		public const int F_SSL3_CHANGE_CIPHER_STATE                       = 129;
+		public const int F_SSL3_CHECK_CERT_AND_ALGORITHM                  = 130;
+		public const int F_SSL3_CTRL                                      = 213;
+		public const int F_SSL3_CTX_CTRL                                  = 133;
+		public const int F_SSL3_DIGEST_CACHED_RECORDS                     = 293;
+		public const int F_SSL3_DO_CHANGE_CIPHER_SPEC                     = 292;
+		public const int F_SSL3_ENC                                       = 608;
+		public const int F_SSL3_FINAL_FINISH_MAC                          = 285;
+		public const int F_SSL3_FINISH_MAC                                = 587;
+		public const int F_SSL3_GENERATE_KEY_BLOCK                        = 238;
+		public const int F_SSL3_GENERATE_MASTER_SECRET                    = 388;
+		public const int F_SSL3_GET_RECORD                                = 143;
+		public const int F_SSL3_INIT_FINISHED_MAC                         = 397;
+		public const int F_SSL3_OUTPUT_CERT_CHAIN                         = 147;
+		public const int F_SSL3_READ_BYTES                                = 148;
+		public const int F_SSL3_READ_N                                    = 149;
+		public const int F_SSL3_SETUP_KEY_BLOCK                           = 157;
+		public const int F_SSL3_SETUP_READ_BUFFER                         = 156;
+		public const int F_SSL3_SETUP_WRITE_BUFFER                        = 291;
+		public const int F_SSL3_WRITE_BYTES                               = 158;
+		public const int F_SSL3_WRITE_PENDING                             = 159;
+		public const int F_SSL_ADD_CERT_CHAIN                             = 316;
+		public const int F_SSL_ADD_CERT_TO_BUF                            = 319;
+		public const int F_SSL_ADD_CERT_TO_WPACKET                        = 493;
+		public const int F_SSL_ADD_CLIENTHELLO_RENEGOTIATE_EXT            = 298;
+		public const int F_SSL_ADD_CLIENTHELLO_TLSEXT                     = 277;
+		public const int F_SSL_ADD_CLIENTHELLO_USE_SRTP_EXT               = 307;
+		public const int F_SSL_ADD_DIR_CERT_SUBJECTS_TO_STACK             = 215;
+		public const int F_SSL_ADD_FILE_CERT_SUBJECTS_TO_STACK            = 216;
+		public const int F_SSL_ADD_SERVERHELLO_RENEGOTIATE_EXT            = 299;
+		public const int F_SSL_ADD_SERVERHELLO_TLSEXT                     = 278;
+		public const int F_SSL_ADD_SERVERHELLO_USE_SRTP_EXT               = 308;
+		public const int F_SSL_BAD_METHOD                                 = 160;
+		public const int F_SSL_BUILD_CERT_CHAIN                           = 332;
+		public const int F_SSL_BYTES_TO_CIPHER_LIST                       = 161;
+		public const int F_SSL_CACHE_CIPHERLIST                           = 520;
+		public const int F_SSL_CERT_ADD0_CHAIN_CERT                       = 346;
+		public const int F_SSL_CERT_DUP                                   = 221;
+		public const int F_SSL_CERT_NEW                                   = 162;
+		public const int F_SSL_CERT_SET0_CHAIN                            = 340;
+		public const int F_SSL_CHECK_PRIVATE_KEY                          = 163;
+		public const int F_SSL_CHECK_SERVERHELLO_TLSEXT                   = 280;
+		public const int F_SSL_CHECK_SRP_EXT_CLIENTHELLO                  = 606;
+		public const int F_SSL_CHECK_SRVR_ECC_CERT_AND_ALG                = 279;
+		public const int F_SSL_CHOOSE_CLIENT_VERSION                      = 607;
+		public const int F_SSL_CIPHER_DESCRIPTION                         = 626;
+		public const int F_SSL_CIPHER_LIST_TO_BYTES                       = 425;
+		public const int F_SSL_CIPHER_PROCESS_RULESTR                     = 230;
+		public const int F_SSL_CIPHER_STRENGTH_SORT                       = 231;
+		public const int F_SSL_CLEAR                                      = 164;
+		public const int F_SSL_CLIENT_HELLO_GET1_EXTENSIONS_PRESENT       = 627;
+		public const int F_SSL_COMP_ADD_COMPRESSION_METHOD                = 165;
+		public const int F_SSL_CONF_CMD                                   = 334;
+		public const int F_SSL_CREATE_CIPHER_LIST                         = 166;
+		public const int F_SSL_CTRL                                       = 232;
+		public const int F_SSL_CTX_CHECK_PRIVATE_KEY                      = 168;
+		public const int F_SSL_CTX_ENABLE_CT                              = 398;
+		public const int F_SSL_CTX_MAKE_PROFILES                          = 309;
+		public const int F_SSL_CTX_NEW                                    = 169;
+		public const int F_SSL_CTX_SET_ALPN_PROTOS                        = 343;
+		public const int F_SSL_CTX_SET_CIPHER_LIST                        = 269;
+		public const int F_SSL_CTX_SET_CLIENT_CERT_ENGINE                 = 290;
+		public const int F_SSL_CTX_SET_CT_VALIDATION_CALLBACK             = 396;
+		public const int F_SSL_CTX_SET_SESSION_ID_CONTEXT                 = 219;
+		public const int F_SSL_CTX_SET_SSL_VERSION                        = 170;
+		public const int F_SSL_CTX_SET_TLSEXT_MAX_FRAGMENT_LENGTH         = 551;
+		public const int F_SSL_CTX_USE_CERTIFICATE                        = 171;
+		public const int F_SSL_CTX_USE_CERTIFICATE_ASN1                   = 172;
+		public const int F_SSL_CTX_USE_CERTIFICATE_FILE                   = 173;
+		public const int F_SSL_CTX_USE_PRIVATEKEY                         = 174;
+		public const int F_SSL_CTX_USE_PRIVATEKEY_ASN1                    = 175;
+		public const int F_SSL_CTX_USE_PRIVATEKEY_FILE                    = 176;
+		public const int F_SSL_CTX_USE_PSK_IDENTITY_HINT                  = 272;
+		public const int F_SSL_CTX_USE_RSAPRIVATEKEY                      = 177;
+		public const int F_SSL_CTX_USE_RSAPRIVATEKEY_ASN1                 = 178;
+		public const int F_SSL_CTX_USE_RSAPRIVATEKEY_FILE                 = 179;
+		public const int F_SSL_CTX_USE_SERVERINFO                         = 336;
+		public const int F_SSL_CTX_USE_SERVERINFO_EX                      = 543;
+		public const int F_SSL_CTX_USE_SERVERINFO_FILE                    = 337;
+		public const int F_SSL_DANE_DUP                                   = 403;
+		public const int F_SSL_DANE_ENABLE                                = 395;
+		public const int F_SSL_DERIVE                                     = 590;
+		public const int F_SSL_DO_CONFIG                                  = 391;
+		public const int F_SSL_DO_HANDSHAKE                               = 180;
+		public const int F_SSL_DUP_CA_LIST                                = 408;
+		public const int F_SSL_ENABLE_CT                                  = 402;
+		public const int F_SSL_GENERATE_PKEY_GROUP                        = 559;
+		public const int F_SSL_GENERATE_SESSION_ID                        = 547;
+		public const int F_SSL_GET_NEW_SESSION                            = 181;
+		public const int F_SSL_GET_PREV_SESSION                           = 217;
+		public const int F_SSL_GET_SERVER_CERT_INDEX                      = 322;
+		public const int F_SSL_GET_SIGN_PKEY                              = 183;
+		public const int F_SSL_HANDSHAKE_HASH                             = 560;
+		public const int F_SSL_INIT_WBIO_BUFFER                           = 184;
+		public const int F_SSL_KEY_UPDATE                                 = 515;
+		public const int F_SSL_LOAD_CLIENT_CA_FILE                        = 185;
+		public const int F_SSL_LOG_MASTER_SECRET                          = 498;
+		public const int F_SSL_LOG_RSA_CLIENT_KEY_EXCHANGE                = 499;
+		public const int F_SSL_MODULE_INIT                                = 392;
+		public const int F_SSL_NEW                                        = 186;
+		public const int F_SSL_NEXT_PROTO_VALIDATE                        = 565;
+		public const int F_SSL_PARSE_CLIENTHELLO_RENEGOTIATE_EXT          = 300;
+		public const int F_SSL_PARSE_CLIENTHELLO_TLSEXT                   = 302;
+		public const int F_SSL_PARSE_CLIENTHELLO_USE_SRTP_EXT             = 310;
+		public const int F_SSL_PARSE_SERVERHELLO_RENEGOTIATE_EXT          = 301;
+		public const int F_SSL_PARSE_SERVERHELLO_TLSEXT                   = 303;
+		public const int F_SSL_PARSE_SERVERHELLO_USE_SRTP_EXT             = 311;
+		public const int F_SSL_PEEK                                       = 270;
+		public const int F_SSL_PEEK_EX                                    = 432;
+		public const int F_SSL_PEEK_INTERNAL                              = 522;
+		public const int F_SSL_READ                                       = 223;
+		public const int F_SSL_READ_EARLY_DATA                            = 529;
+		public const int F_SSL_READ_EX                                    = 434;
+		public const int F_SSL_READ_INTERNAL                              = 523;
+		public const int F_SSL_RENEGOTIATE                                = 516;
+		public const int F_SSL_RENEGOTIATE_ABBREVIATED                    = 546;
+		public const int F_SSL_SCAN_CLIENTHELLO_TLSEXT                    = 320;
+		public const int F_SSL_SCAN_SERVERHELLO_TLSEXT                    = 321;
+		public const int F_SSL_SESSION_DUP                                = 348;
+		public const int F_SSL_SESSION_NEW                                = 189;
+		public const int F_SSL_SESSION_PRINT_FP                           = 190;
+		public const int F_SSL_SESSION_SET1_ID                            = 423;
+		public const int F_SSL_SESSION_SET1_ID_CONTEXT                    = 312;
+		public const int F_SSL_SET_ALPN_PROTOS                            = 344;
+		public const int F_SSL_SET_CERT                                   = 191;
+		public const int F_SSL_SET_CERT_AND_KEY                           = 621;
+		public const int F_SSL_SET_CIPHER_LIST                            = 271;
+		public const int F_SSL_SET_CT_VALIDATION_CALLBACK                 = 399;
+		public const int F_SSL_SET_FD                                     = 192;
+		public const int F_SSL_SET_PKEY                                   = 193;
+		public const int F_SSL_SET_RFD                                    = 194;
+		public const int F_SSL_SET_SESSION                                = 195;
+		public const int F_SSL_SET_SESSION_ID_CONTEXT                     = 218;
+		public const int F_SSL_SET_SESSION_TICKET_EXT                     = 294;
+		public const int F_SSL_SET_TLSEXT_MAX_FRAGMENT_LENGTH             = 550;
+		public const int F_SSL_SET_WFD                                    = 196;
+		public const int F_SSL_SHUTDOWN                                   = 224;
+		public const int F_SSL_SRP_CTX_INIT                               = 313;
+		public const int F_SSL_START_ASYNC_JOB                            = 389;
+		public const int F_SSL_UNDEFINED_FUNCTION                         = 197;
+		public const int F_SSL_UNDEFINED_VOID_FUNCTION                    = 244;
+		public const int F_SSL_USE_CERTIFICATE                            = 198;
+		public const int F_SSL_USE_CERTIFICATE_ASN1                       = 199;
+		public const int F_SSL_USE_CERTIFICATE_FILE                       = 200;
+		public const int F_SSL_USE_PRIVATEKEY                             = 201;
+		public const int F_SSL_USE_PRIVATEKEY_ASN1                        = 202;
+		public const int F_SSL_USE_PRIVATEKEY_FILE                        = 203;
+		public const int F_SSL_USE_PSK_IDENTITY_HINT                      = 273;
+		public const int F_SSL_USE_RSAPRIVATEKEY                          = 204;
+		public const int F_SSL_USE_RSAPRIVATEKEY_ASN1                     = 205;
+		public const int F_SSL_USE_RSAPRIVATEKEY_FILE                     = 206;
+		public const int F_SSL_VALIDATE_CT                                = 400;
+		public const int F_SSL_VERIFY_CERT_CHAIN                          = 207;
+		public const int F_SSL_VERIFY_CLIENT_POST_HANDSHAKE               = 616;
+		public const int F_SSL_WRITE                                      = 208;
+		public const int F_SSL_WRITE_EARLY_DATA                           = 526;
+		public const int F_SSL_WRITE_EARLY_FINISH                         = 527;
+		public const int F_SSL_WRITE_EX                                   = 433;
+		public const int F_SSL_WRITE_INTERNAL                             = 524;
+		public const int F_STATE_MACHINE                                  = 353;
+		public const int F_TLS12_CHECK_PEER_SIGALG                        = 333;
+		public const int F_TLS12_COPY_SIGALGS                             = 533;
+		public const int F_TLS13_CHANGE_CIPHER_STATE                      = 440;
+		public const int F_TLS13_ENC                                      = 609;
+		public const int F_TLS13_FINAL_FINISH_MAC                         = 605;
+		public const int F_TLS13_GENERATE_SECRET                          = 591;
+		public const int F_TLS13_HKDF_EXPAND                              = 561;
+		public const int F_TLS13_RESTORE_HANDSHAKE_DIGEST_FOR_PHA         = 617;
+		public const int F_TLS13_SAVE_HANDSHAKE_DIGEST_FOR_PHA            = 618;
+		public const int F_TLS13_SETUP_KEY_BLOCK                          = 441;
+		public const int F_TLS1_CHANGE_CIPHER_STATE                       = 209;
+		public const int F_TLS1_CHECK_DUPLICATE_EXTENSIONS                = 341;
+		public const int F_TLS1_ENC                                       = 401;
+		public const int F_TLS1_EXPORT_KEYING_MATERIAL                    = 314;
+		public const int F_TLS1_GET_CURVELIST                             = 338;
+		public const int F_TLS1_PRF                                       = 284;
+		public const int F_TLS1_SAVE_U16                                  = 628;
+		public const int F_TLS1_SETUP_KEY_BLOCK                           = 211;
+		public const int F_TLS1_SET_GROUPS                                = 629;
+		public const int F_TLS1_SET_RAW_SIGALGS                           = 630;
+		public const int F_TLS1_SET_SERVER_SIGALGS                        = 335;
+		public const int F_TLS1_SET_SHARED_SIGALGS                        = 631;
+		public const int F_TLS1_SET_SIGALGS                               = 632;
+		public const int F_TLS_CHOOSE_SIGALG                              = 513;
+		public const int F_TLS_CLIENT_KEY_EXCHANGE_POST_WORK              = 354;
+		public const int F_TLS_COLLECT_EXTENSIONS                         = 435;
+		public const int F_TLS_CONSTRUCT_CERTIFICATE_AUTHORITIES          = 542;
+		public const int F_TLS_CONSTRUCT_CERTIFICATE_REQUEST              = 372;
+		public const int F_TLS_CONSTRUCT_CERT_STATUS                      = 429;
+		public const int F_TLS_CONSTRUCT_CERT_STATUS_BODY                 = 494;
+		public const int F_TLS_CONSTRUCT_CERT_VERIFY                      = 496;
+		public const int F_TLS_CONSTRUCT_CHANGE_CIPHER_SPEC               = 427;
+		public const int F_TLS_CONSTRUCT_CKE_DHE                          = 404;
+		public const int F_TLS_CONSTRUCT_CKE_ECDHE                        = 405;
+		public const int F_TLS_CONSTRUCT_CKE_GOST                         = 406;
+		public const int F_TLS_CONSTRUCT_CKE_PSK_PREAMBLE                 = 407;
+		public const int F_TLS_CONSTRUCT_CKE_RSA                          = 409;
+		public const int F_TLS_CONSTRUCT_CKE_SRP                          = 410;
+		public const int F_TLS_CONSTRUCT_CLIENT_CERTIFICATE               = 484;
+		public const int F_TLS_CONSTRUCT_CLIENT_HELLO                     = 487;
+		public const int F_TLS_CONSTRUCT_CLIENT_KEY_EXCHANGE              = 488;
+		public const int F_TLS_CONSTRUCT_CLIENT_VERIFY                    = 489;
+		public const int F_TLS_CONSTRUCT_CTOS_ALPN                        = 466;
+		public const int F_TLS_CONSTRUCT_CTOS_CERTIFICATE                 = 355;
+		public const int F_TLS_CONSTRUCT_CTOS_COOKIE                      = 535;
+		public const int F_TLS_CONSTRUCT_CTOS_EARLY_DATA                  = 530;
+		public const int F_TLS_CONSTRUCT_CTOS_EC_PT_FORMATS               = 467;
+		public const int F_TLS_CONSTRUCT_CTOS_EMS                         = 468;
+		public const int F_TLS_CONSTRUCT_CTOS_ETM                         = 469;
+		public const int F_TLS_CONSTRUCT_CTOS_HELLO                       = 356;
+		public const int F_TLS_CONSTRUCT_CTOS_KEY_EXCHANGE                = 357;
+		public const int F_TLS_CONSTRUCT_CTOS_KEY_SHARE                   = 470;
+		public const int F_TLS_CONSTRUCT_CTOS_MAXFRAGMENTLEN              = 549;
+		public const int F_TLS_CONSTRUCT_CTOS_NPN                         = 471;
+		public const int F_TLS_CONSTRUCT_CTOS_PADDING                     = 472;
+		public const int F_TLS_CONSTRUCT_CTOS_POST_HANDSHAKE_AUTH         = 619;
+		public const int F_TLS_CONSTRUCT_CTOS_PSK                         = 501;
+		public const int F_TLS_CONSTRUCT_CTOS_PSK_KEX_MODES               = 509;
+		public const int F_TLS_CONSTRUCT_CTOS_RENEGOTIATE                 = 473;
+		public const int F_TLS_CONSTRUCT_CTOS_SCT                         = 474;
+		public const int F_TLS_CONSTRUCT_CTOS_SERVER_NAME                 = 475;
+		public const int F_TLS_CONSTRUCT_CTOS_SESSION_TICKET              = 476;
+		public const int F_TLS_CONSTRUCT_CTOS_SIG_ALGS                    = 477;
+		public const int F_TLS_CONSTRUCT_CTOS_SRP                         = 478;
+		public const int F_TLS_CONSTRUCT_CTOS_STATUS_REQUEST              = 479;
+		public const int F_TLS_CONSTRUCT_CTOS_SUPPORTED_GROUPS            = 480;
+		public const int F_TLS_CONSTRUCT_CTOS_SUPPORTED_VERSIONS          = 481;
+		public const int F_TLS_CONSTRUCT_CTOS_USE_SRTP                    = 482;
+		public const int F_TLS_CONSTRUCT_CTOS_VERIFY                      = 358;
+		public const int F_TLS_CONSTRUCT_ENCRYPTED_EXTENSIONS             = 443;
+		public const int F_TLS_CONSTRUCT_END_OF_EARLY_DATA                = 536;
+		public const int F_TLS_CONSTRUCT_EXTENSIONS                       = 447;
+		public const int F_TLS_CONSTRUCT_FINISHED                         = 359;
+		public const int F_TLS_CONSTRUCT_HELLO_REQUEST                    = 373;
+		public const int F_TLS_CONSTRUCT_HELLO_RETRY_REQUEST              = 510;
+		public const int F_TLS_CONSTRUCT_KEY_UPDATE                       = 517;
+		public const int F_TLS_CONSTRUCT_NEW_SESSION_TICKET               = 428;
+		public const int F_TLS_CONSTRUCT_NEXT_PROTO                       = 426;
+		public const int F_TLS_CONSTRUCT_SERVER_CERTIFICATE               = 490;
+		public const int F_TLS_CONSTRUCT_SERVER_HELLO                     = 491;
+		public const int F_TLS_CONSTRUCT_SERVER_KEY_EXCHANGE              = 492;
+		public const int F_TLS_CONSTRUCT_STOC_ALPN                        = 451;
+		public const int F_TLS_CONSTRUCT_STOC_CERTIFICATE                 = 374;
+		public const int F_TLS_CONSTRUCT_STOC_COOKIE                      = 613;
+		public const int F_TLS_CONSTRUCT_STOC_CRYPTOPRO_BUG               = 452;
+		public const int F_TLS_CONSTRUCT_STOC_DONE                        = 375;
+		public const int F_TLS_CONSTRUCT_STOC_EARLY_DATA                  = 531;
+		public const int F_TLS_CONSTRUCT_STOC_EARLY_DATA_INFO             = 525;
+		public const int F_TLS_CONSTRUCT_STOC_EC_PT_FORMATS               = 453;
+		public const int F_TLS_CONSTRUCT_STOC_EMS                         = 454;
+		public const int F_TLS_CONSTRUCT_STOC_ETM                         = 455;
+		public const int F_TLS_CONSTRUCT_STOC_HELLO                       = 376;
+		public const int F_TLS_CONSTRUCT_STOC_KEY_EXCHANGE                = 377;
+		public const int F_TLS_CONSTRUCT_STOC_KEY_SHARE                   = 456;
+		public const int F_TLS_CONSTRUCT_STOC_MAXFRAGMENTLEN              = 548;
+		public const int F_TLS_CONSTRUCT_STOC_NEXT_PROTO_NEG              = 457;
+		public const int F_TLS_CONSTRUCT_STOC_PSK                         = 504;
+		public const int F_TLS_CONSTRUCT_STOC_RENEGOTIATE                 = 458;
+		public const int F_TLS_CONSTRUCT_STOC_SERVER_NAME                 = 459;
+		public const int F_TLS_CONSTRUCT_STOC_SESSION_TICKET              = 460;
+		public const int F_TLS_CONSTRUCT_STOC_STATUS_REQUEST              = 461;
+		public const int F_TLS_CONSTRUCT_STOC_SUPPORTED_GROUPS            = 544;
+		public const int F_TLS_CONSTRUCT_STOC_SUPPORTED_VERSIONS          = 611;
+		public const int F_TLS_CONSTRUCT_STOC_USE_SRTP                    = 462;
+		public const int F_TLS_EARLY_POST_PROCESS_CLIENT_HELLO            = 521;
+		public const int F_TLS_FINISH_HANDSHAKE                           = 597;
+		public const int F_TLS_GET_MESSAGE_BODY                           = 351;
+		public const int F_TLS_GET_MESSAGE_HEADER                         = 387;
+		public const int F_TLS_HANDLE_ALPN                                = 562;
+		public const int F_TLS_HANDLE_STATUS_REQUEST                      = 563;
+		public const int F_TLS_PARSE_CERTIFICATE_AUTHORITIES              = 566;
+		public const int F_TLS_PARSE_CLIENTHELLO_TLSEXT                   = 449;
+		public const int F_TLS_PARSE_CTOS_ALPN                            = 567;
+		public const int F_TLS_PARSE_CTOS_COOKIE                          = 614;
+		public const int F_TLS_PARSE_CTOS_EARLY_DATA                      = 568;
+		public const int F_TLS_PARSE_CTOS_EC_PT_FORMATS                   = 569;
+		public const int F_TLS_PARSE_CTOS_EMS                             = 570;
+		public const int F_TLS_PARSE_CTOS_KEY_SHARE                       = 463;
+		public const int F_TLS_PARSE_CTOS_MAXFRAGMENTLEN                  = 571;
+		public const int F_TLS_PARSE_CTOS_POST_HANDSHAKE_AUTH             = 620;
+		public const int F_TLS_PARSE_CTOS_PSK                             = 505;
+		public const int F_TLS_PARSE_CTOS_PSK_KEX_MODES                   = 572;
+		public const int F_TLS_PARSE_CTOS_RENEGOTIATE                     = 464;
+		public const int F_TLS_PARSE_CTOS_SERVER_NAME                     = 573;
+		public const int F_TLS_PARSE_CTOS_SESSION_TICKET                  = 574;
+		public const int F_TLS_PARSE_CTOS_SIG_ALGS                        = 575;
+		public const int F_TLS_PARSE_CTOS_SIG_ALGS_CERT                   = 615;
+		public const int F_TLS_PARSE_CTOS_SRP                             = 576;
+		public const int F_TLS_PARSE_CTOS_STATUS_REQUEST                  = 577;
+		public const int F_TLS_PARSE_CTOS_SUPPORTED_GROUPS                = 578;
+		public const int F_TLS_PARSE_CTOS_USE_SRTP                        = 465;
+		public const int F_TLS_PARSE_STOC_ALPN                            = 579;
+		public const int F_TLS_PARSE_STOC_COOKIE                          = 534;
+		public const int F_TLS_PARSE_STOC_EARLY_DATA                      = 538;
+		public const int F_TLS_PARSE_STOC_EARLY_DATA_INFO                 = 528;
+		public const int F_TLS_PARSE_STOC_EC_PT_FORMATS                   = 580;
+		public const int F_TLS_PARSE_STOC_KEY_SHARE                       = 445;
+		public const int F_TLS_PARSE_STOC_MAXFRAGMENTLEN                  = 581;
+		public const int F_TLS_PARSE_STOC_NPN                             = 582;
+		public const int F_TLS_PARSE_STOC_PSK                             = 502;
+		public const int F_TLS_PARSE_STOC_RENEGOTIATE                     = 448;
+		public const int F_TLS_PARSE_STOC_SCT                             = 564;
+		public const int F_TLS_PARSE_STOC_SERVER_NAME                     = 583;
+		public const int F_TLS_PARSE_STOC_SESSION_TICKET                  = 584;
+		public const int F_TLS_PARSE_STOC_STATUS_REQUEST                  = 585;
+		public const int F_TLS_PARSE_STOC_SUPPORTED_VERSIONS              = 612;
+		public const int F_TLS_PARSE_STOC_USE_SRTP                        = 446;
+		public const int F_TLS_POST_PROCESS_CLIENT_HELLO                  = 378;
+		public const int F_TLS_POST_PROCESS_CLIENT_KEY_EXCHANGE           = 384;
+		public const int F_TLS_PREPARE_CLIENT_CERTIFICATE                 = 360;
+		public const int F_TLS_PROCESS_AS_HELLO_RETRY_REQUEST             = 610;
+		public const int F_TLS_PROCESS_CERTIFICATE_REQUEST                = 361;
+		public const int F_TLS_PROCESS_CERT_STATUS                        = 362;
+		public const int F_TLS_PROCESS_CERT_STATUS_BODY                   = 495;
+		public const int F_TLS_PROCESS_CERT_VERIFY                        = 379;
+		public const int F_TLS_PROCESS_CHANGE_CIPHER_SPEC                 = 363;
+		public const int F_TLS_PROCESS_CKE_DHE                            = 411;
+		public const int F_TLS_PROCESS_CKE_ECDHE                          = 412;
+		public const int F_TLS_PROCESS_CKE_GOST                           = 413;
+		public const int F_TLS_PROCESS_CKE_PSK_PREAMBLE                   = 414;
+		public const int F_TLS_PROCESS_CKE_RSA                            = 415;
+		public const int F_TLS_PROCESS_CKE_SRP                            = 416;
+		public const int F_TLS_PROCESS_CLIENT_CERTIFICATE                 = 380;
+		public const int F_TLS_PROCESS_CLIENT_HELLO                       = 381;
+		public const int F_TLS_PROCESS_CLIENT_KEY_EXCHANGE                = 382;
+		public const int F_TLS_PROCESS_ENCRYPTED_EXTENSIONS               = 444;
+		public const int F_TLS_PROCESS_END_OF_EARLY_DATA                  = 537;
+		public const int F_TLS_PROCESS_FINISHED                           = 364;
+		public const int F_TLS_PROCESS_HELLO_REQ                          = 507;
+		public const int F_TLS_PROCESS_HELLO_RETRY_REQUEST                = 511;
+		public const int F_TLS_PROCESS_INITIAL_SERVER_FLIGHT              = 442;
+		public const int F_TLS_PROCESS_KEY_EXCHANGE                       = 365;
+		public const int F_TLS_PROCESS_KEY_UPDATE                         = 518;
+		public const int F_TLS_PROCESS_NEW_SESSION_TICKET                 = 366;
+		public const int F_TLS_PROCESS_NEXT_PROTO                         = 383;
+		public const int F_TLS_PROCESS_SERVER_CERTIFICATE                 = 367;
+		public const int F_TLS_PROCESS_SERVER_DONE                        = 368;
+		public const int F_TLS_PROCESS_SERVER_HELLO                       = 369;
+		public const int F_TLS_PROCESS_SKE_DHE                            = 419;
+		public const int F_TLS_PROCESS_SKE_ECDHE                          = 420;
+		public const int F_TLS_PROCESS_SKE_PSK_PREAMBLE                   = 421;
+		public const int F_TLS_PROCESS_SKE_SRP                            = 422;
+		public const int F_TLS_PSK_DO_BINDER                              = 506;
+		public const int F_TLS_SCAN_CLIENTHELLO_TLSEXT                    = 450;
+		public const int F_TLS_SETUP_HANDSHAKE                            = 508;
+		public const int F_USE_CERTIFICATE_CHAIN_FILE                     = 220;
+		public const int F_WPACKET_INTERN_INIT_LEN                        = 633;
+		public const int F_WPACKET_START_SUB_PACKET_LEN__                 = 634;
+		public const int F_WRITE_STATE_MACHINE                            = 586;
+		
+		/*
+		 * SSL reason codes.
+		 */
+		public const int R_APPLICATION_DATA_AFTER_CLOSE_NOTIFY            = 291;
+		public const int R_APP_DATA_IN_HANDSHAKE                          = 100;
+		public const int R_ATTEMPT_TO_REUSE_SESSION_IN_DIFFERENT_CONTEXT  = 272;
+		public const int R_AT_LEAST_TLS_1_0_NEEDED_IN_FIPS_MODE           = 143;
+		public const int R_AT_LEAST_TLS_1_2_NEEDED_IN_SUITEB_MODE         = 158;
+		public const int R_BAD_CHANGE_CIPHER_SPEC                         = 103;
+		public const int R_BAD_CIPHER                                     = 186;
+		public const int R_BAD_DATA                                       = 390;
+		public const int R_BAD_DATA_RETURNED_BY_CALLBACK                  = 106;
+		public const int R_BAD_DECOMPRESSION                              = 107;
+		public const int R_BAD_DH_VALUE                                   = 102;
+		public const int R_BAD_DIGEST_LENGTH                              = 111;
+		public const int R_BAD_EARLY_DATA                                 = 233;
+		public const int R_BAD_ECC_CERT                                   = 304;
+		public const int R_BAD_ECPOINT                                    = 306;
+		public const int R_BAD_EXTENSION                                  = 110;
+		public const int R_BAD_HANDSHAKE_LENGTH                           = 332;
+		public const int R_BAD_HANDSHAKE_STATE                            = 236;
+		public const int R_BAD_HELLO_REQUEST                              = 105;
+		public const int R_BAD_HRR_VERSION                                = 263;
+		public const int R_BAD_KEY_SHARE                                  = 108;
+		public const int R_BAD_KEY_UPDATE                                 = 122;
+		public const int R_BAD_LEGACY_VERSION                             = 292;
+		public const int R_BAD_LENGTH                                     = 271;
+		public const int R_BAD_PACKET                                     = 240;
+		public const int R_BAD_PACKET_LENGTH                              = 115;
+		public const int R_BAD_PROTOCOL_VERSION_NUMBER                    = 116;
+		public const int R_BAD_PSK                                        = 219;
+		public const int R_BAD_PSK_IDENTITY                               = 114;
+		public const int R_BAD_RECORD_TYPE                                = 443;
+		public const int R_BAD_RSA_ENCRYPT                                = 119;
+		public const int R_BAD_SIGNATURE                                  = 123;
+		public const int R_BAD_SRP_A_LENGTH                               = 347;
+		public const int R_BAD_SRP_PARAMETERS                             = 371;
+		public const int R_BAD_SRTP_MKI_VALUE                             = 352;
+		public const int R_BAD_SRTP_PROTECTION_PROFILE_LIST               = 353;
+		public const int R_BAD_SSL_FILETYPE                               = 124;
+		public const int R_BAD_VALUE                                      = 384;
+		public const int R_BAD_WRITE_RETRY                                = 127;
+		public const int R_BINDER_DOES_NOT_VERIFY                         = 253;
+		public const int R_BIO_NOT_SET                                    = 128;
+		public const int R_BLOCK_CIPHER_PAD_IS_WRONG                      = 129;
+		public const int R_BN_LIB                                         = 130;
+		public const int R_CALLBACK_FAILED                                = 234;
+		public const int R_CANNOT_CHANGE_CIPHER                           = 109;
+		public const int R_CA_DN_LENGTH_MISMATCH                          = 131;
+		public const int R_CA_KEY_TOO_SMALL                               = 397;
+		public const int R_CA_MD_TOO_WEAK                                 = 398;
+		public const int R_CCS_RECEIVED_EARLY                             = 133;
+		public const int R_CERTIFICATE_VERIFY_FAILED                      = 134;
+		public const int R_CERT_CB_ERROR                                  = 377;
+		public const int R_CERT_LENGTH_MISMATCH                           = 135;
+		public const int R_CIPHERSUITE_DIGEST_HAS_CHANGED                 = 218;
+		public const int R_CIPHER_CODE_WRONG_LENGTH                       = 137;
+		public const int R_CIPHER_OR_HASH_UNAVAILABLE                     = 138;
+		public const int R_CLIENTHELLO_TLSEXT                             = 226;
+		public const int R_COMPRESSED_LENGTH_TOO_LONG                     = 140;
+		public const int R_COMPRESSION_DISABLED                           = 343;
+		public const int R_COMPRESSION_FAILURE                            = 141;
+		public const int R_COMPRESSION_ID_NOT_WITHIN_PRIVATE_RANGE        = 307;
+		public const int R_COMPRESSION_LIBRARY_ERROR                      = 142;
+		public const int R_CONNECTION_TYPE_NOT_SET                        = 144;
+		public const int R_CONTEXT_NOT_DANE_ENABLED                       = 167;
+		public const int R_COOKIE_GEN_CALLBACK_FAILURE                    = 400;
+		public const int R_COOKIE_MISMATCH                                = 308;
+		public const int R_CUSTOM_EXT_HANDLER_ALREADY_INSTALLED           = 206;
+		public const int R_DANE_ALREADY_ENABLED                           = 172;
+		public const int R_DANE_CANNOT_OVERRIDE_MTYPE_FULL                = 173;
+		public const int R_DANE_NOT_ENABLED                               = 175;
+		public const int R_DANE_TLSA_BAD_CERTIFICATE                      = 180;
+		public const int R_DANE_TLSA_BAD_CERTIFICATE_USAGE                = 184;
+		public const int R_DANE_TLSA_BAD_DATA_LENGTH                      = 189;
+		public const int R_DANE_TLSA_BAD_DIGEST_LENGTH                    = 192;
+		public const int R_DANE_TLSA_BAD_MATCHING_TYPE                    = 200;
+		public const int R_DANE_TLSA_BAD_PUBLIC_KEY                       = 201;
+		public const int R_DANE_TLSA_BAD_SELECTOR                         = 202;
+		public const int R_DANE_TLSA_NULL_DATA                            = 203;
+		public const int R_DATA_BETWEEN_CCS_AND_FINISHED                  = 145;
+		public const int R_DATA_LENGTH_TOO_LONG                           = 146;
+		public const int R_DECRYPTION_FAILED                              = 147;
+		public const int R_DECRYPTION_FAILED_OR_BAD_RECORD_MAC            = 281;
+		public const int R_DH_KEY_TOO_SMALL                               = 394;
+		public const int R_DH_PUBLIC_VALUE_LENGTH_IS_WRONG                = 148;
+		public const int R_DIGEST_CHECK_FAILED                            = 149;
+		public const int R_DTLS_MESSAGE_TOO_BIG                           = 334;
+		public const int R_DUPLICATE_COMPRESSION_ID                       = 309;
+		public const int R_ECC_CERT_NOT_FOR_SIGNING                       = 318;
+		public const int R_ECDH_REQUIRED_FOR_SUITEB_MODE                  = 374;
+		public const int R_EE_KEY_TOO_SMALL                               = 399;
+		public const int R_EMPTY_SRTP_PROTECTION_PROFILE_LIST             = 354;
+		public const int R_ENCRYPTED_LENGTH_TOO_LONG                      = 150;
+		public const int R_ERROR_IN_RECEIVED_CIPHER_LIST                  = 151;
+		public const int R_ERROR_SETTING_TLSA_BASE_DOMAIN                 = 204;
+		public const int R_EXCEEDS_MAX_FRAGMENT_SIZE                      = 194;
+		public const int R_EXCESSIVE_MESSAGE_SIZE                         = 152;
+		public const int R_EXTENSION_NOT_RECEIVED                         = 279;
+		public const int R_EXTRA_DATA_IN_MESSAGE                          = 153;
+		public const int R_EXT_LENGTH_MISMATCH                            = 163;
+		public const int R_FAILED_TO_INIT_ASYNC                           = 405;
+		public const int R_FRAGMENTED_CLIENT_HELLO                        = 401;
+		public const int R_GOT_A_FIN_BEFORE_A_CCS                         = 154;
+		public const int R_HTTPS_PROXY_REQUEST                            = 155;
+		public const int R_HTTP_REQUEST                                   = 156;
+		public const int R_ILLEGAL_POINT_COMPRESSION                      = 162;
+		public const int R_ILLEGAL_SUITEB_DIGEST                          = 380;
+		public const int R_INAPPROPRIATE_FALLBACK                         = 373;
+		public const int R_INCONSISTENT_COMPRESSION                       = 340;
+		public const int R_INCONSISTENT_EARLY_DATA_ALPN                   = 222;
+		public const int R_INCONSISTENT_EARLY_DATA_SNI                    = 231;
+		public const int R_INCONSISTENT_EXTMS                             = 104;
+		public const int R_INSUFFICIENT_SECURITY                          = 241;
+		public const int R_INVALID_ALERT                                  = 205;
+		public const int R_INVALID_CCS_MESSAGE                            = 260;
+		public const int R_INVALID_CERTIFICATE_OR_ALG                     = 238;
+		public const int R_INVALID_COMMAND                                = 280;
+		public const int R_INVALID_COMPRESSION_ALGORITHM                  = 341;
+		public const int R_INVALID_CONFIG                                 = 283;
+		public const int R_INVALID_CONFIGURATION_NAME                     = 113;
+		public const int R_INVALID_CONTEXT                                = 282;
+		public const int R_INVALID_CT_VALIDATION_TYPE                     = 212;
+		public const int R_INVALID_KEY_UPDATE_TYPE                        = 120;
+		public const int R_INVALID_MAX_EARLY_DATA                         = 174;
+		public const int R_INVALID_NULL_CMD_NAME                          = 385;
+		public const int R_INVALID_SEQUENCE_NUMBER                        = 402;
+		public const int R_INVALID_SERVERINFO_DATA                        = 388;
+		public const int R_INVALID_SESSION_ID                             = 999;
+		public const int R_INVALID_SRP_USERNAME                           = 357;
+		public const int R_INVALID_STATUS_RESPONSE                        = 328;
+		public const int R_INVALID_TICKET_KEYS_LENGTH                     = 325;
+		public const int R_LENGTH_MISMATCH                                = 159;
+		public const int R_LENGTH_TOO_LONG                                = 404;
+		public const int R_LENGTH_TOO_SHORT                               = 160;
+		public const int R_LIBRARY_BUG                                    = 274;
+		public const int R_LIBRARY_HAS_NO_CIPHERS                         = 161;
+		public const int R_MISSING_DSA_SIGNING_CERT                       = 165;
+		public const int R_MISSING_ECDSA_SIGNING_CERT                     = 381;
+		public const int R_MISSING_FATAL                                  = 256;
+		public const int R_MISSING_PARAMETERS                             = 290;
+		public const int R_MISSING_RSA_CERTIFICATE                        = 168;
+		public const int R_MISSING_RSA_ENCRYPTING_CERT                    = 169;
+		public const int R_MISSING_RSA_SIGNING_CERT                       = 170;
+		public const int R_MISSING_SIGALGS_EXTENSION                      = 112;
+		public const int R_MISSING_SIGNING_CERT                           = 221;
+		public const int R_MISSING_SRP_PARAM                              = 358;
+		public const int R_MISSING_SUPPORTED_GROUPS_EXTENSION             = 209;
+		public const int R_MISSING_TMP_DH_KEY                             = 171;
+		public const int R_MISSING_TMP_ECDH_KEY                           = 311;
+		public const int R_MIXED_HANDSHAKE_AND_NON_HANDSHAKE_DATA         = 293;
+		public const int R_NOT_ON_RECORD_BOUNDARY                         = 182;
+		public const int R_NOT_REPLACING_CERTIFICATE                      = 289;
+		public const int R_NOT_SERVER                                     = 284;
+		public const int R_NO_APPLICATION_PROTOCOL                        = 235;
+		public const int R_NO_CERTIFICATES_RETURNED                       = 176;
+		public const int R_NO_CERTIFICATE_ASSIGNED                        = 177;
+		public const int R_NO_CERTIFICATE_SET                             = 179;
+		public const int R_NO_CHANGE_FOLLOWING_HRR                        = 214;
+		public const int R_NO_CIPHERS_AVAILABLE                           = 181;
+		public const int R_NO_CIPHERS_SPECIFIED                           = 183;
+		public const int R_NO_CIPHER_MATCH                                = 185;
+		public const int R_NO_CLIENT_CERT_METHOD                          = 331;
+		public const int R_NO_COMPRESSION_SPECIFIED                       = 187;
+		public const int R_NO_COOKIE_CALLBACK_SET                         = 287;
+		public const int R_NO_GOST_CERTIFICATE_SENT_BY_PEER               = 330;
+		public const int R_NO_METHOD_SPECIFIED                            = 188;
+		public const int R_NO_PEM_EXTENSIONS                              = 389;
+		public const int R_NO_PRIVATE_KEY_ASSIGNED                        = 190;
+		public const int R_NO_PROTOCOLS_AVAILABLE                         = 191;
+		public const int R_NO_RENEGOTIATION                               = 339;
+		public const int R_NO_REQUIRED_DIGEST                             = 324;
+		public const int R_NO_SHARED_CIPHER                               = 193;
+		public const int R_NO_SHARED_GROUPS                               = 410;
+		public const int R_NO_SHARED_SIGNATURE_ALGORITHMS                 = 376;
+		public const int R_NO_SRTP_PROFILES                               = 359;
+		public const int R_NO_SUITABLE_KEY_SHARE                          = 101;
+		public const int R_NO_SUITABLE_SIGNATURE_ALGORITHM                = 118;
+		public const int R_NO_VALID_SCTS                                  = 216;
+		public const int R_NO_VERIFY_COOKIE_CALLBACK                      = 403;
+		public const int R_NULL_SSL_CTX                                   = 195;
+		public const int R_NULL_SSL_METHOD_PASSED                         = 196;
+		public const int R_OLD_SESSION_CIPHER_NOT_RETURNED                = 197;
+		public const int R_OLD_SESSION_COMPRESSION_ALGORITHM_NOT_RETURNED = 344;
+		public const int R_OVERFLOW_ERROR                                 = 237;
+		public const int R_PACKET_LENGTH_TOO_LONG                         = 198;
+		public const int R_PARSE_TLSEXT                                   = 227;
+		public const int R_PATH_TOO_LONG                                  = 270;
+		public const int R_PEER_DID_NOT_RETURN_A_CERTIFICATE              = 199;
+		public const int R_PEM_NAME_BAD_PREFIX                            = 391;
+		public const int R_PEM_NAME_TOO_SHORT                             = 392;
+		public const int R_PIPELINE_FAILURE                               = 406;
+		public const int R_POST_HANDSHAKE_AUTH_ENCODING_ERR               = 278;
+		public const int R_PRIVATE_KEY_MISMATCH                           = 288;
+		public const int R_PROTOCOL_IS_SHUTDOWN                           = 207;
+		public const int R_PSK_IDENTITY_NOT_FOUND                         = 223;
+		public const int R_PSK_NO_CLIENT_CB                               = 224;
+		public const int R_PSK_NO_SERVER_CB                               = 225;
+		public const int R_READ_BIO_NOT_SET                               = 211;
+		public const int R_READ_TIMEOUT_EXPIRED                           = 312;
+		public const int R_RECORD_LENGTH_MISMATCH                         = 213;
+		public const int R_RECORD_TOO_SMALL                               = 298;
+		public const int R_RENEGOTIATE_EXT_TOO_LONG                       = 335;
+		public const int R_RENEGOTIATION_ENCODING_ERR                     = 336;
+		public const int R_RENEGOTIATION_MISMATCH                         = 337;
+		public const int R_REQUEST_PENDING                                = 285;
+		public const int R_REQUEST_SENT                                   = 286;
+		public const int R_REQUIRED_CIPHER_MISSING                        = 215;
+		public const int R_REQUIRED_COMPRESSION_ALGORITHM_MISSING         = 342;
+		public const int R_SCSV_RECEIVED_WHEN_RENEGOTIATING               = 345;
+		public const int R_SCT_VERIFICATION_FAILED                        = 208;
+		public const int R_SERVERHELLO_TLSEXT                             = 275;
+		public const int R_SESSION_ID_CONTEXT_UNINITIALIZED               = 277;
+		public const int R_SHUTDOWN_WHILE_IN_INIT                         = 407;
+		public const int R_SIGNATURE_ALGORITHMS_ERROR                     = 360;
+		public const int R_SIGNATURE_FOR_NON_SIGNING_CERTIFICATE          = 220;
+		public const int R_SRP_A_CALC                                     = 361;
+		public const int R_SRTP_COULD_NOT_ALLOCATE_PROFILES               = 362;
+		public const int R_SRTP_PROTECTION_PROFILE_LIST_TOO_LONG          = 363;
+		public const int R_SRTP_UNKNOWN_PROTECTION_PROFILE                = 364;
+		public const int R_SSL3_EXT_INVALID_MAX_FRAGMENT_LENGTH           = 232;
+		public const int R_SSL3_EXT_INVALID_SERVERNAME                    = 319;
+		public const int R_SSL3_EXT_INVALID_SERVERNAME_TYPE               = 320;
+		public const int R_SSL3_SESSION_ID_TOO_LONG                       = 300;
+		public const int R_SSLV3_ALERT_BAD_CERTIFICATE                    = 1042;
+		public const int R_SSLV3_ALERT_BAD_RECORD_MAC                     = 1020;
+		public const int R_SSLV3_ALERT_CERTIFICATE_EXPIRED                = 1045;
+		public const int R_SSLV3_ALERT_CERTIFICATE_REVOKED                = 1044;
+		public const int R_SSLV3_ALERT_CERTIFICATE_UNKNOWN                = 1046;
+		public const int R_SSLV3_ALERT_DECOMPRESSION_FAILURE              = 1030;
+		public const int R_SSLV3_ALERT_HANDSHAKE_FAILURE                  = 1040;
+		public const int R_SSLV3_ALERT_ILLEGAL_PARAMETER                  = 1047;
+		public const int R_SSLV3_ALERT_NO_CERTIFICATE                     = 1041;
+		public const int R_SSLV3_ALERT_UNEXPECTED_MESSAGE                 = 1010;
+		public const int R_SSLV3_ALERT_UNSUPPORTED_CERTIFICATE            = 1043;
+		public const int R_SSL_COMMAND_SECTION_EMPTY                      = 117;
+		public const int R_SSL_COMMAND_SECTION_NOT_FOUND                  = 125;
+		public const int R_SSL_CTX_HAS_NO_DEFAULT_SSL_VERSION             = 228;
+		public const int R_SSL_HANDSHAKE_FAILURE                          = 229;
+		public const int R_SSL_LIBRARY_HAS_NO_CIPHERS                     = 230;
+		public const int R_SSL_NEGATIVE_LENGTH                            = 372;
+		public const int R_SSL_SECTION_EMPTY                              = 126;
+		public const int R_SSL_SECTION_NOT_FOUND                          = 136;
+		public const int R_SSL_SESSION_ID_CALLBACK_FAILED                 = 301;
+		public const int R_SSL_SESSION_ID_CONFLICT                        = 302;
+		public const int R_SSL_SESSION_ID_CONTEXT_TOO_LONG                = 273;
+		public const int R_SSL_SESSION_ID_HAS_BAD_LENGTH                  = 303;
+		public const int R_SSL_SESSION_ID_TOO_LONG                        = 408;
+		public const int R_SSL_SESSION_VERSION_MISMATCH                   = 210;
+		public const int R_STILL_IN_INIT                                  = 121;
+		public const int R_TLSV13_ALERT_CERTIFICATE_REQUIRED              = 1116;
+		public const int R_TLSV13_ALERT_MISSING_EXTENSION                 = 1109;
+		public const int R_TLSV1_ALERT_ACCESS_DENIED                      = 1049;
+		public const int R_TLSV1_ALERT_DECODE_ERROR                       = 1050;
+		public const int R_TLSV1_ALERT_DECRYPTION_FAILED                  = 1021;
+		public const int R_TLSV1_ALERT_DECRYPT_ERROR                      = 1051;
+		public const int R_TLSV1_ALERT_EXPORT_RESTRICTION                 = 1060;
+		public const int R_TLSV1_ALERT_INAPPROPRIATE_FALLBACK             = 1086;
+		public const int R_TLSV1_ALERT_INSUFFICIENT_SECURITY              = 1071;
+		public const int R_TLSV1_ALERT_INTERNAL_ERROR                     = 1080;
+		public const int R_TLSV1_ALERT_NO_RENEGOTIATION                   = 1100;
+		public const int R_TLSV1_ALERT_PROTOCOL_VERSION                   = 1070;
+		public const int R_TLSV1_ALERT_RECORD_OVERFLOW                    = 1022;
+		public const int R_TLSV1_ALERT_UNKNOWN_CA                         = 1048;
+		public const int R_TLSV1_ALERT_USER_CANCELLED                     = 1090;
+		public const int R_TLSV1_BAD_CERTIFICATE_HASH_VALUE               = 1114;
+		public const int R_TLSV1_BAD_CERTIFICATE_STATUS_RESPONSE          = 1113;
+		public const int R_TLSV1_CERTIFICATE_UNOBTAINABLE                 = 1111;
+		public const int R_TLSV1_UNRECOGNIZED_NAME                        = 1112;
+		public const int R_TLSV1_UNSUPPORTED_EXTENSION                    = 1110;
+		public const int R_TLS_HEARTBEAT_PEER_DOESNT_ACCEPT               = 365;
+		public const int R_TLS_HEARTBEAT_PENDING                          = 366;
+		public const int R_TLS_ILLEGAL_EXPORTER_LABEL                     = 367;
+		public const int R_TLS_INVALID_ECPOINTFORMAT_LIST                 = 157;
+		public const int R_TOO_MANY_KEY_UPDATES                           = 132;
+		public const int R_TOO_MANY_WARN_ALERTS                           = 409;
+		public const int R_TOO_MUCH_EARLY_DATA                            = 164;
+		public const int R_UNABLE_TO_FIND_ECDH_PARAMETERS                 = 314;
+		public const int R_UNABLE_TO_FIND_PUBLIC_KEY_PARAMETERS           = 239;
+		public const int R_UNABLE_TO_LOAD_SSL3_MD5_ROUTINES               = 242;
+		public const int R_UNABLE_TO_LOAD_SSL3_SHA1_ROUTINES              = 243;
+		public const int R_UNEXPECTED_CCS_MESSAGE                         = 262;
+		public const int R_UNEXPECTED_END_OF_EARLY_DATA                   = 178;
+		public const int R_UNEXPECTED_MESSAGE                             = 244;
+		public const int R_UNEXPECTED_RECORD                              = 245;
+		public const int R_UNINITIALIZED                                  = 276;
+		public const int R_UNKNOWN_ALERT_TYPE                             = 246;
+		public const int R_UNKNOWN_CERTIFICATE_TYPE                       = 247;
+		public const int R_UNKNOWN_CIPHER_RETURNED                        = 248;
+		public const int R_UNKNOWN_CIPHER_TYPE                            = 249;
+		public const int R_UNKNOWN_CMD_NAME                               = 386;
+		public const int R_UNKNOWN_COMMAND                                = 139;
+		public const int R_UNKNOWN_DIGEST                                 = 368;
+		public const int R_UNKNOWN_KEY_EXCHANGE_TYPE                      = 250;
+		public const int R_UNKNOWN_PKEY_TYPE                              = 251;
+		public const int R_UNKNOWN_PROTOCOL                               = 252;
+		public const int R_UNKNOWN_SSL_VERSION                            = 254;
+		public const int R_UNKNOWN_STATE                                  = 255;
+		public const int R_UNSAFE_LEGACY_RENEGOTIATION_DISABLED           = 338;
+		public const int R_UNSOLICITED_EXTENSION                          = 217;
+		public const int R_UNSUPPORTED_COMPRESSION_ALGORITHM              = 257;
+		public const int R_UNSUPPORTED_ELLIPTIC_CURVE                     = 315;
+		public const int R_UNSUPPORTED_PROTOCOL                           = 258;
+		public const int R_UNSUPPORTED_SSL_VERSION                        = 259;
+		public const int R_UNSUPPORTED_STATUS_TYPE                        = 329;
+		public const int R_USE_SRTP_NOT_NEGOTIATED                        = 369;
+		public const int R_VERSION_TOO_HIGH                               = 166;
+		public const int R_VERSION_TOO_LOW                                = 396;
+		public const int R_WRONG_CERTIFICATE_TYPE                         = 383;
+		public const int R_WRONG_CIPHER_RETURNED                          = 261;
+		public const int R_WRONG_CURVE                                    = 378;
+		public const int R_WRONG_SIGNATURE_LENGTH                         = 264;
+		public const int R_WRONG_SIGNATURE_SIZE                           = 265;
+		public const int R_WRONG_SIGNATURE_TYPE                           = 370;
+		public const int R_WRONG_SSL_VERSION                              = 266;
+		public const int R_WRONG_VERSION_NUMBER                           = 267;
+		public const int R_X509_LIB                                       = 268;
+		public const int R_X509_VERIFICATION_SETUP_PROBLEMS               = 269;
+
 		public function int CLIENT_CERT_PTR(Engine.engine_st* e, ssl_st* ssl, X509.stack_st_X509_NAME* ca_dn, X509.x509_st** pcert, EVP.PKEY** pkey, X509.stack_st_X509** pother, UI.METHOD* ui_method, void* callback_data);
 
 		/* Writeable packets */
@@ -510,6 +808,18 @@ namespace Beef_Net.OpenSSL
 		}
 		public typealias WPACKET = wpacket_st;
 
+		/** FIXME: Not even going to port this, hell no. Feel free to contrib. **/
+		[CRepr]
+		public struct ssl_st { }
+		public typealias SSL = ssl_st;
+		/* This is needed to stop compilers complaining about the 'struct ssl_st *' function parameters used to prototype callbacks in SSL_CTX. */
+		public typealias crock_st = ssl_st*;
+
+		/** FIXME: Not even going to port this, hell no. Feel free to contrib. **/
+		[CRepr]
+		public struct ctx_st { }
+		public typealias CTX = ctx_st;
+
 		/* Used to hold SSL/TLS functions */
 		[CRepr]
 		public struct method_st
@@ -539,7 +849,7 @@ namespace Beef_Net.OpenSSL
 		    public function int() num_ciphers;
 		    public function CIPHER*(uint ncipher) get_cipher;
 		    public function int() get_timeout;
-		    public SSL3.enc_method* ssl3_enc; /* Extra SSLv3/TLS stuff */
+		    public SSL3.ENC_METHOD* ssl3_enc; /* Extra SSLv3/TLS stuff */
 		    public function int() ssl_version;
 		    public function int(ssl_st* s, int cb_id, function void() fp) ssl_callback_ctrl;
 		    public function int(CTX* s, int cb_id, function void() fp) ssl_ctx_callback_ctrl;
@@ -554,10 +864,7 @@ namespace Beef_Net.OpenSSL
 		    public char8* name;           /* text name */
 		    public char8* stdname;        /* RFC name */
 		    public uint32 id;             /* id, 4 bytes, first is version */
-		    /*
-		     * changed in 1.0.0: these four used to be portions of a single value
-		     * 'algorithms'
-		     */
+		    /* changed in 1.0.0: these four used to be portions of a single value 'algorithms' */
 		    public uint32 algorithm_mkey; /* key exchange algorithm */
 		    public uint32 algorithm_auth; /* server authentication */
 		    public uint32 algorithm_enc;  /* symmetric encryption */
@@ -572,26 +879,1158 @@ namespace Beef_Net.OpenSSL
 		    public uint32 alg_bits;       /* Number of bits for algorithm */
 		}
 		public typealias CIPHER = cipher_st;
-
-		/** FIXME: Not even going to port this, hell no. Feel free to contrib. **/
+		public struct stack_st_SSL_CIPHER {}
+		
+		/*-
+		 * Lets make this into an ASN.1 type structure as follows
+		 * SESSION_ID ::= SEQUENCE {
+		 *      version                 INTEGER,        -- structure version number
+		 *      SSLversion              INTEGER,        -- SSL version number
+		 *      Cipher                  OCTET STRING,   -- the 3 byte cipher ID
+		 *      Session_ID              OCTET STRING,   -- the Session ID
+		 *      Master_key              OCTET STRING,   -- the master key
+		 *      Key_Arg [ 0 ] IMPLICIT  OCTET STRING,   -- the optional Key argument
+		 *      Time [ 1 ] EXPLICIT     INTEGER,        -- optional Start Time
+		 *      Timeout [ 2 ] EXPLICIT  INTEGER,        -- optional Timeout ins seconds
+		 *      Peer [ 3 ] EXPLICIT     X509,           -- optional Peer Certificate
+		 *      Session_ID_context [ 4 ] EXPLICIT OCTET STRING,   -- the Session ID context
+		 *      Verify_result [ 5 ] EXPLICIT INTEGER,   -- X509_V_... code for `Peer'
+		 *      HostName [ 6 ] EXPLICIT OCTET STRING,   -- optional HostName from servername TLS extension
+		 *      PSK_identity_hint [ 7 ] EXPLICIT OCTET STRING, -- optional PSK identity hint
+		 *      PSK_identity [ 8 ] EXPLICIT OCTET STRING,  -- optional PSK identity
+		 *      Ticket_lifetime_hint [9] EXPLICIT INTEGER, -- server's lifetime hint for session ticket
+		 *      Ticket [10]             EXPLICIT OCTET STRING, -- session ticket (clients only)
+		 *      Compression_meth [11]   EXPLICIT OCTET STRING, -- optional compression method
+		 *      SRP_username [ 12 ] EXPLICIT OCTET STRING -- optional SRP username
+		 *      flags [ 13 ] EXPLICIT INTEGER -- optional flags
+		 * }
+		 * Look in ssl/ssl_asn1.c for more details
+		 * I'm using EXPLICIT tags so I can read the damn things using asn1parse :-).
+		 */
 		[CRepr]
-		public struct ssl_st { }
-		public typealias SSL = ssl_st;
+		public struct session_st
+		{
+		    public int ssl_version;                                      /* what ssl version session info is being kept in here? */
+		    public uint master_key_length;
+		
+		    /* TLSv1.3 early_secret used for external PSKs */
+		    public uint8[EVP.MAX_MD_SIZE] early_secret;
+		    /* For <=TLS1.2 this is the master_key. For TLS1.3 this is the resumption PSK */
+		    public uint8[TLS1_3.MAX_RESUMPTION_PSK_LENGTH] master_key;
+		    /* session_id - valid? */
+		    public uint session_id_length;
+		    public uint8[SSL.MAX_SSL_SESSION_ID_LENGTH] session_id;
+		    /* this is used to determine whether the session is being reused in the appropriate context. It is up to the application to set this, via new_ */
+		    public uint sid_ctx_length;
+		    public uint8[SSL.MAX_SID_CTX_LENGTH] sid_ctx;
+#if !OPENSSL_NO_PSK
+		    public char8* psk_identity_hint;
+		    public char8* psk_identity;
+#endif
+		    /* Used to indicate that session resumption is not allowed. Applications can also set this bit for a new session via not_resumable_session_cb to disable session caching and tickets. */
+		    public int not_resumable;
+		    /* This is the cert and type for the other end. */
+		    public X509.x509_st* peer;
+		    public int peer_type;
+		    /* Certificate chain peer sent. */
+		    public X509.stack_st_X509* peer_chain;
+		    /* when app_verify_callback accepts a session where the peer's certificate is not ok, we must remember the error for session reuse: */
+		    public int verify_result;                                    /* only for servers */
+		    public Crypto.REF_COUNT references;
+		    public int timeout;
+		    public int time;
+		    public uint compress_meth;                                   /* Need to lookup the method */
+		    public CIPHER* cipher;
+		    public uint cipher_id;                                       /* when ASN.1 loaded, this needs to be used to load the 'cipher' structure */
+		    public Crypto.EX_DATA ex_data;                               /* application specific data */
+		    /* These are used to make removal of session-ids more efficient and to implement a maximum cache size. */
+		    public session_st* prev;
+			public session_st* next;
+			public ext_struct ext;
 
-		/** FIXME: Not even going to port this, hell no. Feel free to contrib. **/
+#if !OPENSSL_NO_SRP
+    		public char8* srp_username;
+#endif
+		    public uint8* ticket_appdata;
+		    public uint ticket_appdata_len;
+		    public uint32 flags;
+		    public Crypto.RWLOCK* lock;
+
+			[CRepr]
+		    public struct ext_struct
+			{
+		        public char8* hostname;
+		        /* RFC4507 info */
+		        public uint8* tick;                     /* Session ticket */
+		        public uint ticklen;                    /* Session ticket length */
+		        /* Session lifetime hint in seconds */
+		        public uint tick_lifetime_hint;
+		        public uint32 tick_age_add;
+		        /* Max number of bytes that can be sent as early data */
+		        public uint32 max_early_data;
+		        /* The ALPN protocol selected for this session */
+		        public uint8* alpn_selected;
+		        public uint alpn_selected_len;
+		        /*
+		         * Maximum Fragment Length as per RFC 4366.
+		         * If this value does not contain RFC 4366 allowed values (1-4) then either the Maximum Fragment Length Negotiation failed or was not performed at all.
+		         */
+		        public uint8 max_fragment_len_mode;
+		    }
+		}
+		public typealias SESSION = session_st;
+
+		/* structure holding name tables. This is used for permitted elements in lists such as TLSv1. */
 		[CRepr]
-		public struct ctx_st { }
-		public typealias CTX = ctx_st;
+		public struct flag_tbl
+		{
+		    public char8* name;
+		    public int namelen;
+		    public uint name_flags;
+		    public uint option_value;
+		}
+
+		public const int PKEY_NUM = 9;
+
+		[CRepr]
+		public struct conf_ctx_st
+		{
+		    /* Various flags indicating (among other things) which options we will recognise. */
+		    public uint flags;
+		    /* Prefix and length of commands */
+		    public char8* prefix;
+		    public uint prefixlen;
+		    /* SSL_CTX or SSL structure to perform operations on */
+		    public CTX* ctx;
+		    public ssl_st* ssl;
+		    /* Pointer to SSL or SSL_CTX options field or NULL if none */
+		    public uint32* poptions;
+		    /* Certificate filenames for each type */
+		    public char8*[PKEY_NUM] cert_filename;
+		    /* Pointer to SSL or SSL_CTX cert_flags or NULL if none */
+		    public uint32* pcert_flags;
+		    /* Pointer to SSL or SSL_CTX verify_mode or NULL if none */
+		    public uint32* pvfy_flags;
+		    /* Pointer to SSL or SSL_CTX min_version field or NULL if none */
+		    public int* min_version;
+		    /* Pointer to SSL or SSL_CTX max_version field or NULL if none */
+		    public int* max_version;
+		    /* Current flag table being worked on */
+		    public flag_tbl *tbl;
+		    /* Size of table */
+		    public uint ntbl;
+		    /* Client CA names */
+		    public X509.stack_st_X509_NAME* canames;
+		}
+		public typealias CONF_CTX = conf_ctx_st;
+		
+		[CRepr]
+		public struct comp_st
+		{
+		    public int id;
+		    public char8* name;
+		    public Comp.METHOD* method;
+		}
+		public typealias COMP = comp_st;
+		public struct stack_st_COMP {}
+
+		[CRepr]
+		public struct danetls_record_st
+		{
+		    public uint8 usage;
+		    public uint8 selector;
+		    public uint8 mtype;
+		    public uint8* data;
+		    public uint dlen;
+		    public EVP.PKEY* spki;
+		}
+		public typealias danetls_record = danetls_record_st;
+		public struct stack_st_danetls_record;
+
+		/* Shared DANE context */
+		[CRepr]
+		public struct dane_ctx_st
+		{
+		    public EVP.MD** mdevp; /* mtype -> digest */
+		    public uint8* mdord;   /* mtype -> preference */
+		    public uint8 mdmax;    /* highest supported mtype */
+		    public uint flags;     /* feature bitmask */
+		}
+		public typealias DANE_CTX = dane_ctx_st;
+
+		/* Per connection DANE state */
+		[CRepr]
+		public struct dane_st
+		{
+		    public DANE_CTX* dctx;
+		    public stack_st_danetls_record* trecs;
+		    public X509.stack_st_X509* certs;      /* DANE-TA(2) Cert(0) Full(0) certs */
+		    public danetls_record* mtlsa;          /* Matching TLSA record */
+		    public X509.x509_st* mcert;            /* DANE matched cert */
+		    public uint32 umask;                   /* Usages present */
+		    public int mdpth;                      /* Depth of matched cert */
+		    public int pdpth;                      /* Depth of PKIX trust */
+		    public uint flags;                     /* feature bitmask */
+		}
+		public typealias DANE = dane_st;
+		
+		/* Maximum block size used in all ciphersuites. Currently 16 for AES. */
+		public const int RT_MAX_CIPHER_BLOCK_SIZE = 16;
+
+		/* OpenSSL version number for ASN.1 encoding of the session information */
+		/*-
+		 * Version 0 - initial version
+		 * Version 1 - added the optional peer certificate
+		 */
+		public const int SESSION_ASN1_VERSION            = 0x0001;
+		
+		public const int MAX_SSL_SESSION_ID_LENGTH       = 32;
+		public const int MAX_SID_CTX_LENGTH              = 32;
+		
+		public const int MIN_RSA_MODULUS_LENGTH_IN_BYTES = 512 / 8;
+		public const int MAX_KEY_ARG_LENGTH              = 8;
+		public const int MAX_MASTER_KEY_LENGTH           = 48;
+		
+		/* The maximum number of encrypt/decrypt pipelines we can support */
+		public const int MAX_PIPELINES                   = 32;
+		
+		/* text strings for the ciphers */
+		/* These are used to specify which ciphers to use and not to use */
+		
+		public const String TXT_LOW             = "LOW";
+		public const String TXT_MEDIUM          = "MEDIUM";
+		public const String TXT_HIGH            = "HIGH";
+		public const String TXT_FIPS            = "FIPS";
+		
+		public const String TXT_aNULL           = "aNULL";
+		public const String TXT_eNULL           = "eNULL";
+		public const String TXT_NULL            = "NULL";
+		
+		public const String TXT_kRSA            = "kRSA";
+		public const String TXT_kDHr            = "kDHr"; /* this cipher class has been removed */
+		public const String TXT_kDHd            = "kDHd"; /* this cipher class has been removed */
+		public const String TXT_kDH             = "kDH";  /* this cipher class has been removed */
+		public const String TXT_kEDH            = "kEDH"; /* alias for kDHE */
+		public const String TXT_kDHE            = "kDHE";
+		public const String TXT_kECDHr          = "kECDHr"; /* this cipher class has been removed */
+		public const String TXT_kECDHe          = "kECDHe"; /* this cipher class has been removed */
+		public const String TXT_kECDH           = "kECDH";  /* this cipher class has been removed */
+		public const String TXT_kEECDH          = "kEECDH"; /* alias for kECDHE */
+		public const String TXT_kECDHE          = "kECDHE";
+		public const String TXT_kPSK            = "kPSK";
+		public const String TXT_kRSAPSK         = "kRSAPSK";
+		public const String TXT_kECDHEPSK       = "kECDHEPSK";
+		public const String TXT_kDHEPSK         = "kDHEPSK";
+		public const String TXT_kGOST           = "kGOST";
+		public const String TXT_kSRP            = "kSRP";
+		
+		public const String TXT_aRSA            = "aRSA";
+		public const String TXT_aDSS            = "aDSS";
+		public const String TXT_aDH             = "aDH";   /* this cipher class has been removed */
+		public const String TXT_aECDH           = "aECDH"; /* this cipher class has been removed */
+		public const String TXT_aECDSA          = "aECDSA";
+		public const String TXT_aPSK            = "aPSK";
+		public const String TXT_aGOST94         = "aGOST94";
+		public const String TXT_aGOST01         = "aGOST01";
+		public const String TXT_aGOST12         = "aGOST12";
+		public const String TXT_aGOST           = "aGOST";
+		public const String TXT_aSRP            = "aSRP";
+		
+		public const String TXT_DSS             = "DSS";
+		public const String TXT_DH              = "DH";
+		public const String TXT_DHE             = "DHE"; /* same as "kDHE:-ADH" */
+		public const String TXT_EDH             = "EDH"; /* alias for DHE */
+		public const String TXT_ADH             = "ADH";
+		public const String TXT_RSA             = "RSA";
+		public const String TXT_ECDH            = "ECDH";
+		public const String TXT_EECDH           = "EECDH"; /* alias for ECDHE" */
+		public const String TXT_ECDHE           = "ECDHE"; /* same as "kECDHE:-AECDH" */
+		public const String TXT_AECDH           = "AECDH";
+		public const String TXT_ECDSA           = "ECDSA";
+		public const String TXT_PSK             = "PSK";
+		public const String TXT_SRP             = "SRP";
+		
+		public const String TXT_DES             = "DES";
+		public const String TXT_3DES            = "3DES";
+		public const String TXT_RC4             = "RC4";
+		public const String TXT_RC2             = "RC2";
+		public const String TXT_IDEA            = "IDEA";
+		public const String TXT_SEED            = "SEED";
+		public const String TXT_AES128          = "AES128";
+		public const String TXT_AES256          = "AES256";
+		public const String TXT_AES             = "AES";
+		public const String TXT_AES_GCM         = "AESGCM";
+		public const String TXT_AES_CCM         = "AESCCM";
+		public const String TXT_AES_CCM_8       = "AESCCM8";
+		public const String TXT_CAMELLIA128     = "CAMELLIA128";
+		public const String TXT_CAMELLIA256     = "CAMELLIA256";
+		public const String TXT_CAMELLIA        = "CAMELLIA";
+		public const String TXT_CHACHA20        = "CHACHA20";
+		public const String TXT_GOST            = "GOST89";
+		public const String TXT_ARIA            = "ARIA";
+		public const String TXT_ARIA_GCM        = "ARIAGCM";
+		public const String TXT_ARIA128         = "ARIA128";
+		public const String TXT_ARIA256         = "ARIA256";
+		
+		public const String TXT_MD5             = "MD5";
+		public const String TXT_SHA1            = "SHA1";
+		public const String TXT_SHA             = "SHA"; /* same as "SHA1" */
+		public const String TXT_GOST94          = "GOST94";
+		public const String TXT_GOST89MAC       = "GOST89MAC";
+		public const String TXT_GOST12          = "GOST12";
+		public const String TXT_GOST89MAC12     = "GOST89MAC12";
+		public const String TXT_SHA256          = "SHA256";
+		public const String TXT_SHA384          = "SHA384";
+		
+		public const String TXT_SSLV3           = "SSLv3";
+		public const String TXT_TLSV1           = "TLSv1";
+		public const String TXT_TLSV1_1         = "TLSv1.1";
+		public const String TXT_TLSV1_2         = "TLSv1.2";
+		
+		public const String TXT_ALL             = "ALL";
+		
+		/*-
+		 * COMPLEMENTOF* definitions. These identifiers are used to (de-select)
+		 * ciphers normally not being used.
+		 * Example: "RC4" will activate all ciphers using RC4 including ciphers
+		 * without authentication, which would normally disabled by DEFAULT (due
+		 * the "!ADH" being part of default). Therefore "RC4:!COMPLEMENTOFDEFAULT"
+		 * will make sure that it is also disabled in the specific selection.
+		 * COMPLEMENTOF* identifiers are portable between version, as adjustments
+		 * to the default cipher setup will also be included here.
+		 *
+		 * COMPLEMENTOFDEFAULT does not experience the same special treatment that
+		 * DEFAULT gets, as only selection is being done and no sorting as needed
+		 * for DEFAULT.
+		 */
+		public const String TXT_CMPALL          = "COMPLEMENTOFALL";
+		public const String TXT_CMPDEF          = "COMPLEMENTOFDEFAULT";
+		
+		/*
+		 * The following cipher list is used by default. It also is substituted when
+		 * an application-defined cipher list string starts with 'DEFAULT'.
+		 * This applies to ciphersuites for TLSv1.2 and below.
+		 */
+		public const String DEFAULT_CIPHER_LIST = "ALL:!COMPLEMENTOFDEFAULT:!eNULL";
+		/*
+		 * As of OpenSSL 1.0.0, ssl_create_cipher_list() in ssl/ssl_ciph.c always
+		 * starts with a reasonable order, and all we have to do for DEFAULT is
+		 * throwing out anonymous and unencrypted ciphersuites! (The latter are not
+		 * actually enabled by ALL, but "ALL:RSA" would enable some of them.)
+		 */
+		
+		/* Used in SSL_set_shutdown()/SSL_get_shutdown(); */
+		public const int SENT_SHUTDOWN     = 1;
+		public const int RECEIVED_SHUTDOWN = 2;
+
+		public const int FILETYPE_ASN1 = X509.FILETYPE_ASN1;
+		public const int FILETYPE_PEM  = X509.FILETYPE_PEM;
+
+		/* Extension context codes */
+		/* This extension is only allowed in TLS */
+		public const int EXT_TLS_ONLY                    = 0x0001;
+		/* This extension is only allowed in DTLS */
+		public const int EXT_DTLS_ONLY                   = 0x0002;
+		/* Some extensions may be allowed in DTLS but we don't implement them for it */
+		public const int EXT_TLS_IMPLEMENTATION_ONLY     = 0x0004;
+		/* Most extensions are not defined for SSLv3 but EXT_TYPE_renegotiate is */
+		public const int EXT_SSL3_ALLOWED                = 0x0008;
+		/* Extension is only defined for TLS1.2 and below */
+		public const int EXT_TLS1_2_AND_BELOW_ONLY       = 0x0010;
+		/* Extension is only defined for TLS1.3 and above */
+		public const int EXT_TLS1_3_ONLY                 = 0x0020;
+		/* Ignore this extension during parsing if we are resuming */
+		public const int EXT_IGNORE_ON_RESUMPTION        = 0x0040;
+		public const int EXT_CLIENT_HELLO                = 0x0080;
+		/* Really means TLS1.2 or below */
+		public const int EXT_TLS1_2_SERVER_HELLO         = 0x0100;
+		public const int EXT_TLS1_3_SERVER_HELLO         = 0x0200;
+		public const int EXT_TLS1_3_ENCRYPTED_EXTENSIONS = 0x0400;
+		public const int EXT_TLS1_3_HELLO_RETRY_REQUEST  = 0x0800;
+		public const int EXT_TLS1_3_CERTIFICATE          = 0x1000;
+		public const int EXT_TLS1_3_NEW_SESSION_TICKET   = 0x2000;
+		public const int EXT_TLS1_3_CERTIFICATE_REQUEST  = 0x4000;
+		
+		/* Typedefs for handling custom extensions */
+		
+		public function int custom_ext_add_cb(ssl_st* s, uint ext_type, uint8** outVal, uint* outlen, int* al, void* add_arg);
+		public function void custom_ext_free_cb(ssl_st* s, uint ext_type, uint8* outVal, void* add_arg);
+		public function int custom_ext_parse_cb(ssl_st* s, uint ext_type, uint8* inVal, uint inlen, int* al, void* parse_arg);
+
+		public function int custom_ext_add_cb_ex(ssl_st* s, uint ext_type, uint context, uint8** outVal, uint* outlen, X509.x509_st* x, uint chainidx, int* al, void* add_arg);
+		public function void custom_ext_free_cb_ex(ssl_st* s, uint ext_type, uint context, uint8* outVal, void* add_arg);
+		public function int custom_ext_parse_cb_ex(ssl_st* s, uint ext_type, uint context, uint8* inVal, uint inlen, X509.x509_st* x, uint chainidx, int* al, void* parse_arg);
+
+		/* Typedef for verification callback */
+		public function int verify_cb(int preverify_ok, X509.STORE_CTX* x509_ctx);
+		
+		/*
+		 * Some values are reserved until OpenSSL 1.2.0 because they were previously
+		 * included in SSL_OP_ALL in a 1.1.x release.
+		 *
+		 * Reserved value (until OpenSSL 1.2.0)                  0x00000001U
+		 * Reserved value (until OpenSSL 1.2.0)                  0x00000002U
+		 */
+		/* Allow initial connection to servers that don't support RI */
+		public const int OP_LEGACY_SERVER_CONNECT                  = 0x00000004U;
+		
+		/* Reserved value (until OpenSSL 1.2.0)                = 0x00000008U */
+		public const int OP_TLSEXT_PADDING                         = 0x00000010U;
+		/* Reserved value (until OpenSSL 1.2.0)                = 0x00000020U */
+		public const int OP_SAFARI_ECDHE_ECDSA_BUG                 = 0x00000040U;
+		/*
+		 * Reserved value (until OpenSSL 1.2.0)                  0x00000080U
+		 * Reserved value (until OpenSSL 1.2.0)                  0x00000100U
+		 * Reserved value (until OpenSSL 1.2.0)                  0x00000200U
+		 */
+		
+		/* In TLSv1.3 allow a non-(ec)dhe based kex_mode */
+		public const int OP_ALLOW_NO_DHE_KEX                       = 0x00000400U;
+		
+		/*
+		 * Disable SSL 3.0/TLS 1.0 CBC vulnerability workaround that was added in
+		 * OpenSSL 0.9.6d.  Usually (depending on the application protocol) the
+		 * workaround is not needed.  Unfortunately some broken SSL/TLS
+		 * implementations cannot handle it at all, which is why we include it in
+		 * SSL_OP_ALL. Added in 0.9.6e
+		 */
+		public const int OP_DONT_INSERT_EMPTY_FRAGMENTS            = 0x00000800U;
+		
+		/* DTLS options */
+		public const int OP_NO_QUERY_MTU                           = 0x00001000U;
+		/* Turn on Cookie Exchange (on relevant for servers) */
+		public const int OP_COOKIE_EXCHANGE                        = 0x00002000U;
+		/* Don't use RFC4507 ticket extension */
+		public const int OP_NO_TICKET                              = 0x00004000U;
+#if !OPENSSL_NO_DTLS1_METHOD
+		/* Use Cisco's "speshul" version of DTLS.BAD_VER (only with deprecated DTLSv1.client_method()) */
+		public const int OP_CISCO_ANYCONNECT                       = 0x00008000U;
+#endif
+		
+		/* As server, disallow session resumption on renegotiation */
+		public const int OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION = 0x00010000U;
+		/* Don't use compression even if supported */
+		public const int OP_NO_COMPRESSION                         = 0x00020000U;
+		/* Permit unsafe legacy renegotiation */
+		public const int OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION      = 0x00040000U;
+		/* Disable encrypt-then-mac */
+		public const int OP_NO_ENCRYPT_THEN_MAC                    = 0x00080000U;
+		
+		/* Enable TLSv1.3 Compatibility mode. This is on by default. A future version of OpenSSL may have this disabled by default. */
+		public const int OP_ENABLE_MIDDLEBOX_COMPAT                = 0x00100000U;
+		
+		/* Prioritize Chacha20Poly1305 when client does. Modifies OP_CIPHER_SERVER_PREFERENCE */
+		public const int OP_PRIORITIZE_CHACHA                      = 0x00200000U;
+		
+		/* Set on servers to choose the cipher according to the server's preferences */
+		public const int OP_CIPHER_SERVER_PREFERENCE               = 0x00400000U;
+		/*
+		 * If set, a server will allow a client to issue a SSLv3.0 version number as latest version supported in the premaster secret, even when TLSv1.0 (version 3.1) was announced in the client hello. Normally this is
+		 * forbidden to prevent version rollback attacks.
+		 */
+		public const int OP_TLS_ROLLBACK_BUG                       = 0x00800000U;
+		
+		/* Switches off automatic TLSv1.3 anti-replay protection for early data. This is a server-side option only (no effect on the client). */
+		public const int OP_NO_ANTI_REPLAY                         = 0x01000000U;
+		
+		public const int OP_NO_SSLv3                               = 0x02000000U;
+		public const int OP_NO_TLSv1                               = 0x04000000U;
+		public const int OP_NO_TLSv1_2                             = 0x08000000U;
+		public const int OP_NO_TLSv1_1                             = 0x10000000U;
+		public const int OP_NO_TLSv1_3                             = 0x20000000U;
+		
+		public const int OP_NO_DTLSv1                              = 0x04000000U;
+		public const int OP_NO_DTLSv1_2                            = 0x08000000U;
+		
+		public const int OP_NO_SSL_MASK                            = OP_NO_SSLv3 | OP_NO_TLSv1 | OP_NO_TLSv1_1 | OP_NO_TLSv1_2 | OP_NO_TLSv1_3;
+		public const int OP_NO_DTLS_MASK                           = OP_NO_DTLSv1 | OP_NO_DTLSv1_2;
+		
+		/* Disallow all renegotiation */
+		public const int OP_NO_RENEGOTIATION                       = 0x40000000U;
+		
+		/* Make server add server-hello extension from early version of cryptopro draft, when GOST ciphersuite is negotiated. Required for interoperability with CryptoPro CSP 3.x */
+		public const int OP_CRYPTOPRO_TLSEXT_BUG                   = 0x80000000U;
+		
+		/*
+		 * SSL_OP_ALL: various bug workarounds that should be rather harmless.
+		 * This used to be 0x000FFFFFL before 0.9.7.
+		 * This used to be 0x80000BFFU before 1.1.1.
+		 */
+		public const int OP_ALL = OP_CRYPTOPRO_TLSEXT_BUG | OP_DONT_INSERT_EMPTY_FRAGMENTS | OP_LEGACY_SERVER_CONNECT | OP_TLSEXT_PADDING | OP_SAFARI_ECDHE_ECDSA_BUG;
+		
+		/* OBSOLETE OPTIONS: retained for compatibility */
+		
+		/* Removed from OpenSSL 1.1.0. Was 0x00000001L */
+		/* Related to removed SSLv2. */
+		public const int OP_MICROSOFT_SESS_ID_BUG                  = 0x0;
+		/* Removed from OpenSSL 1.1.0. Was 0x00000002L */
+		/* Related to removed SSLv2. */
+		public const int OP_NETSCAPE_CHALLENGE_BUG                 = 0x0;
+		/* Removed from OpenSSL 0.9.8q and 1.0.0c. Was 0x00000008L */
+		/* Dead forever, see CVE-2010-4180 */
+		public const int OP_NETSCAPE_REUSE_CIPHER_CHANGE_BUG       = 0x0;
+		/* Removed from OpenSSL 1.0.1h and 1.0.2. Was 0x00000010L */
+		/* Refers to ancient SSLREF and SSLv2. */
+		public const int OP_SSLREF2_REUSE_CERT_TYPE_BUG            = 0x0;
+		/* Removed from OpenSSL 1.1.0. Was 0x00000020 */
+		public const int OP_MICROSOFT_BIG_SSLV3_BUFFER             = 0x0;
+		/* Removed from OpenSSL 0.9.7h and 0.9.8b. Was 0x00000040L */
+		public const int OP_MSIE_SSLV2_RSA_PADDING                 = 0x0;
+		/* Removed from OpenSSL 1.1.0. Was 0x00000080 */
+		/* Ancient SSLeay version. */
+		public const int OP_SSLEAY_080_CLIENT_DH_BUG               = 0x0;
+		/* Removed from OpenSSL 1.1.0. Was 0x00000100L */
+		public const int OP_TLS_D5_BUG                             = 0x0;
+		/* Removed from OpenSSL 1.1.0. Was 0x00000200L */
+		public const int OP_TLS_BLOCK_PADDING_BUG                  = 0x0;
+		/* Removed from OpenSSL 1.1.0. Was 0x00080000L */
+		public const int OP_SINGLE_ECDH_USE                        = 0x0;
+		/* Removed from OpenSSL 1.1.0. Was 0x00100000L */
+		public const int OP_SINGLE_DH_USE                          = 0x0;
+		/* Removed from OpenSSL 1.0.1k and 1.0.2. Was 0x00200000L */
+		public const int OP_EPHEMERAL_RSA                          = 0x0;
+		/* Removed from OpenSSL 1.1.0. Was 0x01000000L */
+		public const int OP_NO_SSLv2                               = 0x0;
+		/* Removed from OpenSSL 1.0.1. Was 0x08000000L */
+		public const int OP_PKCS1_CHECK_1                          = 0x0;
+		/* Removed from OpenSSL 1.0.1. Was 0x10000000L */
+		public const int OP_PKCS1_CHECK_2                          = 0x0;
+		/* Removed from OpenSSL 1.1.0. Was 0x20000000L */
+		public const int OP_NETSCAPE_CA_DN_BUG                     = 0x0;
+		/* Removed from OpenSSL 1.1.0. Was 0x40000000L */
+		public const int OP_NETSCAPE_DEMO_CIPHER_CHANGE_BUG        = 0x0;
+		
+		/* Allow write(..., n) to return r with 0 < r < n (i.e. report success when just a single record has been written): */
+		public const int MODE_ENABLE_PARTIAL_WRITE       = 0x00000001U;
+		/*
+		 * Make it possible to retry SSL_write() with changed buffer location (buffer contents must stay the same!); this is not the default to avoid the misconception that non-blocking SSL_write() behaves like non-blocking
+		 * write():
+		 */
+		public const int MODE_ACCEPT_MOVING_WRITE_BUFFER = 0x00000002U;
+		/* Never bother the application with retries if the transport is blocking: */
+		public const int MODE_AUTO_RETRY                 = 0x00000004U;
+		/* Don't attempt to automatically build certificate chain */
+		public const int MODE_NO_AUTO_CHAIN              = 0x00000008U;
+		/* Save RAM by releasing read and write buffers when they're empty. (SSL3 and TLS only.) Released buffers are freed. */
+		public const int MODE_RELEASE_BUFFERS            = 0x00000010U;
+		/* Send the current time in the Random fields of the ClientHello and ServerHello records for compatibility with hypothetical implementations that require it. */
+		public const int MODE_SEND_CLIENTHELLO_TIME      = 0x00000020U;
+		public const int MODE_SEND_SERVERHELLO_TIME      = 0x00000040U;
+		/*
+		 * Send TLS_FALLBACK_SCSV in the ClientHello. To be set only by applications that reconnect with a downgraded protocol version; see draft-ietf-tls-downgrade-scsv-00 for details. DO NOT ENABLE THIS if your
+		 * application attempts a normal handshake. Only use this in explicit fallback retries, following the guidance in draft-ietf-tls-downgrade-scsv-00.
+		 */
+		public const int MODE_SEND_FALLBACK_SCSV         = 0x00000080U;
+		/* Support Asynchronous operation */
+		public const int MODE_ASYNC                      = 0x00000100U;
+		
+		/*
+		 * When using DTLS/SCTP, include the terminating zero in the label used for computing the endpoint-pair shared secret. Required for interoperability with implementations having this bug like these
+		 * older version of OpenSSL:
+		 * - OpenSSL 1.0.0 series
+		 * - OpenSSL 1.0.1 series
+		 * - OpenSSL 1.0.2 series
+		 * - OpenSSL 1.1.0 series
+		 * - OpenSSL 1.1.1 and 1.1.1a
+		 */
+		public const int MODE_DTLS_SCTP_LABEL_LENGTH_BUG = 0x00000400U;
+		
+		/* Cert related flags */
+		/* Many implementations ignore some aspects of the TLS standards such as enforcing certificate chain algorithms. When this is set we enforce them. */
+		public const int CERT_FLAG_TLS_STRICT            = 0x00000001U;
+		
+		/* Suite B modes, takes same values as certificate verify flags */
+		public const int CERT_FLAG_SUITEB_128_LOS_ONLY   = 0x10000;
+		/* Suite B 192 bit only mode */
+		public const int CERT_FLAG_SUITEB_192_LOS        = 0x20000;
+		/* Suite B 128 bit mode allowing 192 bit algorithms */
+		public const int CERT_FLAG_SUITEB_128_LOS        = 0x30000;
+		
+		/* Perform all sorts of protocol violations for testing purposes */
+		public const int CERT_FLAG_BROKEN_PROTOCOL       = 0x10000000;
+		
+		/* Flags for building certificate chains */
+		/* Treat any existing certificates as untrusted CAs */
+		public const int BUILD_CHAIN_FLAG_UNTRUSTED      = 0x1;
+		/* Don't include root CA in chain */
+		public const int BUILD_CHAIN_FLAG_NO_ROOT        = 0x2;
+		/* Just check certificates already there */
+		public const int BUILD_CHAIN_FLAG_CHECK          = 0x4;
+		/* Ignore verification errors */
+		public const int BUILD_CHAIN_FLAG_IGNORE_ERROR   = 0x8;
+		/* Clear verification errors from queue */
+		public const int BUILD_CHAIN_FLAG_CLEAR_ERROR    = 0x10;
+		
+		/* Flags returned by SSL_check_chain */
+		/* Certificate can be used with this session */
+		public const int CERT_PKEY_VALID         = 0x1;
+		/* Certificate can also be used for signing */
+		public const int CERT_PKEY_SIGN          = 0x2;
+		/* EE certificate signing algorithm OK */
+		public const int CERT_PKEY_EE_SIGNATURE  = 0x10;
+		/* CA signature algorithms OK */
+		public const int CERT_PKEY_CA_SIGNATURE  = 0x20;
+		/* EE certificate parameters OK */
+		public const int CERT_PKEY_EE_PARAM      = 0x40;
+		/* CA certificate parameters OK */
+		public const int CERT_PKEY_CA_PARAM      = 0x80;
+		/* Signing explicitly allowed as opposed to SHA1 fallback */
+		public const int CERT_PKEY_EXPLICIT_SIGN = 0x100;
+		/* Client CA issuer names match (always set for server cert) */
+		public const int CERT_PKEY_ISSUER_NAME   = 0x200;
+		/* Cert type matches client types (always set for server cert) */
+		public const int CERT_PKEY_CERT_TYPE     = 0x400;
+		/* Cert chain suitable to Suite B */
+		public const int CERT_PKEY_SUITEB        = 0x800;
+		
+		public const int CONF_FLAG_CMDLINE         = 0x1;
+		public const int CONF_FLAG_FILE            = 0x2;
+		public const int CONF_FLAG_CLIENT          = 0x4;
+		public const int CONF_FLAG_SERVER          = 0x8;
+		public const int CONF_FLAG_SHOW_ERRORS     = 0x10;
+		public const int CONF_FLAG_CERTIFICATE     = 0x20;
+		public const int CONF_FLAG_REQUIRE_PRIVATE = 0x40;
+		/* Configuration value types */
+		public const int CONF_TYPE_UNKNOWN         = 0x0;
+		public const int CONF_TYPE_STRING          = 0x1;
+		public const int CONF_TYPE_FILE            = 0x2;
+		public const int CONF_TYPE_DIR             = 0x3;
+		public const int CONF_TYPE_NONE            = 0x4;
+		
+		/* Maximum length of the application-controlled segment of a a TLSv1.3 cookie */
+		public const int COOKIE_LENGTH             = 4096;
+		
+		/*
+		** libssl-1_1.dll
+		**	  27   1A 0000253B SSL_CIPHER_description
+		**	  28   1B 00001AAA SSL_CIPHER_find
+		**    29   1C 0000221B SSL_CIPHER_get_auth_nid
+		**	  30   1D 0000222F SSL_CIPHER_get_bits
+		**	  31   1E 00001EBF SSL_CIPHER_get_cipher_nid
+		**	  32   1F 00001848 SSL_CIPHER_get_digest_nid
+		**	  33   20 00001F5F SSL_CIPHER_get_handshake_digest
+		**	  34   21 00002559 SSL_CIPHER_get_id
+		**	  35   22 000023E2 SSL_CIPHER_get_kx_nid
+		**	  36   23 000022ED SSL_CIPHER_get_name
+		**	  37   24 000011B8 SSL_CIPHER_get_protocol_id
+		**	  38   25 00001B04 SSL_CIPHER_get_version
+		**	  39   26 0000210D SSL_CIPHER_is_aead
+		**	  40   27 00001FB4 SSL_CIPHER_standard_name
+		**
+		**	  41   28 00001AFF SSL_COMP_add_compression_method
+		**	  42   29 000010F5 SSL_COMP_get0_name
+		**	  43   2A 00001E33 SSL_COMP_get_compression_methods
+		**	  44   2B 00001532 SSL_COMP_get_id
+		**	  45   2C 000013DE SSL_COMP_get_name
+		**	  46   2D 00001FC3 SSL_COMP_set0_compression_methods
+		**
+		**	  47   2E 000023EC SSL_CONF_CTX_clear_flags
+		**	  48   2F 000016C2 SSL_CONF_CTX_finish
+		**	  49   30 0000176C SSL_CONF_CTX_free
+		**	  50   31 00001DC0 SSL_CONF_CTX_new
+		**	  51   32 00001EAB SSL_CONF_CTX_set1_prefix
+		**	  52   33 00001A05 SSL_CONF_CTX_set_flags
+		**	  53   34 0000209F SSL_CONF_CTX_set_ssl
+		**	  54   35 000023AB SSL_CONF_CTX_set_ssl_ctx
+		**	  55   36 00001465 SSL_CONF_cmd
+		**	  56   37 00001AF0 SSL_CONF_cmd_argv
+		**	  57   38 0000102D SSL_CONF_cmd_value_type
+		**
+		**    58   39 00002072 SSL_CTX_SRP_CTX_free
+		**    59   3A 0000254A SSL_CTX_SRP_CTX_init
+		**	  60   3B 00001235 SSL_CTX_add1_to_CA_list
+		**	  61   3C 000022CF SSL_CTX_add_client_CA
+		**	  62   3D 00001677 SSL_CTX_add_client_custom_ext
+		**	  63   3E 0000155A SSL_CTX_add_custom_ext
+		**	  64   3F 0000254F SSL_CTX_add_server_custom_ext
+		**	  65   40 00002202 SSL_CTX_add_session
+		**	  66   41 00001965 SSL_CTX_callback_ctrl
+		**	  67   42 00001CFD SSL_CTX_check_private_key
+		**	  68   43 00001CA3 SSL_CTX_clear_options
+		**	  69   44 000022E8 SSL_CTX_config
+		**	  70   45 0000107D SSL_CTX_ct_is_enabled
+		**	  71   46 00002338 SSL_CTX_ctrl
+		**	  72   47 00002135 SSL_CTX_dane_clear_flags
+		**	  73   48 00002252 SSL_CTX_dane_enable
+		**	  74   49 0000213F SSL_CTX_dane_mtype_set
+		**	  75   4A 000017FD SSL_CTX_dane_set_flags
+		**	  76   4B 00002207 SSL_CTX_enable_ct
+		**	  77   4C 00001B45 SSL_CTX_flush_sessions
+		**	  78   4D 0000243C SSL_CTX_free
+		**	  79   4E 000010C3 SSL_CTX_get0_CA_list
+		**	  80   4F 00001FEB SSL_CTX_get0_certificate
+		**	  81   50 0000129E SSL_CTX_get0_ctlog_store
+		**	  82   51 00001406 SSL_CTX_get0_param
+		**	  83   52 0000199C SSL_CTX_get0_privatekey
+		**	  84   53 0000137F SSL_CTX_get0_security_ex_data
+		**	  85   54 00001B1D SSL_CTX_get_cert_store
+		**	  86   55 000021B7 SSL_CTX_get_ciphers
+		**	  87   56 000016C7 SSL_CTX_get_client_CA_list
+		**	  88   57 00001ED8 SSL_CTX_get_client_cert_cb
+		**	  89   58 000020EF SSL_CTX_get_default_passwd_cb
+		**	  90   59 00001DA7 SSL_CTX_get_default_passwd_cb_userdata
+		**	  91   5A 0000134D SSL_CTX_get_ex_data
+		**	  92   5B 00001E3D SSL_CTX_get_info_callback
+		**	  93   5C 0000183E SSL_CTX_get_keylog_callback
+		**	  94   5D 00001492 SSL_CTX_get_max_early_data
+		**	  95   5E 0000154B SSL_CTX_get_num_tickets
+		**	  96   5F 00001429 SSL_CTX_get_options
+		**	  97   60 000020D1 SSL_CTX_get_quiet_shutdown
+		**	  98   61 00001794 SSL_CTX_get_record_padding_callback_arg
+		**	  99   62 00001A73 SSL_CTX_get_recv_max_early_data
+		**	 100   63 00001E9C SSL_CTX_get_security_callback
+		**	 101   64 000014A6 SSL_CTX_get_security_level
+		**	 102   65 00001F28 SSL_CTX_get_ssl_method
+		**	 103   66 000013C0 SSL_CTX_get_timeout
+		**	 104   67 0000130C SSL_CTX_get_verify_callback
+		**	 105   68 000020DB SSL_CTX_get_verify_depth
+		**	 106   69 00002068 SSL_CTX_get_verify_mode
+		**	 107   6A 00001CBC SSL_CTX_has_client_custom_ext
+		**	 108   6B 00001992 SSL_CTX_load_verify_locations
+		**	 109   6C 00001BF4 SSL_CTX_new
+		**	 110   6D 0000195B SSL_CTX_remove_session
+		**	 111   6E 00001DFC SSL_CTX_sess_get_get_cb
+		**	 112   6F 000014F6 SSL_CTX_sess_get_new_cb
+		**	 113   70 00001910 SSL_CTX_sess_get_remove_cb
+		**	 114   71 00001217 SSL_CTX_sess_set_get_cb
+		**	 115   72 0000233D SSL_CTX_sess_set_new_cb
+		**	 116   73 00001F23 SSL_CTX_sess_set_remove_cb
+		**	 117   74 00001834 SSL_CTX_sessions
+		**	 118   75 00001118 SSL_CTX_set0_CA_list
+		**	 119   76 00002351 SSL_CTX_set0_ctlog_store
+		**	 120   77 00001D7F SSL_CTX_set0_security_ex_data
+		**	 121   78 00002171 SSL_CTX_set1_cert_store
+		**	 122   79 00001AF5 SSL_CTX_set1_param
+		**	 123   7A 00001E4C SSL_CTX_set_allow_early_data_cb
+		**	 124   7B 00002437 SSL_CTX_set_alpn_protos
+		**	 125   7C 000020B8 SSL_CTX_set_alpn_select_cb
+		**	 126   7D 00001190 SSL_CTX_set_block_padding
+		**	 127   7E 000013A2 SSL_CTX_set_cert_cb
+		**	 128   7F 00002527 SSL_CTX_set_cert_store
+		**	 129   80 000020FE SSL_CTX_set_cert_verify_callback
+		**	 130   81 00001384 SSL_CTX_set_cipher_list
+		**	 131   82 000017F3 SSL_CTX_set_ciphersuites
+		**	 132   83 00001BEF SSL_CTX_set_client_CA_list
+		**	 133   84 00001226 SSL_CTX_set_client_cert_cb
+		**	 134   85 00001622 SSL_CTX_set_client_cert_engine
+		**	 135   86 00001424 SSL_CTX_set_client_hello_cb
+		**	 136   87 00002469 SSL_CTX_set_cookie_generate_cb
+		**	 137   88 0000225C SSL_CTX_set_cookie_verify_cb
+		**	 138   89 000022BB SSL_CTX_set_ct_validation_callback
+		**	 139   8A 00001334 SSL_CTX_set_ctlog_list_file
+		**	 140   8B 00001343 SSL_CTX_set_default_ctlog_list_file
+		**	 141   8C 00001A6E SSL_CTX_set_default_passwd_cb
+		**	 142   8D 00001EA6 SSL_CTX_set_default_passwd_cb_userdata
+		**	 143   8E 00002531 SSL_CTX_set_default_read_buffer_len
+		**	 144   8F 000019BF SSL_CTX_set_default_verify_dir
+		**	 145   90 00001BE5 SSL_CTX_set_default_verify_file
+		**	 146   91 00001CB7 SSL_CTX_set_default_verify_paths
+		**	 147   92 000020A9 SSL_CTX_set_ex_data
+		**	 148   93 00001695 SSL_CTX_set_generate_session_id
+		**	 149   94 0000245F SSL_CTX_set_info_callback
+		**	 150   95 000017E9 SSL_CTX_set_keylog_callback
+		**	 151   96 00001CB2 SSL_CTX_set_max_early_data
+		**	 152   97 00001CEE SSL_CTX_set_msg_callback
+		**	 153   98 00001FDC SSL_CTX_set_next_proto_select_cb
+		**	 154   99 00001078 SSL_CTX_set_next_protos_advertised_cb
+		**	 155   9A 00001DED SSL_CTX_set_not_resumable_session_callback
+		**	 156   9B 00001DAC SSL_CTX_set_num_tickets
+		**	 157   9C 0000137A SSL_CTX_set_options
+		**	 158   9D 00002342 SSL_CTX_set_post_handshake_auth
+		**	 159   9E 00001451 SSL_CTX_set_psk_client_callback
+		**	 160   9F 000021E4 SSL_CTX_set_psk_find_session_callback
+		**	 161   A0 00001A91 SSL_CTX_set_psk_server_callback
+		**	 162   A1 000012FD SSL_CTX_set_psk_use_session_callback
+		**	 163   A2 0000111D SSL_CTX_set_purpose
+		**	 164   A3 000023C9 SSL_CTX_set_quiet_shutdown
+		**	 165   A4 0000145B SSL_CTX_set_record_padding_callback
+		**	 166   A5 0000230B SSL_CTX_set_record_padding_callback_arg
+		**	 167   A6 000021CB SSL_CTX_set_recv_max_early_data
+		**	 168   A7 00001F4B SSL_CTX_set_security_callback
+		**	 169   A8 00002405 SSL_CTX_set_security_level
+		**	 170   A9 0000182F SSL_CTX_set_session_id_context
+		**	 171   AA 000022A7 SSL_CTX_set_session_ticket_cb
+		**   172   AB 00001019 SSL_CTX_set_srp_cb_arg
+		**   173   AC 000019A6 SSL_CTX_set_srp_client_pwd_callback
+		**   174   AD 000012F3 SSL_CTX_set_srp_password
+		**   175   AE 0000164A SSL_CTX_set_srp_strength
+		**   176   AF 00001A19 SSL_CTX_set_srp_username
+		**   177   B0 00001316 SSL_CTX_set_srp_username_callback
+		**   178   B1 0000248C SSL_CTX_set_srp_verify_param_callback
+		**	 179   B2 00002518 SSL_CTX_set_ssl_version
+		**	 180   B3 00001447 SSL_CTX_set_stateless_cookie_generate_cb
+		**	 181   B4 000011D1 SSL_CTX_set_stateless_cookie_verify_cb
+		**	 182   B5 000013C5 SSL_CTX_set_timeout
+		**	 183   B6 00001442 SSL_CTX_set_tlsext_max_fragment_length
+		**	 184   B7 00001C0D SSL_CTX_set_tlsext_use_srtp
+		**	 185   B8 00001C26 SSL_CTX_set_tmp_dh_callback
+		**	 186   B9 000019F1 SSL_CTX_set_trust
+		**	 187   BA 000018F2 SSL_CTX_set_verify
+		**	 188   BB 0000148D SSL_CTX_set_verify_depth
+		**	 189   BC 000012EE SSL_CTX_up_ref
+		**	 190   BD 00001AD7 SSL_CTX_use_PrivateKey
+		**	 191   BE 00001D3E SSL_CTX_use_PrivateKey_ASN1
+		**	 192   BF 000010E6 SSL_CTX_use_PrivateKey_file
+		**	 193   C0 000021FD SSL_CTX_use_RSAPrivateKey
+		**	 194   C1 0000251D SSL_CTX_use_RSAPrivateKey_ASN1
+		**	 195   C2 000024FF SSL_CTX_use_RSAPrivateKey_file
+		**	 196   C3 00001195 SSL_CTX_use_cert_and_key
+		**	 197   C4 00001244 SSL_CTX_use_certificate
+		**	 198   C5 0000146F SSL_CTX_use_certificate_ASN1
+		**	 199   C6 0000175D SSL_CTX_use_certificate_chain_file
+		**	 200   C7 00001951 SSL_CTX_use_certificate_file
+		**	 201   C8 000022C0 SSL_CTX_use_psk_identity_hint
+		**	 202   C9 000017B2 SSL_CTX_use_serverinfo
+		**	 203   CA 00001519 SSL_CTX_use_serverinfo_ex
+		**	 204   CB 00002248 SSL_CTX_use_serverinfo_file
+		**
+		**	 205   CC 00001F32 SSL_SESSION_dup
+		**	 206   CD 00002397 SSL_SESSION_free
+		**	 207   CE 000016A4 SSL_SESSION_get0_alpn_selected
+		**	 208   CF 00001F19 SSL_SESSION_get0_cipher
+		**	 209   D0 000014E2 SSL_SESSION_get0_hostname
+		**	 210   D1 000022A2 SSL_SESSION_get0_id_context
+		**	 211   D2 000013F2 SSL_SESSION_get0_peer
+		**	 212   D3 0000200E SSL_SESSION_get0_ticket
+		**	 213   D4 0000177B SSL_SESSION_get0_ticket_appdata
+		**	 214   D5 0000185C SSL_SESSION_get_compress_id
+		**	 215   D6 0000132F SSL_SESSION_get_ex_data
+		**	 216   D7 00001361 SSL_SESSION_get_id
+		**	 217   D8 00002298 SSL_SESSION_get_master_key
+		**	 218   D9 00002176 SSL_SESSION_get_max_early_data
+		**	 219   DA 00002301 SSL_SESSION_get_max_fragment_length
+		**	 220   DB 000016CC SSL_SESSION_get_protocol_version
+		**	 221   DC 00001EB0 SSL_SESSION_get_ticket_lifetime_hint
+		**	 222   DD 00001537 SSL_SESSION_get_time
+		**	 223   DE 00001FD7 SSL_SESSION_get_timeout
+		**	 224   DF 00001A82 SSL_SESSION_has_ticket
+		**	 225   E0 00001E92 SSL_SESSION_is_resumable
+		**	 226   E1 00001ACD SSL_SESSION_new
+		**	 227   E2 000013D9 SSL_SESSION_print
+		**	 228   E3 0000151E SSL_SESSION_print_fp
+		**	 229   E4 00001CE9 SSL_SESSION_print_keylog
+		**	 230   E5 00001F64 SSL_SESSION_set1_alpn_selected
+		**	 231   E6 00001C08 SSL_SESSION_set1_hostname
+		**	 232   E7 0000123F SSL_SESSION_set1_id
+		**	 233   E8 000013BB SSL_SESSION_set1_id_context
+		**	 234   E9 000023BA SSL_SESSION_set1_master_key
+		**	 235   EA 00001686 SSL_SESSION_set1_ticket_appdata
+		**	 236   EB 00002540 SSL_SESSION_set_cipher
+		**	 237   EC 00001857 SSL_SESSION_set_ex_data
+		**	 238   ED 00001EBA SSL_SESSION_set_max_early_data
+		**	 239   EE 000018DE SSL_SESSION_set_protocol_version
+		**	 240   EF 0000218A SSL_SESSION_set_time
+		**	 241   F0 00001546 SSL_SESSION_set_timeout
+		**	 242   F1 000013B1 SSL_SESSION_up_ref
+		**
+		**   243   F2 000018BB SSL_SRP_CTX_free
+		**   244   F3 00001BC2 SSL_SRP_CTX_init
+		**
+		**	 245   F4 00001A32 SSL_accept
+		**	 246   F5 000016DB SSL_add1_host
+		**	 247   F6 00001E8D SSL_add1_to_CA_list
+		**	 248   F7 00001F55 SSL_add_client_CA
+		**	 249   F8 000011EA SSL_add_dir_cert_subjects_to_stack
+		**	 250   F9 0000156E SSL_add_file_cert_subjects_to_stack
+		**	 251   FA 00001668 SSL_add_ssl_module
+		**	 252   FB 00001131 SSL_alert_desc_string
+		**	 253   FC 0000132A SSL_alert_desc_string_long
+		**	 254   FD 00001F46 SSL_alert_type_string
+		**	 255   FE 00001D20 SSL_alert_type_string_long
+		**	 256   FF 000011E0 SSL_alloc_buffers
+		**	 257  100 00001D93 SSL_bytes_to_cipher_list
+		**	 258  101 000013E3 SSL_callback_ctrl
+		**	 259  102 000020BD SSL_certs_clear
+		**	 260  103 00001FAA SSL_check_chain
+		**	 261  104 0000245A SSL_check_private_key
+		**	 262  105 0000190B SSL_clear
+		**	 263  106 00002077 SSL_clear_options
+		**
+		**	 264  107 00002063 SSL_client_hello_get0_ciphers
+		**	 265  108 00001D52 SSL_client_hello_get0_compression_methods
+		**	 266  109 0000106E SSL_client_hello_get0_ext
+		**	 267  10A 00001E1F SSL_client_hello_get0_legacy_version
+		**	 268  10B 00001FBE SSL_client_hello_get0_random
+		**	 269  10C 000024BE SSL_client_hello_get0_session_id
+		**	 270  10D 000019EC SSL_client_hello_get1_extensions_present
+		**	 271  10E 000016FE SSL_client_hello_isv2
+		**	 272  10F 000014DD SSL_client_version
+		**
+		**	 273  110 00001A69 SSL_config
+		**	 274  111 00001F96 SSL_connect
+		**	 275  112 00001DDE SSL_copy_session_id
+		**	 276  113 00001712 SSL_ct_is_enabled
+		**	 277  114 00001159 SSL_ctrl
+		**	 278  115 00001F14 SSL_dane_clear_flags
+		**	 279  116 00001C49 SSL_dane_enable
+		**	 280  117 00002090 SSL_dane_set_flags
+		**	 281  118 0000103C SSL_dane_tlsa_add
+		**	 282  119 000014CE SSL_do_handshake
+		**	 283  11A 0000191F SSL_dup
+		**	 284  11B 000017A8 SSL_dup_CA_list
+		**	 285  11C 00001A50 SSL_enable_ct
+		**	 286  11D 00001AE6 SSL_export_keying_material
+		**	 287  11E 00001D1B SSL_export_keying_material_early
+		**	 288  11F 000020F4 SSL_extension_supported
+		**	 289  120 0000125D SSL_free
+		**	 290  121 000015B4 SSL_free_buffers
+		**
+		**	 291  122 000023C4 SSL_get0_CA_list
+		**	 292  123 00001EE2 SSL_get0_alpn_selected
+		**	 293  124 00001938 SSL_get0_dane
+		**	 294  125 000019A1 SSL_get0_dane_authority
+		**	 295  126 0000142E SSL_get0_dane_tlsa
+		**	 296  127 00001014 SSL_get0_next_proto_negotiated
+		**	 297  128 000016E0 SSL_get0_param
+		**	 298  129 00001A28 SSL_get0_peer_CA_list
+		**	 299  12A 000024DC SSL_get0_peer_scts
+		**	 300  12B 000018D4 SSL_get0_peername
+		**	 301  12C 00001956 SSL_get0_security_ex_data
+		**	 302  12D 00002275 SSL_get0_verified_chain
+		**	 303  12E 000020EA SSL_get1_session
+		**	 304  12F 00001F82 SSL_get1_supported_ciphers
+		**	 305  130 00001FB9 SSL_get_SSL_CTX
+		**	 306  131 0000173F SSL_get_all_async_fds
+		**	 307  132 00001055 SSL_get_certificate
+		**	 308  133 00001082 SSL_get_changed_async_fds
+		**	 309  134 0000108C SSL_get_cipher_list
+		**	 310  135 00001703 SSL_get_ciphers
+		**	 311  136 0000229D SSL_get_client_CA_list
+		**	 312  137 0000100A SSL_get_client_ciphers
+		**	 313  138 0000252C SSL_get_client_random
+		**	 314  139 00001505 SSL_get_current_cipher
+		**	 315  13A 00001F9B SSL_get_current_compression
+		**	 316  13B 00002347 SSL_get_current_expansion
+		**	 317  13C 000019F6 SSL_get_default_passwd_cb
+		**	 318  13D 000010AF SSL_get_default_passwd_cb_userdata
+		**	 319  13E 00001C76 SSL_get_default_timeout
+		**	 320  13F 000024B9 SSL_get_early_data_status
+		**	 321  140 000022B6 SSL_get_error
+		**	 322  141 000010B9 SSL_get_ex_data
+		**	 323  142 00001FC8 SSL_get_ex_data_X509_STORE_CTX_idx
+		**	 324  143 000016EA SSL_get_fd
+		**	 325  144 00002270 SSL_get_finished
+		**	 326  145 000011F4 SSL_get_info_callback
+		**	 327  146 00002388 SSL_get_key_update_type
+		**	 328  147 000020E0 SSL_get_max_early_data
+		**	 329  148 0000222A SSL_get_num_tickets
+		**	 330  149 000012A8 SSL_get_options
+		**	 331  14A 00001640 SSL_get_peer_cert_chain
+		**	 332  14B 00001E01 SSL_get_peer_certificate
+		**	 333  14C 00001D7A SSL_get_peer_finished
+		**	 334  14D 000011C2 SSL_get_peer_signature_type_nid
+		**	 335  14E 00001587 SSL_get_pending_cipher
+		**	 336  14F 00001FFF SSL_get_privatekey
+		**	 337  150 00001A2D SSL_get_psk_identity
+		**	 338  151 00001839 SSL_get_psk_identity_hint
+		**	 339  152 0000220C SSL_get_quiet_shutdown
+		**	 340  153 00001596 SSL_get_rbio
+		**	 341  154 00001767 SSL_get_read_ahead
+		**	 342  155 00001C03 SSL_get_record_padding_callback_arg
+		**	 343  156 000014B5 SSL_get_recv_max_early_data
+		**	 344  157 0000149C SSL_get_rfd
+		**	 345  158 000015FA SSL_get_security_callback
+		**	 346  159 000013E8 SSL_get_security_level
+		**	 347  15A 000019B0 SSL_get_selected_srtp_profile
+		**	 348  15B 00001E1A SSL_get_server_random
+		**	 349  15C 00002315 SSL_get_servername
+		**	 350  15D 00001325 SSL_get_servername_type
+		**	 351  15E 00001875 SSL_get_session
+		**	 352  15F 0000171C SSL_get_shared_ciphers
+		**	 353  160 00001E83 SSL_get_shared_sigalgs
+		**	 354  161 00001393 SSL_get_shutdown
+		**	 355  162 00001FFA SSL_get_sigalgs
+		**	 356  163 00001631 SSL_get_signature_type_nid
+		**   357  164 00002013 SSL_get_srp_N
+		**   358  165 00002126 SSL_get_srp_g
+		**   359  166 00001267 SSL_get_srp_userinfo
+		**   360  167 0000247D SSL_get_srp_username
+		**	 361  168 00001717 SSL_get_srtp_profiles
+		**	 362  169 00001B63 SSL_get_ssl_method
+		**	 363  16A 0000186B SSL_get_state
+		**	 364  16B 000010BE SSL_get_verify_callback
+		**	 365  16C 0000123A SSL_get_verify_depth
+		**	 366  16D 00001F05 SSL_get_verify_mode
+		**	 367  16E 00002121 SSL_get_verify_result
+		**	 368  16F 00001933 SSL_get_version
+		**	 369  170 000011BD SSL_get_wbio
+		**	 370  171 0000218F SSL_get_wfd
+		**
+		**	 371  172 00002545 SSL_has_matching_session_id
+		**	 372  173 0000100F SSL_has_pending
+		**	 373  174 00001A3C SSL_in_before
+		**	 374  175 000021A3 SSL_in_init
+		**	 375  176 00002022 SSL_is_dtls
+		**	 376  177 000013D4 SSL_is_init_finished
+		**	 377  178 000010AA SSL_is_server
+		**	 378  179 00002216 SSL_key_update
+		**	 379  17A 000010DC SSL_load_client_CA_file
+		**	 380  17B 00001E29 SSL_new
+		**	 381  17C 00001B8B SSL_peek
+		**	 382  17D 00001645 SSL_peek_ex
+		**	 383  17E 00002243 SSL_pending
+		**	 384  17F 000016D6 SSL_read
+		**	 385  180 000019C4 SSL_read_early_data
+		**	 386  181 00002455 SSL_read_ex
+		**	 387  182 00002333 SSL_renegotiate
+		**	 388  183 000012A3 SSL_renegotiate_abbreviated
+		**	 389  184 00002473 SSL_renegotiate_pending
+		**	 390  185 00001654 SSL_rstate_string
+		**	 391  186 000021D5 SSL_rstate_string_long
+		**	 392  187 0000255E SSL_select_next_proto
+		**	 393  188 00002086 SSL_session_reused
+		**
+		**	 394  189 000016D1 SSL_set0_CA_list
+		**	 395  18A 000014C4 SSL_set0_rbio
+		**	 396  18B 0000228E SSL_set0_security_ex_data
+		**	 397  18C 0000240F SSL_set0_wbio
+		**	 398  18D 00002450 SSL_set1_host
+		**	 399  18E 000022F7 SSL_set1_param
+		**	 400  18F 00001CA8 SSL_set_SSL_CTX
+		**	 401  190 00002383 SSL_set_accept_state
+		**	 402  191 000020C2 SSL_set_allow_early_data_cb
+		**	 403  192 00001500 SSL_set_alpn_protos
+		**	 404  193 0000131B SSL_set_bio
+		**	 405  194 00001CD5 SSL_set_block_padding
+		**	 406  195 00002199 SSL_set_cert_cb
+		**	 407  196 000018F7 SSL_set_cipher_list
+		**	 408  197 00001A8C SSL_set_ciphersuites
+		**	 409  198 00002167 SSL_set_client_CA_list
+		**	 410  199 00001708 SSL_set_connect_state
+		**	 411  19A 00001960 SSL_set_ct_validation_callback
+		**	 412  19B 00001B86 SSL_set_debug
+		**	 413  19C 00001F69 SSL_set_default_passwd_cb
+		**	 414  19D 00002356 SSL_set_default_passwd_cb_userdata
+		**	 415  19E 00002027 SSL_set_default_read_buffer_len
+		**	 416  19F 000011AE SSL_set_ex_data
+		**	 417  1A0 00001604 SSL_set_fd
+		**	 418  1A1 000017B7 SSL_set_generate_session_id
+		**	 419  1A2 00001366 SSL_set_hostflags
+		**	 420  1A3 000016AE SSL_set_info_callback
+		**	 421  1A4 000021A8 SSL_set_max_early_data
+		**	 422  1A5 000014EC SSL_set_msg_callback
+		**	 423  1A6 0000209A SSL_set_not_resumable_session_callback
+		**	 424  1A7 00001A87 SSL_set_num_tickets
+		**	 425  1A8 00001979 SSL_set_options
+		**	 426  1A9 00002374 SSL_set_post_handshake_auth
+		**	 427  1AA 000018E3 SSL_set_psk_client_callback
+		**	 428  1AB 0000240A SSL_set_psk_find_session_callback
+		**	 429  1AC 00001816 SSL_set_psk_server_callback
+		**	 430  1AD 00002018 SSL_set_psk_use_session_callback
+		**	 431  1AE 0000246E SSL_set_purpose
+		**	 432  1AF 000014AB SSL_set_quiet_shutdown
+		**	 433  1B0 00002220 SSL_set_read_ahead
+		**	 434  1B1 0000141A SSL_set_record_padding_callback
+		**	 435  1B2 00001F78 SSL_set_record_padding_callback_arg
+		**	 436  1B3 0000167C SSL_set_recv_max_early_data
+		**	 437  1B4 00001415 SSL_set_rfd
+		**	 438  1B5 0000187A SSL_set_security_callback
+		**	 439  1B6 0000226B SSL_set_security_level
+		**	 440  1B7 0000121C SSL_set_session
+		**	 441  1B8 000021EE SSL_set_session_id_context
+		**	 442  1B9 000012C6 SSL_set_session_secret_cb
+		**	 443  1BA 0000150A SSL_set_session_ticket_ext
+		**	 444  1BB 00001401 SSL_set_session_ticket_ext_cb
+		**	 445  1BC 00001785 SSL_set_shutdown
+		**   446  1BD 00001D84 SSL_set_srp_server_param
+		**   447  1BE 000016EF SSL_set_srp_server_param_pw
+		**	 448  1BF 0000234C SSL_set_ssl_method
+		**	 449  1C0 00001569 SSL_set_tlsext_max_fragment_length
+		**	 450  1C1 000024F5 SSL_set_tlsext_use_srtp
+		**	 451  1C2 00002031 SSL_set_tmp_dh_callback
+		**	 452  1C3 000011F9 SSL_set_trust
+		**	 453  1C4 00001DF7 SSL_set_verify
+		**	 454  1C5 00001884 SSL_set_verify_depth
+		**	 455  1C6 00001541 SSL_set_verify_result
+		**	 456  1C7 00001929 SSL_set_wfd
+		**
+		**	 457  1C8 00001203 SSL_shutdown
+		**   458  1C9 000018FC SSL_srp_server_param_with_username
+		**	 459  1CA 00002009 SSL_state_string
+		**	 460  1CB 00001947 SSL_state_string_long
+		**	 461  1CC 00001B2C SSL_stateless
+		**	 462  1CD 00001A37 SSL_up_ref
+		**
+		**	 463  1CE 00001168 SSL_use_PrivateKey
+		**	 464  1CF 00002360 SSL_use_PrivateKey_ASN1
+		**	 465  1D0 00002392 SSL_use_PrivateKey_file
+		**	 466  1D1 00001E6F SSL_use_RSAPrivateKey
+		**	 467  1D2 00001F73 SSL_use_RSAPrivateKey_ASN1
+		**	 468  1D3 00001B22 SSL_use_RSAPrivateKey_file
+		**	 469  1D4 000023D8 SSL_use_cert_and_key
+		**	 470  1D5 0000133E SSL_use_certificate
+		**	 471  1D6 0000146A SSL_use_certificate_ASN1
+		**	 472  1D7 000021DA SSL_use_certificate_chain_file
+		**	 473  1D8 000017DA SSL_use_certificate_file
+		**	 474  1D9 000018C5 SSL_use_psk_identity_hint
+		**
+		**	 475  1DA 00001E97 SSL_verify_client_post_handshake
+		**	 476  1DB 00002446 SSL_version
+		**	 477  1DC 00001113 SSL_waiting_for_async
+		**	 478  1DD 00001398 SSL_want
+		**	 479  1DE 000013A7 SSL_write
+		**	 480  1DF 00001609 SSL_write_early_data
+		**	 481  1E0 000020CC SSL_write_ex
+		**
+		**	 494  1ED 00001410 d2i_SSL_SESSION
+		**	 495  1EE 00001659 i2d_SSL_SESSION
+		*/
+		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_SRP_CTX_init")]
+		public extern static int CTX_SRP_CTX_init(CTX* ctx);
+		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_SRP_CTX_free")]
+		public extern static int CTX_SRP_CTX_free(CTX* ctx);
+
+#if !OPENSSL_NO_SRP
+		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_srp_cb_arg")]
+		public extern static int CTX_set_srp_cb_arg(CTX* ctx, void* arg);
+		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_srp_client_pwd_callback")]
+		public extern static int CTX_set_srp_client_pwd_callback(CTX* ctx, function char8*(ssl_st*, void*) cb);
+		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_srp_password")]
+		public extern static int CTX_set_srp_password(CTX* ctx, char8* password);
+		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_srp_strength")]
+		public extern static int CTX_set_srp_strength(CTX* ctx, int strength);
+		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_srp_username")]
+		public extern static int CTX_set_srp_username(CTX* ctx, char8* name);
+		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_srp_username_callback")]
+		public extern static int CTX_set_srp_username_callback(CTX* ctx, function int(ssl_st*, int*, void*) cb);
+		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_srp_verify_param_callback")]
+		public extern static int CTX_set_srp_verify_param_callback(CTX* ctx, function int(ssl_st*, void*) cb);
+# endif
+		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SRP_CTX_free")]
+		public extern static int SRP_CTX_free(ssl_st* ctx);
+		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SRP_CTX_init")]
+		public extern static int SRP_CTX_init(ssl_st* s);
+
+		[Import(OPENSSL_LIB_SSL), LinkName("SSL_srp_server_param_with_username")]
+		public extern static int srp_server_param_with_username(ssl_st* s, int* ad);
+
+#if !OPENSSL_NO_SRP
+		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_srp_N")]
+		public extern static BN.BIGNUM* get_srp_N(ssl_st* s);
+		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_srp_g")]
+		public extern static BN.BIGNUM* get_srp_g(ssl_st* s);
+		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_srp_userinfo")]
+		public extern static char8* get_srp_userinfo(ssl_st* s);
+		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_srp_username")]
+		public extern static char8* get_srp_username(ssl_st* s);
+# endif
+
+#if !OPENSSL_NO_SRP
+		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_srp_server_param")]
+		public extern static int set_srp_server_param(ssl_st* s, BN.BIGNUM* N, BN.BIGNUM* g, BN.BIGNUM* sa, BN.BIGNUM* v, char8* info);
+		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_srp_server_param_pw")]
+		public extern static int set_srp_server_param_pw(ssl_st* s, char8* user, char8* pass, char8* grp);
+# endif
 
 #if !OPENSSL_NO_SRTP
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("SSL_CTX_set_tlsext_use_srtp")]
+		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_tlsext_use_srtp")]
 		public extern static int CTX_set_tlsext_use_srtp(CTX* ctx, char8* profiles);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("SSL_set_tlsext_use_srtp")]
+		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_tlsext_use_srtp")]
 		public extern static int set_tlsext_use_srtp(ssl_st* ssl, char8* profiles);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("SSL_get_srtp_profiles")]
+		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_srtp_profiles")]
 		public extern static SRTP.stack_st_SRTP_PROTECTION_PROFILE* get_srtp_profiles(ssl_st* ssl);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("SSL_get_selected_srtp_profile")]
+		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_selected_srtp_profile")]
 		public extern static SRTP.PROTECTION_PROFILE* get_selected_srtp_profile(ssl_st* s);
 #endif
 	}
@@ -599,10 +2038,313 @@ namespace Beef_Net.OpenSSL
 	[AlwaysInclude]
 	sealed abstract class SSL2
 	{
+		public const int VERSION         = 0x0002;
+
+		public const int MT_CLIENT_HELLO = 1;
 	}
 	
 	[AlwaysInclude]
 	sealed abstract class SSL3
 	{
+#if !OPENSSL_NO_COMP
+		/* Used for holding the relevant compression methods loaded into SSL_CTX */
+		[CRepr]
+		public struct comp_st
+		{
+		    public int comp_id;         /* The identifier byte for this compression type */
+		    public char8* name;         /* Text name used for the compression type */
+		    public Comp.METHOD* method; /* The method :-) */
+		}
+		public typealias COMP = comp_st;
+#endif
+		public const int SEQ_NUM_SIZE = 8;
+
+		public struct record_st
+		{
+		    /* Record layer version */
+		    /* r */
+		    public int rec_version;
+		    /* type of record */
+		    /* r */
+		    public int type;
+		    /* How many bytes available */
+		    /* rw */
+		    public uint length;
+		    /* How many bytes were available before padding was removed? This is used to implement the MAC check in constant time for CBC records. */
+		    /* rw */
+		    public uint orig_len;
+		    /* read/write offset into 'buf' */
+		    /* r */
+		    public uint off;
+		    /* pointer to the record data */
+		    /* rw */
+		    public uint8* data;
+		    /* where the decode bytes are */
+		    /* rw */
+		    public uint8* input;
+		    /* only used with decompression - malloc()ed */
+		    /* r */
+		    public uint8* comp;
+		    /* Whether the data from this record has already been read or not */
+		    /* r */
+		    public uint read;
+		    /* epoch number, needed by DTLS1 */
+		    /* r */
+		    public uint epoch;
+		    /* sequence number, needed by DTLS1 */
+		    /* r */
+		    public uint8[SEQ_NUM_SIZE] seq_num;
+		}
+		public typealias RECORD = record_st;
+		
+		/* This is for the SSLv3/TLSv1.0 differences in crypto/hash stuff It is a bit of a mess of functions, but hell, think of it as an opaque structure :-) */
+		[CRepr]
+		public struct enc_method
+		{
+		    public function int(SSL.ssl_st*, RECORD*, uint, int) enc;
+		    public function int(SSL.ssl_st*, RECORD*, uint8*, int) mac;
+		    public function int(SSL.ssl_st*) setup_key_block;
+		    public function int(SSL.ssl_st*, uint8*, uint8*, uint, uint*) generate_master_secret;
+		    public function int(SSL.ssl_st*, int) change_cipher_state;
+		    public function uint(SSL.ssl_st*, char8*, uint, uint8*) final_finish_mac;
+		    public char8* client_finished_label;
+		    public uint client_finished_label_len;
+		    public char8* server_finished_label;
+		    public uint server_finished_label_len;
+		    public function int(int) alert_value;
+		    public function int(SSL.ssl_st*, uint8*, uint, char8*, uint, uint8*, uint, int use_context) export_keying_material;
+		    /* Various flags indicating protocol version requirements */
+		    public uint32 enc_flags;
+		    /* Set the handshake header */
+		    public function int(SSL.ssl_st* s, SSL.WPACKET* pkt, int type) set_handshake_header;
+		    /* Close construction of the handshake message */
+		    public function int(SSL.ssl_st* s, SSL.WPACKET* pkt, int htype) close_construct_packet;
+		    /* Write out handshake message */
+		    public function int(SSL.ssl_st* s) do_write;
+		}
+		public typealias ENC_METHOD = enc_method;
+
+		/* Signalling cipher suite value from RFC 5746 (TLS_EMPTY_RENEGOTIATION_INFO_SCSV) */
+		public const int CK_SCSV                         = 0x030000FF;
+		
+		/* Signalling cipher suite value from draft-ietf-tls-downgrade-scsv-00 (TLS_FALLBACK_SCSV) */
+		public const int CK_FALLBACK_SCSV                = 0x03005600;
+		
+		public const int CK_RSA_NULL_MD5                 = 0x03000001;
+		public const int CK_RSA_NULL_SHA                 = 0x03000002;
+		public const int CK_RSA_RC4_40_MD5               = 0x03000003;
+		public const int CK_RSA_RC4_128_MD5              = 0x03000004;
+		public const int CK_RSA_RC4_128_SHA              = 0x03000005;
+		public const int CK_RSA_RC2_40_MD5               = 0x03000006;
+		public const int CK_RSA_IDEA_128_SHA             = 0x03000007;
+		public const int CK_RSA_DES_40_CBC_SHA           = 0x03000008;
+		public const int CK_RSA_DES_64_CBC_SHA           = 0x03000009;
+		public const int CK_RSA_DES_192_CBC3_SHA         = 0x0300000A;
+		
+		public const int CK_DH_DSS_DES_40_CBC_SHA        = 0x0300000B;
+		public const int CK_DH_DSS_DES_64_CBC_SHA        = 0x0300000C;
+		public const int CK_DH_DSS_DES_192_CBC3_SHA      = 0x0300000D;
+		public const int CK_DH_RSA_DES_40_CBC_SHA        = 0x0300000E;
+		public const int CK_DH_RSA_DES_64_CBC_SHA        = 0x0300000F;
+		public const int CK_DH_RSA_DES_192_CBC3_SHA      = 0x03000010;
+		
+		public const int CK_DHE_DSS_DES_40_CBC_SHA       = 0x03000011;
+		public const int CK_EDH_DSS_DES_40_CBC_SHA       = CK_DHE_DSS_DES_40_CBC_SHA;
+		public const int CK_DHE_DSS_DES_64_CBC_SHA       = 0x03000012;
+		public const int CK_EDH_DSS_DES_64_CBC_SHA       = CK_DHE_DSS_DES_64_CBC_SHA;
+		public const int CK_DHE_DSS_DES_192_CBC3_SHA     = 0x03000013;
+		public const int CK_EDH_DSS_DES_192_CBC3_SHA     = CK_DHE_DSS_DES_192_CBC3_SHA;
+		public const int CK_DHE_RSA_DES_40_CBC_SHA       = 0x03000014;
+		public const int CK_EDH_RSA_DES_40_CBC_SHA       = CK_DHE_RSA_DES_40_CBC_SHA;
+		public const int CK_DHE_RSA_DES_64_CBC_SHA       = 0x03000015;
+		public const int CK_EDH_RSA_DES_64_CBC_SHA       = CK_DHE_RSA_DES_64_CBC_SHA;
+		public const int CK_DHE_RSA_DES_192_CBC3_SHA     = 0x03000016;
+		public const int CK_EDH_RSA_DES_192_CBC3_SHA     = CK_DHE_RSA_DES_192_CBC3_SHA;
+		
+		public const int CK_ADH_RC4_40_MD5               = 0x03000017;
+		public const int CK_ADH_RC4_128_MD5              = 0x03000018;
+		public const int CK_ADH_DES_40_CBC_SHA           = 0x03000019;
+		public const int CK_ADH_DES_64_CBC_SHA           = 0x0300001A;
+		public const int CK_ADH_DES_192_CBC_SHA          = 0x0300001B;
+		
+		/* a bundle of RFC standard cipher names, generated from ssl3_ciphers[] */
+		public const String RFC_RSA_NULL_MD5             = "TLS_RSA_WITH_NULL_MD5";
+		public const String RFC_RSA_NULL_SHA             = "TLS_RSA_WITH_NULL_SHA";
+		public const String RFC_RSA_DES_192_CBC3_SHA     = "TLS_RSA_WITH_3DES_EDE_CBC_SHA";
+		public const String RFC_DHE_DSS_DES_192_CBC3_SHA = "TLS_DHE_DSS_WITH_3DES_EDE_CBC_SHA";
+		public const String RFC_DHE_RSA_DES_192_CBC3_SHA = "TLS_DHE_RSA_WITH_3DES_EDE_CBC_SHA";
+		public const String RFC_ADH_DES_192_CBC_SHA      = "TLS_DH_anon_WITH_3DES_EDE_CBC_SHA";
+		public const String RFC_RSA_IDEA_128_SHA         = "TLS_RSA_WITH_IDEA_CBC_SHA";
+		public const String RFC_RSA_RC4_128_MD5          = "TLS_RSA_WITH_RC4_128_MD5";
+		public const String RFC_RSA_RC4_128_SHA          = "TLS_RSA_WITH_RC4_128_SHA";
+		public const String RFC_ADH_RC4_128_MD5          = "TLS_DH_anon_WITH_RC4_128_MD5";
+		
+		public const String TXT_RSA_NULL_MD5             = "NULL-MD5";
+		public const String TXT_RSA_NULL_SHA             = "NULL-SHA";
+		public const String TXT_RSA_RC4_40_MD5           = "EXP-RC4-MD5";
+		public const String TXT_RSA_RC4_128_MD5          = "RC4-MD5";
+		public const String TXT_RSA_RC4_128_SHA          = "RC4-SHA";
+		public const String TXT_RSA_RC2_40_MD5           = "EXP-RC2-CBC-MD5";
+		public const String TXT_RSA_IDEA_128_SHA         = "IDEA-CBC-SHA";
+		public const String TXT_RSA_DES_40_CBC_SHA       = "EXP-DES-CBC-SHA";
+		public const String TXT_RSA_DES_64_CBC_SHA       = "DES-CBC-SHA";
+		public const String TXT_RSA_DES_192_CBC3_SHA     = "DES-CBC3-SHA";
+		
+		public const String TXT_DH_DSS_DES_40_CBC_SHA    = "EXP-DH-DSS-DES-CBC-SHA";
+		public const String TXT_DH_DSS_DES_64_CBC_SHA    = "DH-DSS-DES-CBC-SHA";
+		public const String TXT_DH_DSS_DES_192_CBC3_SHA  = "DH-DSS-DES-CBC3-SHA";
+		public const String TXT_DH_RSA_DES_40_CBC_SHA    = "EXP-DH-RSA-DES-CBC-SHA";
+		public const String TXT_DH_RSA_DES_64_CBC_SHA    = "DH-RSA-DES-CBC-SHA";
+		public const String TXT_DH_RSA_DES_192_CBC3_SHA  = "DH-RSA-DES-CBC3-SHA";
+		
+		public const String TXT_DHE_DSS_DES_40_CBC_SHA   = "EXP-DHE-DSS-DES-CBC-SHA";
+		public const String TXT_DHE_DSS_DES_64_CBC_SHA   = "DHE-DSS-DES-CBC-SHA";
+		public const String TXT_DHE_DSS_DES_192_CBC3_SHA = "DHE-DSS-DES-CBC3-SHA";
+		public const String TXT_DHE_RSA_DES_40_CBC_SHA   = "EXP-DHE-RSA-DES-CBC-SHA";
+		public const String TXT_DHE_RSA_DES_64_CBC_SHA   = "DHE-RSA-DES-CBC-SHA";
+		public const String TXT_DHE_RSA_DES_192_CBC3_SHA = "DHE-RSA-DES-CBC3-SHA";
+		
+		/* This next block of six "EDH" labels is for backward compatibility with older versions of OpenSSL.  New code should use the six "DHE" labels above instead: */
+		public const String TXT_EDH_DSS_DES_40_CBC_SHA   = "EXP-EDH-DSS-DES-CBC-SHA";
+		public const String TXT_EDH_DSS_DES_64_CBC_SHA   = "EDH-DSS-DES-CBC-SHA";
+		public const String TXT_EDH_DSS_DES_192_CBC3_SHA = "EDH-DSS-DES-CBC3-SHA";
+		public const String TXT_EDH_RSA_DES_40_CBC_SHA   = "EXP-EDH-RSA-DES-CBC-SHA";
+		public const String TXT_EDH_RSA_DES_64_CBC_SHA   = "EDH-RSA-DES-CBC-SHA";
+		public const String TXT_EDH_RSA_DES_192_CBC3_SHA = "EDH-RSA-DES-CBC3-SHA";
+		
+		public const String TXT_ADH_RC4_40_MD5           = "EXP-ADH-RC4-MD5";
+		public const String TXT_ADH_RC4_128_MD5          = "ADH-RC4-MD5";
+		public const String TXT_ADH_DES_40_CBC_SHA       = "EXP-ADH-DES-CBC-SHA";
+		public const String TXT_ADH_DES_64_CBC_SHA       = "ADH-DES-CBC-SHA";
+		public const String TXT_ADH_DES_192_CBC_SHA      = "ADH-DES-CBC3-SHA";
+		
+		public const int SSL_SESSION_ID_LENGTH           = 32;
+		public const int MAX_SSL_SESSION_ID_LENGTH       = 32;
+		
+		public const int MASTER_SECRET_SIZE              = 48;
+		public const int RANDOM_SIZE                     = 32;
+		public const int SESSION_ID_SIZE                 = 32;
+		public const int RT_HEADER_LENGTH                = 5;
+		
+		public const int HM_HEADER_LENGTH                = 4;
+
+		 /*
+		  * Some will argue that this increases memory footprint, but it's not actually true. Point is that malloc has to return at least 64-bit aligned pointers, meaning that allocating 5 bytes wastes 3 bytes in either case.
+		  * Suggested pre-gaping simply moves these wasted bytes from the end of allocated region to its front, but makes data payload aligned, which improves performance:-)
+		  */
+		public const int ALIGN_PAYLOAD                   = 8;
+		
+		/* This is the maximum MAC (digest) size used by the SSL library. Currently maximum of 20 is used by SHA1, but we reserve for future extension for 512-bit hashes. */
+		public const int RT_MAX_MD_SIZE                  = 64;
+		
+		public const int RT_MAX_EXTRA                    = 16384;
+		
+		/* Maximum plaintext length: defined by SSL/TLS standards */
+		public const int RT_MAX_PLAIN_LENGTH             = 16384;
+		/* Maximum compression overhead: defined by SSL/TLS standards */
+		public const int RT_MAX_COMPRESSED_OVERHEAD      = 1024;
+		
+		/* The standards give a maximum encryption overhead of 1024 bytes. In practice the value is lower than this. The overhead is the maximum number of padding bytes (256) plus the mac size. */
+		public const int RT_MAX_ENCRYPTED_OVERHEAD       = 256 + RT_MAX_MD_SIZE;
+		public const int RT_MAX_TLS13_ENCRYPTED_OVERHEAD = 256;
+		
+		/* OpenSSL currently only uses a padding length of at most one block so the send overhead is smaller. */
+		
+		public const int RT_SEND_MAX_ENCRYPTED_OVERHEAD = SSL.RT_MAX_CIPHER_BLOCK_SIZE + RT_MAX_MD_SIZE;
+		
+		/* If compression isn't used don't include the compression overhead */
+#if OPENSSL_NO_COMP
+		public const int RT_MAX_COMPRESSED_LENGTH       = RT_MAX_PLAIN_LENGTH;
+#else
+		public const int RT_MAX_COMPRESSED_LENGTH       = RT_MAX_PLAIN_LENGTH + RT_MAX_COMPRESSED_OVERHEAD;
+#endif
+		public const int RT_MAX_ENCRYPTED_LENGTH        = RT_MAX_ENCRYPTED_OVERHEAD + RT_MAX_COMPRESSED_LENGTH;
+		public const int RT_MAX_TLS13_ENCRYPTED_LENGTH  = RT_MAX_PLAIN_LENGTH + RT_MAX_TLS13_ENCRYPTED_OVERHEAD;
+		public const int RT_MAX_PACKET_SIZE             = RT_MAX_ENCRYPTED_LENGTH + RT_HEADER_LENGTH;
+
+		public const String MD_CLIENT_FINISHED_CONST    = "\x43\x4C\x4E\x54";
+		public const String MD_SERVER_FINISHED_CONST    = "\x53\x52\x56\x52";
+
+		public const int VERSION                        = 0x0300;
+		public const int VERSION_MAJOR                  = 0x03;
+		public const int VERSION_MINOR                  = 0x00;
+
+		public const int RT_CHANGE_CIPHER_SPEC          = 20;
+		public const int RT_ALERT                       = 21;
+		public const int RT_HANDSHAKE                   = 22;
+		public const int RT_APPLICATION_DATA            = 23;
+
+		/* Pseudo content types for SSL/TLS header info */
+		public const int RT_HEADER                      = 0x100;
+		public const int RT_INNER_CONTENT_TYPE          = 0x101;
+
+		public const int AL_WARNING                     = 1;
+		public const int AL_FATAL                       = 2;
+
+		public const int AD_CLOSE_NOTIFY                = 0;
+		public const int AD_UNEXPECTED_MESSAGE          = 10; /* fatal */
+		public const int AD_BAD_RECORD_MAC              = 20; /* fatal */
+		public const int AD_DECOMPRESSION_FAILURE       = 30; /* fatal */
+		public const int AD_HANDSHAKE_FAILURE           = 40; /* fatal */
+		public const int AD_NO_CERTIFICATE              = 41;
+		public const int AD_BAD_CERTIFICATE             = 42;
+		public const int AD_UNSUPPORTED_CERTIFICATE     = 43;
+		public const int AD_CERTIFICATE_REVOKED         = 44;
+		public const int AD_CERTIFICATE_EXPIRED         = 45;
+		public const int AD_CERTIFICATE_UNKNOWN         = 46;
+		public const int AD_ILLEGAL_PARAMETER           = 47; /* fatal */
+
+		public const int CT_RSA_SIGN                    = 1;
+		public const int CT_DSS_SIGN                    = 2;
+		public const int CT_RSA_FIXED_DH                = 3;
+		public const int CT_DSS_FIXED_DH                = 4;
+		public const int CT_RSA_EPHEMERAL_DH            = 5;
+		public const int CT_DSS_EPHEMERAL_DH            = 6;
+		public const int CT_FORTEZZA_DMS                = 20;
+		/* CT_NUMBER is used to size arrays and it must be large enough to contain all of the cert types defined for *either* SSLv3 and TLSv1. */
+		public const int CT_NUMBER                      = 10;
+
+		/* No longer used as of OpenSSL 1.1.1 */
+		public const int FLAGS_NO_RENEGOTIATE_CIPHERS   = 0x0001;
+
+		public const int MT_HELLO_REQUEST               = 0;
+		public const int MT_CLIENT_HELLO                = 1;
+		public const int MT_SERVER_HELLO                = 2;
+		public const int MT_NEWSESSION_TICKET           = 4;
+		public const int MT_END_OF_EARLY_DATA           = 5;
+		public const int MT_ENCRYPTED_EXTENSIONS        = 8;
+		public const int MT_CERTIFICATE                 = 11;
+		public const int MT_SERVER_KEY_EXCHANGE         = 12;
+		public const int MT_CERTIFICATE_REQUEST         = 13;
+		public const int MT_SERVER_DONE                 = 14;
+		public const int MT_CERTIFICATE_VERIFY          = 15;
+		public const int MT_CLIENT_KEY_EXCHANGE         = 16;
+		public const int MT_FINISHED                    = 20;
+		public const int MT_CERTIFICATE_URL             = 21;
+		public const int MT_CERTIFICATE_STATUS          = 22;
+		public const int MT_SUPPLEMENTAL_DATA           = 23;
+		public const int MT_KEY_UPDATE                  = 24;
+#if !OPENSSL_NO_NEXTPROTONEG
+		public const int MT_NEXT_PROTO                  = 67;
+#endif
+		public const int MT_MESSAGE_HASH                = 254;
+
+		/* Dummy message type for handling CCS like a normal handshake message */
+		public const int MT_CHANGE_CIPHER_SPEC          = 0x0101;
+
+		public const int MT_CCS                         = 1;
+
+		/* These are used when changing over to a new cipher */
+		public const int CC_READ                        = 0x001;
+		public const int CC_WRITE                       = 0x002;
+		public const int CC_CLIENT                      = 0x010;
+		public const int CC_SERVER                      = 0x020;
+		public const int CC_EARLY                       = 0x040;
+		public const int CC_HANDSHAKE                   = 0x080;
+		public const int CC_APPLICATION                 = 0x100;
+		public const int CHANGE_CIPHER_CLIENT_WRITE     = CC_CLIENT | CC_WRITE;
+		public const int CHANGE_CIPHER_SERVER_READ      = CC_SERVER | CC_READ;
+		public const int CHANGE_CIPHER_CLIENT_READ      = CC_CLIENT | CC_READ;
+		public const int CHANGE_CIPHER_SERVER_WRITE     = CC_SERVER | CC_WRITE;
 	}
 }

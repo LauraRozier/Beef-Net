@@ -24,10 +24,7 @@ namespace Beef_Net.OpenSSL
 		public const int ANY_VERSION   = 0x1FFFF;
 		
 		/* lengths of messages */
-		/*
-		 * Actually the max cookie length in DTLS is 255. But we can't change this now
-		 * due to compatibility concerns.
-		 */
+		/* Actually the max cookie length in DTLS is 255. But we can't change this now due to compatibility concerns. */
 		public const int COOKIE_LENGTH     = 256;
 		
 		public const int RT_HEADER_LENGTH  = 13;
@@ -66,24 +63,26 @@ namespace Beef_Net.OpenSSL
 		**   10    9 000022C5 DTLS_server_method
 		**   11    A 00002536 DTLS_set_timer_cb
 		*/
+		[Import(OPENSSL_LIB_SSL), LinkName("DTLS_client_method")]
+		public extern static SSL.METHOD* client_method();         /* DTLS 1.0 and 1.2 */
+		[Import(OPENSSL_LIB_SSL), LinkName("DTLS_get_data_mtu")]
+		public extern static uint get_data_mtu(SSL.ssl_st* s);
 		[Import(OPENSSL_LIB_SSL), LinkName("DTLS_method")]
 		public extern static SSL.METHOD* method();                /* DTLS 1.0 and 1.2 */
 		[Import(OPENSSL_LIB_SSL), LinkName("DTLS_server_method")]
 		public extern static SSL.METHOD* server_method();         /* DTLS 1.0 and 1.2 */
-		[Import(OPENSSL_LIB_SSL), LinkName("DTLS_client_method")]
-		public extern static SSL.METHOD* client_method();         /* DTLS 1.0 and 1.2 */
-		
 		public function uint timer_cb(SSL.ssl_st* s, uint timer_us);
-
 		[Import(OPENSSL_LIB_SSL), LinkName("DTLS_set_timer_cb")]
 		public extern static void set_timer_cb(SSL.ssl_st* s, timer_cb cb);
-		[Import(OPENSSL_LIB_SSL), LinkName("DTLS_get_data_mtu")]
-		public extern static uint get_data_mtu(SSL.ssl_st* s);
 	}
 
 	sealed abstract class DTLS1
 	{
-		public const int VERSION = 0xFEFF;
+		public const int VERSION                 = 0xFEFF;
+		
+		public const int RT_HEARTBEAT            = 24;
+
+		public const int MT_HELLO_VERIFY_REQUEST = 3;
 
 		[Inline]
 		public static int get_timeout(SSL.ssl_st* ssl, void* arg) => SSL.ctrl(ssl, DTLS.CTRL_GET_TIMEOUT, 0, arg);
@@ -115,15 +114,22 @@ namespace Beef_Net.OpenSSL
 	sealed abstract class DTLS1_2
 	{
 		public const int VERSION = 0xFEFD;
-
+		
+		/*
+		** MOVED for convenience
+		** libssl-1_1.dll
+        **   12    B 0000204A DTLSv1_2_client_method
+        **   13    C 0000181B DTLSv1_2_method
+        **   14    D 000020A4 DTLSv1_2_server_method
+		*/
 #if !OPENSSL_NO_DTLS1_2_METHOD
 		/* DTLSv1.2 */
+		[Import(OPENSSL_LIB_SSL), LinkName("DTLSv1_2_client_method")]
+		public extern static SSL.METHOD* client_method();
 		[Import(OPENSSL_LIB_SSL), LinkName("DTLSv1_2_method")]
 		public extern static SSL.METHOD* method();
 		[Import(OPENSSL_LIB_SSL), LinkName("DTLSv1_2_server_method")]
 		public extern static SSL.METHOD* server_method();
-		[Import(OPENSSL_LIB_SSL), LinkName("DTLSv1_2_client_method")]
-		public extern static SSL.METHOD* client_method();
 #endif
 	}
 }

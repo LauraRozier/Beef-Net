@@ -15,7 +15,7 @@ namespace Beef_Net.OpenSSL
 	sealed abstract class SMIME
 	{
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("SMIME_write_ASN1")]
-		public static extern int write_ASN1(BIO.bio_st* bio, ASN1.VALUE* val, BIO.bio_st* data, int flags, int ctype_nid, int econt_nid, Stack.stack_st_X509_ALGOR* mdalgs, ASN1.ITEM* it);
+		public static extern int write_ASN1(BIO.bio_st* bio, ASN1.VALUE* val, BIO.bio_st* data, int flags, int ctype_nid, int econt_nid, X509.stack_st_X509_ALGOR* mdalgs, ASN1.ITEM* it);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("SMIME_read_ASN1")]
 		public static extern ASN1.VALUE* read_ASN1(BIO.bio_st* bio, BIO.bio_st** bcont, ASN1.ITEM* it);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("SMIME_crlf_copy")]

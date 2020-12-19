@@ -339,5 +339,71 @@ namespace Beef_Net.OpenSSL
 		/* exponent limit enforced for "large" modulus only */
 		public const int RSA_MAX_PUBEXP_BITS       = 64;
 #endif
+
+		public function int sk_compfunc(void* a, void* b);
+		public function void sk_freefunc(void* a);
+		public function void* sk_copyfunc(void* a);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_num")]
+		public extern static int sk_num(Stack.OPENSSL_STACK* st);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_value")]
+		public extern static void* sk_value(Stack.OPENSSL_STACK* st, int i);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_set")]
+		public extern static void* sk_set(Stack.OPENSSL_STACK* st, int i, void* data);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_new")]
+		public extern static Stack.OPENSSL_STACK* sk_new(sk_compfunc cmp);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_new_null")]
+		public extern static Stack.OPENSSL_STACK* sk_new_null();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_new_reserve")]
+		public extern static Stack.OPENSSL_STACK* sk_new_reserve(sk_compfunc c, int n);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_reserve")]
+		public extern static int sk_reserve(Stack.OPENSSL_STACK* st, int n);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_free")]
+		public extern static void sk_free(Stack.OPENSSL_STACK* st);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_pop_free")]
+		public extern static void sk_pop_free(Stack.OPENSSL_STACK* st, function void(void*) func);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_deep_copy")]
+		public extern static Stack.OPENSSL_STACK* sk_deep_copy(Stack.OPENSSL_STACK* st, sk_copyfunc c, sk_freefunc f);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_insert")]
+		public extern static int sk_insert(Stack.OPENSSL_STACK* sk, void* data, int where_);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_delete")]
+		public extern static void* sk_delete(Stack.OPENSSL_STACK* st, int loc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_delete_ptr")]
+		public extern static void* sk_delete_ptr(Stack.OPENSSL_STACK* st, void* p);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_find")]
+		public extern static int sk_find(Stack.OPENSSL_STACK* st, void* data);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_find_ex")]
+		public extern static int sk_find_ex(Stack.OPENSSL_STACK* st, void* data);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_push")]
+		public extern static int sk_push(Stack.OPENSSL_STACK* st, void* data);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_unshift")]
+		public extern static int sk_unshift(Stack.OPENSSL_STACK* st, void* data);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_shift")]
+		public extern static void* sk_shift(Stack.OPENSSL_STACK* st);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_pop")]
+		public extern static void* sk_pop(Stack.OPENSSL_STACK* st);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_zero")]
+		public extern static void sk_zero(Stack.OPENSSL_STACK* st);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_set_cmp_func")]
+		public extern static sk_compfunc sk_set_cmp_func(Stack.OPENSSL_STACK* sk, sk_compfunc cmp);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_dup")]
+		public extern static Stack.OPENSSL_STACK* sk_dup(Stack.OPENSSL_STACK* st);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_sort")]
+		public extern static void sk_sort(Stack.OPENSSL_STACK* st);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_is_sorted")]
+		public extern static int sk_is_sorted(Stack.OPENSSL_STACK* st);
+
+		/*
+		** MOVED for convenience
+		** libssl-1_1.dll
+		**	  20   13 0000180C OPENSSL_cipher_name
+		**	  21   14 00002059 OPENSSL_init_ssl
+		*/
+		[Import(OPENSSL_LIB_SSL), LinkName("OPENSSL_cipher_name")]
+		public extern static char8* cipher_name(char8* rfc_name);
+		[Import(OPENSSL_LIB_SSL), LinkName("OPENSSL_init_ssl")]
+		public extern static int init_ssl(uint64 opts, INIT_SETTINGS* settings);
 	}
 }

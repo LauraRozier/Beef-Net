@@ -11,33 +11,149 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
-	/*
-	libssl-1_1.dll
-		482  1E1 00001ED3 TLS_client_method
-		483  1E2 00002365 TLS_method
-		484  1E3 00001591 TLS_server_method
-		485  1E4 000024E1 TLSv1_1_client_method
-		486  1E5 000017CB TLSv1_1_method
-		487  1E6 0000112C TLSv1_1_server_method
-		488  1E7 00001E6A TLSv1_2_client_method
-		489  1E8 00001FCD TLSv1_2_method
-		490  1E9 00001122 TLSv1_2_server_method
-		491  1EA 00001D70 TLSv1_client_method
-		492  1EB 00001D2A TLSv1_method
-		493  1EC 000015C3 TLSv1_server_method
-	*/
+	[AlwaysInclude]
+	sealed abstract class TLS
+	{
+		/* TLS Session Ticket extension struct */
+		[CRepr]
+		public struct session_ticket_ext_st
+		{
+		    public uint16 length;
+		    public void* data;
+		}
+		public typealias SESSION_TICKET_EXT = session_ticket_ext_st;
+
+		[CRepr]
+		public struct sigalgs_st {} // Couldn't find this anywhere so.. GG
+		public typealias SIGALGS = sigalgs_st;
+		
+		/* This is the default set of TLSv1.3 ciphersuites */
+#if !OPENSSL_NO_CHACHA || !OPENSSL_NO_POLY1305 // OR is better then AND.. If either doesn't exist it can't be used :D
+		public const String DEFAULT_CIPHERSUITES = "TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256";
+#else
+		public const String DEFAULT_CIPHERSUITES = "TLS_AES_256_GCM_SHA384:TLS_AES_128_GCM_SHA256";
+#endif
+
+		public function int session_ticket_ext_cb_fn(SSL.ssl_st* s, uint8* data, int len, void* arg);
+		public function int session_secret_cb_fn(SSL.ssl_st* s, void* secret, int* secret_len, SSL.stack_st_SSL_CIPHER* peer_ciphers, SSL.CIPHER** cipher, void* arg);
+
+		/*
+		** MOVED for convenience
+		** libssl-1_1.dll
+		**   482  1E1 00001ED3 TLS_client_method
+		**   483  1E2 00002365 TLS_method
+		**   484  1E3 00001591 TLS_server_method
+		*/
+		/* Negotiate highest available SSL/TLS version */
+		[Import(OPENSSL_LIB_SSL), LinkName("TLS_method")]
+		public extern static SSL.METHOD* method();
+		[Import(OPENSSL_LIB_SSL), LinkName("TLS_server_method")]
+		public extern static SSL.METHOD* server_method();
+		[Import(OPENSSL_LIB_SSL), LinkName("TLS_client_method")]
+		public extern static SSL.METHOD* client_method();
+	}
+
 	[AlwaysInclude]
 	sealed abstract class TLS1
 	{
+		/* Pseudo content types to indicate additional parameters */
+		public const int RT_CRYPTO               = 0x1000;
+		public const int RT_CRYPTO_PREMASTER     = RT_CRYPTO | 0x1;
+		public const int RT_CRYPTO_CLIENT_RANDOM = RT_CRYPTO | 0x2;
+		public const int RT_CRYPTO_SERVER_RANDOM = RT_CRYPTO | 0x3;
+		public const int RT_CRYPTO_MASTER        = RT_CRYPTO | 0x4;
+		
+		public const int RT_CRYPTO_READ          = 0x0000;
+		public const int RT_CRYPTO_WRITE         = 0x0100;
+		public const int RT_CRYPTO_MAC           = RT_CRYPTO | 0x5;
+		public const int RT_CRYPTO_KEY           = RT_CRYPTO | 0x6;
+		public const int RT_CRYPTO_IV            = RT_CRYPTO | 0x7;
+		public const int RT_CRYPTO_FIXED_IV      = RT_CRYPTO | 0x8;
+
+		public const int HB_REQUEST  = 1;
+		public const int HB_RESPONSE = 2;
+
+		/* Removed from OpenSSL 1.1.0 */
+		public const int FLAGS_TLS_PADDING_BUG        = 0x0;
+		
+		public const int FLAGS_SKIP_CERT_VERIFY       = 0x0010;
+		
+		/* Set if we encrypt then mac instead of usual mac then encrypt */
+		public const int FLAGS_ENCRYPT_THEN_MAC_READ  = 0x0100;
+		public const int FLAGS_ENCRYPT_THEN_MAC       = FLAGS_ENCRYPT_THEN_MAC_READ;
+		
+		/* Set if extended master secret extension received from peer */
+		public const int FLAGS_RECEIVED_EXTMS         = 0x0200;
+		
+		public const int FLAGS_ENCRYPT_THEN_MAC_WRITE = 0x0400;
+		
+		public const int FLAGS_STATELESS              = 0x0800;
+		
+		/* Set if extended master secret extension required on renegotiation */
+		public const int FLAGS_REQUIRED_EXTMS         = 0x1000;
+
+		/*
+		** MOVED for convenience
+		** libssl-1_1.dll
+		**   491  1EA 00001D70 TLSv1_client_method
+		**   492  1EB 00001D2A TLSv1_method
+		**   493  1EC 000015C3 TLSv1_server_method
+		*/
+#if !OPENSSL_NO_TLS1_METHOD
+		[Import(OPENSSL_LIB_SSL), LinkName("TLSv1_client_method")]
+		public extern static SSL.METHOD* client_method();
+		[Import(OPENSSL_LIB_SSL), LinkName("TLSv1_method")]
+		public extern static SSL.METHOD* method(); /* TLSv1.0 */
+		[Import(OPENSSL_LIB_SSL), LinkName("TLSv1_server_method")]
+		public extern static SSL.METHOD* server_method();
+#endif
 	}
 	
 	[AlwaysInclude]
 	sealed abstract class TLS1_1
 	{
+		/*
+		** MOVED for convenience
+		** libssl-1_1.dll
+		**   485  1E4 000024E1 TLSv1_1_client_method
+		**   486  1E5 000017CB TLSv1_1_method
+		**   487  1E6 0000112C TLSv1_1_server_method
+		*/
+#if !OPENSSL_NO_TLS1_1_METHOD
+		[Import(OPENSSL_LIB_SSL), LinkName("TLSv1_1_client_method")]
+		public extern static SSL.METHOD* client_method();
+		[Import(OPENSSL_LIB_SSL), LinkName("TLSv1_1_method")]
+		public extern static SSL.METHOD* method(); /* TLSv1.1 */
+		[Import(OPENSSL_LIB_SSL), LinkName("TLSv1_1_server_method")]
+		public extern static SSL.METHOD* server_method();
+#endif
 	}
 	
 	[AlwaysInclude]
 	sealed abstract class TLS1_2
 	{
+		/*
+		** MOVED for convenience
+		** libssl-1_1.dll
+		**   488  1E7 00001E6A TLSv1_2_client_method
+		**   489  1E8 00001FCD TLSv1_2_method
+		**   490  1E9 00001122 TLSv1_2_server_method
+		*/
+
+#if !OPENSSL_NO_TLS1_2_METHOD
+		[Import(OPENSSL_LIB_SSL), LinkName("TLSv1_2_client_method")]
+		public extern static SSL.METHOD* client_method();
+		[Import(OPENSSL_LIB_SSL), LinkName("TLSv1_2_method")]
+		public extern static SSL.METHOD* method(); /* TLSv1.2 */
+		[Import(OPENSSL_LIB_SSL), LinkName("TLSv1_2_server_method")]
+		public extern static SSL.METHOD* server_method();
+#endif
+	}
+	
+	[AlwaysInclude]
+	sealed abstract class TLS1_3
+	{
+		/* Matches the length of PSK_MAX_PSK_LEN. We keep it the same value for consistency, even in the event of OPENSSL_NO_PSK being defined. */
+		public const int MAX_RESUMPTION_PSK_LENGTH = 256;
 	}
 }

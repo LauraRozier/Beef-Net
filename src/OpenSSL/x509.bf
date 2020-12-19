@@ -542,7 +542,6 @@ namespace Beef_Net.OpenSSL
 		}
 		public typealias STORE_CTX = store_ctx_st;
 
-		
 		[CRepr]
 		public struct object_st
 		{
