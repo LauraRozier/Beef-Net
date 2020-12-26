@@ -22,9 +22,13 @@ namespace Beef_Net.OpenSSL
 		public const int BUILT_ON       = OpenSSL.BUILT_ON;
 		public const int PLATFORM       = OpenSSL.PLATFORM;
 		public const int DIR            = OpenSSL.DIR;
-
+		
+		[Inline]
 		public uint SSLeay()            => OpenSSL.version_num();
+		[Inline]
 		public char8* version(int type) => OpenSSL.version(type);
+		[Inline]
+		public static void add_ssl_algorithms() => SSL.library_init();
 	}
 	
 	[AlwaysInclude]
@@ -405,5 +409,23 @@ namespace Beef_Net.OpenSSL
 		public extern static char8* cipher_name(char8* rfc_name);
 		[Import(OPENSSL_LIB_SSL), LinkName("OPENSSL_init_ssl")]
 		public extern static int init_ssl(uint64 opts, INIT_SETTINGS* settings);
+
+		/* OPENSSL_INIT flag 0x010000 reserved for internal use */
+		public const int INIT_NO_LOAD_SSL_STRINGS = 0x00100000L;
+		public const int INIT_LOAD_SSL_STRINGS    = 0x00200000L;
+
+		public const int INIT_SSL_DEFAULT         = INIT_LOAD_SSL_STRINGS | INIT_LOAD_CRYPTO_STRINGS;
+
+		public const int NPN_UNSUPPORTED = 0;
+		public const int NPN_NEGOTIATED  = 1;
+		public const int NPN_NO_OVERLAP  = 2;
+
+		[Inline]
+		public static void add_ssl_algorithms() => SSL.library_init();
+
+#if !OPENSSL_NO_UNIT_TEST
+		[Import(OPENSSL_LIB_SSL), LinkName("SSL_test_functions")]
+		public extern static ssl_test_functions* test_functions();
+#endif
 	}
 }

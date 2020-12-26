@@ -167,7 +167,8 @@ namespace Beef_Net.OpenSSL
 		public const int MIN_RSA_BITS = 2048;
 
 		[CRepr]
-		public struct ctlog_st {
+		public struct ctlog_st
+		{
 		    public char8* name;
 		    public uint8[CT.V1_HASHLEN] log_id;
 		    public EVP.PKEY* public_key;
@@ -175,7 +176,8 @@ namespace Beef_Net.OpenSSL
 		public typealias CTLOG = ctlog_st;
 
 		[CRepr]
-		public struct store_st {
+		public struct store_st
+		{
 		    public stack_st_CTLOG* logs;
 		}
 		public typealias STORE = store_st;
@@ -291,7 +293,8 @@ namespace Beef_Net.OpenSSL
 
 		/* Signed Certificate Timestamp */
 		[CRepr]
-		public struct sct_st {
+		public struct sct_st
+		{
 		    public version_t version;
 		    /* If version is not SCT_VERSION_V1, this contains the encoded SCT */
 		    public uint8* sct;
@@ -319,10 +322,12 @@ namespace Beef_Net.OpenSSL
 		    public validation_status_t validation_status;
 		}
 		public typealias SCT = sct_st;
+		public struct stack_st_SCT {}
 
 		/* Miscellaneous data that is useful when verifying an SCT  */
 		[CRepr]
-		public struct ctx_st {
+		public struct ctx_st
+		{
 		    /* Public key */
 		    public EVP.PKEY* pkey;
 		    /* Hash of public key */
@@ -341,8 +346,6 @@ namespace Beef_Net.OpenSSL
 		    public uint64 epoch_time_in_ms;
 		}
 		public typealias CTX = ctx_st;
-
-		public struct stack_st_SCT {}
 
 		/*****************
 		 * SCT functions *
