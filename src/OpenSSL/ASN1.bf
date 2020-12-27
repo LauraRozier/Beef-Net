@@ -250,60 +250,62 @@ namespace Beef_Net.OpenSSL
 		public const int R_WRONG_PUBLIC_KEY_TYPE                               = 200;
 		public const int R_WRONG_TAG                                           = 168;
 
-		
 #if NO_ASN1_TYPEDEFS
-		#  define INTEGER         = ASN1_STRING;
-		#  define ENUMERATED      = ASN1_STRING;
-		#  define BIT_STRING      = ASN1_STRING;
-		#  define OCTET_STRING    = ASN1_STRING;
-		#  define PRINTABLESTRING = ASN1_STRING;
-		#  define T61STRING       = ASN1_STRING;
-		#  define IA5STRING       = ASN1_STRING;
-		#  define UTCTIME         = ASN1_STRING;
-		#  define GENERALIZEDTIME = ASN1_STRING;
-		#  define TIME            = ASN1_STRING;
-		#  define GENERALSTRING   = ASN1_STRING;
-		#  define UNIVERSALSTRING = ASN1_STRING;
-		#  define BMPSTRING       = ASN1_STRING;
-		#  define VISIBLESTRING   = ASN1_STRING;
-		#  define UTF8STRING      = ASN1_STRING;
-		#  define BOOLEAN         = int;
-		#  define NULL            = int;
+		public typealias INTEGER         = STRING;
+		public typealias ENUMERATED      = STRING;
+		public typealias BIT_STRING      = STRING;
+		public typealias OCTET_STRING    = STRING;
+		public typealias PRINTABLESTRING = STRING;
+		public typealias T61STRING       = STRING;
+		public typealias IA5STRING       = STRING;
+		public typealias UTCTIME         = STRING;
+		public typealias GENERALIZEDTIME = STRING;
+		public typealias TIME            = STRING;
+		public typealias GENERALSTRING   = STRING;
+		public typealias UNIVERSALSTRING = STRING;
+		public typealias BMPSTRING       = STRING;
+		public typealias VISIBLESTRING   = STRING;
+		public typealias UTF8STRING      = STRING;
+		public typealias BOOLEAN         = int;
+		public typealias NULL            = int;
 #else
-		public typealias INTEGER = string_st;
-		public typealias ENUMERATED = string_st;
-		public typealias BIT_STRING = string_st;
-		public typealias OCTET_STRING = string_st;
+		public typealias INTEGER         = string_st;
+		public typealias ENUMERATED      = string_st;
+		public typealias BIT_STRING      = string_st;
+		public typealias OCTET_STRING    = string_st;
 		public typealias PRINTABLESTRING = string_st;
-		public typealias T61STRING = string_st;
-		public typealias IA5STRING = string_st;
-		public typealias GENERALSTRING = string_st;
+		public typealias T61STRING       = string_st;
+		public typealias IA5STRING       = string_st;
+		public typealias GENERALSTRING   = string_st;
 		public typealias UNIVERSALSTRING = string_st;
-		public typealias BMPSTRING = string_st;
-		public typealias UTCTIME = string_st;
-		public typealias TIME = string_st;
+		public typealias BMPSTRING       = string_st;
+		public typealias UTCTIME         = string_st;
+		public typealias TIME            = string_st;
 		public typealias GENERALIZEDTIME = string_st;
-		public typealias VISIBLESTRING = string_st;
-		public typealias UTF8STRING = string_st;
-		public typealias STRING = string_st;
-		public typealias BOOLEAN = int;
-		public typealias NULL = int;
+		public typealias VISIBLESTRING   = string_st;
+		public typealias UTF8STRING      = string_st;
+		public typealias STRING          = string_st;
+		public typealias BOOLEAN         = int;
+		public typealias NULL            = int;
 #endif
+		public struct stack_st_ASN1_UTF8STRING {}
 
 		[CRepr]
-		public struct object_st {
+		public struct object_st
+		{
 		    public char8* sn;
 			public char8* ln;
 		    public int nid;
 		    public int length;
-		    public uint8* data;  /* data remains const after init */
-		    public int flags;                  /* Should we free this one */
+		    public uint8* data; /* data remains const after init */
+		    public int flags;   /* Should we free this one */
 		}
 		public typealias OBJECT = object_st;
 		
 		/* ASN1 print context structure */
 		[CRepr]
-		public struct pctx_st {
+		public struct pctx_st
+		{
 		    public uint flags;
 		    public uint nm_flags;
 		    public uint cert_flags;
@@ -313,10 +315,11 @@ namespace Beef_Net.OpenSSL
 		public typealias PCTX = pctx_st;
 
 		[CRepr]
-		public struct sctx_st {
-		    /* The ASN1_ITEM associated with this field */
+		public struct sctx_st
+		{
+		    /* The ITEM associated with this field */
 		    public ITEM* it;
-		    /* If ASN1_TEMPLATE associated with this field */
+		    /* If TEMPLATE associated with this field */
 		    public TEMPLATE* tt;
 		    /* Various flags associated with field and context */
 		    public uint flags;
@@ -352,11 +355,7 @@ namespace Beef_Net.OpenSSL
 		public const int PKEY_CTRL_SET1_TLS_ENCPT = 0x9;
 		public const int PKEY_CTRL_GET1_TLS_ENCPT = 0xa;
 
-		/*
-		 * This is the ASN1 template structure that defines a wrapper round the
-		 * actual type. It determines the actual position of the field in the value
-		 * structure, various flags such as OPTIONAL and the field name.
-		 */
+		/* This is the ASN1 template structure that defines a wrapper round the actual type. It determines the actual position of the field in the value structure, various flags such as OPTIONAL and the field name. */
 		[CRepr]
 		public struct TEMPLATE_st
 		{
@@ -364,7 +363,7 @@ namespace Beef_Net.OpenSSL
 		    public int tag;           /* tag, not used if no tagging */
 		    public uint offset;       /* Offset of this field in structure */
 		    public char8* field_name; /* Field name */
-		    public ITEM_EXP* item;    /* Relevant ASN1_ITEM or ASN1_ADB */
+		    public ITEM_EXP* item;    /* Relevant ITEM or ADB */
 		}
 		public typealias TEMPLATE = TEMPLATE_st;
 
@@ -408,21 +407,13 @@ namespace Beef_Net.OpenSSL
 		/* Field is a SEQUENCE OF */
 		public const int TFLG_SEQUENCE_OF   = 0x2 << 1;
 		
-		/*
-		 * Special case: this refers to a SET OF that will be sorted into DER order
-		 * when encoded *and* the corresponding STACK will be modified to match the
-		 * new order.
-		 */
+		/* Special case: this refers to a SET OF that will be sorted into DER order when encoded *and* the corresponding STACK will be modified to match the new order. */
 		public const int TFLG_SET_ORDER     = 0x3 << 1;
 		
 		/* Mask for SET OF or SEQUENCE OF */
 		public const int TFLG_SK_MASK       = 0x3 << 1;
 		
-		/*
-		 * These flags mean the tag should be taken from the tag field. If EXPLICIT
-		 * then the underlying type is used for the inner tag.
-		 */
-		
+		/* These flags mean the tag should be taken from the tag field. If EXPLICIT then the underlying type is used for the inner tag. */
 		/* IMPLICIT tagging */
 		public const int TFLG_IMPTAG        = 0x1 << 3;
 		
@@ -437,11 +428,7 @@ namespace Beef_Net.OpenSSL
 		/* context specific EXPLICIT */
 		public const int TFLG_EXPLICIT      = TFLG_EXPTAG | TFLG_CONTEXT;
 		
-		/*
-		 * If tagging is in force these determine the type of tag to use. Otherwise
-		 * the tag is determined by the underlying type. These values reflect the
-		 * actual octet format.
-		 */
+		/* If tagging is in force these determine the type of tag to use. Otherwise the tag is determined by the underlying type. These values reflect the actual octet format. */
 		/* Universal tag */
 		public const int TFLG_UNIVERSAL     = 0x0 << 6;
 		/* Application tag */
@@ -453,21 +440,14 @@ namespace Beef_Net.OpenSSL
 		
 		public const int TFLG_TAG_CLASS     = 0x3 << 6;
 		
-		/*
-		 * These are for ANY DEFINED BY type. In this case the 'item' field points to
-		 * an ASN1_ADB structure which contains a table of values to decode the
-		 * relevant type
-		 */
+		/* These are for ANY DEFINED BY type. In this case the 'item' field points to an ASN1_ADB structure which contains a table of values to decode the relevant type */
 		public const int TFLG_ADB_MASK      = 0x3 << 8;
 		
 		public const int TFLG_ADB_OID       = 0x1 << 8;
 		
 		public const int TFLG_ADB_INT       = 0x1 << 9;
 		
-		/*
-		 * This flag when present in a SEQUENCE OF, SET OF or EXPLICIT causes
-		 * indefinite length constructed encoding to be used if required.
-		 */
+		/* This flag when present in a SEQUENCE OF, SET OF or EXPLICIT causes indefinite length constructed encoding to be used if required. */
 		public const int TFLG_NDEF          = 0x1 << 11;
 		
 		/* Field is embedded and not a pointer */
@@ -503,7 +483,7 @@ namespace Beef_Net.OpenSSL
 		 * The EXTERN type uses a new style d2i/i2d.
 		 * The new style should be used where possible because it avoids things like the d2i IMPLICIT hack.
 		 *
-		 * MSTRING is a multiple string type, it is used for a CHOICE of character strings where the actual strings all occupy an ASN1_STRING structure. In this case the 'utype' field has a special meaning,
+		 * MSTRING is a multiple string type, it is used for a CHOICE of character strings where the actual strings all occupy an STRING structure. In this case the 'utype' field has a special meaning,
 		 * it is used as a mask of acceptable types using the B_ASN1 constants.
 		 *
 		 * NDEF_SEQUENCE is the same as SEQUENCE except that it will use indefinite length constructed encoding if requested.
@@ -515,10 +495,7 @@ namespace Beef_Net.OpenSSL
 		public const int ITYPE_MSTRING       = 0x5;
 		public const int ITYPE_NDEF_SEQUENCE = 0x6;
 
-		/*
-		 * Cache for ASN1 tag and length, so we don't keep re-reading it for things
-		 * like CHOICE
-		 */
+		/* Cache for ASN1 tag and length, so we don't keep re-reading it for things like CHOICE */
 		[CRepr]
 		public struct TLC_st
 		{
@@ -572,18 +549,11 @@ namespace Beef_Net.OpenSSL
 		public typealias PRIMITIVE_FUNCS = PRIMITIVE_FUNCS_st;
 
 		/*
-		 * This is the ASN1_AUX structure: it handles various miscellaneous
-		 * requirements. For example the use of reference counts and an informational
-		 * callback. The "informational callback" is called at various points during
-		 * the ASN1 encoding and decoding. It can be used to provide minor
-		 * customisation of the structures used. This is most useful where the
-		 * supplied routines *almost* do the right thing but need some extra help at
-		 * a few points. If the callback returns zero then it is assumed a fatal
-		 * error has occurred and the main operation should be abandoned. If major
-		 * changes in the default behaviour are required then an external type is
+		 * This is the AUX structure: it handles various miscellaneous requirements. For example the use of reference counts and an informational callback. The "informational callback" is called at various points during
+		 * the ASN1 encoding and decoding. It can be used to provide minor customisation of the structures used. This is most useful where the supplied routines *almost* do the right thing but need some extra help at
+		 * a few points. If the callback returns zero then it is assumed a fatal error has occurred and the main operation should be abandoned. If major changes in the default behaviour are required then an external type is
 		 * more appropriate.
 		 */
-
 		public function int aux_cb(int operation, VALUE** inVal, ITEM* it, void* exarg);
 
 		[CRepr]
@@ -594,7 +564,7 @@ namespace Beef_Net.OpenSSL
 		    public int ref_offset;  /* Offset of reference value */
 		    public int ref_lock;    /* Lock type to use */
 		    public aux_cb* asn1_cb;
-		    public int enc_offset;  /* Offset of ASN1_ENCODING structure */
+		    public int enc_offset;  /* Offset of ENCODING structure */
 		}
 		public typealias AUX = AUX_st;
 
@@ -621,8 +591,7 @@ namespace Beef_Net.OpenSSL
 		}
 		public typealias STREAM_ARG = STREAM_ARG_st;
 
-		/* Flags in ASN1_AUX */
-		
+		/* Flags in AUX */
 		/* Use a reference count */
 		public const int AFLG_REFCOUNT    = 1;
 		/* Save the encoding of structure (useful for signatures) */
@@ -670,9 +639,9 @@ namespace Beef_Net.OpenSSL
 		public const int V_ASN1_ANY                      = -4; /* used in ASN1 template code */
 		
 		public const int V_ASN1_UNDEF                    = -1;
-		/* ASN.1 tag values */
+		/* ASN1 tag values */
 		public const int V_ASN1_EOC                      = 0;
-		public const int V_ASN1_BOOLEAN                  = 1; /**/
+		public const int V_ASN1_BOOLEAN                  = 1; /*  */
 		public const int V_ASN1_INTEGER                  = 2;
 		public const int V_ASN1_BIT_STRING               = 3;
 		public const int V_ASN1_OCTET_STRING             = 4;
@@ -685,26 +654,22 @@ namespace Beef_Net.OpenSSL
 		public const int V_ASN1_UTF8STRING               = 12;
 		public const int V_ASN1_SEQUENCE                 = 16;
 		public const int V_ASN1_SET                      = 17;
-		public const int V_ASN1_NUMERICSTRING            = 18; /**/
+		public const int V_ASN1_NUMERICSTRING            = 18; /*  */
 		public const int V_ASN1_PRINTABLESTRING          = 19;
 		public const int V_ASN1_T61STRING                = 20;
 		public const int V_ASN1_TELETEXSTRING            = 20; /* alias */
-		public const int V_ASN1_VIDEOTEXSTRING           = 21; /**/
+		public const int V_ASN1_VIDEOTEXSTRING           = 21; /*  */
 		public const int V_ASN1_IA5STRING                = 22;
 		public const int V_ASN1_UTCTIME                  = 23;
-		public const int V_ASN1_GENERALIZEDTIME          = 24; /**/
-		public const int V_ASN1_GRAPHICSTRING            = 25; /**/
-		public const int V_ASN1_ISO64STRING              = 26; /**/
+		public const int V_ASN1_GENERALIZEDTIME          = 24; /*  */
+		public const int V_ASN1_GRAPHICSTRING            = 25; /*  */
+		public const int V_ASN1_ISO64STRING              = 26; /*  */
 		public const int V_ASN1_VISIBLESTRING            = 26; /* alias */
-		public const int V_ASN1_GENERALSTRING            = 27; /**/
-		public const int V_ASN1_UNIVERSALSTRING          = 28; /**/
+		public const int V_ASN1_GENERALSTRING            = 27; /*  */
+		public const int V_ASN1_UNIVERSALSTRING          = 28; /*  */
 		public const int V_ASN1_BMPSTRING                = 30;
 
-		/*
-		 * NB the constants below are used internally by ASN1_INTEGER
-		 * and ASN1_ENUMERATED to indicate the sign. They are *not* on
-		 * the wire tag values.
-		 */
+		/* NB the constants below are used internally by INTEGER and ENUMERATED to indicate the sign. They are *not* on the wire tag values. */
 		public const int V_ASN1_NEG             = 0x100;
 		public const int V_ASN1_NEG_INTEGER     = 2 | V_ASN1_NEG;
 		public const int V_ASN1_NEG_ENUMERATED  = 10 | V_ASN1_NEG;
@@ -729,7 +694,7 @@ namespace Beef_Net.OpenSSL
 		public const int B_ASN1_UTCTIME         = 0x4000;
 		public const int B_ASN1_GENERALIZEDTIME = 0x8000;
 		public const int B_ASN1_SEQUENCE        = 0x10000;
-		/* For use with ASN1_mbstring_copy() */
+		/* For use with mbstring_copy() */
 		public const int MBSTRING_FLAG          = 0x1000;
 		public const int MBSTRING_UTF8          = MBSTRING_FLAG;
 		public const int MBSTRING_ASC           = MBSTRING_FLAG | 1;
@@ -740,22 +705,11 @@ namespace Beef_Net.OpenSSL
 		public const int SMIME_STREAM           = 0x1000;
 
 		public const int STRING_FLAG_BITS_LEFT = 0x08; /* Set if 0x07 has bits left value */
-		/*
-		 * This indicates that the ASN1_STRING is not a real value but just a place
-		 * holder for the location where indefinite length constructed data should be
-		 * inserted in the memory buffer
-		 */
+		/* This indicates that the ASN1_STRING is not a real value but just a place holder for the location where indefinite length constructed data should be inserted in the memory buffer */
 		public const int STRING_FLAG_NDEF      = 0x010;
-		/*
-		 * This flag is used by the CMS code to indicate that a string is not
-		 * complete and is a place holder for content when it had all been accessed.
-		 * The flag will be reset when content has been written to it.
-		 */
+		/* This flag is used by the CMS code to indicate that a string is not complete and is a place holder for content when it had all been accessed. The flag will be reset when content has been written to it. */
 		public const int STRING_FLAG_CONT      = 0x020;
-		/*
-		 * This flag is used by ASN1 code to indicate an ASN1_STRING is an MSTRING
-		 * type.
-		 */
+		/* This flag is used by ASN1 code to indicate an STRING is an MSTRING type. */
 		public const int STRING_FLAG_MSTRING   = 0x040;
 		/* String is embedded and only content should be freed */
 		public const int STRING_FLAG_EMBED     = 0x080;
@@ -768,20 +722,15 @@ namespace Beef_Net.OpenSSL
 		    public int length;
 		    public int type;
 		    public uint8* data;
-		    /*
-		     * The value of the following field depends on the type being held.  It
-		     * is mostly being used for BIT_STRING so if the input data has a
-		     * non-zero 'unused bits' value, it will be handled correctly
-		     */
+		    /* The value of the following field depends on the type being held.  It is mostly being used for BIT_STRING so if the input data has a non-zero 'unused bits' value, it will be handled correctly */
 		    public int flags;
 		}
-
 		/*
-		 * ASN1_ENCODING structure: this is used to save the received encoding of an
-		 * ASN1 type. This is useful to get round problems with invalid encodings
-		 * which can break signatures.
-		 */
+		// The following is already defined below
+		public typealias STRING = string_st;
+		*/
 
+		/* ENCODING structure: this is used to save the received encoding of an ASN1 type. This is useful to get round problems with invalid encodings which can break signatures. */
 		[CRepr]
 		public struct ENCODING_st
 		{
@@ -796,8 +745,8 @@ namespace Beef_Net.OpenSSL
 		
 		public const int STABLE_FLAGS_MALLOC = 0x01;
 		/*
-		 * A zero passed to ASN1_STRING_TABLE_new_add for the flags is interpreted as "don't change" and STABLE_FLAGS_MALLOC is always set. By setting
-		 * STABLE_FLAGS_MALLOC only we can clear the existing value. Use the alias STABLE_FLAGS_CLEAR to reflect this.
+		 * A zero passed to STRING_TABLE_new_add for the flags is interpreted as "don't change" and STABLE_FLAGS_MALLOC is always set. By setting STABLE_FLAGS_MALLOC only we can clear the existing value.
+		 * Use the alias STABLE_FLAGS_CLEAR to reflect this.
 		 */
 		public const int STABLE_FLAGS_CLEAR = STABLE_FLAGS_MALLOC;
 		public const int STABLE_NO_MASK     = 0x02;
@@ -830,18 +779,11 @@ namespace Beef_Net.OpenSSL
 		public typealias VALUE = VALUE_st;
 
 		/*-
-		 * The following macros and typedefs allow an ASN1_ITEM
-		 * to be embedded in a structure and referenced. Since
-		 * the ASN1_ITEM pointers need to be globally accessible
-		 * (possibly from shared libraries) they may exist in
-		 * different forms. On platforms that support it the
-		 * ASN1_ITEM structure itself will be globally exported.
-		 * Other platforms will export a function that returns
-		 * an ASN1_ITEM pointer.
+		 * The following macros and typedefs allow an ITEM to be embedded in a structure and referenced. Since the ITEM pointers need to be globally accessible
+		 * (possibly from shared libraries) they may exist in different forms. On platforms that support it the ITEM structure itself will be globally exported.
+		 * Other platforms will export a function that returns an ITEM pointer.
 		 *
-		 * To handle both cases transparently the macros below
-		 * should be used instead of hard coding an ASN1_ITEM
-		 * pointer in a structure.
+		 * To handle both cases transparently the macros below should be used instead of hard coding an ITEM pointer in a structure.
 		 *
 		 * The structure will look like this:
 		 *
@@ -853,48 +795,34 @@ namespace Beef_Net.OpenSSL
 		 *
 		 * It would be initialised as e.g.:
 		 *
-		 * SOMETHING somevar = {...,ASN1_ITEM_ref(X509),...};
+		 * SOMETHING somevar = {...,ITEM_ref(X509),...};
 		 *
 		 * and the actual pointer extracted with:
 		 *
-		 * ITEM* it = ASN1_ITEM_ptr(somevar.iptr);
+		 * ITEM* it = ITEM_ptr(somevar.iptr);
 		 *
-		 * Finally an ASN1_ITEM pointer can be extracted from an
-		 * appropriate reference with: ASN1_ITEM_rptr(X509). This
-		 * would be used when a function takes an ITEM* argument.
-		 *
+		 * Finally an ITEM pointer can be extracted from an appropriate reference with: ITEM_rptr(X509.x509_st). This would be used when a function takes an ITEM* argument.
 		 */
 
 #if !OPENSSL_EXPORT_VAR_AS_FUNCTION
-		/* ASN1_ITEM pointer exported type */
+		/* ITEM pointer exported type */
 		public typealias ITEM_EXP = ITEM*;
 #else
-		/*
-		 * Platforms that can't easily handle shared global variables are declared as
-		 * functions returning ITEM pointers.
-		 */
-		/* ASN1_ITEM pointer exported type */
+		/* Platforms that can't easily handle shared global variables are declared as functions returning ITEM pointers. */
+		/* ITEM pointer exported type */
 		public function ITEM* ITEM_EXP();
 #endif
 
 		/* Parameters used by STRING_print_ex() */
-
-		/*
-		 * These determine which characters to escape: RFC2253 special characters,
-		 * control characters and MSB set characters
-		 */
+		/* These determine which characters to escape: RFC2253 special characters, control characters and MSB set characters */
 		public const int STRFLGS_ESC_2253 = 1;
 		public const int STRFLGS_ESC_CTRL = 2;
 		public const int STRFLGS_ESC_MSB  = 4;
 
-		/*
-		 * This flag determines how we do escaping: normally RC2253 backslash only,
-		 * set this to use backslash and quote.
-		 */
+		/* This flag determines how we do escaping: normally RC2253 backslash only, set this to use backslash and quote. */
 		public const int STRFLGS_ESC_QUOTE = 8;
 
 		/* These three flags are internal use only. */
-
 		/* Character is a valid PrintableString character */
 		public const int CHARTYPE_PRINTABLESTRING = 0x10;
 		/* Character needs escaping if it is the first character */
@@ -902,51 +830,30 @@ namespace Beef_Net.OpenSSL
 		/* Character needs escaping if it is the last character */
 		public const int CHARTYPE_LAST_ESC_2253   = 0x40;
 
-		/*
-		 * NB the internal flags are safely reused below by flags handled at the top
-		 * level.
-		 */
-
-		/*
-		 * If this is set we convert all character strings to UTF8 first
-		 */
+		/* NB the internal flags are safely reused below by flags handled at the top level. */
+		/* If this is set we convert all character strings to UTF8 first */
 		public const int STRFLGS_UTF8_CONVERT = 0x10;
 
-		/*
-		 * If this is set we don't attempt to interpret content: just assume all
-		 * strings are 1 byte per character. This will produce some pretty odd
-		 * looking output!
-		 */
+		/* If this is set we don't attempt to interpret content: just assume all strings are 1 byte per character. This will produce some pretty odd looking output! */
 		public const int STRFLGS_IGNORE_TYPE  = 0x20;
 
 		/* If this is set we include the string type in the output */
 		public const int STRFLGS_SHOW_TYPE    = 0x40;
 
 		/*
-		 * This determines which strings to display and which to 'dump' (hex dump of
-		 * content octets or DER encoding). We can only dump non character strings or
-		 * everything. If we don't dump 'unknown' they are interpreted as character
-		 * strings with 1 octet per character and are subject to the usual escaping
-		 * options.
+		 * This determines which strings to display and which to 'dump' (hex dump of content octets or DER encoding). We can only dump non character strings or everything.
+		 * If we don't dump 'unknown' they are interpreted as character strings with 1 octet per character and are subject to the usual escaping options.
 		 */
 		public const int STRFLGS_DUMP_ALL     = 0x80;
 		public const int STRFLGS_DUMP_UNKNOWN = 0x100;
 
-		/*
-		 * These determine what 'dumping' does, we can dump the content octets or the
-		 * DER encoding: both use the RFC2253 #XXXXX notation.
-		 */
+		/* These determine what 'dumping' does, we can dump the content octets or the DER encoding: both use the RFC2253 #XXXXX notation. */
 		public const int STRFLGS_DUMP_DER     = 0x200;
 
-		/*
-		 * This flag specifies that RC2254 escaping shall be performed.
-		 */
+		/* This flag specifies that RC2254 escaping shall be performed. */
 		public const int STRFLGS_ESC_2254     = 0x400;
 
-		/*
-		 * All the string flags consistent with RFC2253, escaping control characters
-		 * isn't essential in RFC2253 but it is advisable anyway.
-		 */
+		/* All the string flags consistent with RFC2253, escaping control characters isn't essential in RFC2253 but it is advisable anyway. */
 		public const int STRFLGS_RFC2253      = STRFLGS_ESC_2253 | STRFLGS_ESC_CTRL | STRFLGS_ESC_MSB | STRFLGS_UTF8_CONVERT | STRFLGS_DUMP_UNKNOWN | STRFLGS_DUMP_DER;
 		
 		[CRepr]
@@ -976,10 +883,7 @@ namespace Beef_Net.OpenSSL
 		        public GENERALIZEDTIME* generalizedtime;
 		        public VISIBLESTRING* visiblestring;
 		        public UTF8STRING* utf8string;
-		        /*
-		         * set and sequence are left complete and still contain the set or
-		         * sequence bytes
-		         */
+		        /* set and sequence are left complete and still contain the set or sequence bytes */
 		        public STRING* set;
 		        public STRING* sequence;
 		        public VALUE* asn1_value;
@@ -1057,9 +961,7 @@ namespace Beef_Net.OpenSSL
 		public static extern STRING* STRING_type_new(int type);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_STRING_cmp")]
 		public static extern int STRING_cmp(STRING* a, STRING* b);
-		/*
-		 * Since this is used to store all sorts of things, via macros, for now, make its data void* 
-		 */
+		/* Since this is used to store all sorts of things, via macros, for now, make its data void* */
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_STRING_set")]
 		public static extern int STRING_set(STRING* str, void* data, int len);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_STRING_set0")]
@@ -1284,7 +1186,7 @@ namespace Beef_Net.OpenSSL
 		public static extern void* dup(i2d_of_void i2d, d2i_of_void d2i, void* x);
 
 		/*
-		 * OpenSSL.. Please learn to make portable headers. Thanks.
+		// OpenSSL.. Please learn to make portable headers. Thanks.
 		# define ASN1_dup_of(type,i2d,d2i,x) ((type*)ASN1_dup(CHECKED_I2D_OF(type, i2d), CHECKED_D2I_OF(type, d2i), CHECKED_PTR_OF(type, x)))
 		
 		# define ASN1_dup_of_const(type,i2d,d2i,x) ((type*)ASN1_dup(CHECKED_I2D_OF(const type, i2d), CHECKED_D2I_OF(type, d2i), CHECKED_PTR_OF(const type, x)))
@@ -1310,7 +1212,8 @@ namespace Beef_Net.OpenSSL
 		{
 			void* innetF() => (void*)xnew();
 			return d2i_bio(=> innetF, d2i, inVal, (void**)x);
-		}*/
+		}
+		*/
 
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_item_dup")]
 		public static extern void* item_dup(ITEM* it, void* x);
@@ -1365,7 +1268,6 @@ namespace Beef_Net.OpenSSL
 		public static extern char8* tag2str(int tag);
 		
 		/* Used to load and write Netscape format cert */
-		
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_UNIVERSALSTRING_to_string")]
 		public static extern int UNIVERSALSTRING_to_string(UNIVERSALSTRING* s);
 		
@@ -1405,7 +1307,6 @@ namespace Beef_Net.OpenSSL
 		public static extern void STRING_TABLE_cleanup();
 		
 		/* ASN1 template functions */
-		
 		/* Old API compatible functions */
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASN1_item_new")]
 		public static extern VALUE* item_new(ITEM* it);
@@ -1431,7 +1332,6 @@ namespace Beef_Net.OpenSSL
 		public static extern int str2mask(char8* str, uint* pmask);
 		
 		/* ASN1 Print flags */
-		
 		/* Indicate missing OPTIONAL fields */
 		public const int PCTX_FLAGS_SHOW_ABSENT            = 0x001;
 		/* Mark start and end of SEQUENCE */

@@ -24,7 +24,8 @@ namespace Beef_Net.OpenSSL
 		public const int KEY_LENGTH = 16;
 
 		[CRepr]
-		public struct key_st {
+		public struct key_st
+		{
 		    public LONG[32] data;
 		    public int short_key; /* Use reduced rounds for short key */
 		}

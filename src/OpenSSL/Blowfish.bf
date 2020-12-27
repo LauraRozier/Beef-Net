@@ -29,9 +29,10 @@ namespace Beef_Net.OpenSSL
 		public const int BLOCK  = 8;
 
 		[CRepr]
-		public struct key_st {
-		    LONG[ROUNDS + 2] P;
-		    LONG[4 * 256] S;
+		public struct key_st
+		{
+		    public LONG[ROUNDS + 2] P;
+		    public LONG[4 * 256] S;
 		}
 		public typealias KEY = key_st;
 

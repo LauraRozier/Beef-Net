@@ -150,12 +150,12 @@ namespace Beef_Net.OpenSSL
 		    public char8* cb_arg;               /* first argument for the callback */
 		    public int init;
 		    public int shutdown;
-		    public int flags;                  /* extra storage */
+		    public int flags;                   /* extra storage */
 		    public int retry_reason;
 		    public int num;
 		    public void* ptr;
-		    public bio_st* next_bio;    /* used by filter BIOs */
-		    public bio_st* prev_bio;    /* used by filter BIOs */
+		    public bio_st* next_bio;            /* used by filter BIOs */
+		    public bio_st* prev_bio;            /* used by filter BIOs */
 		    public Crypto.REF_COUNT references;
 		    public uint64 num_read;
 		    public uint64 num_write;
@@ -197,61 +197,56 @@ namespace Beef_Net.OpenSSL
 
         public const int TYPE_START       = 128;
 
-		/*
-		 * BIO_FILENAME_READ|BIO_CLOSE to open or close on free.
-		 * BIO_set_fp(in,stdin,BIO_NOCLOSE);
-		 */
+		/* FILENAME_READ | CLOSE to open or close on free. set_fp(in, stdin, NOCLOSE); */
         public const int NOCLOSE = 0x00;
         public const int CLOSE   = 0x01;
 
-		/*
-		 * These are used in the following macros and are passed to BIO_ctrl()
-		 */
-        public const int CTRL_RESET                       = 1;/* opt - rewind/zero etc */
-        public const int CTRL_EOF                         = 2;/* opt - are we at the eof */
-        public const int CTRL_INFO                        = 3;/* opt - extra tit-bits */
-        public const int CTRL_SET                         = 4;/* man - set the 'IO' type */
-        public const int CTRL_GET                         = 5;/* man - get the 'IO' type */
-        public const int CTRL_PUSH                        = 6;/* opt - internal, used to signify change */
-        public const int CTRL_POP                         = 7;/* opt - internal, used to signify change */
-        public const int CTRL_GET_CLOSE                   = 8;/* man - set the 'close' on free */
-        public const int CTRL_SET_CLOSE                   = 9;/* man - set the 'close' on free */
-        public const int CTRL_PENDING                     = 10;/* opt - is their more data buffered */
-        public const int CTRL_FLUSH                       = 11;/* opt - 'flush' buffered output */
-        public const int CTRL_DUP                         = 12;/* man - extra stuff for 'duped' BIO */
-        public const int CTRL_WPENDING                    = 13;/* opt - number of bytes still to write */
-        public const int CTRL_SET_CALLBACK                = 14;/* opt - set callback function */
-        public const int CTRL_GET_CALLBACK                = 15;/* opt - set callback function */
+		/* These are used in the following macros and are passed to ctrl() */
+        public const int CTRL_RESET                       = 1;  /* opt - rewind/zero etc */
+        public const int CTRL_EOF                         = 2;  /* opt - are we at the eof */
+        public const int CTRL_INFO                        = 3;  /* opt - extra tit-bits */
+        public const int CTRL_SET                         = 4;  /* man - set the 'IO' type */
+        public const int CTRL_GET                         = 5;  /* man - get the 'IO' type */
+        public const int CTRL_PUSH                        = 6;  /* opt - internal, used to signify change */
+        public const int CTRL_POP                         = 7;  /* opt - internal, used to signify change */
+        public const int CTRL_GET_CLOSE                   = 8;  /* man - set the 'close' on free */
+        public const int CTRL_SET_CLOSE                   = 9;  /* man - set the 'close' on free */
+        public const int CTRL_PENDING                     = 10; /* opt - is their more data buffered */
+        public const int CTRL_FLUSH                       = 11; /* opt - 'flush' buffered output */
+        public const int CTRL_DUP                         = 12; /* man - extra stuff for 'duped' BIO */
+        public const int CTRL_WPENDING                    = 13; /* opt - number of bytes still to write */
+        public const int CTRL_SET_CALLBACK                = 14; /* opt - set callback function */
+        public const int CTRL_GET_CALLBACK                = 15; /* opt - set callback function */
 
-        public const int CTRL_PEEK                        = 29;/* BIO_f_buffer special */
-        public const int CTRL_SET_FILENAME                = 30;/* BIO_s_file special */
+        public const int CTRL_PEEK                        = 29; /* f_buffer special */
+        public const int CTRL_SET_FILENAME                = 30; /* s_file special */
 
 		/* dgram BIO stuff */
-        public const int CTRL_DGRAM_CONNECT               = 31;/* BIO dgram special */
-        public const int CTRL_DGRAM_SET_CONNECTED         = 32;/* allow for an externally connected socket to be passed in */
-        public const int CTRL_DGRAM_SET_RECV_TIMEOUT      = 33;/* setsockopt, essentially */
-        public const int CTRL_DGRAM_GET_RECV_TIMEOUT      = 34;/* getsockopt, essentially */
-        public const int CTRL_DGRAM_SET_SEND_TIMEOUT      = 35;/* setsockopt, essentially */
-        public const int CTRL_DGRAM_GET_SEND_TIMEOUT      = 36;/* getsockopt, essentially */
+        public const int CTRL_DGRAM_CONNECT               = 31; /* BIO dgram special */
+        public const int CTRL_DGRAM_SET_CONNECTED         = 32; /* allow for an externally connected socket to be passed in */
+        public const int CTRL_DGRAM_SET_RECV_TIMEOUT      = 33; /* setsockopt, essentially */
+        public const int CTRL_DGRAM_GET_RECV_TIMEOUT      = 34; /* getsockopt, essentially */
+        public const int CTRL_DGRAM_SET_SEND_TIMEOUT      = 35; /* setsockopt, essentially */
+        public const int CTRL_DGRAM_GET_SEND_TIMEOUT      = 36; /* getsockopt, essentially */
 
-        public const int CTRL_DGRAM_GET_RECV_TIMER_EXP    = 37;/* flag whether the last */
-        public const int CTRL_DGRAM_GET_SEND_TIMER_EXP    = 38;/* I/O operation tiemd out */
+        public const int CTRL_DGRAM_GET_RECV_TIMER_EXP    = 37; /* flag whether the last */
+        public const int CTRL_DGRAM_GET_SEND_TIMER_EXP    = 38; /* I/O operation tiemd out */
 
 		/* #ifdef IP_MTU_DISCOVER */
-        public const int CTRL_DGRAM_MTU_DISCOVER          = 39;/* set DF bit on egress packets */
+        public const int CTRL_DGRAM_MTU_DISCOVER          = 39; /* set DF bit on egress packets */
 		/* #endif */
 
-        public const int CTRL_DGRAM_QUERY_MTU             = 40;/* as kernel for current MTU */
+        public const int CTRL_DGRAM_QUERY_MTU             = 40; /* as kernel for current MTU */
         public const int CTRL_DGRAM_GET_FALLBACK_MTU      = 47;
-        public const int CTRL_DGRAM_GET_MTU               = 41;/* get cached value for MTU */
-        public const int CTRL_DGRAM_SET_MTU               = 42;/* set cached value for MTU. want to use this if asking the kernel fails */
+        public const int CTRL_DGRAM_GET_MTU               = 41; /* get cached value for MTU */
+        public const int CTRL_DGRAM_SET_MTU               = 42; /* set cached value for MTU. want to use this if asking the kernel fails */
 
-        public const int CTRL_DGRAM_MTU_EXCEEDED          = 43;/* check whether the MTU was exceed in the previous write operation */
+        public const int CTRL_DGRAM_MTU_EXCEEDED          = 43; /* check whether the MTU was exceed in the previous write operation */
 
         public const int CTRL_DGRAM_GET_PEER              = 46;
-        public const int CTRL_DGRAM_SET_PEER              = 44;/* Destination for the data */
+        public const int CTRL_DGRAM_SET_PEER              = 44; /* Destination for the data */
 
-        public const int CTRL_DGRAM_SET_NEXT_TIMEOUT      = 45;/* Next DTLS handshake timeout to adjust socket timeouts */
+        public const int CTRL_DGRAM_SET_NEXT_TIMEOUT      = 45; /* Next DTLS handshake timeout to adjust socket timeouts */
         public const int CTRL_DGRAM_SET_DONT_FRAG         = 48;
 
         public const int CTRL_DGRAM_GET_MTU_OVERHEAD      = 49;
@@ -286,10 +281,7 @@ namespace Beef_Net.OpenSSL
         public const int FLAGS_RWS          = FLAGS_READ | FLAGS_WRITE | FLAGS_IO_SPECIAL;
         public const int FLAGS_SHOULD_RETRY = 0x08;
 #if !BIO_FLAGS_UPLINK
-		/*
-		 * "UPLINK" flag denotes file descriptors provided by application. It
-		 * defaults to 0, as most platforms don't require UPLINK interface.
-		 */
+		/* "UPLINK" flag denotes file descriptors provided by application. It defaults to 0, as most platforms don't require UPLINK interface. */
         public const int FLAGS_UPLINK       = 0;
 #endif
 
@@ -297,8 +289,8 @@ namespace Beef_Net.OpenSSL
 
 		/*
 		 * This is used with memory BIOs:
-		 * BIO_FLAGS_MEM_RDONLY means we shouldn't free up or change the data in any way;
-		 * BIO_FLAGS_NONCLEAR_RST means we shouldn't clear data on reset.
+		 * FLAGS_MEM_RDONLY means we shouldn't free up or change the data in any way;
+		 * FLAGS_NONCLEAR_RST means we shouldn't clear data on reset.
 		 */
         public const int FLAGS_MEM_RDONLY   = 0x200;
         public const int FLAGS_NONCLEAR_RST = 0x400;
@@ -365,15 +357,11 @@ namespace Beef_Net.OpenSSL
 		public static int should_retry(bio_st* a) => test_flags(a, FLAGS_SHOULD_RETRY);
 
 		/*
-		 * The next three are used in conjunction with the BIO_should_io_special()
-		 * condition.  After this returns true, bio_st* BIO_get_retry_BIO(bio_st* bio, int* reason);
-		 * will walk the BIO stack and return the 'reason' for the special
-		 * and the offending BIO. Given a BIO, BIO_get_retry_reason(bio) will return
+		 * The next three are used in conjunction with the should_io_special() condition.
+		 * After this returns true, bio_st* get_retry_BIO(bio_st* bio, int* reason); will walk the BIO stack and return the 'reason' for the special and the offending BIO. Given a BIO, get_retry_reason(bio) will return
 		 * the code.
 		 */
-		/*
-		 * Returned from the SSL bio when the certificate retrieval code had an error
-		 */
+		/* Returned from the SSL bio when the certificate retrieval code had an error */
         public const int RR_SSL_X509_LOOKUP = 0x01;
 		/* Returned from the connect BIO when a connect would have blocked */
         public const int RR_CONNECT         = 0x02;
@@ -388,10 +376,7 @@ namespace Beef_Net.OpenSSL
         public const int CB_GETS  = 0x05;
         public const int CB_CTRL  = 0x06;
 
-		/*
-		 * The callback is called before and after the underling operation, The
-		 * BIO_CB_RETURN flag indicates if it is after the call
-		 */
+		/* The callback is called before and after the underling operation, The CB_RETURN flag indicates if it is after the call */
         public const int CB_RETURN = 0x80;
 
 		[Inline]
@@ -427,7 +412,8 @@ namespace Beef_Net.OpenSSL
 #if !OPENSSL_NO_SCTP
 		/* SCTP parameter structs */
 		[CRepr]
-		public struct bio_dgram_sctp_sndinfo {
+		public struct bio_dgram_sctp_sndinfo
+		{
 		    public uint16 snd_sid;
 		    public uint16 snd_flags;
 		    public uint32 snd_ppid;
@@ -435,7 +421,8 @@ namespace Beef_Net.OpenSSL
 		}
 		
 		[CRepr]
-		public struct bio_dgram_sctp_rcvinfo {
+		public struct bio_dgram_sctp_rcvinfo
+		{
 		    public uint16 rcv_sid;
 		    public uint16 rcv_ssn;
 		    public uint16 rcv_flags;
@@ -446,14 +433,15 @@ namespace Beef_Net.OpenSSL
 		}
 		
 		[CRepr]
-		public struct bio_dgram_sctp_prinfo {
+		public struct bio_dgram_sctp_prinfo
+		{
 		    public uint16 pr_policy;
 		    public uint32 pr_value;
 		}
 #endif
 
 		/*
-		 * #define BIO_CONN_get_param_hostname BIO_ctrl
+		 * #define CONN_get_param_hostname ctrl
 		 */
 
 		public const int C_SET_CONNECT                 = 100;
@@ -478,7 +466,7 @@ namespace Beef_Net.OpenSSL
 		public const int C_SSL_MODE                    = 119;
 		public const int C_GET_MD_CTX                  = 120;
 		/* public const int C_GET_PROXY_PARAM             = 121; */
-		public const int C_SET_BUFF_READ_DATA          = 122;/* data to read first */
+		public const int C_SET_BUFF_READ_DATA          = 122; /* data to read first */
 		public const int C_GET_CONNECT                 = 123;
 		public const int C_GET_ACCEPT                  = 124;
 		public const int C_SET_SSL_RENEGOTIATE_BYTES   = 125;
@@ -486,14 +474,14 @@ namespace Beef_Net.OpenSSL
 		public const int C_SET_SSL_RENEGOTIATE_TIMEOUT = 127;
 		public const int C_FILE_SEEK                   = 128;
 		public const int C_GET_CIPHER_CTX              = 129;
-		public const int C_SET_BUF_MEM_EOF_RETURN      = 130;/* return end of input value */
+		public const int C_SET_BUF_MEM_EOF_RETURN      = 130; /* return end of input value */
 		public const int C_SET_BIND_MODE               = 131;
 		public const int C_GET_BIND_MODE               = 132;
 		public const int C_FILE_TELL                   = 133;
 		public const int C_GET_SOCKS                   = 134;
 		public const int C_SET_SOCKS                   = 135;
 
-		public const int C_SET_WRITE_BUF_SIZE          = 136;/* for BIO_s_bio */
+		public const int C_SET_WRITE_BUF_SIZE          = 136; /* for s_bio */
 		public const int C_GET_WRITE_BUF_SIZE          = 137;
 		public const int C_MAKE_BIO_PAIR               = 138;
 		public const int C_DESTROY_BIO_PAIR            = 139;
@@ -523,13 +511,13 @@ namespace Beef_Net.OpenSSL
 		public static void* get_app_data(bio_st* s) => get_ex_data(s, 0);
 
 #if !OPENSSL_NO_SOCK
-		/* IP families we support, for BIO_s_connect() and BIO_s_accept() */
+		/* IP families we support, for s_connect() and s_accept() */
 		/* Note: the underlying operating system may not support some of them */
 		public const int FAMILY_IPV4  = 4;
 		public const int FAMILY_IPV6  = 6;
 		public const int FAMILY_IPANY = 256;
 
-		/* BIO_s_connect() */
+		/* s_connect() */
 		[Inline]
 		public static int set_conn_hostname(bio_st* b, char8* name) => ctrl(b, C_SET_CONNECT, 0, name);
 		[Inline]
@@ -582,7 +570,7 @@ namespace Beef_Net.OpenSSL
 		[Inline]
 		public static int get_bind_mode(bio_st* b) => ctrl(b, C_GET_BIND_MODE, 0, null);
 
-		/* BIO_s_accept() and BIO_s_connect() */
+		/* s_accept() and s_connect() */
 		[Inline]
 		public static int do_connect(bio_st* b) => do_handshake(b);
 		[Inline]
@@ -592,33 +580,27 @@ namespace Beef_Net.OpenSSL
 		[Inline]
 		public static int do_handshake(bio_st* b) => ctrl(b, C_DO_STATE_MACHINE, 0, null);
 
-		/* BIO_s_datagram(), BIO_s_fd(), BIO_s_socket(), BIO_s_accept() and BIO_s_connect() */
+		/* s_datagram(), s_fd(), s_socket(), s_accept() and s_connect() */
 		[Inline]
 		public static int set_fd(bio_st* b, int fd, int c) => int_ctrl(b, C_SET_FD, c, fd);
 		[Inline]
 		public static int get_fd(bio_st* b, char8* c) => ctrl(b, C_GET_FD, 0, c);
 
-		/* BIO_s_file() */
+		/* s_file() */
 		[Inline]
 		public static int set_fp(bio_st* b, char8* fp, int c) => ctrl(b, C_SET_FILE_PTR, c, fp);
 		[Inline]
 		public static int get_fp(bio_st* b, char8* fpp) => ctrl(b, C_GET_FILE_PTR, 0, fpp);
 
-		/* BIO_s_fd() and BIO_s_file() */
+		/* s_fd() and s_file() */
 		[Inline]
 		public static int seek(bio_st* b, int ofs) => ctrl(b, C_FILE_SEEK, ofs, null);
 		[Inline]
 		public static int tell(bio_st* b) => ctrl(b, C_FILE_TELL, 0, null);
 
-		/*
-		 * name is cast to lose const, but might be better to route through a
-		 * function so we can do it safely
-		 */
+		/* name is cast to lose const, but might be better to route through a function so we can do it safely */
 #if CONST_STRICT
-		/*
-		 * If you are wondering why this isn't defined, its because CONST_STRICT is
-		 * purely a compile-time kludge to allow const to be checked.
-		 */
+		/* If you are wondering why this isn't defined, its because CONST_STRICT is purely a compile-time kludge to allow const to be checked. */
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_read_filename")]
 		public extern static int read_filename(bio_st* b, char8* name);
 #else
@@ -633,10 +615,8 @@ namespace Beef_Net.OpenSSL
 		public static int rw_filename(bio_st* b, char8* name) => ctrl(b, C_SET_FILENAME,  CLOSE | FP_READ | FP_WRITE, name);
 
 		/*
-		 * WARNING WARNING, this ups the reference count on the read bio of the SSL
-		 * structure.  This is because the ssl read BIO is now pointed to by the
-		 * next_bio field in the bio.  So when you free the BIO, make sure you are
-		 * doing a BIO_free_all() to catch the underlying BIO.
+		 * WARNING WARNING, this ups the reference count on the read bio of the SSL structure.  This is because the ssl read BIO is now pointed to by the next_bio field in the bio.
+		 * So when you free the BIO, make sure you are doing a free_all() to catch the underlying BIO.
 		 */
 		[Inline]
 		public static int set_ssl(bio_st* b, char8* ssl, int c) => ctrl(b, C_SET_SSL, c, ssl);
@@ -665,7 +645,7 @@ namespace Beef_Net.OpenSSL
 		[Inline]
 		public static int set_mem_eof_return(bio_st* b,int v) => ctrl(b, C_SET_BUF_MEM_EOF_RETURN, v, null);
 
-		/* For the BIO_f_buffer() type */
+		/* For the f_buffer() type */
 		[Inline]
 		public static int get_buffer_num_lines(bio_st* b) => ctrl(b, C_GET_BUFF_NUM_LINES, 0, null);
 		[Inline]
@@ -705,13 +685,13 @@ namespace Beef_Net.OpenSSL
 		[Inline]
 		public static int set_info_callback(bio_st* b, info_cb* cb) => callback_ctrl(b, CTRL_SET_CALLBACK, cb);
 
-		/* For the BIO_f_buffer() type */
+		/* For the f_buffer() type */
 		[Inline]
 		public static int buffer_get_num_lines(bio_st* b) => ctrl(b, CTRL_GET, 0, null);
 		[Inline]
 		public static int buffer_peek(bio_st* b, char8* s, int l) => ctrl(b, CTRL_PEEK, l, s);
 
-		/* For BIO_s_bio() */
+		/* For s_bio() */
 		[Inline]
 		public static int set_write_buf_size(bio_st* b, int size) => ctrl(b, C_SET_WRITE_BUF_SIZE, size, null);
 		[Inline]
@@ -762,7 +742,7 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_number_written")]
 		public extern static uint64 number_written(bio_st* bio);
 
-		/* For BIO_f_asn1() */
+		/* For f_asn1() */
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_asn1_set_prefix")]
 		public extern static int asn1_set_prefix(bio_st* b, asn1_ps_func* prefix, asn1_ps_func* prefix_free);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_asn1_get_prefix")]
@@ -972,7 +952,8 @@ namespace Beef_Net.OpenSSL
 		public extern static void ADDRINFO_free(ADDRINFO* bai);
 
 		[CRepr]
-		enum hostserv_priorities {
+		public enum hostserv_priorities
+		{
 		    BIO_PARSE_PRIO_HOST,
 			BIO_PARSE_PRIO_SERV
 		}
@@ -980,7 +961,8 @@ namespace Beef_Net.OpenSSL
 		public extern static int parse_hostserv(char8* hostserv, char8** host, char8** service, hostserv_priorities hostserv_prio);
 		
 		[CRepr]
-		enum lookup_type {
+		public enum lookup_type
+		{
 		    BIO_LOOKUP_CLIENT,
 			BIO_LOOKUP_SERVER
 		}
@@ -1013,11 +995,13 @@ namespace Beef_Net.OpenSSL
 		public extern static int accept(int sock, char8** ip_port);
 
 		[CRepr, Union]
-		public struct sock_info_u {
-		    ADDR* addr;
+		public struct sock_info_u
+		{
+		    public ADDR* addr;
 		}
 		[CRepr]
-		enum sock_info_type {
+		public enum sock_info_type
+		{
 		    BIO_SOCK_INFO_ADDRESS
 		}
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_sock_info")]
@@ -1055,32 +1039,22 @@ namespace Beef_Net.OpenSSL
 
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_new_bio_pair")]
 		public extern static int new_bio_pair(bio_st** bio1, uint writebuf1, bio_st** bio2, uint writebuf2);
-		/*
-		 * If successful, returns 1 and in *bio1, *bio2 two BIO pair endpoints.
-		 * Otherwise returns 0 and sets *bio1 and *bio2 to NULL. Size 0 uses default
-		 * value.
-		 */
-
+		/* If successful, returns 1 and in *bio1, *bio2 two BIO pair endpoints. Otherwise returns 0 and sets *bio1 and *bio2 to NULL. Size 0 uses default value. */
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_copy_next_retry")]
 		public extern static void copy_next_retry(bio_st* b);
 
 		/*
-		 * long BIO_ghbn_ctrl(int cmd,int iarg,char8* parg);
-		 */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_ghbn_ctrl")]
+		public extern static long ghbn_ctrl(int cmd, int iarg, char8* parg);
+		*/
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_printf")]
 		public extern static int printf(bio_st* bio, char8* format, ...);
-		/** FIXME: Perhaps void* is enough. **/
-		/*
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_vprintf")]
-		public extern static int vprintf(bio_st* bio, char8* format, va_list args);
-		*/
+		public extern static int vprintf(bio_st* bio, char8* format, void* args);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_snprintf")]
 		public extern static int snprintf(char8* buf, uint n, char8* format, ...);
-		/** FIXME: Perhaps void* is enough. **/
-		/*
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_vsnprintf")]
-		public extern static int vsnprintf(char8* buf, uint n, char8* format, va_list args);
-		*/
+		public extern static int vsnprintf(char8* buf, uint n, char8* format, void* args);
 
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_new")]
 		public extern static METHOD* meth_new(int type, char8* name);

@@ -29,9 +29,7 @@ namespace Beef_Net.OpenSSL
 			public struct ks_struct
 			{
 		        public cblock cblock;
-		        /*
-		         * make sure things are correct size on machines with 8 byte longs
-		         */
+		        /* make sure things are correct size on machines with 8 byte longs */
 		        public LONG[2] deslong;
 			}
 		}
@@ -86,13 +84,9 @@ namespace Beef_Net.OpenSSL
 		public extern static void ecb_encrypt(const_cblock* input, cblock* output, key_schedule* ks, int enc);
 		
 		/*
-		 * This is the DES encryption function that gets called by just about every
-		 * other DES routine in the library.  You should not use this function except
-		 * to implement 'modes' of DES.  I say this because the functions that call
-		 * this routine do the conversion from 'char8*' to long, and this needs to be
-		 * done to make sure 'non-aligned' memory access do not occur.  The
-		 * characters are loaded 'little endian'. Data is a pointer to 2 unsigned
-		 * long's and ks is the DES_key_schedule to use.  enc, is non zero specifies
+		 * This is the DES encryption function that gets called by just about every other DES routine in the library.
+		 * You should not use this function except to implement 'modes' of DES.  I say this because the functions that call this routine do the conversion from 'char8*' to long, and this needs to be
+		 * done to make sure 'non-aligned' memory access do not occur.  The characters are loaded 'little endian'. Data is a pointer to 2 unsigned long's and ks is the DES_key_schedule to use.  enc, is non zero specifies
 		 * encryption, zero if decryption.
 		 */
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("DES_encrypt1")]
@@ -100,8 +94,8 @@ namespace Beef_Net.OpenSSL
 		
 		/*
 		 * This functions is the same as encrypt1() except that the DES initial permutation (IP) and final permutation (FP) have been left out.
-		 * As for encrypt1(), you should not use this function. It is used by the routines in the library that implement triple DES. IP() encrypt2()
-		 * encrypt2() encrypt2() FP() is the same as encrypt1() encrypt1() encrypt1() except faster :-).
+		 * As for encrypt1(), you should not use this function. It is used by the routines in the library that implement triple DES. IP() encrypt2() encrypt2() encrypt2() FP()
+		 * is the same as encrypt1() encrypt1() encrypt1() except faster :-).
 		 */
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("DES_encrypt2")]
 		public extern static void encrypt2(LONG* data, key_schedule* ks, int enc);
@@ -136,10 +130,7 @@ namespace Beef_Net.OpenSSL
 		public extern static int check_key_parity(const_cblock* key);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("DES_is_weak_key")]
 		public extern static int is_weak_key(const_cblock* key);
-		/*
-		 * set_key (= set_key = key_sched = key_sched) calls set_key_checked if global variable check_key is set,
-		 * set_key_unchecked otherwise.
-		 */
+		/* set_key (= set_key = key_sched = key_sched) calls set_key_checked if global variable check_key is set, set_key_unchecked otherwise. */
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("DES_set_key")]
 		public extern static int set_key(const_cblock* key, key_schedule* schedule);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("DES_key_sched")]

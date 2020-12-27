@@ -15,6 +15,935 @@ namespace Beef_Net.OpenSSL
 	sealed abstract class TS
 	{
 #if !OPENSSL_NO_TS
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int ERR_load_TS_strings();
+
+		/*
+		 * TS function codes.
+		 */
+		public const int F_DEF_SERIAL_CB                          = 110;
+		public const int F_DEF_TIME_CB                            = 111;
+		public const int F_ESS_ADD_SIGNING_CERT                   = 112;
+		public const int F_ESS_ADD_SIGNING_CERT_V2                = 147;
+		public const int F_ESS_CERT_ID_NEW_INIT                   = 113;
+		public const int F_ESS_CERT_ID_V2_NEW_INIT                = 156;
+		public const int F_ESS_SIGNING_CERT_NEW_INIT              = 114;
+		public const int F_ESS_SIGNING_CERT_V2_NEW_INIT           = 157;
+		public const int F_INT_TS_RESP_VERIFY_TOKEN               = 149;
+		public const int F_PKCS7_TO_TS_TST_INFO                   = 148;
+		public const int F_TS_ACCURACY_SET_MICROS                 = 115;
+		public const int F_TS_ACCURACY_SET_MILLIS                 = 116;
+		public const int F_TS_ACCURACY_SET_SECONDS                = 117;
+		public const int F_TS_CHECK_IMPRINTS                      = 100;
+		public const int F_TS_CHECK_NONCES                        = 101;
+		public const int F_TS_CHECK_POLICY                        = 102;
+		public const int F_TS_CHECK_SIGNING_CERTS                 = 103;
+		public const int F_TS_CHECK_STATUS_INFO                   = 104;
+		public const int F_TS_COMPUTE_IMPRINT                     = 145;
+		public const int F_TS_CONF_INVALID                        = 151;
+		public const int F_TS_CONF_LOAD_CERT                      = 153;
+		public const int F_TS_CONF_LOAD_CERTS                     = 154;
+		public const int F_TS_CONF_LOAD_KEY                       = 155;
+		public const int F_TS_CONF_LOOKUP_FAIL                    = 152;
+		public const int F_TS_CONF_SET_DEFAULT_ENGINE             = 146;
+		public const int F_TS_GET_STATUS_TEXT                     = 105;
+		public const int F_TS_MSG_IMPRINT_SET_ALGO                = 118;
+		public const int F_TS_REQ_SET_MSG_IMPRINT                 = 119;
+		public const int F_TS_REQ_SET_NONCE                       = 120;
+		public const int F_TS_REQ_SET_POLICY_ID                   = 121;
+		public const int F_TS_RESP_CREATE_RESPONSE                = 122;
+		public const int F_TS_RESP_CREATE_TST_INFO                = 123;
+		public const int F_TS_RESP_CTX_ADD_FAILURE_INFO           = 124;
+		public const int F_TS_RESP_CTX_ADD_MD                     = 125;
+		public const int F_TS_RESP_CTX_ADD_POLICY                 = 126;
+		public const int F_TS_RESP_CTX_NEW                        = 127;
+		public const int F_TS_RESP_CTX_SET_ACCURACY               = 128;
+		public const int F_TS_RESP_CTX_SET_CERTS                  = 129;
+		public const int F_TS_RESP_CTX_SET_DEF_POLICY             = 130;
+		public const int F_TS_RESP_CTX_SET_SIGNER_CERT            = 131;
+		public const int F_TS_RESP_CTX_SET_STATUS_INFO            = 132;
+		public const int F_TS_RESP_GET_POLICY                     = 133;
+		public const int F_TS_RESP_SET_GENTIME_WITH_PRECISION     = 134;
+		public const int F_TS_RESP_SET_STATUS_INFO                = 135;
+		public const int F_TS_RESP_SET_TST_INFO                   = 150;
+		public const int F_TS_RESP_SIGN                           = 136;
+		public const int F_TS_RESP_VERIFY_SIGNATURE               = 106;
+		public const int F_TS_TST_INFO_SET_ACCURACY               = 137;
+		public const int F_TS_TST_INFO_SET_MSG_IMPRINT            = 138;
+		public const int F_TS_TST_INFO_SET_NONCE                  = 139;
+		public const int F_TS_TST_INFO_SET_POLICY_ID              = 140;
+		public const int F_TS_TST_INFO_SET_SERIAL                 = 141;
+		public const int F_TS_TST_INFO_SET_TIME                   = 142;
+		public const int F_TS_TST_INFO_SET_TSA                    = 143;
+		public const int F_TS_VERIFY                              = 108;
+		public const int F_TS_VERIFY_CERT                         = 109;
+		public const int F_TS_VERIFY_CTX_NEW                      = 144;
+
+		/*
+		 * TS reason codes.
+		 */
+		public const int R_BAD_PKCS7_TYPE                         = 132;
+		public const int R_BAD_TYPE                               = 133;
+		public const int R_CANNOT_LOAD_CERT                       = 137;
+		public const int R_CANNOT_LOAD_KEY                        = 138;
+		public const int R_CERTIFICATE_VERIFY_ERROR               = 100;
+		public const int R_COULD_NOT_SET_ENGINE                   = 127;
+		public const int R_COULD_NOT_SET_TIME                     = 115;
+		public const int R_DETACHED_CONTENT                       = 134;
+		public const int R_ESS_ADD_SIGNING_CERT_ERROR             = 116;
+		public const int R_ESS_ADD_SIGNING_CERT_V2_ERROR          = 139;
+		public const int R_ESS_SIGNING_CERTIFICATE_ERROR          = 101;
+		public const int R_INVALID_NULL_POINTER                   = 102;
+		public const int R_INVALID_SIGNER_CERTIFICATE_PURPOSE     = 117;
+		public const int R_MESSAGE_IMPRINT_MISMATCH               = 103;
+		public const int R_NONCE_MISMATCH                         = 104;
+		public const int R_NONCE_NOT_RETURNED                     = 105;
+		public const int R_NO_CONTENT                             = 106;
+		public const int R_NO_TIME_STAMP_TOKEN                    = 107;
+		public const int R_PKCS7_ADD_SIGNATURE_ERROR              = 118;
+		public const int R_PKCS7_ADD_SIGNED_ATTR_ERROR            = 119;
+		public const int R_PKCS7_TO_TS_TST_INFO_FAILED            = 129;
+		public const int R_POLICY_MISMATCH                        = 108;
+		public const int R_PRIVATE_KEY_DOES_NOT_MATCH_CERTIFICATE = 120;
+		public const int R_RESPONSE_SETUP_ERROR                   = 121;
+		public const int R_SIGNATURE_FAILURE                      = 109;
+		public const int R_THERE_MUST_BE_ONE_SIGNER               = 110;
+		public const int R_TIME_SYSCALL_ERROR                     = 122;
+		public const int R_TOKEN_NOT_PRESENT                      = 130;
+		public const int R_TOKEN_PRESENT                          = 131;
+		public const int R_TSA_NAME_MISMATCH                      = 111;
+		public const int R_TSA_UNTRUSTED                          = 112;
+		public const int R_TST_INFO_SETUP_ERROR                   = 123;
+		public const int R_TS_DATASIGN                            = 124;
+		public const int R_UNACCEPTABLE_POLICY                    = 125;
+		public const int R_UNSUPPORTED_MD_ALGORITHM               = 126;
+		public const int R_UNSUPPORTED_VERSION                    = 113;
+		public const int R_VAR_BAD_VALUE                          = 135;
+		public const int R_VAR_LOOKUP_FAILURE                     = 136;
+		public const int R_WRONG_CONTENT_TYPE                     = 114;
+
+		/*-
+		 * MessageImprint ::= SEQUENCE  {
+		 *      hashAlgorithm                AlgorithmIdentifier,
+		 *      hashedMessage                OCTET STRING
+		 * }
+		 */
+		[CRepr]
+		public struct msg_imprint_st
+		{
+		    public X509.ALGOR* hash_algo;
+		    public ASN1.OCTET_STRING* hashed_msg;
+		}
+		public typealias MSG_IMPRINT = msg_imprint_st;
+		/*-
+		 * TimeStampReq ::= SEQUENCE  {
+		 *    version                  INTEGER  { v1(1) },
+		 *    messageImprint           MessageImprint, -- a hash algorithm OID and the hash value of the data to be time-stamped
+		 *    reqPolicy                TSAPolicyId                OPTIONAL,
+		 *    nonce                    INTEGER                    OPTIONAL,
+		 *    certReq                  BOOLEAN                    DEFAULT FALSE,
+		 *    extensions               [0] IMPLICIT Extensions    OPTIONAL
+		 * }
+		 */
+		[CRepr]
+		public struct req_st
+		{
+		    public ASN1.INTEGER* version;
+		    public MSG_IMPRINT* msg_imprint;
+		    public ASN1.OBJECT* policy_id;
+		    public ASN1.INTEGER* nonce;
+		    public ASN1.BOOLEAN cert_req;
+		    public X509.stack_st_X509_EXTENSION* extensions;
+		}
+		public typealias REQ = req_st;
+		/*-
+		 * Accuracy ::= SEQUENCE {
+		 *                 seconds        INTEGER           OPTIONAL,
+		 *                 millis     [0] INTEGER  (1..999) OPTIONAL,
+		 *                 micros     [1] INTEGER  (1..999) OPTIONAL
+		 * }
+		 */
+		[CRepr]
+		public struct accuracy_st
+		{
+		    public ASN1.INTEGER* seconds;
+		    public ASN1.INTEGER* millis;
+		    public ASN1.INTEGER* micros;
+		}
+		public typealias ACCURACY = accuracy_st;
+		/*-
+		 * TSTInfo ::= SEQUENCE  {
+		 *     version                      INTEGER  { v1(1) },
+		 *     policy                       TSAPolicyId,
+		 *     messageImprint               MessageImprint, -- MUST have the same value as the similar field in TimeStampReq
+		 *     serialNumber                 INTEGER, -- Time-Stamping users MUST be ready to accommodate integers up to 160 bits.
+		 *     genTime                      GeneralizedTime,
+		 *     accuracy                     Accuracy                 OPTIONAL,
+		 *     ordering                     BOOLEAN             DEFAULT FALSE,
+		 *     nonce                        INTEGER                  OPTIONAL, -- MUST be present if the similar field was present in TimeStampReq.  In that case it MUST have the same value.
+		 *     tsa                          [0] GeneralName          OPTIONAL,
+		 *     extensions                   [1] IMPLICIT Extensions  OPTIONAL
+		 * }
+		 */
+		[CRepr]
+		public struct tst_info_st
+		{
+		    public ASN1.INTEGER* version;
+		    public ASN1.OBJECT* policy_id;
+		    public MSG_IMPRINT* msg_imprint;
+		    public ASN1.INTEGER* serial;
+		    public ASN1.GENERALIZEDTIME* time;
+		    public ACCURACY* accuracy;
+		    public ASN1.BOOLEAN ordering;
+		    public ASN1.INTEGER* nonce;
+		    public X509v3.GENERAL_NAME* tsa;
+		    public X509.stack_st_X509_EXTENSION* extensions;
+		}
+		public typealias TST_INFO = tst_info_st;
+
+		/* Possible values for status. */
+		public const int STATUS_GRANTED                 = 0;
+		public const int STATUS_GRANTED_WITH_MODS       = 1;
+		public const int STATUS_REJECTION               = 2;
+		public const int STATUS_WAITING                 = 3;
+		public const int STATUS_REVOCATION_WARNING      = 4;
+		public const int STATUS_REVOCATION_NOTIFICATION = 5;
+
+		/* Possible values for failure_info. */
+		public const int INFO_BAD_ALG                = 0;
+		public const int INFO_BAD_REQUEST            = 2;
+		public const int INFO_BAD_DATA_FORMAT        = 5;
+		public const int INFO_TIME_NOT_AVAILABLE     = 14;
+		public const int INFO_UNACCEPTED_POLICY      = 15;
+		public const int INFO_UNACCEPTED_EXTENSION   = 16;
+		public const int INFO_ADD_INFO_NOT_AVAILABLE = 17;
+		public const int INFO_SYSTEM_FAILURE         = 25;
+		
+		[CRepr]
+		public struct status_info_st
+		{
+		    public ASN1.INTEGER* status;
+		    public ASN1.stack_st_ASN1_UTF8STRING* text;
+		    public ASN1.BIT_STRING* failure_info;
+		}
+		public typealias STATUS_INFO = status_info_st;
+		
+		/*-
+		 * TimeStampResp ::= SEQUENCE  {
+		 *     status                  PKIStatusInfo,
+		 *     timeStampToken          TimeStampToken     OPTIONAL
+		 * }
+		 */
+		[CRepr]
+		public struct resp_st
+		{
+		    public STATUS_INFO* status_info;
+		    public PKCS7.pkcs7_st* token;
+		    public TST_INFO* tst_info;
+		}
+		public typealias RESP = resp_st;
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_REQ_new")]
+		public extern static REQ* REQ_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_REQ_free")]
+		public extern static void REQ_free(REQ* a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int i2d_TS_REQ(REQ* a, uint8** pp);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static REQ* d2i_TS_REQ(REQ** a, uint8** pp, int length);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_REQ_dup")]
+		public extern static REQ* REQ_dup(REQ* a);
+
+	#if !OPENSSL_NO_STDIO
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static REQ* d2i_TS_REQ_fp(Platform.BfpFile* fp, REQ** a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int i2d_TS_REQ_fp(Platform.BfpFile* fp, REQ* a);
+	#endif
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static REQ* d2i_TS_REQ_bio(BIO.bio_st* fp, REQ** a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int i2d_TS_REQ_bio(BIO.bio_st* fp, REQ* a);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_MSG_IMPRINT_new")]
+		public extern static MSG_IMPRINT* MSG_IMPRINT_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_MSG_IMPRINT_free")]
+		public extern static void MSG_IMPRINT_free(MSG_IMPRINT* a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int i2d_TS_MSG_IMPRINT(MSG_IMPRINT* a, uint8** pp);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static MSG_IMPRINT* d2i_TS_MSG_IMPRINT(MSG_IMPRINT** a, uint8** pp, int length);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_MSG_IMPRINT_dup")]
+		public extern static MSG_IMPRINT* MSG_IMPRINT_dup(MSG_IMPRINT* a);
+
+	#if !OPENSSL_NO_STDIO
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static MSG_IMPRINT* d2i_TS_MSG_IMPRINT_fp(Platform.BfpFile* fp, MSG_IMPRINT** a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int i2d_TS_MSG_IMPRINT_fp(Platform.BfpFile* fp, MSG_IMPRINT* a);
+	#endif
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static MSG_IMPRINT* d2i_TS_MSG_IMPRINT_bio(BIO.bio_st* bio, MSG_IMPRINT** a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int i2d_TS_MSG_IMPRINT_bio(BIO.bio_st* bio, MSG_IMPRINT* a);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_RESP_new")]
+		public extern static RESP* RESP_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_RESP_free")]
+		public extern static void RESP_free(RESP* a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int i2d_TS_RESP(RESP* a, uint8** pp);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static RESP* d2i_TS_RESP(RESP** a, uint8** pp, int length);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_RESP_dup")]
+		public extern static RESP* RESP_dup(RESP* a);
+
+	#if !OPENSSL_NO_STDIO
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static RESP* d2i_TS_RESP_fp(Platform.BfpFile* fp, RESP** a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int i2d_TS_RESP_fp(Platform.BfpFile* fp, RESP* a);
+	#endif
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static RESP* d2i_TS_RESP_bio(BIO.bio_st* bio, RESP** a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int i2d_TS_RESP_bio(BIO.bio_st* bio, RESP* a);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_STATUS_INFO_new")]
+		public extern static STATUS_INFO* STATUS_INFO_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_STATUS_INFO_free")]
+		public extern static void STATUS_INFO_free(STATUS_INFO* a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int i2d_TS_STATUS_INFO(STATUS_INFO* a, uint8** pp);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static STATUS_INFO* d2i_TS_STATUS_INFO(STATUS_INFO** a, uint8** pp, int length);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_STATUS_INFO_dup")]
+		public extern static STATUS_INFO* STATUS_INFO_dup(STATUS_INFO* a);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_TST_INFO_new")]
+		public extern static TST_INFO* TST_INFO_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_TST_INFO_free")]
+		public extern static void TST_INFO_free(TST_INFO* a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int i2d_TS_TST_INFO(TST_INFO*  a, uint8** pp);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static TST_INFO* d2i_TS_TST_INFO(TST_INFO** a, uint8** pp, int length);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_TST_INFO_dup")]
+		public extern static TST_INFO* TST_INFO_dup(TST_INFO* a);
+
+	#if !OPENSSL_NO_STDIO
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static TST_INFO* d2i_TS_TST_INFO_fp(Platform.BfpFile* fp, TST_INFO** a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int i2d_TS_TST_INFO_fp(Platform.BfpFile* fp, TST_INFO* a);
+	#endif
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static TST_INFO* d2i_TS_TST_INFO_bio(BIO.bio_st* bio, TST_INFO** a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int i2d_TS_TST_INFO_bio(BIO.bio_st* bio, TST_INFO* a);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_ACCURACY_new")]
+		public extern static ACCURACY* ACCURACY_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_ACCURACY_free")]
+		public extern static void ACCURACY_free(ACCURACY* a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int i2d_TS_ACCURACY(ACCURACY* a, uint8** pp);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static ACCURACY* d2i_TS_ACCURACY(ACCURACY** a, uint8** pp, int length);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_ACCURACY_dup")]
+		public extern static ACCURACY* ACCURACY_dup(ACCURACY* a);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_REQ_set_version")]
+		public extern static int REQ_set_version(REQ* a, int version);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_REQ_get_version")]
+		public extern static int REQ_get_version(REQ* a);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_STATUS_INFO_set_status")]
+		public extern static int STATUS_INFO_set_status(STATUS_INFO* a, int i);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_STATUS_INFO_get0_status")]
+		public extern static ASN1.INTEGER* STATUS_INFO_get0_status(STATUS_INFO* a);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_STATUS_INFO_get0_text")]
+		public extern static ASN1.stack_st_ASN1_UTF8STRING* STATUS_INFO_get0_text(STATUS_INFO* a);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_STATUS_INFO_get0_failure_info")]
+		public extern static ASN1.BIT_STRING* STATUS_INFO_get0_failure_info(STATUS_INFO* a);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_REQ_set_msg_imprint")]
+		public extern static int REQ_set_msg_imprint(REQ* a, MSG_IMPRINT* msg_imprint);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_REQ_get_msg_imprint")]
+		public extern static MSG_IMPRINT* REQ_get_msg_imprint(REQ* a);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_MSG_IMPRINT_set_algo")]
+		public extern static int MSG_IMPRINT_set_algo(MSG_IMPRINT* a, X509.ALGOR* alg);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_MSG_IMPRINT_get_algo")]
+		public extern static X509.ALGOR* MSG_IMPRINT_get_algo(MSG_IMPRINT* a);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_MSG_IMPRINT_set_msg")]
+		public extern static int MSG_IMPRINT_set_msg(MSG_IMPRINT* a, uint8* d, int len);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_MSG_IMPRINT_get_msg")]
+		public extern static ASN1.OCTET_STRING* MSG_IMPRINT_get_msg(MSG_IMPRINT* a);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_REQ_set_policy_id")]
+		public extern static int REQ_set_policy_id(REQ* a, ASN1.OBJECT* policy);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_REQ_get_policy_id")]
+		public extern static ASN1.OBJECT* REQ_get_policy_id(REQ* a);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_REQ_set_nonce")]
+		public extern static int REQ_set_nonce(REQ* a, ASN1.INTEGER* nonce);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_REQ_get_nonce")]
+		public extern static ASN1.INTEGER* REQ_get_nonce(REQ* a);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_REQ_set_cert_req")]
+		public extern static int REQ_set_cert_req(REQ* a, int cert_req);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_REQ_get_cert_req")]
+		public extern static int REQ_get_cert_req(REQ* a);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_REQ_get_exts")]
+		public extern static X509.stack_st_X509_EXTENSION* REQ_get_exts(REQ* a);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_REQ_ext_free")]
+		public extern static void REQ_ext_free(REQ* a);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_REQ_get_ext_count")]
+		public extern static int REQ_get_ext_count(REQ* a);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_REQ_get_ext_by_NID")]
+		public extern static int REQ_get_ext_by_NID(REQ* a, int nid, int lastpos);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_REQ_get_ext_by_OBJ")]
+		public extern static int REQ_get_ext_by_OBJ(REQ* a, ASN1.OBJECT* obj, int lastpos);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_REQ_get_ext_by_critical")]
+		public extern static int REQ_get_ext_by_critical(REQ* a, int crit, int lastpos);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_REQ_get_ext")]
+		public extern static X509.EXTENSION* REQ_get_ext(REQ* a, int loc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_REQ_delete_ext")]
+		public extern static X509.EXTENSION* REQ_delete_ext(REQ* a, int loc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_REQ_add_ext")]
+		public extern static int REQ_add_ext(REQ* a, X509.EXTENSION* ex, int loc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_REQ_get_ext_d2i")]
+		public extern static void* REQ_get_ext_d2i(REQ* a, int nid, int* crit, int* idx);
+
+		/* Function declarations for REQ defined in ts/ts_req_print.c */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_REQ_print_bio")]
+		public extern static int REQ_print_bio(BIO.bio_st* bio, REQ* a);
+
+		/* Function declarations for RESP defined in ts/ts_resp_utils.c */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_RESP_set_status_info")]
+		public extern static int RESP_set_status_info(RESP* a, STATUS_INFO* info);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_RESP_get_status_info")]
+		public extern static STATUS_INFO* RESP_get_status_info(RESP* a);
+
+		/* Caller loses ownership of PKCS7 and TST_INFO objects. */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_RESP_set_tst_info")]
+		public extern static void RESP_set_tst_info(RESP* a, PKCS7.pkcs7_st* p7, TST_INFO* tst_info);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_RESP_get_token")]
+		public extern static PKCS7.pkcs7_st* RESP_get_token(RESP* a);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_RESP_get_tst_info")]
+		public extern static TST_INFO* RESP_get_tst_info(RESP* a);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_TST_INFO_set_version")]
+		public extern static int TST_INFO_set_version(TST_INFO* a, int version);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_TST_INFO_get_version")]
+		public extern static int TST_INFO_get_version(TST_INFO* a);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_TST_INFO_set_policy_id")]
+		public extern static int TST_INFO_set_policy_id(TST_INFO* a, ASN1.OBJECT* policy_id);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_TST_INFO_get_policy_id")]
+		public extern static ASN1.OBJECT* TST_INFO_get_policy_id(TST_INFO* a);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_TST_INFO_set_msg_imprint")]
+		public extern static int TST_INFO_set_msg_imprint(TST_INFO* a, MSG_IMPRINT* msg_imprint);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_TST_INFO_get_msg_imprint")]
+		public extern static MSG_IMPRINT* TST_INFO_get_msg_imprint(TST_INFO* a);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_TST_INFO_set_serial")]
+		public extern static int TST_INFO_set_serial(TST_INFO* a, ASN1.INTEGER* serial);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_TST_INFO_get_serial")]
+		public extern static ASN1.INTEGER* TST_INFO_get_serial(TST_INFO* a);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_TST_INFO_set_time")]
+		public extern static int TST_INFO_set_time(TST_INFO* a, ASN1.GENERALIZEDTIME* gtime);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_TST_INFO_get_time")]
+		public extern static ASN1.GENERALIZEDTIME* TST_INFO_get_time(TST_INFO* a);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_TST_INFO_set_accuracy")]
+		public extern static int TST_INFO_set_accuracy(TST_INFO* a, ACCURACY* accuracy);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_TST_INFO_get_accuracy")]
+		public extern static ACCURACY* TST_INFO_get_accuracy(TST_INFO* a);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_ACCURACY_set_seconds")]
+		public extern static int ACCURACY_set_seconds(ACCURACY* a, ASN1.INTEGER* seconds);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_ACCURACY_get_seconds")]
+		public extern static ASN1.INTEGER* ACCURACY_get_seconds(ACCURACY* a);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_ACCURACY_set_millis")]
+		public extern static int ACCURACY_set_millis(ACCURACY* a, ASN1.INTEGER* millis);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_ACCURACY_get_millis")]
+		public extern static ASN1.INTEGER* ACCURACY_get_millis(ACCURACY* a);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_ACCURACY_set_micros")]
+		public extern static int ACCURACY_set_micros(ACCURACY* a, ASN1.INTEGER* micros);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_ACCURACY_get_micros")]
+		public extern static ASN1.INTEGER* ACCURACY_get_micros(ACCURACY* a);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_TST_INFO_set_ordering")]
+		public extern static int TST_INFO_set_ordering(TST_INFO* a, int ordering);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_TST_INFO_get_ordering")]
+		public extern static int TST_INFO_get_ordering(TST_INFO* a);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_TST_INFO_set_nonce")]
+		public extern static int TST_INFO_set_nonce(TST_INFO* a, ASN1.INTEGER* nonce);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_TST_INFO_get_nonce")]
+		public extern static ASN1.INTEGER* TST_INFO_get_nonce(TST_INFO* a);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_TST_INFO_set_tsa")]
+		public extern static int TST_INFO_set_tsa(TST_INFO* a, X509v3.GENERAL_NAME* tsa);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_TST_INFO_get_tsa")]
+		public extern static X509v3.GENERAL_NAME* TST_INFO_get_tsa(TST_INFO* a);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_TST_INFO_get_exts")]
+		public extern static X509.stack_st_X509_EXTENSION* TST_INFO_get_exts(TST_INFO* a);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_TST_INFO_ext_free")]
+		public extern static void TST_INFO_ext_free(TST_INFO* a);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_TST_INFO_get_ext_count")]
+		public extern static int TST_INFO_get_ext_count(TST_INFO* a);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_TST_INFO_get_ext_by_NID")]
+		public extern static int TST_INFO_get_ext_by_NID(TST_INFO* a, int nid, int lastpos);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_TST_INFO_get_ext_by_OBJ")]
+		public extern static int TST_INFO_get_ext_by_OBJ(TST_INFO* a, ASN1.OBJECT* obj, int lastpos);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_TST_INFO_get_ext_by_critical")]
+		public extern static int TST_INFO_get_ext_by_critical(TST_INFO* a, int crit, int lastpos);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_TST_INFO_get_ext")]
+		public extern static X509.EXTENSION* TST_INFO_get_ext(TST_INFO* a, int loc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_TST_INFO_delete_ext")]
+		public extern static X509.EXTENSION* TST_INFO_delete_ext(TST_INFO* a, int loc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_TST_INFO_add_ext")]
+		public extern static int TST_INFO_add_ext(TST_INFO* a, X509.EXTENSION* ex, int loc);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_TST_INFO_get_ext_d2i")]
+		public extern static void* TST_INFO_get_ext_d2i(TST_INFO* a, int nid, int* crit, int* idx);
+
+		/* Declarations related to response generation, defined in ts/ts_resp_sign.c. */
+		/* Optional flags for response generation. */
+		/* Don't include the TSA name in response. */
+		public const int TSA_NAME          = 0x01;
+		/* Set ordering to true in response. */
+		public const int ORDERING          = 0x02;
+
+		/* Include the signer certificate and the other specified certificates in the ESS signing certificate attribute beside the PKCS7 signed data. Only the signer certificates is included by default. */
+		public const int ESS_CERT_ID_CHAIN = 0x04;
+
+		/* This must return a unique number less than 160 bits long. */
+		public function ASN1.INTEGER* serial_cb(resp_ctx* ctx, void* args);
+
+		/* This must return the seconds and microseconds since Jan 1, 1970 in the sec and usec variables allocated by the caller. Return non-zero for success and zero for failure. */
+		public function int time_cb(resp_ctx* ctx, void* args, int* sec, int* usec);
+
+		/* This must process the given extension. It can modify the TST_INFO object of the context. Return values: !0 (processed), 0 (error, it must set the status info/failure info of the response). */
+		public function int extension_cb(resp_ctx* ctx, X509.EXTENSION* e, void* args);
+
+		[CRepr]
+		public struct resp_ctx
+		{
+		    public X509.x509_st* signer_cert;
+		    public EVP.PKEY* signer_key;
+		    public EVP.MD* signer_md;
+		    public EVP.MD* ess_cert_id_digest;
+		    public X509.stack_st_X509* certs;           /* Certs to include in signed data. */
+		    public ASN1.stack_st_ASN1_OBJECT* policies; /* Acceptable policies. */
+		    public ASN1.OBJECT* default_policy;         /* It may appear in policies, too. */
+		    public EVP.stack_st_EVP_MD* mds;            /* Acceptable message digests. */
+		    public ASN1.INTEGER* seconds;               /* accuracy, 0 means not specified. */
+		    public ASN1.INTEGER* millis;                /* accuracy, 0 means not specified. */
+		    public ASN1.INTEGER* micros;                /* accuracy, 0 means not specified. */
+		    public uint clock_precision_digits;         /* fraction of seconds in time stamp token. */
+		    public uint flags;                          /* Optional info, see values above. */
+		    /* Callback functions. */
+		    public serial_cb serial_cb;
+		    public void* serial_cb_data;                /* User data for serial_cb. */
+		    public time_cb time_cb;
+		    public void* time_cb_data;                  /* User data for time_cb. */
+		    public extension_cb extension_cb;
+		    public void* extension_cb_data;             /* User data for extension_cb. */
+		    /* These members are used only while creating the response. */
+		    public REQ* request;
+		    public RESP* response;
+		    public TST_INFO* tst_info;
+		}
+		public typealias RESP_CTX = resp_ctx;
+
+		/* Creates a response context that can be used for generating responses. */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_RESP_CTX_new")]
+		public extern static RESP_CTX* RESP_CTX_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_RESP_CTX_free")]
+		public extern static void RESP_CTX_free(RESP_CTX* ctx);
+
+		/* This parameter must be set. */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_RESP_CTX_set_signer_cert")]
+		public extern static int RESP_CTX_set_signer_cert(RESP_CTX* ctx, X509.x509_st* signer);
+
+		/* This parameter must be set. */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_RESP_CTX_set_signer_key")]
+		public extern static int RESP_CTX_set_signer_key(RESP_CTX* ctx, EVP.PKEY* key);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_RESP_CTX_set_signer_digest")]
+		public extern static int RESP_CTX_set_signer_digest(RESP_CTX* ctx, EVP.MD* signer_digest);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_RESP_CTX_set_ess_cert_id_digest")]
+		public extern static int RESP_CTX_set_ess_cert_id_digest(RESP_CTX* ctx, EVP.MD* md);
+
+		/* This parameter must be set. */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_RESP_CTX_set_def_policy")]
+		public extern static int RESP_CTX_set_def_policy(RESP_CTX* ctx, ASN1.OBJECT* def_policy);
+
+		/* No additional certs are included in the response by default. */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_RESP_CTX_set_certs")]
+		public extern static int RESP_CTX_set_certs(RESP_CTX* ctx, X509.stack_st_X509* certs);
+
+		/* Adds a new acceptable policy, only the default policy is accepted by default. */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_RESP_CTX_add_policy")]
+		public extern static int RESP_CTX_add_policy(RESP_CTX* ctx, ASN1.OBJECT* policy);
+
+		/* Adds a new acceptable message digest. Note that no message digests are accepted by default. The md argument is shared with the caller. */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_RESP_CTX_add_md")]
+		public extern static int RESP_CTX_add_md(RESP_CTX* ctx, EVP.MD* md);
+
+		/* Accuracy is not included by default. */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_RESP_CTX_set_accuracy")]
+		public extern static int RESP_CTX_set_accuracy(RESP_CTX* ctx, int secs, int millis, int micros);
+
+		/* Clock precision digits, i.e. the number of decimal digits: '0' means sec, '3' msec, '6' usec, and so on. Default is 0. */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_RESP_CTX_set_clock_precision_digits")]
+		public extern static int RESP_CTX_set_clock_precision_digits(RESP_CTX* ctx, uint clock_precision_digits);
+
+		/* At most we accept usec precision. */
+		public const int MAX_CLOCK_PRECISION_DIGITS = 6;
+
+		/* Maximum status message length */
+		public const int MAX_STATUS_LENGTH = 1024 * 1024;
+
+		/* No flags are set by default. */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_RESP_CTX_add_flags")]
+		public extern static void RESP_CTX_add_flags(RESP_CTX* ctx, int flags);
+
+		/* Default callback always returns a constant. */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_RESP_CTX_set_serial_cb")]
+		public extern static void RESP_CTX_set_serial_cb(RESP_CTX* ctx, serial_cb cb, void* data);
+
+		/* Default callback uses the gettimeofday() and gmtime() system calls. */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_RESP_CTX_set_time_cb")]
+		public extern static void RESP_CTX_set_time_cb(RESP_CTX* ctx, time_cb cb, void* data);
+
+		/* Default callback rejects all extensions. The extension callback is called when the TST_INFO object is already set up and not signed yet. */
+		/* FIXME: extension handling is not tested yet. */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_RESP_CTX_set_extension_cb")]
+		public extern static void RESP_CTX_set_extension_cb(RESP_CTX* ctx, extension_cb cb, void* data);
+
+		/* The following methods can be used in the callbacks. */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_RESP_CTX_set_status_info")]
+		public extern static int RESP_CTX_set_status_info(RESP_CTX* ctx, int status, char8* text);
+
+		/* Sets the status info only if it is still TS_STATUS_GRANTED. */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_RESP_CTX_set_status_info_cond")]
+		public extern static int RESP_CTX_set_status_info_cond(RESP_CTX* ctx, int status, char8* text);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_RESP_CTX_add_failure_info")]
+		public extern static int RESP_CTX_add_failure_info(RESP_CTX* ctx, int failure);
+
+		/* The get methods below can be used in the extension callback. */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_RESP_CTX_get_request")]
+		public extern static REQ* RESP_CTX_get_request(RESP_CTX* ctx);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_RESP_CTX_get_tst_info")]
+		public extern static TST_INFO* RESP_CTX_get_tst_info(RESP_CTX* ctx);
+
+		/* Creates the signed TST_INFO and puts it in RESP. In case of errors it sets the status info properly. Returns NULL only in case of memory allocation/fatal error. */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_RESP_create_response")]
+		public extern static RESP* RESP_create_response(RESP_CTX* ctx, BIO.bio_st* req_bio);
+
+		/* Declarations related to response verification, they are defined in ts/ts_resp_verify.c. */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_RESP_verify_signature")]
+		public extern static int RESP_verify_signature(PKCS7.pkcs7_st* token, X509.stack_st_X509* certs, X509.STORE* store, X509.x509_st** signer_out);
+
+		/* Context structure for the generic verify method. */
+		/* Verify the signer's certificate and the signature of the response. */
+		public const int VFY_SIGNATURE   = 1u << 0;
+		/* Verify the version number of the response. */
+		public const int VFY_VERSION     = 1u << 1;
+		/* Verify if the policy supplied by the user matches the policy of the TSA. */
+		public const int VFY_POLICY      = 1u << 2;
+		/* Verify the message imprint provided by the user. This flag should not be specified with VFY_DATA. */
+		public const int VFY_IMPRINT     = 1u << 3;
+		/* Verify the message imprint computed by the verify method from the user provided data and the MD algorithm of the response. This flag should not be specified with VFY_IMPRINT. */
+		public const int VFY_DATA        = 1u << 4;
+		/* Verify the nonce value. */
+		public const int VFY_NONCE       = 1u << 5;
+		/* Verify if the TSA name field matches the signer certificate. */
+		public const int VFY_SIGNER      = 1u << 6;
+		/* Verify if the TSA name field equals to the user provided name. */
+		public const int VFY_TSA_NAME    = 1u << 7;
+		/* You can use the following convenience constants. */
+		public const int VFY_ALL_IMPRINT = VFY_SIGNATURE | VFY_VERSION | VFY_POLICY | VFY_IMPRINT | VFY_NONCE | VFY_SIGNER | VFY_TSA_NAME;
+		public const int VFY_ALL_DATA    = VFY_SIGNATURE | VFY_VERSION | VFY_POLICY | VFY_DATA | VFY_NONCE | VFY_SIGNER | VFY_TSA_NAME;
+
+		[CRepr]
+		public struct verify_ctx
+		{
+		    /* Set this to the union of VFY_... flags you want to carry out. */
+		    public uint flags;
+		    /* Must be set only with VFY_SIGNATURE. certs is optional. */
+		    public X509.STORE* store;
+		    public X509.stack_st_X509* certs;
+		    /* Must be set only with VFY_POLICY. */
+		    public ASN1.OBJECT* policy;
+		    /* Must be set only with VFY_IMPRINT. If md_alg is NULL, the algorithm from the response is used. */
+		    public X509.ALGOR* md_alg;
+		    public uint8* imprint;
+		    public uint imprint_len;
+		    /* Must be set only with VFY_DATA. */
+		    public BIO.bio_st* data;
+		    /* Must be set only with VFY_TSA_NAME. */
+		    public ASN1.INTEGER* nonce;
+		    /* Must be set only with VFY_TSA_NAME. */
+		    public X509v3.GENERAL_NAME* tsa_name;
+		}
+		public typealias VERIFY_CTX = verify_ctx;
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_RESP_verify_response")]
+		public extern static int RESP_verify_response(VERIFY_CTX* ctx, RESP* response);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_RESP_verify_token")]
+		public extern static int RESP_verify_token(VERIFY_CTX* ctx, PKCS7.pkcs7_st* token);
+
+		/* Declarations related to response verification context, */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_VERIFY_CTX_new")]
+		public extern static VERIFY_CTX* VERIFY_CTX_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_VERIFY_CTX_init")]
+		public extern static void VERIFY_CTX_init(VERIFY_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_VERIFY_CTX_free")]
+		public extern static void VERIFY_CTX_free(VERIFY_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_VERIFY_CTX_cleanup")]
+		public extern static void VERIFY_CTX_cleanup(VERIFY_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_VERIFY_CTX_set_flags")]
+		public extern static int VERIFY_CTX_set_flags(VERIFY_CTX* ctx, int f);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_VERIFY_CTX_add_flags")]
+		public extern static int VERIFY_CTX_add_flags(VERIFY_CTX* ctx, int f);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_VERIFY_CTX_set_data")]
+		public extern static BIO.bio_st* VERIFY_CTX_set_data(VERIFY_CTX* ctx, BIO.bio_st* b);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_VERIFY_CTX_set_imprint")]
+		public extern static uint8* VERIFY_CTX_set_imprint(VERIFY_CTX* ctx, uint8* hexstr, int len);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_VERIFY_CTX_set_store")]
+		public extern static X509.STORE* VERIFY_CTX_set_store(VERIFY_CTX* ctx, X509.STORE* s);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_VERIFY_CTS_set_certs")]
+		public extern static X509.stack_st_X509* VERIFY_CTS_set_certs(VERIFY_CTX* ctx, X509.stack_st_X509* certs);
+
+		/*-
+		 * If ctx is NULL, it allocates and returns a new object, otherwise it returns ctx. It initialises all the members as follows:
+		 * flags = VFY_ALL_IMPRINT & ~(VFY_TSA_NAME | VFY_SIGNATURE)
+		 * certs = NULL
+		 * store = NULL
+		 * policy = policy from the request or NULL if absent (in this case VFY_POLICY is cleared from flags as well)
+		 * md_alg = MD algorithm from request
+		 * imprint, imprint_len = imprint from request
+		 * data = NULL
+		 * nonce, nonce_len = nonce from the request or NULL if absent (in this case VFY_NONCE is cleared from flags as well)
+		 * tsa_name = NULL
+		 * Important: after calling this method VFY_SIGNATURE should be added!
+		 */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_REQ_to_TS_VERIFY_CTX")]
+		public extern static VERIFY_CTX* REQ_to_TS_VERIFY_CTX(REQ* req, VERIFY_CTX* ctx);
+
+		/* Function declarations for TS_RESP defined in ts/ts_resp_print.c */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_RESP_print_bio")]
+		public extern static int RESP_print_bio(BIO.bio_st* bio, RESP* a);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_STATUS_INFO_print_bio")]
+		public extern static int STATUS_INFO_print_bio(BIO.bio_st* bio, STATUS_INFO* a);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_TST_INFO_print_bio")]
+		public extern static int TST_INFO_print_bio(BIO.bio_st* bio, TST_INFO* a);
+
+		/* Common utility functions defined in ts/ts_lib.c */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_ASN1_INTEGER_print_bio")]
+		public extern static int ASN1_INTEGER_print_bio(BIO.bio_st* bio, ASN1.INTEGER* num);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_OBJ_print_bio")]
+		public extern static int OBJ_print_bio(BIO.bio_st* bio, ASN1.OBJECT* obj);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_ext_print_bio")]
+		public extern static int ext_print_bio(BIO.bio_st* bio, X509.stack_st_X509_EXTENSION* extensions);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_X509_ALGOR_print_bio")]
+		public extern static int X509_ALGOR_print_bio(BIO.bio_st* bio, X509.ALGOR* alg);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_MSG_IMPRINT_print_bio")]
+		public extern static int MSG_IMPRINT_print_bio(BIO.bio_st* bio, MSG_IMPRINT* msg);
+
+		/* Function declarations for handling configuration options, defined in ts/ts_conf.c */
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_CONF_load_cert")]
+		public extern static X509.x509_st* CONF_load_cert(char8* file);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_CONF_load_certs")]
+		public extern static X509.stack_st_X509* CONF_load_certs(char8* file);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_CONF_load_key")]
+		public extern static EVP.PKEY* CONF_load_key(char8* file, char8* pass);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_CONF_get_tsa_section")]
+		public extern static char8* CONF_get_tsa_section(Conf.conf_st* conf, char8* section);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_CONF_set_serial")]
+		public extern static int CONF_set_serial(Conf.conf_st* conf, char8* section, serial_cb cb, RESP_CTX* ctx);
+	#if !OPENSSL_NO_ENGINE
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_CONF_set_crypto_device")]
+		public extern static int CONF_set_crypto_device(Conf.conf_st* conf, char8* section, char8* device);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_CONF_set_default_engine")]
+		public extern static int CONF_set_default_engine(char8* name);
+	#endif
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_CONF_set_signer_cert")]
+		public extern static int CONF_set_signer_cert(Conf.conf_st* conf, char8* section, char8* cert, RESP_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_CONF_set_certs")]
+		public extern static int CONF_set_certs(Conf.conf_st* conf, char8* section, char8* certs, RESP_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_CONF_set_signer_key")]
+		public extern static int CONF_set_signer_key(Conf.conf_st* conf, char8* section, char8* key, char8* pass, RESP_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_CONF_set_signer_digest")]
+		public extern static int CONF_set_signer_digest(Conf.conf_st* conf, char8* section, char8* md, RESP_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_CONF_set_def_policy")]
+		public extern static int CONF_set_def_policy(Conf.conf_st* conf, char8* section, char8* policy, RESP_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_CONF_set_policies")]
+		public extern static int CONF_set_policies(Conf.conf_st* conf, char8* section, RESP_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_CONF_set_digests")]
+		public extern static int CONF_set_digests(Conf.conf_st* conf, char8* section, RESP_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_CONF_set_accuracy")]
+		public extern static int CONF_set_accuracy(Conf.conf_st* conf, char8* section, RESP_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_CONF_set_clock_precision_digits")]
+		public extern static int CONF_set_clock_precision_digits(Conf.conf_st* conf, char8* section, RESP_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_CONF_set_ordering")]
+		public extern static int CONF_set_ordering(Conf.conf_st* conf, char8* section, RESP_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_CONF_set_tsa_name")]
+		public extern static int CONF_set_tsa_name(Conf.conf_st* conf, char8* section, RESP_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_CONF_set_ess_cert_id_chain")]
+		public extern static int CONF_set_ess_cert_id_chain(Conf.conf_st* conf, char8* section, RESP_CTX* ctx);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("TS_CONF_set_ess_cert_id_digest")]
+		public extern static int CONF_set_ess_cert_id_digest(Conf.conf_st* conf, char8* section, RESP_CTX* ctx);
 #endif
+	}
+
+	[AlwaysInclude]
+	sealed abstract class ESS
+	{
+		public struct stack_st_POLICYINFO {}
+		
+		/*-
+		 * IssuerSerial ::= SEQUENCE {
+		 *         issuer                   GeneralNames,
+		 *         serialNumber             CertificateSerialNumber
+		 * }
+		 */
+		[CRepr]
+		public struct issuer_serial
+		{
+		    public X509v3.stack_st_GENERAL_NAMES* issuer;
+		    public ASN1.INTEGER* serial;
+		}
+		public typealias ISSUER_SERIAL = issuer_serial;
+		/*-
+		 * ESSCertID ::=  SEQUENCE {
+		 *         certHash                 Hash,
+		 *         issuerSerial             IssuerSerial OPTIONAL
+		 * }
+		 */
+		[CRepr]
+		public struct cert_id
+		{
+		    public ASN1.OCTET_STRING* hash;      /* Always SHA-1 digest. */
+		    public ISSUER_SERIAL* issuer_serial;
+		}
+		public typealias CERT_ID = cert_id;
+		public struct stack_st_ESS_CERT_ID {}
+		/*-
+		 * SigningCertificate ::=  SEQUENCE {
+		 *        certs        SEQUENCE OF ESSCertID,
+		 *        policies     SEQUENCE OF PolicyInformation OPTIONAL
+		 * }
+		 */
+		[CRepr]
+		public struct signing_cert
+		{
+		    public stack_st_ESS_CERT_ID* cert_ids;
+		    public stack_st_POLICYINFO* policy_info;
+		}
+		public typealias SIGNING_CERT = signing_cert;
+
+		/*-
+		 * ESSCertIDv2 ::=  SEQUENCE {
+		 *        hashAlgorithm           AlgorithmIdentifier DEFAULT {algorithm id-sha256},
+		 *        certHash                Hash,
+		 *        issuerSerial            IssuerSerial OPTIONAL
+		 * }
+		 */
+		[CRepr]
+		public struct cert_id_v2_st
+		{
+		    public X509.ALGOR* hash_alg;         /* Default: SHA-256 */
+		    public ASN1.OCTET_STRING* hash;
+		    public ISSUER_SERIAL* issuer_serial;
+		}
+		public typealias CERT_ID_V2 = cert_id_v2_st;
+		public struct stack_st_ESS_CERT_ID_V2 {}
+		/*-
+		 * SigningCertificateV2 ::= SEQUENCE {
+		 *        certs                   SEQUENCE OF ESSCertIDv2,
+		 *        policies                SEQUENCE OF PolicyInformation OPTIONAL
+		 * }
+		 */
+		[CRepr]
+		public struct signing_cert_v2_st
+		{
+		    public stack_st_ESS_CERT_ID_V2* cert_ids;
+		    public stack_st_POLICYINFO* policy_info;
+		}
+		public typealias SIGNING_CERT_V2 = signing_cert_v2_st;
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static ISSUER_SERIAL* ESS_ISSUER_SERIAL_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static void ESS_ISSUER_SERIAL_free(ISSUER_SERIAL* a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int i2d_ESS_ISSUER_SERIAL(ISSUER_SERIAL* a, uint8** pp);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static ISSUER_SERIAL* d2i_ESS_ISSUER_SERIAL(ISSUER_SERIAL** a, uint8** pp, int length);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static ISSUER_SERIAL* ESS_ISSUER_SERIAL_dup(ISSUER_SERIAL* a);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static CERT_ID* ESS_CERT_ID_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static void ESS_CERT_ID_free(CERT_ID* a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int i2d_ESS_CERT_ID(CERT_ID* a, uint8** pp);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static CERT_ID* d2i_ESS_CERT_ID(CERT_ID** a, uint8** pp, int length);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static CERT_ID* ESS_CERT_ID_dup(CERT_ID* a);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static SIGNING_CERT* ESS_SIGNING_CERT_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static void ESS_SIGNING_CERT_free(SIGNING_CERT* a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int i2d_ESS_SIGNING_CERT(SIGNING_CERT* a, uint8** pp);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static SIGNING_CERT* d2i_ESS_SIGNING_CERT(SIGNING_CERT** a, uint8** pp, int length);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static SIGNING_CERT* ESS_SIGNING_CERT_dup(SIGNING_CERT* a);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static CERT_ID_V2* ESS_CERT_ID_V2_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static void ESS_CERT_ID_V2_free(CERT_ID_V2* a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int i2d_ESS_CERT_ID_V2(CERT_ID_V2* a, uint8** pp);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static CERT_ID_V2* d2i_ESS_CERT_ID_V2(CERT_ID_V2** a, uint8** pp, int length);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static CERT_ID_V2* ESS_CERT_ID_V2_dup(CERT_ID_V2 *a);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static SIGNING_CERT_V2* ESS_SIGNING_CERT_V2_new();
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		public extern static void ESS_SIGNING_CERT_V2_free(SIGNING_CERT_V2* a);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static int i2d_ESS_SIGNING_CERT_V2(SIGNING_CERT_V2* a, uint8** pp);
+		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		public extern static SIGNING_CERT_V2* d2i_ESS_SIGNING_CERT_V2(SIGNING_CERT_V2** a, uint8** pp, int length);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("ESS_SIGNING_CERT_V2_dup")]
+		public extern static SIGNING_CERT_V2* ESS_SIGNING_CERT_V2_dup(SIGNING_CERT_V2* a);
 	}
 }

@@ -79,11 +79,9 @@ namespace Beef_Net.OpenSSL
 		public const int R_UNABLE_TO_CHECK_GENERATOR = 121;
 		
 		[CRepr]
-		public struct dh_st {
-		    /*
-		     * This first argument is used to pick up errors when a DH is passed
-		     * instead of a EVP_PKEY
-		     */
+		public struct dh_st
+		{
+		    /* This first argument is used to pick up errors when a DH is passed instead of a EVP.PKEY */
 		    public int pad;
 		    public int version;
 		    public BN.BIGNUM* p;
@@ -107,12 +105,12 @@ namespace Beef_Net.OpenSSL
 		}
 
 		[CRepr]
-		public struct method_st {
+		public struct method_st
+		{
 		    public char8* name;
 		    /* Methods here */
 		    public function int(dh_st* dh) generate_key;
 		    public function int(uint8* key, BN.BIGNUM* pub_key, dh_st* dh) compute_key;
-
 		    /* Can be null */
 		    public function int(dh_st* dh, BN.BIGNUM* r, BN.BIGNUM* a, BN.BIGNUM* p, BN.BIGNUM* m, BN.CTX* ctx, BN.MONT_CTX* m_ctx) bn_mod_exp;
 		    public function int(dh_st* dh) init;
@@ -125,22 +123,14 @@ namespace Beef_Net.OpenSSL
 		public typealias METHOD = method_st;
 		
 		public const int FLAG_CACHE_MONT_P     = 0x01;
-		/*
-		 * Does nothing. Previously this switched off constant time behaviour.
-		 */
+		/* Does nothing. Previously this switched off constant time behaviour. */
 		public const int FLAG_NO_EXP_CONSTTIME = 0x00;
 		/*
-		 * If this flag is set the DH method is FIPS compliant and can be used in
-		 * FIPS mode. This is set in the validated module method. If an application
-		 * sets this flag in its own methods it is its responsibility to ensure the
+		 * If this flag is set the DH method is FIPS compliant and can be used in FIPS mode. This is set in the validated module method. If an application sets this flag in its own methods it is its responsibility to ensure the
 		 * result is compliant.
 		 */
 		public const int FLAG_FIPS_METHOD      = 0x0400;
-		/*
-		 * If this flag is set the operations normally disabled in FIPS mode are
-		 * permitted it is then the applications responsibility to ensure that the
-		 * usage is compliant.
-		 */
+		/* If this flag is set the operations normally disabled in FIPS mode are permitted it is then the applications responsibility to ensure that the usage is compliant. */
 		public const int FLAG_NON_FIPS_ALLOW   = 0x0400;
 
 		/* Already defined in ossl_typ.h */
@@ -165,10 +155,7 @@ namespace Beef_Net.OpenSSL
 		public const int CHECK_PUBKEY_TOO_LARGE    = 0x02;
 		public const int CHECK_PUBKEY_INVALID      = 0x04;
 
-		/*
-		 * primes p where (p-1)/2 is prime too are called "safe"; we define this for
-		 * backward compatibility:
-		 */
+		/* primes p where (p-1)/2 is prime too are called "safe"; we define this for backward compatibility: */
 		public const int CHECK_P_NOT_STRONG_PRIME = CHECK_P_NOT_SAFE_PRIME;
 
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_OpenSSL")]
@@ -196,8 +183,7 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_security_bits")]
 		public extern static int security_bits(dh_st* dh);
 		[Inline]
-		public static int get_ex_new_index(int l, void* p, Crypto.EX_new newf, Crypto.EX_dup dupf, Crypto.EX_free freef) =>
-			Crypto.get_ex_new_index(Crypto.EX_INDEX_DH, l, p, newf, dupf, freef);
+		public static int get_ex_new_index(int l, void* p, Crypto.EX_new newf, Crypto.EX_dup dupf, Crypto.EX_free freef) => Crypto.get_ex_new_index(Crypto.EX_INDEX_DH, l, p, newf, dupf, freef);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_set_ex_data")]
 		public extern static int set_ex_data(dh_st* d, int idx, void* arg);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("DH_get_ex_data")]

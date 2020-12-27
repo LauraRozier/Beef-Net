@@ -256,7 +256,8 @@ namespace Beef_Net.OpenSSL
 		public typealias SignerInfo = SignerInfo_st;
 		
 		[CRepr]
-		public struct CertificateChoices_st {
+		public struct CertificateChoices_st
+		{
 		    public int type;
 		    public d_struct d;
 
@@ -265,8 +266,8 @@ namespace Beef_Net.OpenSSL
 			{
 		        public X509.x509_st* certificate;
 		        public ASN1.STRING* extendedCertificate; /* Obsolete */
-		        public ASN1.STRING* v1AttrCert; /* Left encoded for now */
-		        public ASN1.STRING* v2AttrCert; /* Left encoded for now */
+		        public ASN1.STRING* v1AttrCert;          /* Left encoded for now */
+		        public ASN1.STRING* v2AttrCert;          /* Left encoded for now */
 		        public OtherCertificateFormat* other;
 			}
 		}

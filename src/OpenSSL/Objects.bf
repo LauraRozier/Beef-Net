@@ -114,7 +114,7 @@ namespace Beef_Net.OpenSSL
 		public readonly static int32[] simpleSecurityObject                                   = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 4L, 19L) ~ delete _;
 		public readonly static int32[] pilotOrganization                                      = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 4L, 20L) ~ delete _;
 		public readonly static int32[] pilotDSA                                               = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 4L, 21L) ~ delete _;
-		public readonly static int32[] qualityLabelledData                                    = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 4L, 22L);
+		public readonly static int32[] qualityLabelledData                                    = new .[7](itu_t, 9L, 2342L, 19200300L, 100L, 4L, 22L) ~ delete _;
 
 		public readonly static int32[] pilotGroups                                            = new .[6](itu_t, 9L, 2342L, 19200300L, 100L, 10L) ~ delete _;
 

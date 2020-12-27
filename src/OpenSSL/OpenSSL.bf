@@ -399,6 +399,10 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_is_sorted")]
 		public extern static int sk_is_sorted(Stack.OPENSSL_STACK* st);
 
+		[CRepr]
+		public struct dir_context_st {} // Too platform dependent
+		public typealias DIR_CTX = dir_context_st;
+
 		/*
 		** MOVED for convenience
 		** libssl-1_1.dll

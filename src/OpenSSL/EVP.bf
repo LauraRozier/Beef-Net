@@ -268,6 +268,7 @@ namespace Beef_Net.OpenSSL
 		    public function int(MD_CTX* ctx, int cmd, int p1, void* p2) md_ctrl;
 		}
 		public typealias MD = md_st;
+		public struct stack_st_EVP_MD {}
 		
 		[CRepr]
 		public struct md_ctx_st

@@ -124,9 +124,9 @@ namespace Beef_Net.OpenSSL
 		[CRepr]
 		public struct gencb_st
 		{
-		    uint ver;     /* To handle binary (in)compatibility */
-		    void* arg;    /* callback-specific data */
-			cb_struct cb;
+		    public uint ver;     /* To handle binary (in)compatibility */
+		    public void* arg;    /* callback-specific data */
+			public cb_struct cb;
 
 			[Union, CRepr]
 			public struct cb_struct
@@ -139,25 +139,19 @@ namespace Beef_Net.OpenSSL
 		}
 		public typealias GENCB = gencb_st;
 
-		/*
-		 * 64-bit processor with LP64 ABI
-		 */
+		/* 64-bit processor with LP64 ABI */
 #if SIXTY_FOUR_BIT_LONG
 		public typealias ULONG = uint64;
 		public const int BYTES = 8;
 #endif
 
-		/*
-		 * 64-bit processor other than LP64 ABI
-		 */
+		/* 64-bit processor other than LP64 ABI */
 #if SIXTY_FOUR_BIT
 		public typealias ULONG = uint64;
 		public const int BYTES = 8;
 #endif
 		
-		/*
-		 * 32-bit processor
-		 */
+		/* 32-bit processor */
 #if THIRTY_TWO_BIT
 		public typealias ULONG = uint32;
 		public const int BYTES = 4;
@@ -170,12 +164,7 @@ namespace Beef_Net.OpenSSL
 		public const int FLG_MALLOCED    = 0x01;
 		public const int FLG_STATIC_DATA = 0x02;
 
-		/*
-		 * avoid leaking exponent information through timing,
-		 * BN_mod_exp_mont() will call BN_mod_exp_mont_consttime,
-		 * BN_div() will call BN_div_no_branch,
-		 * BN_mod_inverse() will call bn_mod_inverse_no_branch.
-		 */
+		/* Avoid leaking exponent information through timing, mod_exp_mont() will call mod_exp_mont_consttime, div() will call div_no_branch, mod_inverse() will call mod_inverse_no_branch. */
 		public const int FLG_CONSTTIME = 0x04;
 		public const int FLG_SECURE    = 0x08;
 
@@ -198,15 +187,13 @@ namespace Beef_Net.OpenSSL
 		public const int RAND_BOTTOM_ODD = 1;
 		
 		/*
-		 * get a clone of a BIGNUM with changed flags, for *temporary* use only (the
-		 * two BIGNUMs cannot be used in parallel!). Also only for *read only* use. The
-		 * value |dest| should be a newly allocated BIGNUM obtained via BN_new() that
-		 * has not been otherwise initialised or used.
+		 * Get a clone of a BIGNUM with changed flags, for *temporary* use only (the two BIGNUMs cannot be used in parallel!). Also only for *read only* use.
+		 * The value |dest| should be a newly allocated BIGNUM obtained via new() that has not been otherwise initialised or used.
 		 */
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_with_flags")]
 		public extern static void with_flags(BIGNUM* dest, BIGNUM* b, int flags);
 
-		/* Wrapper function to make using BN_GENCB easier */
+		/* Wrapper function to make using GENCB easier */
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_GENCB_call")]
 		public extern static int GENCB_call(GENCB* cb, int a, int b);
 
@@ -215,11 +202,11 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_GENCB_free")]
 		public extern static void GENCB_free(GENCB* cb);
 
-		/* Populate a BN_GENCB structure with an "old"-style callback */
+		/* Populate a GENCB structure with an "old"-style callback */
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_GENCB_set_old")]
 		public extern static void GENCB_set_old(GENCB* gencb, function void(int, int, void*) callback, void* cb_arg);
 
-		/* Populate a BN_GENCB structure with a "new"-style callback */
+		/* Populate a GENCB structure with a "new"-style callback */
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_GENCB_set")]
 		public extern static void GENCB_set(GENCB* gencb, function int(int, int, GENCB*) callback, void* cb_arg);
 
@@ -229,16 +216,11 @@ namespace Beef_Net.OpenSSL
 		public const int prime_checks = 0; /* default: select number of iterations based on the size of the number */
 
 		/*
-		 * BN_prime_checks_for_size() returns the number of Miller-Rabin iterations
-		 * that will be done for checking that a random number is probably prime. The
-		 * error rate for accepting a composite number as prime depends on the size of
-		 * the prime |b|. The error rates used are for calculating an RSA key with 2 primes,
-		 * and so the level is what you would expect for a key of double the size of the
-		 * prime.
+		 * prime_checks_for_size() returns the number of Miller-Rabin iterations that will be done for checking that a random number is probably prime.
+		 * The error rate for accepting a composite number as prime depends on the size of the prime |b|. The error rates used are for calculating an RSA key with 2 primes,
+		 * and so the level is what you would expect for a key of double the size of the prime.
 		 *
-		 * This table is generated using the algorithm of FIPS PUB 186-4
-		 * Digital Signature Standard (DSS), section F.1, page 117.
-		 * (https://dx.doi.org/10.6028/NIST.FIPS.186-4)
+		 * This table is generated using the algorithm of FIPS PUB 186-4 Digital Signature Standard (DSS), section F.1, page 117. (https://dx.doi.org/10.6028/NIST.FIPS.186-4)
 		 *
 		 * The following magma script was used to generate the output:
 		 * securitybits:=125;
@@ -267,14 +249,11 @@ namespace Beef_Net.OpenSSL
 		 *   if seclevel ge securitybits then break; end if;
 		 * end for;
 		 *
-		 * It can be run online at:
-		 * http://magma.maths.usyd.edu.au/calc
+		 * It can be run online at: http://magma.maths.usyd.edu.au/calc
 		 *
-		 * And will output:
-		 * k:  1024, security: 129 bits  (t: 6, M: 23)
+		 * And will output: k:  1024, security: 129 bits  (t: 6, M: 23)
 		 *
-		 * k is the number of bits of the prime, securitybits is the level we want to
-		 * reach.
+		 * k is the number of bits of the prime, securitybits is the level we want to reach.
 		 *
 		 * prime length | RSA key size | # MR tests | security level
 		 * -------------+--------------|------------+---------------
@@ -322,9 +301,11 @@ namespace Beef_Net.OpenSSL
 		public extern static void zero_ex(BIGNUM* a);
 
 		// #if OPENSSL_API_COMPAT >= 0x00908000L
-		// public static int zero(BIGNUM* a) => zero_ex(a);
+		[Inline]
+		public static void zero_compat(BIGNUM* a) => zero_ex(a);
 		// #else
-		public static int BN_zero(BIGNUM* a) => set_word(a, 0);
+		[Inline]
+		public static int zero(BIGNUM* a) => set_word(a, 0);
 		// #endif
 
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_value_one")]
@@ -397,13 +378,13 @@ namespace Beef_Net.OpenSSL
 		public extern static int mul(BIGNUM* r, BIGNUM* a, BIGNUM* b, CTX* ctx);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_sqr")]
 		public extern static int sqr(BIGNUM* r, BIGNUM* a, CTX* ctx);
-		/** BN_set_negative sets sign of a BIGNUM
+		/** set_negative sets sign of a BIGNUM
 		 * \param  b  pointer to the BIGNUM object
 		 * \param  n  0 if the BIGNUM b should be positive and a value != 0 otherwise
 		 */
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_set_negative")]
 		public extern static void set_negative(BIGNUM* b, int n);
-		/** BN_is_negative returns 1 if the BIGNUM is negative
+		/** is_negative returns 1 if the BIGNUM is negative
 		 * \param  b  pointer to the BIGNUM object
 		 * \return 1 if a < 0 and 0 otherwise
 		 */
@@ -412,7 +393,7 @@ namespace Beef_Net.OpenSSL
 
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_div")]
 		public extern static int div(BIGNUM* dv, BIGNUM* rem, BIGNUM* m, BIGNUM* d, CTX* ctx);
-		//# define BN_mod(rem,m,d,ctx) BN_div(NULL,(rem),(m),(d),(ctx))
+		//# define mod(rem, m, d, ctx) div(null, rem, m, d, ctx)
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_nnmod")]
 		public extern static int nnmod(BIGNUM* r, BIGNUM* m, BIGNUM* d, CTX* ctx);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_mod_add")]
@@ -486,13 +467,7 @@ namespace Beef_Net.OpenSSL
 		public static int print_fp(StringView filename, BIGNUM* a)
 		{
 			Platform.BfpFileResult fileResult = .Ok;
-			Platform.BfpFile* fp = Platform.BfpFile_Create(
-				filename.ToScopeCStr!(128),
-				.CreateAlways,
-				.Read | .Write | .Append,
-				.Normal,
-				&fileResult
-			);
+			Platform.BfpFile* fp = Platform.BfpFile_Create(filename.ToScopeCStr!(128), .CreateAlways, .Read | .Write | .Append, .Normal, &fileResult);
 
 			if (fp == null || fileResult != .Ok) {
 				switch (fileResult) {
@@ -648,21 +623,15 @@ namespace Beef_Net.OpenSSL
 #if !OPENSSL_NO_EC2M
 		/*
 		 * Functions for arithmetic over binary polynomials represented by BIGNUMs.
-		 * The BIGNUM::neg property of BIGNUMs representing binary polynomials is
-		 * ignored. Note that input arguments are not const so that their bit arrays
-		 * can be expanded to the appropriate size if needed.
+		 * The BIGNUM::neg property of BIGNUMs representing binary polynomials is ignored. Note that input arguments are not const so that their bit arrays can be expanded to the appropriate size if needed.
 		 */
 
-		/*
-		 * r = a + b
-		 */
+		/* r = a + b */
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_GF2m_add")]
 		public extern static int GF2m_add(BIGNUM* r, BIGNUM* a, BIGNUM* b);
 		[Inline]
 		public static int GF2m_sub(BIGNUM* r, BIGNUM* a, BIGNUM* b) => GF2m_add(r, a, b);
-		/*
-		 * r=a mod p
-		 */
+		/* r = a mod p */
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_GF2m_mod")]
 		public extern static int GF2m_mod(BIGNUM* r, BIGNUM* a, BIGNUM* p);
 		/* r = (a * b) mod p */
@@ -689,8 +658,7 @@ namespace Beef_Net.OpenSSL
 		[Inline]
 		public static int GF2m_cmp(BIGNUM* a, BIGNUM* b) => ucmp(a, b);
 		/*-
-		 * Some functions allow for representation of the irreducible polynomials
-		 * as an unsigned int[], say p.  The irreducible f(t) is then of the form:
+		 * Some functions allow for representation of the irreducible polynomials as an unsigned int[], say p.  The irreducible f(t) is then of the form:
 		 *     t^p[0] + t^p[1] + ... + t^p[k]
 		 * where m = p[0] > p[1] > ... > p[k] = 0.
 		 */
@@ -724,9 +692,7 @@ namespace Beef_Net.OpenSSL
 		public extern static int GF2m_arr2poly(int[] p, BIGNUM* a);
 #endif
 
-		/*
-		 * faster mod functions for the 'NIST primes' 0 <= a < p^2
-		 */
+		/* faster mod functions for the 'NIST primes' 0 <= a < p^2 */
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_nist_mod_192")]
 		public extern static int nist_mod_192(BIGNUM* r, BIGNUM* a, BIGNUM* p, CTX* ctx);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_nist_mod_224")]

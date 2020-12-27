@@ -27,10 +27,7 @@ namespace Beef_Net.OpenSSL
 		/*
 		 * BUF reason codes.
 		 */
-		/*
-		 * These names are outdated as of OpenSSL 1.1; a future release
-		 * will move them to be deprecated.
-		 */
+		/* These names are outdated as of OpenSSL 1.1; a future release will move them to be deprecated. */
 		[Inline]
 		public static char8* strdup(char8* str) => OpenSSL.strdup(str);
 		[Inline]
@@ -45,7 +42,8 @@ namespace Beef_Net.OpenSSL
 		public static uint strnlen(char8* str, uint maxlen) => OpenSSL.strnlen(str, maxlen);
 
 		[CRepr]
-		public struct mem_st {
+		public struct mem_st
+		{
 		    public uint length; /* current number of bytes */
 		    public char8* data;
 		    public uint max;    /* size of buffer */

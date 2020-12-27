@@ -96,7 +96,8 @@ namespace Beef_Net.OpenSSL
 
 		/* Module definitions */
 		[CRepr]
-		public struct imodule_st {
+		public struct imodule_st
+		{
 		    public MODULE* pmod;
 		    public char8* name;
 		    public char8* value;
@@ -105,7 +106,9 @@ namespace Beef_Net.OpenSSL
 		}
 		public typealias IMODULE = imodule_st;
 
-		public struct module_st {
+		[CRepr]
+		public struct module_st
+		{
 		    /* DSO of this module or NULL if static */
 		    public DSO.dso_st* dso;
 		    /* Name of the module */
@@ -161,10 +164,7 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("CONF_dump_bio")]
 		public extern static int dump_bio(lhash_st_CONF_VALUE* conf, BIO.bio_st* outVal);
 
-		/*
-		 * New conf code.  The semantics are different from the functions above. If
-		 * that wasn't the case, the above functions would have been replaced
-		 */
+		/* New conf code.  The semantics are different from the functions above. If that wasn't the case, the above functions would have been replaced */
 		[CRepr]
 		public struct conf_st
 		{
@@ -175,7 +175,6 @@ namespace Beef_Net.OpenSSL
 		public typealias CONF = conf_st;
 
 		/* Module functions */
-
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("CONF_modules_load")]
 		public extern static int modules_load(conf_st* cnf, char8* appname, uint flags);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("CONF_modules_load_file")]

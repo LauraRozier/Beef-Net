@@ -63,22 +63,14 @@ namespace Beef_Net.OpenSSL
 		public const int R_SEED_LEN_SMALL           = 110;
 
 		public const int FLAG_CACHE_MONT_P      = 0x01;
-		/*
-		 * Does nothing. Previously this switched off constant time behaviour.
-		 */
+		/* Does nothing. Previously this switched off constant time behaviour. */
 		public const int FLAG_NO_EXP_CONSTTIME = 0x00;
 		/*
-		 * If this flag is set the DSA method is FIPS compliant and can be used in
-		 * FIPS mode. This is set in the validated module method. If an application
-		 * sets this flag in its own methods it is its responsibility to ensure the
+		 * If this flag is set the DSA method is FIPS compliant and can be used in FIPS mode. This is set in the validated module method. If an application sets this flag in its own methods it is its responsibility to ensure the
 		 * result is compliant.
 		 */
 		public const int FLAG_FIPS_METHOD       = 0x0400;
-		/*
-		 * If this flag is set the operations normally disabled in FIPS mode are
-		 * permitted it is then the applications responsibility to ensure that the
-		 * usage is compliant.
-		 */
+		/* If this flag is set the operations normally disabled in FIPS mode are permitted it is then the applications responsibility to ensure that the usage is compliant. */
 		public const int FLAG_NON_FIPS_ALLOW    = 0x0400;
 		public const int FLAG_FIPS_CHECKED      = 0x0800;
 
@@ -94,18 +86,16 @@ namespace Beef_Net.OpenSSL
 		public typealias SIG = SIG_st;
 
 		[CRepr]
-		public struct dsa_st {
-		    /*
-		     * This first variable is used to pick up errors where a DSA is passed
-		     * instead of of a EVP_PKEY
-		     */
+		public struct dsa_st
+		{
+		    /* This first variable is used to pick up errors where a DSA is passed instead of of a EVP.PKEY */
 		    public int pad;
 		    public int32 version;
 		    public BN.BIGNUM* p;
-		    public BN.BIGNUM* q;        /* == 20 */
+		    public BN.BIGNUM* q;                /* == 20 */
 		    public BN.BIGNUM* g;
-		    public BN.BIGNUM* pub_key;  /* y public key */
-		    public BN.BIGNUM* priv_key; /* x private key */
+		    public BN.BIGNUM* pub_key;          /* y public key */
+		    public BN.BIGNUM* priv_key;         /* x private key */
 		    public int flags;
 		    /* Normally used to cache montgomery values */
 		    public BN.MONT_CTX* method_mont_p;
@@ -119,7 +109,8 @@ namespace Beef_Net.OpenSSL
 		public typealias DSA = dsa_st;
 		
 		[CRepr]
-		public struct method_st {
+		public struct method_st
+		{
 		    public char8* name;
 		    public function SIG*(uint8* dgst, int dlen, dsa_st* dsa) dsa_do_sign;
 		    public function int(dsa_st* dsa, BN.CTX* ctx_in, BN.BIGNUM** kinvp, BN.BIGNUM** rp) dsa_sign_setup;
@@ -191,8 +182,7 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_verify")]
 		public extern static int verify(int type, uint8* dgst, int dgst_len, uint8* sigbuf, int siglen, dsa_st* dsa);
 		[Inline]
-		public static int get_ex_new_index(int l, void* p, Crypto.EX_new newf, Crypto.EX_dup dupf, Crypto.EX_free freef) =>
-			Crypto.get_ex_new_index(Crypto.EX_INDEX_DSA, l, p, newf, dupf, freef);
+		public static int get_ex_new_index(int l, void* p, Crypto.EX_new newf, Crypto.EX_dup dupf, Crypto.EX_free freef) => Crypto.get_ex_new_index(Crypto.EX_INDEX_DSA, l, p, newf, dupf, freef);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_set_ex_data")]
 		public extern static int set_ex_data(dsa_st* d, int idx, void* arg);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_get_ex_data")]
@@ -227,19 +217,14 @@ namespace Beef_Net.OpenSSL
 
 		public const int DSS_prime_checks = 64;
 		/*
-		 * Primality test according to FIPS PUB 186-4, Appendix C.3. Since we only
-		 * have one value here we set the number of checks to 64 which is the 128 bit
-		 * security level that is the highest level and valid for creating a 3072 bit
-		 * DSA key.
+		 * Primality test according to FIPS PUB 186-4, Appendix C.3. Since we only have one value here we set the number of checks to 64 which is the 128 bit
+		 * security level that is the highest level and valid for creating a 3072 bit DSA key.
 		 */
 		[Inline]
 		public static int is_prime(BN.BIGNUM* n, function void(int, int, void*) callback, void* cb_arg) => BN.is_prime(n, DSS_prime_checks, callback, null, cb_arg);
 
 	#if !OPENSSL_NO_DH
-		/*
-		 * Convert DSA structure (key or just parameters) into DH structure (be
-		 * careful to avoid small subgroup attacks when using this!)
-		 */
+		/* Convert DSA structure (key or just parameters) into DH structure (be careful to avoid small subgroup attacks when using this!) */
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_dup_DH")]
 		public extern static DH.dh_st* dup_DH(dsa_st* r);
 	#endif

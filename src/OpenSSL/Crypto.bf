@@ -59,10 +59,7 @@ namespace Beef_Net.OpenSSL
 		/*-------------------------------------------------------------------------------
 		** crypto.h
 		*/
-		/*
-		 * Old type for allocating dynamic locks. No longer used. Use the new thread
-		 * API instead.
-		 */
+		/* Old type for allocating dynamic locks. No longer used. Use the new thread API instead. */
 		[CRepr]
 		public struct dynloc
 		{
@@ -85,10 +82,7 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_atomic_add")]
 		public extern static int atomic_add(int* val, int amount, int* ret, RWLOCK* lock);
 		
-		/*
-		 * The following can be used to detect memory leaks in the library. If
-		 * used, it turns on malloc checking
-		 */
+		/* The following can be used to detect memory leaks in the library. If used, it turns on malloc checking */
 		public const int MEM_CHECK_OFF     = 0x0; /* Control only */
 		public const int MEM_CHECK_ON      = 0x1; /* Control and mode bit */
 		public const int MEM_CHECK_ENABLE  = 0x2; /* Control and mode bit */
@@ -102,9 +96,7 @@ namespace Beef_Net.OpenSSL
 		}
 		public typealias EX_DATA = ex_data_st;
 		
-		/*
-		 * Per class, we have a STACK of function pointers.
-		 */
+		/* Per class, we have a STACK of function pointers. */
 		public const int EX_INDEX_SSL            = 0;
 		public const int EX_INDEX_SSL_CTX        = 1;
 		public const int EX_INDEX_SSL_SESSION    = 2;
@@ -137,10 +129,7 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_free_ex_index")]
 		public extern static int free_ex_index(int class_index, int idx);
 
-		/*
-		 * Initialise/duplicate/free EX_DATA variables corresponding to a
-		 * given class (invokes whatever per-class callbacks are applicable)
-		 */
+		/* Initialise/duplicate/free EX_DATA variables corresponding to a given class (invokes whatever per-class callbacks are applicable) */
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_new_ex_data")]
 		public extern static int new_ex_data(int class_index, void* obj, EX_DATA* ad);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_dup_ex_data")]
@@ -149,31 +138,20 @@ namespace Beef_Net.OpenSSL
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_free_ex_data")]
 		public extern static void free_ex_data(int class_index, void* obj, EX_DATA* ad);
 		
-		/*
-		 * Get/set data in a EX_DATA variable corresponding to a particular
-		 * index (relative to the class type involved)
-		 */
+		/* Get/set data in a EX_DATA variable corresponding to a particular index (relative to the class type involved) */
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_set_ex_data")]
 		public extern static int set_ex_data(EX_DATA* ad, int idx, void* val);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_get_ex_data")]
 		public extern static void* get_ex_data(EX_DATA* ad, int idx);
 		
-		/*
-		 * This function cleans up all "ex_data" state. It mustn't be called under
-		 * potential race-conditions.
-		 */
+		/* This function cleans up all "ex_data" state. It mustn't be called under potential race-conditions. */
 		[Inline, Obsolete("No longer available, no-op", true)]
 		public static void cleanup_all_ex_data() { while(false) continue; }
 		
 		/*
-		 * The old locking functions have been removed completely without compatibility
-		 * macros. This is because the old functions either could not properly report
-		 * errors, or the returned error values were not clearly documented.
-		 * Replacing the locking functions with no-ops would cause race condition
-		 * issues in the affected applications. It is far better for them to fail at
-		 * compile time.
-		 * On the other hand, the locking callbacks are no longer used.  Consequently,
-		 * the callback management functions can be safely replaced with no-op macros.
+		 * The old locking functions have been removed completely without compatibility macros. This is because the old functions either could not properly report errors, or the returned error values were not clearly documented.
+		 * Replacing the locking functions with no-ops would cause race condition issues in the affected applications. It is far better for them to fail at compile time.
+		 * On the other hand, the locking callbacks are no longer used.  Consequently, the callback management functions can be safely replaced with no-op macros.
 		 */
 		[Inline, Obsolete("No longer available, no-op", true)]
 		public static int num_locks() => 1;
@@ -186,11 +164,7 @@ namespace Beef_Net.OpenSSL
 		[Inline, Obsolete("No longer available, no-op", true)]
 		public static void* get_add_lock_callback() => null;
 		
-		/*
-		 * These defines where used in combination with the old locking callbacks,
-		 * they are not called anymore, but old code that's not called might still
-		 * use them.
-		 */
+		/* These defines where used in combination with the old locking callbacks, they are not called anymore, but old code that's not called might still use them. */
 		public static int LOCK   = 1;
 		public static int UNLOCK = 2;
 		public static int READ   = 4;
@@ -295,17 +269,15 @@ namespace Beef_Net.OpenSSL
 
 		/*
 		 * memcmp returns zero iff the |len| bytes at |a| and |b| are equal.
-		 * It takes an amount of time dependent on |len|, but independent of the
-		 * contents of |a| and |b|. Unlike memcmp, it cannot be used to put elements
-		 * into a defined order as the return value when a != b is undefined, other
+		 * It takes an amount of time dependent on |len|, but independent of the contents of |a| and |b|. Unlike memcmp, it cannot be used to put elements into a defined order as the return value when a != b is undefined, other
 		 * than to be non-zero.
 		 */
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_memcmp")]
 		public extern static int memcmp(void* in_a, void* in_b, uint len);
 
-		public typealias ONCE         = uint;
+		public typealias ONCE = uint;
 		public typealias THREAD_LOCAL = uint;
-		public typealias THREAD_ID    = uint;
+		public typealias THREAD_ID = uint;
 		
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_THREAD_run_once")]
 		public extern static int THREAD_run_once(ONCE* once, function void() init);

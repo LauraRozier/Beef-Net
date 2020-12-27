@@ -37,8 +37,8 @@ namespace Beef_Net.OpenSSL
 		[CRepr]
 		public struct method_st
 		{
-		    public int type;                   /* NID for compression library */
-		    public char8* name;           /* A text string to identify the library */
+		    public int type;                                                                           /* NID for compression library */
+		    public char8* name;                                                                        /* A text string to identify the library */
 		    public function int(CTX* ctx) init;
 		    public function void(CTX* ctx) finish;
 		    public function int(CTX* ctx, uint8* outVal, uint olen, uint8* inVal, uint ilen) compress;

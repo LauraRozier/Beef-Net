@@ -17,28 +17,25 @@ namespace Beef_Net.OpenSSL
 		public const int ENCRYPT = 1;
 		public const int DECRYPT = 0;
 
-		/*
-		 * Because array size can't be a const in C, the following two are macros.
-		 * Both sizes are in bytes.
-		 */
+		/* Because array size can't be a const in C, the following two are macros. Both sizes are in bytes. */
 
 		/* This should be a hidden type, but EVP requires that the size be known */
-
 		public const int BLOCK_SIZE     = 16;
 		public const int TABLE_BYTE_LEN = 272;
 		public const int TABLE_WORD_LEN = TABLE_BYTE_LEN / 4;
 
-		public typealias KEY_TABLE_TYPE = uint[272 / 4/*TABLE_WORD_LEN*/]; /* to match with WORD */
+		public typealias KEY_TABLE_TYPE = uint[272 / 4 /*TABLE_WORD_LEN*/]; /* to match with WORD */
 
 		[CRepr]
-		public struct key_st {
+		public struct key_st
+		{
 		    public u_struct u;
 		    public int grand_rounds;
 
 			[CRepr, Union]
 			public struct u_struct
 			{
-				public double d; /* ensures 64-bit align */
+				public double d;              /* ensures 64-bit align */
 				public KEY_TABLE_TYPE rd_key;
 			}
 		}

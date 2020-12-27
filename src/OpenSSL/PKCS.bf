@@ -495,6 +495,9 @@ namespace Beef_Net.OpenSSL
 		public extern static int add0_attrib_signing_time(SIGNER_INFO* si, ASN1.TIME* t);
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_add1_attrib_digest")]
 		public extern static int add1_attrib_digest(SIGNER_INFO* si, uint8* md, int mdlen);
+
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_to_TS_TST_INFO")]
+		public extern static TS.TST_INFO* to_TS_TST_INFO(pkcs7_st* token);
 	}
 	
 	[AlwaysInclude]
