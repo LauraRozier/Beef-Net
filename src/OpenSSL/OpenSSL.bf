@@ -420,6 +420,9 @@ namespace Beef_Net.OpenSSL
 		public const int NPN_NEGOTIATED  = 1;
 		public const int NPN_NO_OVERLAP  = 2;
 
+		/* Default security level if not overridden at config time */
+		public const int TLS_SECURITY_LEVEL = 1;
+
 		[Inline]
 		public static void add_ssl_algorithms() => SSL.library_init();
 

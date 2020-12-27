@@ -37,6 +37,62 @@ namespace Beef_Net.OpenSSL
 		public function int session_ticket_ext_cb_fn(SSL.ssl_st* s, uint8* data, int len, void* arg);
 		public function int session_secret_cb_fn(SSL.ssl_st* s, void* secret, int* secret_len, SSL.stack_st_SSL_CIPHER* peer_ciphers, SSL.CIPHER** cipher, void* arg);
 
+		public const int MAX_VERSION = TLS1_3.VERSION;
+		/* Special value for method supporting multiple versions */
+		public const int ANY_VERSION = 0x10000;
+
+		public const int CT_RSA_SIGN         = 1;
+		public const int CT_DSS_SIGN         = 2;
+		public const int CT_RSA_FIXED_DH     = 3;
+		public const int CT_DSS_FIXED_DH     = 4;
+		public const int CT_ECDSA_SIGN       = 64;
+		public const int CT_RSA_FIXED_ECDH   = 65;
+		public const int CT_ECDSA_FIXED_ECDH = 66;
+		public const int CT_GOST01_SIGN      = 22;
+		public const int CT_GOST12_SIGN      = 238;
+		public const int CT_GOST12_512_SIGN  = 239;
+		/* when correcting this number, correct also SSL3.CT_NUMBER in ssl3.h (see comment there) */
+		public const int CT_NUMBER           = 10;
+
+		public const int MD_MAX_CONST_SIZE                    = 22;
+		public const String MD_CLIENT_FINISH_CONST            = "client finished";
+		public const int MD_CLIENT_FINISH_CONST_SIZE          = 15;
+		public const String MD_SERVER_FINISH_CONST            = "server finished";
+		public const int MD_SERVER_FINISH_CONST_SIZE          = 15;
+		public const String MD_KEY_EXPANSION_CONST            = "key expansion";
+		public const int MD_KEY_EXPANSION_CONST_SIZE          = 13;
+		public const String MD_CLIENT_WRITE_KEY_CONST         = "client write key";
+		public const int MD_CLIENT_WRITE_KEY_CONST_SIZE       = 16;
+		public const String MD_SERVER_WRITE_KEY_CONST         = "server write key";
+		public const int MD_SERVER_WRITE_KEY_CONST_SIZE       = 16;
+		public const String MD_IV_BLOCK_CONST                 = "IV block";
+		public const int MD_IV_BLOCK_CONST_SIZE               = 8;
+		public const String MD_MASTER_SECRET_CONST            = "master secret";
+		public const int MD_MASTER_SECRET_CONST_SIZE          = 13;
+		public const String MD_EXTENDED_MASTER_SECRET_CONST   = "extended master secret";
+		public const int MD_EXTENDED_MASTER_SECRET_CONST_SIZE = 22;
+
+#if CHARSET_EBCDIC
+		/* client finished */
+		public const String MD_CLIENT_FINISH_CONST          = "\x63\x6c\x69\x65\x6e\x74\x20\x66\x69\x6e\x69\x73\x68\x65\x64";
+		/* server finished */
+		public const String MD_SERVER_FINISH_CONST          = "\x73\x65\x72\x76\x65\x72\x20\x66\x69\x6e\x69\x73\x68\x65\x64";
+		/* server write key */
+		public const String MD_SERVER_WRITE_KEY_CONST       = "\x73\x65\x72\x76\x65\x72\x20\x77\x72\x69\x74\x65\x20\x6b\x65\x79";
+		/* key expansion */
+		public const String MD_KEY_EXPANSION_CONST          = "\x6b\x65\x79\x20\x65\x78\x70\x61\x6e\x73\x69\x6f\x6e";
+		/* client write key */
+		public const String MD_CLIENT_WRITE_KEY_CONST       = "\x63\x6c\x69\x65\x6e\x74\x20\x77\x72\x69\x74\x65\x20\x6b\x65\x79";
+		/* server write key */
+		public const String MD_SERVER_WRITE_KEY_CONST       = "\x73\x65\x72\x76\x65\x72\x20\x77\x72\x69\x74\x65\x20\x6b\x65\x79";
+		/* IV block */
+		public const String MD_IV_BLOCK_CONST               = "\x49\x56\x20\x62\x6c\x6f\x63\x6b";
+		/* master secret */
+		public const String MD_MASTER_SECRET_CONST          = "\x6d\x61\x73\x74\x65\x72\x20\x73\x65\x63\x72\x65\x74";
+		/* extended master secret */
+		public const String MD_EXTENDED_MASTER_SECRET_CONST = "\x65\x78\x74\x65\x6e\x64\x65\x64\x20\x6d\x61\x73\x74\x65\x72\x20\x73\x65\x63\x72\x65\x74";
+#endif
+
 		/*
 		** MOVED for convenience
 		** libssl-1_1.dll
@@ -54,15 +110,916 @@ namespace Beef_Net.OpenSSL
 	}
 
 	[AlwaysInclude]
+	sealed abstract class TLSEXT
+	{
+		/* ExtensionType values from RFC3546 / RFC4366 / RFC6066 */
+		public const int TYPE_server_name                            = 0;
+		public const int TYPE_max_fragment_length                    = 1;
+		public const int TYPE_client_certificate_url                 = 2;
+		public const int TYPE_trusted_ca_keys                        = 3;
+		public const int TYPE_truncated_hmac                         = 4;
+		public const int TYPE_status_request                         = 5;
+		/* ExtensionType values from RFC4681 */
+		public const int TYPE_user_mapping                           = 6;
+		/* ExtensionType values from RFC5878 */
+		public const int TYPE_client_authz                           = 7;
+		public const int TYPE_server_authz                           = 8;
+		/* ExtensionType values from RFC6091 */
+		public const int TYPE_cert_type                              = 9;
+		/* ExtensionType values from RFC4492 */
+		/* Prior to TLSv1.3 the supported_groups extension was known as elliptic_curves */
+		public const int TYPE_supported_groups                       = 10;
+		public const int TYPE_elliptic_curves                        = TYPE_supported_groups;
+		public const int TYPE_ec_point_formats                       = 11;
+		/* ExtensionType value from RFC5054 */
+		public const int TYPE_srp                                    = 12;
+		/* ExtensionType values from RFC5246 */
+		public const int TYPE_signature_algorithms                   = 13;
+		/* ExtensionType value from RFC5764 */
+		public const int TYPE_use_srtp                               = 14;
+		/* ExtensionType value from RFC5620 */
+		public const int TYPE_heartbeat                              = 15;
+		/* ExtensionType value from RFC7301 */
+		public const int TYPE_application_layer_protocol_negotiation = 16;
+		/* Extension type for Certificate Transparency https://tools.ietf.org/html/rfc6962#section-3.3.1 */
+		public const int TYPE_signed_certificate_timestamp           = 18;
+		/* ExtensionType value for TLS padding extension. http://tools.ietf.org/html/draft-agl-tls-padding */
+		public const int TYPE_padding                                = 21;
+		/* ExtensionType value from RFC7366 */
+		public const int TYPE_encrypt_then_mac                       = 22;
+		/* ExtensionType value from RFC7627 */
+		public const int TYPE_extended_master_secret                 = 23;
+		/* ExtensionType value from RFC4507 */
+		public const int TYPE_session_ticket                         = 35;
+		/* As defined for TLS1.3 */
+		public const int TYPE_psk                                    = 41;
+		public const int TYPE_early_data                             = 42;
+		public const int TYPE_supported_versions                     = 43;
+		public const int TYPE_cookie                                 = 44;
+		public const int TYPE_psk_kex_modes                          = 45;
+		public const int TYPE_certificate_authorities                = 47;
+		public const int TYPE_post_handshake_auth                    = 49;
+		public const int TYPE_signature_algorithms_cert              = 50;
+		public const int TYPE_key_share                              = 51;
+		/* Temporary extension type */
+		public const int TYPE_renegotiate                            = 0xff01;
+#if !OPENSSL_NO_NEXTPROTONEG
+		/* This is not an IANA defined extension number */
+		public const int TYPE_next_proto_neg                         = 13172;
+#endif
+
+		/* NameType value from RFC3546 */
+		public const int NAMETYPE_host_name = 0;
+		/* status request value from RFC3546 */
+		public const int STATUSTYPE_ocsp    = 1;
+
+		/* ECPointFormat values from RFC4492 */
+		public const int ECPOINTFORMAT_first                     = 0;
+		public const int ECPOINTFORMAT_uncompressed              = 0;
+		public const int ECPOINTFORMAT_ansiX962_compressed_prime = 1;
+		public const int ECPOINTFORMAT_ansiX962_compressed_char2 = 2;
+		public const int ECPOINTFORMAT_last                      = 2;
+
+		/* Signature and hash algorithms from RFC5246 */
+		public const int signature_anonymous         = 0;
+		public const int signature_rsa               = 1;
+		public const int signature_dsa               = 2;
+		public const int signature_ecdsa             = 3;
+		public const int signature_gostr34102001     = 237;
+		public const int signature_gostr34102012_256 = 238;
+		public const int signature_gostr34102012_512 = 239;
+
+		/* Total number of different signature algorithms */
+		public const int signature_num               = 7;
+
+		public const int hash_none              = 0;
+		public const int hash_md5               = 1;
+		public const int hash_sha1              = 2;
+		public const int hash_sha224            = 3;
+		public const int hash_sha256            = 4;
+		public const int hash_sha384            = 5;
+		public const int hash_sha512            = 6;
+		public const int hash_gostr3411         = 237;
+		public const int hash_gostr34112012_256 = 238;
+		public const int hash_gostr34112012_512 = 239;
+
+		/* Total number of different digest algorithms */
+		public const int hash_num               = 10;
+
+		/* Flag set for unrecognised algorithms */
+		public const int nid_unknown            = 0x01000000;
+
+		/* ECC curves */
+		public const int curve_P_256  = 23;
+		public const int curve_P_384  = 24;
+
+		/* OpenSSL value to disable maximum fragment length extension */
+		public const int max_fragment_length_DISABLED = 0;
+		/* Allowed values for max fragment length extension */
+		public const int max_fragment_length_512      = 1;
+		public const int max_fragment_length_1024     = 2;
+		public const int max_fragment_length_2048     = 3;
+		public const int max_fragment_length_4096     = 4;
+
+		public const int MAXLEN_host_name = 255;
+	}
+
+	[AlwaysInclude]
 	sealed abstract class TLS1
 	{
+		public const int VERSION       = 0x0301;
+		public const int VERSION_MAJOR = 0x03;
+		public const int VERSION_MINOR = 0x01;
+
+		[Inline]
+		public static int get_version(SSL.ssl_st* s) => (SSL.version(s) >> 8) == VERSION_MAJOR ? SSL.version(s) : 0;
+		[Inline]
+		public static int get_client_version(SSL.ssl_st* s) => (SSL.client_version(s) >> 8) == VERSION_MAJOR ? SSL.client_version(s) : 0;
+
+		public const int AD_DECRYPTION_FAILED      = 21;
+		public const int AD_RECORD_OVERFLOW        = 22;
+		public const int AD_UNKNOWN_CA             = 48; /* fatal */
+		public const int AD_ACCESS_DENIED          = 49; /* fatal */
+		public const int AD_DECODE_ERROR           = 50; /* fatal */
+		public const int AD_DECRYPT_ERROR          = 51;
+		public const int AD_EXPORT_RESTRICTION     = 60; /* fatal */
+		public const int AD_PROTOCOL_VERSION       = 70; /* fatal */
+		public const int AD_INSUFFICIENT_SECURITY  = 71; /* fatal */
+		public const int AD_INTERNAL_ERROR         = 80; /* fatal */
+		public const int AD_INAPPROPRIATE_FALLBACK = 86; /* fatal */
+		public const int AD_USER_CANCELLED         = 90;
+		public const int AD_NO_RENEGOTIATION       = 100;
+		/* codes 110-114 are from RFC3546 */
+		public const int AD_UNSUPPORTED_EXTENSION           = 110;
+		public const int AD_CERTIFICATE_UNOBTAINABLE        = 111;
+		public const int AD_UNRECOGNIZED_NAME               = 112;
+		public const int AD_BAD_CERTIFICATE_STATUS_RESPONSE = 113;
+		public const int AD_BAD_CERTIFICATE_HASH_VALUE      = 114;
+		public const int AD_UNKNOWN_PSK_IDENTITY            = 115; /* fatal */
+		public const int AD_NO_APPLICATION_PROTOCOL         = 120; /* fatal */
+
+		/* PSK ciphersuites from 4279 */
+		public const int CK_PSK_WITH_RC4_128_SHA                    = 0x0300008A;
+		public const int CK_PSK_WITH_3DES_EDE_CBC_SHA               = 0x0300008B;
+		public const int CK_PSK_WITH_AES_128_CBC_SHA                = 0x0300008C;
+		public const int CK_PSK_WITH_AES_256_CBC_SHA                = 0x0300008D;
+		public const int CK_DHE_PSK_WITH_RC4_128_SHA                = 0x0300008E;
+		public const int CK_DHE_PSK_WITH_3DES_EDE_CBC_SHA           = 0x0300008F;
+		public const int CK_DHE_PSK_WITH_AES_128_CBC_SHA            = 0x03000090;
+		public const int CK_DHE_PSK_WITH_AES_256_CBC_SHA            = 0x03000091;
+		public const int CK_RSA_PSK_WITH_RC4_128_SHA                = 0x03000092;
+		public const int CK_RSA_PSK_WITH_3DES_EDE_CBC_SHA           = 0x03000093;
+		public const int CK_RSA_PSK_WITH_AES_128_CBC_SHA            = 0x03000094;
+		public const int CK_RSA_PSK_WITH_AES_256_CBC_SHA            = 0x03000095;
+
+		/* PSK ciphersuites from 5487 */
+		public const int CK_PSK_WITH_AES_128_GCM_SHA256             = 0x030000A8;
+		public const int CK_PSK_WITH_AES_256_GCM_SHA384             = 0x030000A9;
+		public const int CK_DHE_PSK_WITH_AES_128_GCM_SHA256         = 0x030000AA;
+		public const int CK_DHE_PSK_WITH_AES_256_GCM_SHA384         = 0x030000AB;
+		public const int CK_RSA_PSK_WITH_AES_128_GCM_SHA256         = 0x030000AC;
+		public const int CK_RSA_PSK_WITH_AES_256_GCM_SHA384         = 0x030000AD;
+		public const int CK_PSK_WITH_AES_128_CBC_SHA256             = 0x030000AE;
+		public const int CK_PSK_WITH_AES_256_CBC_SHA384             = 0x030000AF;
+		public const int CK_PSK_WITH_NULL_SHA256                    = 0x030000B0;
+		public const int CK_PSK_WITH_NULL_SHA384                    = 0x030000B1;
+		public const int CK_DHE_PSK_WITH_AES_128_CBC_SHA256         = 0x030000B2;
+		public const int CK_DHE_PSK_WITH_AES_256_CBC_SHA384         = 0x030000B3;
+		public const int CK_DHE_PSK_WITH_NULL_SHA256                = 0x030000B4;
+		public const int CK_DHE_PSK_WITH_NULL_SHA384                = 0x030000B5;
+		public const int CK_RSA_PSK_WITH_AES_128_CBC_SHA256         = 0x030000B6;
+		public const int CK_RSA_PSK_WITH_AES_256_CBC_SHA384         = 0x030000B7;
+		public const int CK_RSA_PSK_WITH_NULL_SHA256                = 0x030000B8;
+		public const int CK_RSA_PSK_WITH_NULL_SHA384                = 0x030000B9;
+
+		/* NULL PSK ciphersuites from RFC4785 */
+		public const int CK_PSK_WITH_NULL_SHA                       = 0x0300002C;
+		public const int CK_DHE_PSK_WITH_NULL_SHA                   = 0x0300002D;
+		public const int CK_RSA_PSK_WITH_NULL_SHA                   = 0x0300002E;
+
+		/* AES ciphersuites from RFC3268 */
+		public const int CK_RSA_WITH_AES_128_SHA                    = 0x0300002F;
+		public const int CK_DH_DSS_WITH_AES_128_SHA                 = 0x03000030;
+		public const int CK_DH_RSA_WITH_AES_128_SHA                 = 0x03000031;
+		public const int CK_DHE_DSS_WITH_AES_128_SHA                = 0x03000032;
+		public const int CK_DHE_RSA_WITH_AES_128_SHA                = 0x03000033;
+		public const int CK_ADH_WITH_AES_128_SHA                    = 0x03000034;
+		public const int CK_RSA_WITH_AES_256_SHA                    = 0x03000035;
+		public const int CK_DH_DSS_WITH_AES_256_SHA                 = 0x03000036;
+		public const int CK_DH_RSA_WITH_AES_256_SHA                 = 0x03000037;
+		public const int CK_DHE_DSS_WITH_AES_256_SHA                = 0x03000038;
+		public const int CK_DHE_RSA_WITH_AES_256_SHA                = 0x03000039;
+		public const int CK_ADH_WITH_AES_256_SHA                    = 0x0300003A;
+
+		/* TLS v1.2 ciphersuites */
+		public const int CK_RSA_WITH_NULL_SHA256                    = 0x0300003B;
+		public const int CK_RSA_WITH_AES_128_SHA256                 = 0x0300003C;
+		public const int CK_RSA_WITH_AES_256_SHA256                 = 0x0300003D;
+		public const int CK_DH_DSS_WITH_AES_128_SHA256              = 0x0300003E;
+		public const int CK_DH_RSA_WITH_AES_128_SHA256              = 0x0300003F;
+		public const int CK_DHE_DSS_WITH_AES_128_SHA256             = 0x03000040;
+
+		/* Camellia ciphersuites from RFC4132 */
+		public const int CK_RSA_WITH_CAMELLIA_128_CBC_SHA           = 0x03000041;
+		public const int CK_DH_DSS_WITH_CAMELLIA_128_CBC_SHA        = 0x03000042;
+		public const int CK_DH_RSA_WITH_CAMELLIA_128_CBC_SHA        = 0x03000043;
+		public const int CK_DHE_DSS_WITH_CAMELLIA_128_CBC_SHA       = 0x03000044;
+		public const int CK_DHE_RSA_WITH_CAMELLIA_128_CBC_SHA       = 0x03000045;
+		public const int CK_ADH_WITH_CAMELLIA_128_CBC_SHA           = 0x03000046;
+
+		/* TLS v1.2 ciphersuites */
+		public const int CK_DHE_RSA_WITH_AES_128_SHA256             = 0x03000067;
+		public const int CK_DH_DSS_WITH_AES_256_SHA256              = 0x03000068;
+		public const int CK_DH_RSA_WITH_AES_256_SHA256              = 0x03000069;
+		public const int CK_DHE_DSS_WITH_AES_256_SHA256             = 0x0300006A;
+		public const int CK_DHE_RSA_WITH_AES_256_SHA256             = 0x0300006B;
+		public const int CK_ADH_WITH_AES_128_SHA256                 = 0x0300006C;
+		public const int CK_ADH_WITH_AES_256_SHA256                 = 0x0300006D;
+
+		/* Camellia ciphersuites from RFC4132 */
+		public const int CK_RSA_WITH_CAMELLIA_256_CBC_SHA           = 0x03000084;
+		public const int CK_DH_DSS_WITH_CAMELLIA_256_CBC_SHA        = 0x03000085;
+		public const int CK_DH_RSA_WITH_CAMELLIA_256_CBC_SHA        = 0x03000086;
+		public const int CK_DHE_DSS_WITH_CAMELLIA_256_CBC_SHA       = 0x03000087;
+		public const int CK_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA       = 0x03000088;
+		public const int CK_ADH_WITH_CAMELLIA_256_CBC_SHA           = 0x03000089;
+
+		/* SEED ciphersuites from RFC4162 */
+		public const int CK_RSA_WITH_SEED_SHA                       = 0x03000096;
+		public const int CK_DH_DSS_WITH_SEED_SHA                    = 0x03000097;
+		public const int CK_DH_RSA_WITH_SEED_SHA                    = 0x03000098;
+		public const int CK_DHE_DSS_WITH_SEED_SHA                   = 0x03000099;
+		public const int CK_DHE_RSA_WITH_SEED_SHA                   = 0x0300009A;
+		public const int CK_ADH_WITH_SEED_SHA                       = 0x0300009B;
+
+		/* TLS v1.2 GCM ciphersuites from RFC5288 */
+		public const int CK_RSA_WITH_AES_128_GCM_SHA256             = 0x0300009C;
+		public const int CK_RSA_WITH_AES_256_GCM_SHA384             = 0x0300009D;
+		public const int CK_DHE_RSA_WITH_AES_128_GCM_SHA256         = 0x0300009E;
+		public const int CK_DHE_RSA_WITH_AES_256_GCM_SHA384         = 0x0300009F;
+		public const int CK_DH_RSA_WITH_AES_128_GCM_SHA256          = 0x030000A0;
+		public const int CK_DH_RSA_WITH_AES_256_GCM_SHA384          = 0x030000A1;
+		public const int CK_DHE_DSS_WITH_AES_128_GCM_SHA256         = 0x030000A2;
+		public const int CK_DHE_DSS_WITH_AES_256_GCM_SHA384         = 0x030000A3;
+		public const int CK_DH_DSS_WITH_AES_128_GCM_SHA256          = 0x030000A4;
+		public const int CK_DH_DSS_WITH_AES_256_GCM_SHA384          = 0x030000A5;
+		public const int CK_ADH_WITH_AES_128_GCM_SHA256             = 0x030000A6;
+		public const int CK_ADH_WITH_AES_256_GCM_SHA384             = 0x030000A7;
+
+		/* CCM ciphersuites from RFC6655 */
+		public const int CK_RSA_WITH_AES_128_CCM                    = 0x0300C09C;
+		public const int CK_RSA_WITH_AES_256_CCM                    = 0x0300C09D;
+		public const int CK_DHE_RSA_WITH_AES_128_CCM                = 0x0300C09E;
+		public const int CK_DHE_RSA_WITH_AES_256_CCM                = 0x0300C09F;
+		public const int CK_RSA_WITH_AES_128_CCM_8                  = 0x0300C0A0;
+		public const int CK_RSA_WITH_AES_256_CCM_8                  = 0x0300C0A1;
+		public const int CK_DHE_RSA_WITH_AES_128_CCM_8              = 0x0300C0A2;
+		public const int CK_DHE_RSA_WITH_AES_256_CCM_8              = 0x0300C0A3;
+		public const int CK_PSK_WITH_AES_128_CCM                    = 0x0300C0A4;
+		public const int CK_PSK_WITH_AES_256_CCM                    = 0x0300C0A5;
+		public const int CK_DHE_PSK_WITH_AES_128_CCM                = 0x0300C0A6;
+		public const int CK_DHE_PSK_WITH_AES_256_CCM                = 0x0300C0A7;
+		public const int CK_PSK_WITH_AES_128_CCM_8                  = 0x0300C0A8;
+		public const int CK_PSK_WITH_AES_256_CCM_8                  = 0x0300C0A9;
+		public const int CK_DHE_PSK_WITH_AES_128_CCM_8              = 0x0300C0AA;
+		public const int CK_DHE_PSK_WITH_AES_256_CCM_8              = 0x0300C0AB;
+
+		/* CCM ciphersuites from RFC7251 */
+		public const int CK_ECDHE_ECDSA_WITH_AES_128_CCM            = 0x0300C0AC;
+		public const int CK_ECDHE_ECDSA_WITH_AES_256_CCM            = 0x0300C0AD;
+		public const int CK_ECDHE_ECDSA_WITH_AES_128_CCM_8          = 0x0300C0AE;
+		public const int CK_ECDHE_ECDSA_WITH_AES_256_CCM_8          = 0x0300C0AF;
+
+		/* TLS 1.2 Camellia SHA-256 ciphersuites from RFC5932 */
+		public const int CK_RSA_WITH_CAMELLIA_128_CBC_SHA256        = 0x030000BA;
+		public const int CK_DH_DSS_WITH_CAMELLIA_128_CBC_SHA256     = 0x030000BB;
+		public const int CK_DH_RSA_WITH_CAMELLIA_128_CBC_SHA256     = 0x030000BC;
+		public const int CK_DHE_DSS_WITH_CAMELLIA_128_CBC_SHA256    = 0x030000BD;
+		public const int CK_DHE_RSA_WITH_CAMELLIA_128_CBC_SHA256    = 0x030000BE;
+		public const int CK_ADH_WITH_CAMELLIA_128_CBC_SHA256        = 0x030000BF;
+
+		public const int CK_RSA_WITH_CAMELLIA_256_CBC_SHA256        =  0x030000C0;
+		public const int CK_DH_DSS_WITH_CAMELLIA_256_CBC_SHA256     = 0x030000C1;
+		public const int CK_DH_RSA_WITH_CAMELLIA_256_CBC_SHA256     = 0x030000C2;
+		public const int CK_DHE_DSS_WITH_CAMELLIA_256_CBC_SHA256    = 0x030000C3;
+		public const int CK_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA256    = 0x030000C4;
+		public const int CK_ADH_WITH_CAMELLIA_256_CBC_SHA256        = 0x030000C5;
+
+		/* ECC ciphersuites from RFC4492 */
+		public const int CK_ECDH_ECDSA_WITH_NULL_SHA                = 0x0300C001;
+		public const int CK_ECDH_ECDSA_WITH_RC4_128_SHA             = 0x0300C002;
+		public const int CK_ECDH_ECDSA_WITH_DES_192_CBC3_SHA        = 0x0300C003;
+		public const int CK_ECDH_ECDSA_WITH_AES_128_CBC_SHA         = 0x0300C004;
+		public const int CK_ECDH_ECDSA_WITH_AES_256_CBC_SHA         = 0x0300C005;
+
+		public const int CK_ECDHE_ECDSA_WITH_NULL_SHA               = 0x0300C006;
+		public const int CK_ECDHE_ECDSA_WITH_RC4_128_SHA            = 0x0300C007;
+		public const int CK_ECDHE_ECDSA_WITH_DES_192_CBC3_SHA       = 0x0300C008;
+		public const int CK_ECDHE_ECDSA_WITH_AES_128_CBC_SHA        = 0x0300C009;
+		public const int CK_ECDHE_ECDSA_WITH_AES_256_CBC_SHA        = 0x0300C00A;
+
+		public const int CK_ECDH_RSA_WITH_NULL_SHA                  = 0x0300C00B;
+		public const int CK_ECDH_RSA_WITH_RC4_128_SHA               = 0x0300C00C;
+		public const int CK_ECDH_RSA_WITH_DES_192_CBC3_SHA          = 0x0300C00D;
+		public const int CK_ECDH_RSA_WITH_AES_128_CBC_SHA           = 0x0300C00E;
+		public const int CK_ECDH_RSA_WITH_AES_256_CBC_SHA           = 0x0300C00F;
+
+		public const int CK_ECDHE_RSA_WITH_NULL_SHA                 = 0x0300C010;
+		public const int CK_ECDHE_RSA_WITH_RC4_128_SHA              = 0x0300C011;
+		public const int CK_ECDHE_RSA_WITH_DES_192_CBC3_SHA         = 0x0300C012;
+		public const int CK_ECDHE_RSA_WITH_AES_128_CBC_SHA          = 0x0300C013;
+		public const int CK_ECDHE_RSA_WITH_AES_256_CBC_SHA          = 0x0300C014;
+
+		public const int CK_ECDH_anon_WITH_NULL_SHA                 = 0x0300C015;
+		public const int CK_ECDH_anon_WITH_RC4_128_SHA              = 0x0300C016;
+		public const int CK_ECDH_anon_WITH_DES_192_CBC3_SHA         = 0x0300C017;
+		public const int CK_ECDH_anon_WITH_AES_128_CBC_SHA          = 0x0300C018;
+		public const int CK_ECDH_anon_WITH_AES_256_CBC_SHA          = 0x0300C019;
+
+		/* SRP ciphersuites from RFC 5054 */
+		public const int CK_SRP_SHA_WITH_3DES_EDE_CBC_SHA           = 0x0300C01A;
+		public const int CK_SRP_SHA_RSA_WITH_3DES_EDE_CBC_SHA       = 0x0300C01B;
+		public const int CK_SRP_SHA_DSS_WITH_3DES_EDE_CBC_SHA       = 0x0300C01C;
+		public const int CK_SRP_SHA_WITH_AES_128_CBC_SHA            = 0x0300C01D;
+		public const int CK_SRP_SHA_RSA_WITH_AES_128_CBC_SHA        = 0x0300C01E;
+		public const int CK_SRP_SHA_DSS_WITH_AES_128_CBC_SHA        = 0x0300C01F;
+		public const int CK_SRP_SHA_WITH_AES_256_CBC_SHA            = 0x0300C020;
+		public const int CK_SRP_SHA_RSA_WITH_AES_256_CBC_SHA        = 0x0300C021;
+		public const int CK_SRP_SHA_DSS_WITH_AES_256_CBC_SHA        = 0x0300C022;
+
+		/* ECDH HMAC based ciphersuites from RFC5289 */
+		public const int CK_ECDHE_ECDSA_WITH_AES_128_SHA256         = 0x0300C023;
+		public const int CK_ECDHE_ECDSA_WITH_AES_256_SHA384         = 0x0300C024;
+		public const int CK_ECDH_ECDSA_WITH_AES_128_SHA256          = 0x0300C025;
+		public const int CK_ECDH_ECDSA_WITH_AES_256_SHA384          = 0x0300C026;
+		public const int CK_ECDHE_RSA_WITH_AES_128_SHA256           = 0x0300C027;
+		public const int CK_ECDHE_RSA_WITH_AES_256_SHA384           = 0x0300C028;
+		public const int CK_ECDH_RSA_WITH_AES_128_SHA256            = 0x0300C029;
+		public const int CK_ECDH_RSA_WITH_AES_256_SHA384            = 0x0300C02A;
+
+		/* ECDH GCM based ciphersuites from RFC5289 */
+		public const int CK_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256     = 0x0300C02B;
+		public const int CK_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384     = 0x0300C02C;
+		public const int CK_ECDH_ECDSA_WITH_AES_128_GCM_SHA256      = 0x0300C02D;
+		public const int CK_ECDH_ECDSA_WITH_AES_256_GCM_SHA384      = 0x0300C02E;
+		public const int CK_ECDHE_RSA_WITH_AES_128_GCM_SHA256       = 0x0300C02F;
+		public const int CK_ECDHE_RSA_WITH_AES_256_GCM_SHA384       = 0x0300C030;
+		public const int CK_ECDH_RSA_WITH_AES_128_GCM_SHA256        = 0x0300C031;
+		public const int CK_ECDH_RSA_WITH_AES_256_GCM_SHA384        = 0x0300C032;
+
+		/* ECDHE PSK ciphersuites from RFC5489 */
+		public const int CK_ECDHE_PSK_WITH_RC4_128_SHA              = 0x0300C033;
+		public const int CK_ECDHE_PSK_WITH_3DES_EDE_CBC_SHA         = 0x0300C034;
+		public const int CK_ECDHE_PSK_WITH_AES_128_CBC_SHA          = 0x0300C035;
+		public const int CK_ECDHE_PSK_WITH_AES_256_CBC_SHA          = 0x0300C036;
+
+		public const int CK_ECDHE_PSK_WITH_AES_128_CBC_SHA256       = 0x0300C037;
+		public const int CK_ECDHE_PSK_WITH_AES_256_CBC_SHA384       = 0x0300C038;
+
+		/* NULL PSK ciphersuites from RFC4785 */
+		public const int CK_ECDHE_PSK_WITH_NULL_SHA                 = 0x0300C039;
+		public const int CK_ECDHE_PSK_WITH_NULL_SHA256              = 0x0300C03A;
+		public const int CK_ECDHE_PSK_WITH_NULL_SHA384              = 0x0300C03B;
+
+		/* Camellia-CBC ciphersuites from RFC6367 */
+		public const int CK_ECDHE_ECDSA_WITH_CAMELLIA_128_CBC_SHA256 = 0x0300C072;
+		public const int CK_ECDHE_ECDSA_WITH_CAMELLIA_256_CBC_SHA384 = 0x0300C073;
+		public const int CK_ECDH_ECDSA_WITH_CAMELLIA_128_CBC_SHA256  = 0x0300C074;
+		public const int CK_ECDH_ECDSA_WITH_CAMELLIA_256_CBC_SHA384  = 0x0300C075;
+		public const int CK_ECDHE_RSA_WITH_CAMELLIA_128_CBC_SHA256   = 0x0300C076;
+		public const int CK_ECDHE_RSA_WITH_CAMELLIA_256_CBC_SHA384   = 0x0300C077;
+		public const int CK_ECDH_RSA_WITH_CAMELLIA_128_CBC_SHA256    = 0x0300C078;
+		public const int CK_ECDH_RSA_WITH_CAMELLIA_256_CBC_SHA384    = 0x0300C079;
+
+		public const int CK_PSK_WITH_CAMELLIA_128_CBC_SHA256         = 0x0300C094;
+		public const int CK_PSK_WITH_CAMELLIA_256_CBC_SHA384         = 0x0300C095;
+		public const int CK_DHE_PSK_WITH_CAMELLIA_128_CBC_SHA256     = 0x0300C096;
+		public const int CK_DHE_PSK_WITH_CAMELLIA_256_CBC_SHA384     = 0x0300C097;
+		public const int CK_RSA_PSK_WITH_CAMELLIA_128_CBC_SHA256     = 0x0300C098;
+		public const int CK_RSA_PSK_WITH_CAMELLIA_256_CBC_SHA384     = 0x0300C099;
+		public const int CK_ECDHE_PSK_WITH_CAMELLIA_128_CBC_SHA256   = 0x0300C09A;
+		public const int CK_ECDHE_PSK_WITH_CAMELLIA_256_CBC_SHA384   = 0x0300C09B;
+
+		/* draft-ietf-tls-chacha20-poly1305-03 */
+		public const int CK_ECDHE_RSA_WITH_CHACHA20_POLY1305         = 0x0300CCA8;
+		public const int CK_ECDHE_ECDSA_WITH_CHACHA20_POLY1305       = 0x0300CCA9;
+		public const int CK_DHE_RSA_WITH_CHACHA20_POLY1305           = 0x0300CCAA;
+		public const int CK_PSK_WITH_CHACHA20_POLY1305               = 0x0300CCAB;
+		public const int CK_ECDHE_PSK_WITH_CHACHA20_POLY1305         = 0x0300CCAC;
+		public const int CK_DHE_PSK_WITH_CHACHA20_POLY1305           = 0x0300CCAD;
+		public const int CK_RSA_PSK_WITH_CHACHA20_POLY1305           = 0x0300CCAE;
+
+		/* Aria ciphersuites from RFC6209 */
+		public const int CK_RSA_WITH_ARIA_128_GCM_SHA256             = 0x0300C050;
+		public const int CK_RSA_WITH_ARIA_256_GCM_SHA384             = 0x0300C051;
+		public const int CK_DHE_RSA_WITH_ARIA_128_GCM_SHA256         = 0x0300C052;
+		public const int CK_DHE_RSA_WITH_ARIA_256_GCM_SHA384         = 0x0300C053;
+		public const int CK_DH_RSA_WITH_ARIA_128_GCM_SHA256          = 0x0300C054;
+		public const int CK_DH_RSA_WITH_ARIA_256_GCM_SHA384          = 0x0300C055;
+		public const int CK_DHE_DSS_WITH_ARIA_128_GCM_SHA256         = 0x0300C056;
+		public const int CK_DHE_DSS_WITH_ARIA_256_GCM_SHA384         = 0x0300C057;
+		public const int CK_DH_DSS_WITH_ARIA_128_GCM_SHA256          = 0x0300C058;
+		public const int CK_DH_DSS_WITH_ARIA_256_GCM_SHA384          = 0x0300C059;
+		public const int CK_DH_anon_WITH_ARIA_128_GCM_SHA256         = 0x0300C05A;
+		public const int CK_DH_anon_WITH_ARIA_256_GCM_SHA384         = 0x0300C05B;
+		public const int CK_ECDHE_ECDSA_WITH_ARIA_128_GCM_SHA256     = 0x0300C05C;
+		public const int CK_ECDHE_ECDSA_WITH_ARIA_256_GCM_SHA384     = 0x0300C05D;
+		public const int CK_ECDH_ECDSA_WITH_ARIA_128_GCM_SHA256      = 0x0300C05E;
+		public const int CK_ECDH_ECDSA_WITH_ARIA_256_GCM_SHA384      = 0x0300C05F;
+		public const int CK_ECDHE_RSA_WITH_ARIA_128_GCM_SHA256       = 0x0300C060;
+		public const int CK_ECDHE_RSA_WITH_ARIA_256_GCM_SHA384       = 0x0300C061;
+		public const int CK_ECDH_RSA_WITH_ARIA_128_GCM_SHA256        = 0x0300C062;
+		public const int CK_ECDH_RSA_WITH_ARIA_256_GCM_SHA384        = 0x0300C063;
+		public const int CK_PSK_WITH_ARIA_128_GCM_SHA256             = 0x0300C06A;
+		public const int CK_PSK_WITH_ARIA_256_GCM_SHA384             = 0x0300C06B;
+		public const int CK_DHE_PSK_WITH_ARIA_128_GCM_SHA256         = 0x0300C06C;
+		public const int CK_DHE_PSK_WITH_ARIA_256_GCM_SHA384         = 0x0300C06D;
+		public const int CK_RSA_PSK_WITH_ARIA_128_GCM_SHA256         = 0x0300C06E;
+		public const int CK_RSA_PSK_WITH_ARIA_256_GCM_SHA384         = 0x0300C06F;
+
+		/* a bundle of RFC standard cipher names, generated from ssl3.ciphers[] */
+		public const String RFC_RSA_WITH_AES_128_SHA                     = "TLS_RSA_WITH_AES_128_CBC_SHA";
+		public const String RFC_DHE_DSS_WITH_AES_128_SHA                 = "TLS_DHE_DSS_WITH_AES_128_CBC_SHA";
+		public const String RFC_DHE_RSA_WITH_AES_128_SHA                 = "TLS_DHE_RSA_WITH_AES_128_CBC_SHA";
+		public const String RFC_ADH_WITH_AES_128_SHA                     = "TLS_DH_anon_WITH_AES_128_CBC_SHA";
+		public const String RFC_RSA_WITH_AES_256_SHA                     = "TLS_RSA_WITH_AES_256_CBC_SHA";
+		public const String RFC_DHE_DSS_WITH_AES_256_SHA                 = "TLS_DHE_DSS_WITH_AES_256_CBC_SHA";
+		public const String RFC_DHE_RSA_WITH_AES_256_SHA                 = "TLS_DHE_RSA_WITH_AES_256_CBC_SHA";
+		public const String RFC_ADH_WITH_AES_256_SHA                     = "TLS_DH_anon_WITH_AES_256_CBC_SHA";
+		public const String RFC_RSA_WITH_NULL_SHA256                     = "TLS_RSA_WITH_NULL_SHA256";
+		public const String RFC_RSA_WITH_AES_128_SHA256                  = "TLS_RSA_WITH_AES_128_CBC_SHA256";
+		public const String RFC_RSA_WITH_AES_256_SHA256                  = "TLS_RSA_WITH_AES_256_CBC_SHA256";
+		public const String RFC_DHE_DSS_WITH_AES_128_SHA256              = "TLS_DHE_DSS_WITH_AES_128_CBC_SHA256";
+		public const String RFC_DHE_RSA_WITH_AES_128_SHA256              = "TLS_DHE_RSA_WITH_AES_128_CBC_SHA256";
+		public const String RFC_DHE_DSS_WITH_AES_256_SHA256              = "TLS_DHE_DSS_WITH_AES_256_CBC_SHA256";
+		public const String RFC_DHE_RSA_WITH_AES_256_SHA256              = "TLS_DHE_RSA_WITH_AES_256_CBC_SHA256";
+		public const String RFC_ADH_WITH_AES_128_SHA256                  = "TLS_DH_anon_WITH_AES_128_CBC_SHA256";
+		public const String RFC_ADH_WITH_AES_256_SHA256                  = "TLS_DH_anon_WITH_AES_256_CBC_SHA256";
+		public const String RFC_RSA_WITH_AES_128_GCM_SHA256              = "TLS_RSA_WITH_AES_128_GCM_SHA256";
+		public const String RFC_RSA_WITH_AES_256_GCM_SHA384              = "TLS_RSA_WITH_AES_256_GCM_SHA384";
+		public const String RFC_DHE_RSA_WITH_AES_128_GCM_SHA256          = "TLS_DHE_RSA_WITH_AES_128_GCM_SHA256";
+		public const String RFC_DHE_RSA_WITH_AES_256_GCM_SHA384          = "TLS_DHE_RSA_WITH_AES_256_GCM_SHA384";
+		public const String RFC_DHE_DSS_WITH_AES_128_GCM_SHA256          = "TLS_DHE_DSS_WITH_AES_128_GCM_SHA256";
+		public const String RFC_DHE_DSS_WITH_AES_256_GCM_SHA384          = "TLS_DHE_DSS_WITH_AES_256_GCM_SHA384";
+		public const String RFC_ADH_WITH_AES_128_GCM_SHA256              = "TLS_DH_anon_WITH_AES_128_GCM_SHA256";
+		public const String RFC_ADH_WITH_AES_256_GCM_SHA384              = "TLS_DH_anon_WITH_AES_256_GCM_SHA384";
+		public const String RFC_RSA_WITH_AES_128_CCM                     = "TLS_RSA_WITH_AES_128_CCM";
+		public const String RFC_RSA_WITH_AES_256_CCM                     = "TLS_RSA_WITH_AES_256_CCM";
+		public const String RFC_DHE_RSA_WITH_AES_128_CCM                 = "TLS_DHE_RSA_WITH_AES_128_CCM";
+		public const String RFC_DHE_RSA_WITH_AES_256_CCM                 = "TLS_DHE_RSA_WITH_AES_256_CCM";
+		public const String RFC_RSA_WITH_AES_128_CCM_8                   = "TLS_RSA_WITH_AES_128_CCM_8";
+		public const String RFC_RSA_WITH_AES_256_CCM_8                   = "TLS_RSA_WITH_AES_256_CCM_8";
+		public const String RFC_DHE_RSA_WITH_AES_128_CCM_8               = "TLS_DHE_RSA_WITH_AES_128_CCM_8";
+		public const String RFC_DHE_RSA_WITH_AES_256_CCM_8               = "TLS_DHE_RSA_WITH_AES_256_CCM_8";
+		public const String RFC_PSK_WITH_AES_128_CCM                     = "TLS_PSK_WITH_AES_128_CCM";
+		public const String RFC_PSK_WITH_AES_256_CCM                     = "TLS_PSK_WITH_AES_256_CCM";
+		public const String RFC_DHE_PSK_WITH_AES_128_CCM                 = "TLS_DHE_PSK_WITH_AES_128_CCM";
+		public const String RFC_DHE_PSK_WITH_AES_256_CCM                 = "TLS_DHE_PSK_WITH_AES_256_CCM";
+		public const String RFC_PSK_WITH_AES_128_CCM_8                   = "TLS_PSK_WITH_AES_128_CCM_8";
+		public const String RFC_PSK_WITH_AES_256_CCM_8                   = "TLS_PSK_WITH_AES_256_CCM_8";
+		public const String RFC_DHE_PSK_WITH_AES_128_CCM_8               = "TLS_PSK_DHE_WITH_AES_128_CCM_8";
+		public const String RFC_DHE_PSK_WITH_AES_256_CCM_8               = "TLS_PSK_DHE_WITH_AES_256_CCM_8";
+		public const String RFC_ECDHE_ECDSA_WITH_AES_128_CCM             = "TLS_ECDHE_ECDSA_WITH_AES_128_CCM";
+		public const String RFC_ECDHE_ECDSA_WITH_AES_256_CCM             = "TLS_ECDHE_ECDSA_WITH_AES_256_CCM";
+		public const String RFC_ECDHE_ECDSA_WITH_AES_128_CCM_8           = "TLS_ECDHE_ECDSA_WITH_AES_128_CCM_8";
+		public const String RFC_ECDHE_ECDSA_WITH_AES_256_CCM_8           = "TLS_ECDHE_ECDSA_WITH_AES_256_CCM_8";
+		public const String RFC_ECDHE_ECDSA_WITH_NULL_SHA                = "TLS_ECDHE_ECDSA_WITH_NULL_SHA";
+		public const String RFC_ECDHE_ECDSA_WITH_DES_192_CBC3_SHA        = "TLS_ECDHE_ECDSA_WITH_3DES_EDE_CBC_SHA";
+		public const String RFC_ECDHE_ECDSA_WITH_AES_128_CBC_SHA         = "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA";
+		public const String RFC_ECDHE_ECDSA_WITH_AES_256_CBC_SHA         = "TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA";
+		public const String RFC_ECDHE_RSA_WITH_NULL_SHA                  = "TLS_ECDHE_RSA_WITH_NULL_SHA";
+		public const String RFC_ECDHE_RSA_WITH_DES_192_CBC3_SHA          = "TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA";
+		public const String RFC_ECDHE_RSA_WITH_AES_128_CBC_SHA           = "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA";
+		public const String RFC_ECDHE_RSA_WITH_AES_256_CBC_SHA           = "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA";
+		public const String RFC_ECDH_anon_WITH_NULL_SHA                  = "TLS_ECDH_anon_WITH_NULL_SHA";
+		public const String RFC_ECDH_anon_WITH_DES_192_CBC3_SHA          = "TLS_ECDH_anon_WITH_3DES_EDE_CBC_SHA";
+		public const String RFC_ECDH_anon_WITH_AES_128_CBC_SHA           = "TLS_ECDH_anon_WITH_AES_128_CBC_SHA";
+		public const String RFC_ECDH_anon_WITH_AES_256_CBC_SHA           = "TLS_ECDH_anon_WITH_AES_256_CBC_SHA";
+		public const String RFC_ECDHE_ECDSA_WITH_AES_128_SHA256          = "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256";
+		public const String RFC_ECDHE_ECDSA_WITH_AES_256_SHA384          = "TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384";
+		public const String RFC_ECDHE_RSA_WITH_AES_128_SHA256            = "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256";
+		public const String RFC_ECDHE_RSA_WITH_AES_256_SHA384            = "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384";
+		public const String RFC_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256      = "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256";
+		public const String RFC_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384      = "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384";
+		public const String RFC_ECDHE_RSA_WITH_AES_128_GCM_SHA256        = "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256";
+		public const String RFC_ECDHE_RSA_WITH_AES_256_GCM_SHA384        = "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384";
+		public const String RFC_PSK_WITH_NULL_SHA                        = "TLS_PSK_WITH_NULL_SHA";
+		public const String RFC_DHE_PSK_WITH_NULL_SHA                    = "TLS_DHE_PSK_WITH_NULL_SHA";
+		public const String RFC_RSA_PSK_WITH_NULL_SHA                    = "TLS_RSA_PSK_WITH_NULL_SHA";
+		public const String RFC_PSK_WITH_3DES_EDE_CBC_SHA                = "TLS_PSK_WITH_3DES_EDE_CBC_SHA";
+		public const String RFC_PSK_WITH_AES_128_CBC_SHA                 = "TLS_PSK_WITH_AES_128_CBC_SHA";
+		public const String RFC_PSK_WITH_AES_256_CBC_SHA                 = "TLS_PSK_WITH_AES_256_CBC_SHA";
+		public const String RFC_DHE_PSK_WITH_3DES_EDE_CBC_SHA            = "TLS_DHE_PSK_WITH_3DES_EDE_CBC_SHA";
+		public const String RFC_DHE_PSK_WITH_AES_128_CBC_SHA             = "TLS_DHE_PSK_WITH_AES_128_CBC_SHA";
+		public const String RFC_DHE_PSK_WITH_AES_256_CBC_SHA             = "TLS_DHE_PSK_WITH_AES_256_CBC_SHA";
+		public const String RFC_RSA_PSK_WITH_3DES_EDE_CBC_SHA            = "TLS_RSA_PSK_WITH_3DES_EDE_CBC_SHA";
+		public const String RFC_RSA_PSK_WITH_AES_128_CBC_SHA             = "TLS_RSA_PSK_WITH_AES_128_CBC_SHA";
+		public const String RFC_RSA_PSK_WITH_AES_256_CBC_SHA             = "TLS_RSA_PSK_WITH_AES_256_CBC_SHA";
+		public const String RFC_PSK_WITH_AES_128_GCM_SHA256              = "TLS_PSK_WITH_AES_128_GCM_SHA256";
+		public const String RFC_PSK_WITH_AES_256_GCM_SHA384              = "TLS_PSK_WITH_AES_256_GCM_SHA384";
+		public const String RFC_DHE_PSK_WITH_AES_128_GCM_SHA256          = "TLS_DHE_PSK_WITH_AES_128_GCM_SHA256";
+		public const String RFC_DHE_PSK_WITH_AES_256_GCM_SHA384          = "TLS_DHE_PSK_WITH_AES_256_GCM_SHA384";
+		public const String RFC_RSA_PSK_WITH_AES_128_GCM_SHA256          = "TLS_RSA_PSK_WITH_AES_128_GCM_SHA256";
+		public const String RFC_RSA_PSK_WITH_AES_256_GCM_SHA384          = "TLS_RSA_PSK_WITH_AES_256_GCM_SHA384";
+		public const String RFC_PSK_WITH_AES_128_CBC_SHA256              = "TLS_PSK_WITH_AES_128_CBC_SHA256";
+		public const String RFC_PSK_WITH_AES_256_CBC_SHA384              = "TLS_PSK_WITH_AES_256_CBC_SHA384";
+		public const String RFC_PSK_WITH_NULL_SHA256                     = "TLS_PSK_WITH_NULL_SHA256";
+		public const String RFC_PSK_WITH_NULL_SHA384                     = "TLS_PSK_WITH_NULL_SHA384";
+		public const String RFC_DHE_PSK_WITH_AES_128_CBC_SHA256          = "TLS_DHE_PSK_WITH_AES_128_CBC_SHA256";
+		public const String RFC_DHE_PSK_WITH_AES_256_CBC_SHA384          = "TLS_DHE_PSK_WITH_AES_256_CBC_SHA384";
+		public const String RFC_DHE_PSK_WITH_NULL_SHA256                 = "TLS_DHE_PSK_WITH_NULL_SHA256";
+		public const String RFC_DHE_PSK_WITH_NULL_SHA384                 = "TLS_DHE_PSK_WITH_NULL_SHA384";
+		public const String RFC_RSA_PSK_WITH_AES_128_CBC_SHA256          = "TLS_RSA_PSK_WITH_AES_128_CBC_SHA256";
+		public const String RFC_RSA_PSK_WITH_AES_256_CBC_SHA384          = "TLS_RSA_PSK_WITH_AES_256_CBC_SHA384";
+		public const String RFC_RSA_PSK_WITH_NULL_SHA256                 = "TLS_RSA_PSK_WITH_NULL_SHA256";
+		public const String RFC_RSA_PSK_WITH_NULL_SHA384                 = "TLS_RSA_PSK_WITH_NULL_SHA384";
+		public const String RFC_ECDHE_PSK_WITH_3DES_EDE_CBC_SHA          = "TLS_ECDHE_PSK_WITH_3DES_EDE_CBC_SHA";
+		public const String RFC_ECDHE_PSK_WITH_AES_128_CBC_SHA           = "TLS_ECDHE_PSK_WITH_AES_128_CBC_SHA";
+		public const String RFC_ECDHE_PSK_WITH_AES_256_CBC_SHA           = "TLS_ECDHE_PSK_WITH_AES_256_CBC_SHA";
+		public const String RFC_ECDHE_PSK_WITH_AES_128_CBC_SHA256        = "TLS_ECDHE_PSK_WITH_AES_128_CBC_SHA256";
+		public const String RFC_ECDHE_PSK_WITH_AES_256_CBC_SHA384        = "TLS_ECDHE_PSK_WITH_AES_256_CBC_SHA384";
+		public const String RFC_ECDHE_PSK_WITH_NULL_SHA                  = "TLS_ECDHE_PSK_WITH_NULL_SHA";
+		public const String RFC_ECDHE_PSK_WITH_NULL_SHA256               = "TLS_ECDHE_PSK_WITH_NULL_SHA256";
+		public const String RFC_ECDHE_PSK_WITH_NULL_SHA384               = "TLS_ECDHE_PSK_WITH_NULL_SHA384";
+		public const String RFC_SRP_SHA_WITH_3DES_EDE_CBC_SHA            = "TLS_SRP_SHA_WITH_3DES_EDE_CBC_SHA";
+		public const String RFC_SRP_SHA_RSA_WITH_3DES_EDE_CBC_SHA        = "TLS_SRP_SHA_RSA_WITH_3DES_EDE_CBC_SHA";
+		public const String RFC_SRP_SHA_DSS_WITH_3DES_EDE_CBC_SHA        = "TLS_SRP_SHA_DSS_WITH_3DES_EDE_CBC_SHA";
+		public const String RFC_SRP_SHA_WITH_AES_128_CBC_SHA             = "TLS_SRP_SHA_WITH_AES_128_CBC_SHA";
+		public const String RFC_SRP_SHA_RSA_WITH_AES_128_CBC_SHA         = "TLS_SRP_SHA_RSA_WITH_AES_128_CBC_SHA";
+		public const String RFC_SRP_SHA_DSS_WITH_AES_128_CBC_SHA         = "TLS_SRP_SHA_DSS_WITH_AES_128_CBC_SHA";
+		public const String RFC_SRP_SHA_WITH_AES_256_CBC_SHA             = "TLS_SRP_SHA_WITH_AES_256_CBC_SHA";
+		public const String RFC_SRP_SHA_RSA_WITH_AES_256_CBC_SHA         = "TLS_SRP_SHA_RSA_WITH_AES_256_CBC_SHA";
+		public const String RFC_SRP_SHA_DSS_WITH_AES_256_CBC_SHA         = "TLS_SRP_SHA_DSS_WITH_AES_256_CBC_SHA";
+		public const String RFC_DHE_RSA_WITH_CHACHA20_POLY1305           = "TLS_DHE_RSA_WITH_CHACHA20_POLY1305_SHA256";
+		public const String RFC_ECDHE_RSA_WITH_CHACHA20_POLY1305         = "TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256";
+		public const String RFC_ECDHE_ECDSA_WITH_CHACHA20_POLY1305       = "TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256";
+		public const String RFC_PSK_WITH_CHACHA20_POLY1305               = "TLS_PSK_WITH_CHACHA20_POLY1305_SHA256";
+		public const String RFC_ECDHE_PSK_WITH_CHACHA20_POLY1305         = "TLS_ECDHE_PSK_WITH_CHACHA20_POLY1305_SHA256";
+		public const String RFC_DHE_PSK_WITH_CHACHA20_POLY1305           = "TLS_DHE_PSK_WITH_CHACHA20_POLY1305_SHA256";
+		public const String RFC_RSA_PSK_WITH_CHACHA20_POLY1305           = "TLS_RSA_PSK_WITH_CHACHA20_POLY1305_SHA256";
+		public const String RFC_RSA_WITH_CAMELLIA_128_CBC_SHA256         = "TLS_RSA_WITH_CAMELLIA_128_CBC_SHA256";
+		public const String RFC_DHE_DSS_WITH_CAMELLIA_128_CBC_SHA256     = "TLS_DHE_DSS_WITH_CAMELLIA_128_CBC_SHA256";
+		public const String RFC_DHE_RSA_WITH_CAMELLIA_128_CBC_SHA256     = "TLS_DHE_RSA_WITH_CAMELLIA_128_CBC_SHA256";
+		public const String RFC_ADH_WITH_CAMELLIA_128_CBC_SHA256         = "TLS_DH_anon_WITH_CAMELLIA_128_CBC_SHA256";
+		public const String RFC_RSA_WITH_CAMELLIA_256_CBC_SHA256         = "TLS_RSA_WITH_CAMELLIA_256_CBC_SHA256";
+		public const String RFC_DHE_DSS_WITH_CAMELLIA_256_CBC_SHA256     = "TLS_DHE_DSS_WITH_CAMELLIA_256_CBC_SHA256";
+		public const String RFC_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA256     = "TLS_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA256";
+		public const String RFC_ADH_WITH_CAMELLIA_256_CBC_SHA256         = "TLS_DH_anon_WITH_CAMELLIA_256_CBC_SHA256";
+		public const String RFC_RSA_WITH_CAMELLIA_256_CBC_SHA            = "TLS_RSA_WITH_CAMELLIA_256_CBC_SHA";
+		public const String RFC_DHE_DSS_WITH_CAMELLIA_256_CBC_SHA        = "TLS_DHE_DSS_WITH_CAMELLIA_256_CBC_SHA";
+		public const String RFC_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA        = "TLS_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA";
+		public const String RFC_ADH_WITH_CAMELLIA_256_CBC_SHA            = "TLS_DH_anon_WITH_CAMELLIA_256_CBC_SHA";
+		public const String RFC_RSA_WITH_CAMELLIA_128_CBC_SHA            = "TLS_RSA_WITH_CAMELLIA_128_CBC_SHA";
+		public const String RFC_DHE_DSS_WITH_CAMELLIA_128_CBC_SHA        = "TLS_DHE_DSS_WITH_CAMELLIA_128_CBC_SHA";
+		public const String RFC_DHE_RSA_WITH_CAMELLIA_128_CBC_SHA        = "TLS_DHE_RSA_WITH_CAMELLIA_128_CBC_SHA";
+		public const String RFC_ADH_WITH_CAMELLIA_128_CBC_SHA            = "TLS_DH_anon_WITH_CAMELLIA_128_CBC_SHA";
+		public const String RFC_ECDHE_ECDSA_WITH_CAMELLIA_128_CBC_SHA256 = "TLS_ECDHE_ECDSA_WITH_CAMELLIA_128_CBC_SHA256";
+		public const String RFC_ECDHE_ECDSA_WITH_CAMELLIA_256_CBC_SHA384 = "TLS_ECDHE_ECDSA_WITH_CAMELLIA_256_CBC_SHA384";
+		public const String RFC_ECDHE_RSA_WITH_CAMELLIA_128_CBC_SHA256   = "TLS_ECDHE_RSA_WITH_CAMELLIA_128_CBC_SHA256";
+		public const String RFC_ECDHE_RSA_WITH_CAMELLIA_256_CBC_SHA384   = "TLS_ECDHE_RSA_WITH_CAMELLIA_256_CBC_SHA384";
+		public const String RFC_PSK_WITH_CAMELLIA_128_CBC_SHA256         = "TLS_PSK_WITH_CAMELLIA_128_CBC_SHA256";
+		public const String RFC_PSK_WITH_CAMELLIA_256_CBC_SHA384         = "TLS_PSK_WITH_CAMELLIA_256_CBC_SHA384";
+		public const String RFC_DHE_PSK_WITH_CAMELLIA_128_CBC_SHA256     = "TLS_DHE_PSK_WITH_CAMELLIA_128_CBC_SHA256";
+		public const String RFC_DHE_PSK_WITH_CAMELLIA_256_CBC_SHA384     = "TLS_DHE_PSK_WITH_CAMELLIA_256_CBC_SHA384";
+		public const String RFC_RSA_PSK_WITH_CAMELLIA_128_CBC_SHA256     = "TLS_RSA_PSK_WITH_CAMELLIA_128_CBC_SHA256";
+		public const String RFC_RSA_PSK_WITH_CAMELLIA_256_CBC_SHA384     = "TLS_RSA_PSK_WITH_CAMELLIA_256_CBC_SHA384";
+		public const String RFC_ECDHE_PSK_WITH_CAMELLIA_128_CBC_SHA256   = "TLS_ECDHE_PSK_WITH_CAMELLIA_128_CBC_SHA256";
+		public const String RFC_ECDHE_PSK_WITH_CAMELLIA_256_CBC_SHA384   = "TLS_ECDHE_PSK_WITH_CAMELLIA_256_CBC_SHA384";
+		public const String RFC_RSA_WITH_SEED_SHA                        = "TLS_RSA_WITH_SEED_CBC_SHA";
+		public const String RFC_DHE_DSS_WITH_SEED_SHA                    = "TLS_DHE_DSS_WITH_SEED_CBC_SHA";
+		public const String RFC_DHE_RSA_WITH_SEED_SHA                    = "TLS_DHE_RSA_WITH_SEED_CBC_SHA";
+		public const String RFC_ADH_WITH_SEED_SHA                        = "TLS_DH_anon_WITH_SEED_CBC_SHA";
+		public const String RFC_ECDHE_PSK_WITH_RC4_128_SHA               = "TLS_ECDHE_PSK_WITH_RC4_128_SHA";
+		public const String RFC_ECDH_anon_WITH_RC4_128_SHA               = "TLS_ECDH_anon_WITH_RC4_128_SHA";
+		public const String RFC_ECDHE_ECDSA_WITH_RC4_128_SHA             = "TLS_ECDHE_ECDSA_WITH_RC4_128_SHA";
+		public const String RFC_ECDHE_RSA_WITH_RC4_128_SHA               = "TLS_ECDHE_RSA_WITH_RC4_128_SHA";
+		public const String RFC_PSK_WITH_RC4_128_SHA                     = "TLS_PSK_WITH_RC4_128_SHA";
+		public const String RFC_RSA_PSK_WITH_RC4_128_SHA                 = "TLS_RSA_PSK_WITH_RC4_128_SHA";
+		public const String RFC_DHE_PSK_WITH_RC4_128_SHA                 = "TLS_DHE_PSK_WITH_RC4_128_SHA";
+		public const String RFC_RSA_WITH_ARIA_128_GCM_SHA256             = "TLS_RSA_WITH_ARIA_128_GCM_SHA256";
+		public const String RFC_RSA_WITH_ARIA_256_GCM_SHA384             = "TLS_RSA_WITH_ARIA_256_GCM_SHA384";
+		public const String RFC_DHE_RSA_WITH_ARIA_128_GCM_SHA256         = "TLS_DHE_RSA_WITH_ARIA_128_GCM_SHA256";
+		public const String RFC_DHE_RSA_WITH_ARIA_256_GCM_SHA384         = "TLS_DHE_RSA_WITH_ARIA_256_GCM_SHA384";
+		public const String RFC_DH_RSA_WITH_ARIA_128_GCM_SHA256          = "TLS_DH_RSA_WITH_ARIA_128_GCM_SHA256";
+		public const String RFC_DH_RSA_WITH_ARIA_256_GCM_SHA384          = "TLS_DH_RSA_WITH_ARIA_256_GCM_SHA384";
+		public const String RFC_DHE_DSS_WITH_ARIA_128_GCM_SHA256         = "TLS_DHE_DSS_WITH_ARIA_128_GCM_SHA256";
+		public const String RFC_DHE_DSS_WITH_ARIA_256_GCM_SHA384         = "TLS_DHE_DSS_WITH_ARIA_256_GCM_SHA384";
+		public const String RFC_DH_DSS_WITH_ARIA_128_GCM_SHA256          = "TLS_DH_DSS_WITH_ARIA_128_GCM_SHA256";
+		public const String RFC_DH_DSS_WITH_ARIA_256_GCM_SHA384          = "TLS_DH_DSS_WITH_ARIA_256_GCM_SHA384";
+		public const String RFC_DH_anon_WITH_ARIA_128_GCM_SHA256         = "TLS_DH_anon_WITH_ARIA_128_GCM_SHA256";
+		public const String RFC_DH_anon_WITH_ARIA_256_GCM_SHA384         = "TLS_DH_anon_WITH_ARIA_256_GCM_SHA384";
+		public const String RFC_ECDHE_ECDSA_WITH_ARIA_128_GCM_SHA256     = "TLS_ECDHE_ECDSA_WITH_ARIA_128_GCM_SHA256";
+		public const String RFC_ECDHE_ECDSA_WITH_ARIA_256_GCM_SHA384     = "TLS_ECDHE_ECDSA_WITH_ARIA_256_GCM_SHA384";
+		public const String RFC_ECDH_ECDSA_WITH_ARIA_128_GCM_SHA256      = "TLS_ECDH_ECDSA_WITH_ARIA_128_GCM_SHA256";
+		public const String RFC_ECDH_ECDSA_WITH_ARIA_256_GCM_SHA384      = "TLS_ECDH_ECDSA_WITH_ARIA_256_GCM_SHA384";
+		public const String RFC_ECDHE_RSA_WITH_ARIA_128_GCM_SHA256       = "TLS_ECDHE_RSA_WITH_ARIA_128_GCM_SHA256";
+		public const String RFC_ECDHE_RSA_WITH_ARIA_256_GCM_SHA384       = "TLS_ECDHE_RSA_WITH_ARIA_256_GCM_SHA384";
+		public const String RFC_ECDH_RSA_WITH_ARIA_128_GCM_SHA256        = "TLS_ECDH_RSA_WITH_ARIA_128_GCM_SHA256";
+		public const String RFC_ECDH_RSA_WITH_ARIA_256_GCM_SHA384        = "TLS_ECDH_RSA_WITH_ARIA_256_GCM_SHA384";
+		public const String RFC_PSK_WITH_ARIA_128_GCM_SHA256             = "TLS_PSK_WITH_ARIA_128_GCM_SHA256";
+		public const String RFC_PSK_WITH_ARIA_256_GCM_SHA384             = "TLS_PSK_WITH_ARIA_256_GCM_SHA384";
+		public const String RFC_DHE_PSK_WITH_ARIA_128_GCM_SHA256         = "TLS_DHE_PSK_WITH_ARIA_128_GCM_SHA256";
+		public const String RFC_DHE_PSK_WITH_ARIA_256_GCM_SHA384         = "TLS_DHE_PSK_WITH_ARIA_256_GCM_SHA384";
+		public const String RFC_RSA_PSK_WITH_ARIA_128_GCM_SHA256         = "TLS_RSA_PSK_WITH_ARIA_128_GCM_SHA256";
+		public const String RFC_RSA_PSK_WITH_ARIA_256_GCM_SHA384         = "TLS_RSA_PSK_WITH_ARIA_256_GCM_SHA384";
+
+		/*
+		 * XXX Backward compatibility alert: Older versions of OpenSSL gave some DHE ciphers names with "EDH" instead of "DHE".  Going forward, we should be using DHE everywhere, though we may indefinitely maintain aliases for
+		 * users or configurations that used "EDH"
+		 */
+		public const String TXT_DHE_DSS_WITH_RC4_128_SHA = "DHE-DSS-RC4-SHA";
+
+		public const String TXT_PSK_WITH_NULL_SHA        = "PSK-NULL-SHA";
+		public const String TXT_DHE_PSK_WITH_NULL_SHA    = "DHE-PSK-NULL-SHA";
+		public const String TXT_RSA_PSK_WITH_NULL_SHA    = "RSA-PSK-NULL-SHA";
+
+		/* AES ciphersuites from RFC3268 */
+		public const String TXT_RSA_WITH_AES_128_SHA     = "AES128-SHA";
+		public const String TXT_DH_DSS_WITH_AES_128_SHA  = "DH-DSS-AES128-SHA";
+		public const String TXT_DH_RSA_WITH_AES_128_SHA  = "DH-RSA-AES128-SHA";
+		public const String TXT_DHE_DSS_WITH_AES_128_SHA = "DHE-DSS-AES128-SHA";
+		public const String TXT_DHE_RSA_WITH_AES_128_SHA = "DHE-RSA-AES128-SHA";
+		public const String TXT_ADH_WITH_AES_128_SHA     = "ADH-AES128-SHA";
+
+		public const String TXT_RSA_WITH_AES_256_SHA     = "AES256-SHA";
+		public const String TXT_DH_DSS_WITH_AES_256_SHA  = "DH-DSS-AES256-SHA";
+		public const String TXT_DH_RSA_WITH_AES_256_SHA  = "DH-RSA-AES256-SHA";
+		public const String TXT_DHE_DSS_WITH_AES_256_SHA = "DHE-DSS-AES256-SHA";
+		public const String TXT_DHE_RSA_WITH_AES_256_SHA = "DHE-RSA-AES256-SHA";
+		public const String TXT_ADH_WITH_AES_256_SHA     = "ADH-AES256-SHA";
+
+		/* ECC ciphersuites from RFC4492 */
+		public const String TXT_ECDH_ECDSA_WITH_NULL_SHA          = "ECDH-ECDSA-NULL-SHA";
+		public const String TXT_ECDH_ECDSA_WITH_RC4_128_SHA       = "ECDH-ECDSA-RC4-SHA";
+		public const String TXT_ECDH_ECDSA_WITH_DES_192_CBC3_SHA  = "ECDH-ECDSA-DES-CBC3-SHA";
+		public const String TXT_ECDH_ECDSA_WITH_AES_128_CBC_SHA   = "ECDH-ECDSA-AES128-SHA";
+		public const String TXT_ECDH_ECDSA_WITH_AES_256_CBC_SHA   = "ECDH-ECDSA-AES256-SHA";
+
+		public const String TXT_ECDHE_ECDSA_WITH_NULL_SHA         = "ECDHE-ECDSA-NULL-SHA";
+		public const String TXT_ECDHE_ECDSA_WITH_RC4_128_SHA      = "ECDHE-ECDSA-RC4-SHA";
+		public const String TXT_ECDHE_ECDSA_WITH_DES_192_CBC3_SHA = "ECDHE-ECDSA-DES-CBC3-SHA";
+		public const String TXT_ECDHE_ECDSA_WITH_AES_128_CBC_SHA  = "ECDHE-ECDSA-AES128-SHA";
+		public const String TXT_ECDHE_ECDSA_WITH_AES_256_CBC_SHA  = "ECDHE-ECDSA-AES256-SHA";
+
+		public const String TXT_ECDH_RSA_WITH_NULL_SHA            = "ECDH-RSA-NULL-SHA";
+		public const String TXT_ECDH_RSA_WITH_RC4_128_SHA         = "ECDH-RSA-RC4-SHA";
+		public const String TXT_ECDH_RSA_WITH_DES_192_CBC3_SHA    = "ECDH-RSA-DES-CBC3-SHA";
+		public const String TXT_ECDH_RSA_WITH_AES_128_CBC_SHA     = "ECDH-RSA-AES128-SHA";
+		public const String TXT_ECDH_RSA_WITH_AES_256_CBC_SHA     = "ECDH-RSA-AES256-SHA";
+
+		public const String TXT_ECDHE_RSA_WITH_NULL_SHA           = "ECDHE-RSA-NULL-SHA";
+		public const String TXT_ECDHE_RSA_WITH_RC4_128_SHA        = "ECDHE-RSA-RC4-SHA";
+		public const String TXT_ECDHE_RSA_WITH_DES_192_CBC3_SHA   = "ECDHE-RSA-DES-CBC3-SHA";
+		public const String TXT_ECDHE_RSA_WITH_AES_128_CBC_SHA    = "ECDHE-RSA-AES128-SHA";
+		public const String TXT_ECDHE_RSA_WITH_AES_256_CBC_SHA    = "ECDHE-RSA-AES256-SHA";
+
+		public const String TXT_ECDH_anon_WITH_NULL_SHA           = "AECDH-NULL-SHA";
+		public const String TXT_ECDH_anon_WITH_RC4_128_SHA        = "AECDH-RC4-SHA";
+		public const String TXT_ECDH_anon_WITH_DES_192_CBC3_SHA   = "AECDH-DES-CBC3-SHA";
+		public const String TXT_ECDH_anon_WITH_AES_128_CBC_SHA    = "AECDH-AES128-SHA";
+		public const String TXT_ECDH_anon_WITH_AES_256_CBC_SHA    = "AECDH-AES256-SHA";
+
+		/* PSK ciphersuites from RFC 4279 */
+		public const String TXT_PSK_WITH_RC4_128_SHA          = "PSK-RC4-SHA";
+		public const String TXT_PSK_WITH_3DES_EDE_CBC_SHA     = "PSK-3DES-EDE-CBC-SHA";
+		public const String TXT_PSK_WITH_AES_128_CBC_SHA      = "PSK-AES128-CBC-SHA";
+		public const String TXT_PSK_WITH_AES_256_CBC_SHA      = "PSK-AES256-CBC-SHA";
+
+		public const String TXT_DHE_PSK_WITH_RC4_128_SHA      = "DHE-PSK-RC4-SHA";
+		public const String TXT_DHE_PSK_WITH_3DES_EDE_CBC_SHA = "DHE-PSK-3DES-EDE-CBC-SHA";
+		public const String TXT_DHE_PSK_WITH_AES_128_CBC_SHA  = "DHE-PSK-AES128-CBC-SHA";
+		public const String TXT_DHE_PSK_WITH_AES_256_CBC_SHA  = "DHE-PSK-AES256-CBC-SHA";
+		public const String TXT_RSA_PSK_WITH_RC4_128_SHA      = "RSA-PSK-RC4-SHA";
+		public const String TXT_RSA_PSK_WITH_3DES_EDE_CBC_SHA = "RSA-PSK-3DES-EDE-CBC-SHA";
+		public const String TXT_RSA_PSK_WITH_AES_128_CBC_SHA  = "RSA-PSK-AES128-CBC-SHA";
+		public const String TXT_RSA_PSK_WITH_AES_256_CBC_SHA  = "RSA-PSK-AES256-CBC-SHA";
+
+		/* PSK ciphersuites from RFC 5487 */
+		public const String TXT_PSK_WITH_AES_128_GCM_SHA256     = "PSK-AES128-GCM-SHA256";
+		public const String TXT_PSK_WITH_AES_256_GCM_SHA384     = "PSK-AES256-GCM-SHA384";
+		public const String TXT_DHE_PSK_WITH_AES_128_GCM_SHA256 = "DHE-PSK-AES128-GCM-SHA256";
+		public const String TXT_DHE_PSK_WITH_AES_256_GCM_SHA384 = "DHE-PSK-AES256-GCM-SHA384";
+		public const String TXT_RSA_PSK_WITH_AES_128_GCM_SHA256 = "RSA-PSK-AES128-GCM-SHA256";
+		public const String TXT_RSA_PSK_WITH_AES_256_GCM_SHA384 = "RSA-PSK-AES256-GCM-SHA384";
+
+		public const String TXT_PSK_WITH_AES_128_CBC_SHA256     = "PSK-AES128-CBC-SHA256";
+		public const String TXT_PSK_WITH_AES_256_CBC_SHA384     = "PSK-AES256-CBC-SHA384";
+		public const String TXT_PSK_WITH_NULL_SHA256            = "PSK-NULL-SHA256";
+		public const String TXT_PSK_WITH_NULL_SHA384            = "PSK-NULL-SHA384";
+
+		public const String TXT_DHE_PSK_WITH_AES_128_CBC_SHA256 = "DHE-PSK-AES128-CBC-SHA256";
+		public const String TXT_DHE_PSK_WITH_AES_256_CBC_SHA384 = "DHE-PSK-AES256-CBC-SHA384";
+		public const String TXT_DHE_PSK_WITH_NULL_SHA256        = "DHE-PSK-NULL-SHA256";
+		public const String TXT_DHE_PSK_WITH_NULL_SHA384        = "DHE-PSK-NULL-SHA384";
+
+		public const String TXT_RSA_PSK_WITH_AES_128_CBC_SHA256 = "RSA-PSK-AES128-CBC-SHA256";
+		public const String TXT_RSA_PSK_WITH_AES_256_CBC_SHA384 = "RSA-PSK-AES256-CBC-SHA384";
+		public const String TXT_RSA_PSK_WITH_NULL_SHA256        = "RSA-PSK-NULL-SHA256";
+		public const String TXT_RSA_PSK_WITH_NULL_SHA384        = "RSA-PSK-NULL-SHA384";
+
+		/* SRP ciphersuite from RFC 5054 */
+		public const String TXT_SRP_SHA_WITH_3DES_EDE_CBC_SHA     = "SRP-3DES-EDE-CBC-SHA";
+		public const String TXT_SRP_SHA_RSA_WITH_3DES_EDE_CBC_SHA = "SRP-RSA-3DES-EDE-CBC-SHA";
+		public const String TXT_SRP_SHA_DSS_WITH_3DES_EDE_CBC_SHA = "SRP-DSS-3DES-EDE-CBC-SHA";
+		public const String TXT_SRP_SHA_WITH_AES_128_CBC_SHA      = "SRP-AES-128-CBC-SHA";
+		public const String TXT_SRP_SHA_RSA_WITH_AES_128_CBC_SHA  = "SRP-RSA-AES-128-CBC-SHA";
+		public const String TXT_SRP_SHA_DSS_WITH_AES_128_CBC_SHA  = "SRP-DSS-AES-128-CBC-SHA";
+		public const String TXT_SRP_SHA_WITH_AES_256_CBC_SHA      = "SRP-AES-256-CBC-SHA";
+		public const String TXT_SRP_SHA_RSA_WITH_AES_256_CBC_SHA  = "SRP-RSA-AES-256-CBC-SHA";
+		public const String TXT_SRP_SHA_DSS_WITH_AES_256_CBC_SHA  = "SRP-DSS-AES-256-CBC-SHA";
+
+		/* Camellia ciphersuites from RFC4132 */
+		public const String TXT_RSA_WITH_CAMELLIA_128_CBC_SHA     = "CAMELLIA128-SHA";
+		public const String TXT_DH_DSS_WITH_CAMELLIA_128_CBC_SHA  = "DH-DSS-CAMELLIA128-SHA";
+		public const String TXT_DH_RSA_WITH_CAMELLIA_128_CBC_SHA  = "DH-RSA-CAMELLIA128-SHA";
+		public const String TXT_DHE_DSS_WITH_CAMELLIA_128_CBC_SHA = "DHE-DSS-CAMELLIA128-SHA";
+		public const String TXT_DHE_RSA_WITH_CAMELLIA_128_CBC_SHA = "DHE-RSA-CAMELLIA128-SHA";
+		public const String TXT_ADH_WITH_CAMELLIA_128_CBC_SHA     = "ADH-CAMELLIA128-SHA";
+
+		public const String TXT_RSA_WITH_CAMELLIA_256_CBC_SHA     = "CAMELLIA256-SHA";
+		public const String TXT_DH_DSS_WITH_CAMELLIA_256_CBC_SHA  = "DH-DSS-CAMELLIA256-SHA";
+		public const String TXT_DH_RSA_WITH_CAMELLIA_256_CBC_SHA  = "DH-RSA-CAMELLIA256-SHA";
+		public const String TXT_DHE_DSS_WITH_CAMELLIA_256_CBC_SHA = "DHE-DSS-CAMELLIA256-SHA";
+		public const String TXT_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA = "DHE-RSA-CAMELLIA256-SHA";
+		public const String TXT_ADH_WITH_CAMELLIA_256_CBC_SHA     = "ADH-CAMELLIA256-SHA";
+
+		/* TLS 1.2 Camellia SHA-256 ciphersuites from RFC5932 */
+		public const String TXT_RSA_WITH_CAMELLIA_128_CBC_SHA256       = "CAMELLIA128-SHA256";
+		public const String TXT_DH_DSS_WITH_CAMELLIA_128_CBC_SHA256    = "DH-DSS-CAMELLIA128-SHA256";
+		public const String TXT_DH_RSA_WITH_CAMELLIA_128_CBC_SHA256    = "DH-RSA-CAMELLIA128-SHA256";
+		public const String TXT_DHE_DSS_WITH_CAMELLIA_128_CBC_SHA256   = "DHE-DSS-CAMELLIA128-SHA256";
+		public const String TXT_DHE_RSA_WITH_CAMELLIA_128_CBC_SHA256   = "DHE-RSA-CAMELLIA128-SHA256";
+		public const String TXT_ADH_WITH_CAMELLIA_128_CBC_SHA256       = "ADH-CAMELLIA128-SHA256";
+
+		public const String TXT_RSA_WITH_CAMELLIA_256_CBC_SHA256       = "CAMELLIA256-SHA256";
+		public const String TXT_DH_DSS_WITH_CAMELLIA_256_CBC_SHA256    = "DH-DSS-CAMELLIA256-SHA256";
+		public const String TXT_DH_RSA_WITH_CAMELLIA_256_CBC_SHA256    = "DH-RSA-CAMELLIA256-SHA256";
+		public const String TXT_DHE_DSS_WITH_CAMELLIA_256_CBC_SHA256   = "DHE-DSS-CAMELLIA256-SHA256";
+		public const String TXT_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA256   = "DHE-RSA-CAMELLIA256-SHA256";
+		public const String TXT_ADH_WITH_CAMELLIA_256_CBC_SHA256       = "ADH-CAMELLIA256-SHA256";
+
+		public const String TXT_PSK_WITH_CAMELLIA_128_CBC_SHA256       = "PSK-CAMELLIA128-SHA256";
+		public const String TXT_PSK_WITH_CAMELLIA_256_CBC_SHA384       = "PSK-CAMELLIA256-SHA384";
+		public const String TXT_DHE_PSK_WITH_CAMELLIA_128_CBC_SHA256   = "DHE-PSK-CAMELLIA128-SHA256";
+		public const String TXT_DHE_PSK_WITH_CAMELLIA_256_CBC_SHA384   = "DHE-PSK-CAMELLIA256-SHA384";
+		public const String TXT_RSA_PSK_WITH_CAMELLIA_128_CBC_SHA256   = "RSA-PSK-CAMELLIA128-SHA256";
+		public const String TXT_RSA_PSK_WITH_CAMELLIA_256_CBC_SHA384   = "RSA-PSK-CAMELLIA256-SHA384";
+		public const String TXT_ECDHE_PSK_WITH_CAMELLIA_128_CBC_SHA256 = "ECDHE-PSK-CAMELLIA128-SHA256";
+		public const String TXT_ECDHE_PSK_WITH_CAMELLIA_256_CBC_SHA384 = "ECDHE-PSK-CAMELLIA256-SHA384";
+
+		/* SEED ciphersuites from RFC4162 */
+		public const String TXT_RSA_WITH_SEED_SHA     = "SEED-SHA";
+		public const String TXT_DH_DSS_WITH_SEED_SHA  = "DH-DSS-SEED-SHA";
+		public const String TXT_DH_RSA_WITH_SEED_SHA  = "DH-RSA-SEED-SHA";
+		public const String TXT_DHE_DSS_WITH_SEED_SHA = "DHE-DSS-SEED-SHA";
+		public const String TXT_DHE_RSA_WITH_SEED_SHA = "DHE-RSA-SEED-SHA";
+		public const String TXT_ADH_WITH_SEED_SHA     = "ADH-SEED-SHA";
+
+		/* TLS v1.2 ciphersuites */
+		public const String TXT_RSA_WITH_NULL_SHA256        = "NULL-SHA256";
+		public const String TXT_RSA_WITH_AES_128_SHA256     = "AES128-SHA256";
+		public const String TXT_RSA_WITH_AES_256_SHA256     = "AES256-SHA256";
+		public const String TXT_DH_DSS_WITH_AES_128_SHA256  = "DH-DSS-AES128-SHA256";
+		public const String TXT_DH_RSA_WITH_AES_128_SHA256  = "DH-RSA-AES128-SHA256";
+		public const String TXT_DHE_DSS_WITH_AES_128_SHA256 = "DHE-DSS-AES128-SHA256";
+		public const String TXT_DHE_RSA_WITH_AES_128_SHA256 = "DHE-RSA-AES128-SHA256";
+		public const String TXT_DH_DSS_WITH_AES_256_SHA256  = "DH-DSS-AES256-SHA256";
+		public const String TXT_DH_RSA_WITH_AES_256_SHA256  = "DH-RSA-AES256-SHA256";
+		public const String TXT_DHE_DSS_WITH_AES_256_SHA256 = "DHE-DSS-AES256-SHA256";
+		public const String TXT_DHE_RSA_WITH_AES_256_SHA256 = "DHE-RSA-AES256-SHA256";
+		public const String TXT_ADH_WITH_AES_128_SHA256     = "ADH-AES128-SHA256";
+		public const String TXT_ADH_WITH_AES_256_SHA256     = "ADH-AES256-SHA256";
+
+		/* TLS v1.2 GCM ciphersuites from RFC5288 */
+		public const String TXT_RSA_WITH_AES_128_GCM_SHA256     = "AES128-GCM-SHA256";
+		public const String TXT_RSA_WITH_AES_256_GCM_SHA384     = "AES256-GCM-SHA384";
+		public const String TXT_DHE_RSA_WITH_AES_128_GCM_SHA256 = "DHE-RSA-AES128-GCM-SHA256";
+		public const String TXT_DHE_RSA_WITH_AES_256_GCM_SHA384 = "DHE-RSA-AES256-GCM-SHA384";
+		public const String TXT_DH_RSA_WITH_AES_128_GCM_SHA256  = "DH-RSA-AES128-GCM-SHA256";
+		public const String TXT_DH_RSA_WITH_AES_256_GCM_SHA384  = "DH-RSA-AES256-GCM-SHA384";
+		public const String TXT_DHE_DSS_WITH_AES_128_GCM_SHA256 = "DHE-DSS-AES128-GCM-SHA256";
+		public const String TXT_DHE_DSS_WITH_AES_256_GCM_SHA384 = "DHE-DSS-AES256-GCM-SHA384";
+		public const String TXT_DH_DSS_WITH_AES_128_GCM_SHA256  = "DH-DSS-AES128-GCM-SHA256";
+		public const String TXT_DH_DSS_WITH_AES_256_GCM_SHA384  = "DH-DSS-AES256-GCM-SHA384";
+		public const String TXT_ADH_WITH_AES_128_GCM_SHA256     = "ADH-AES128-GCM-SHA256";
+		public const String TXT_ADH_WITH_AES_256_GCM_SHA384     = "ADH-AES256-GCM-SHA384";
+
+		/* CCM ciphersuites from RFC6655 */
+		public const String TXT_RSA_WITH_AES_128_CCM       = "AES128-CCM";
+		public const String TXT_RSA_WITH_AES_256_CCM       = "AES256-CCM";
+		public const String TXT_DHE_RSA_WITH_AES_128_CCM   = "DHE-RSA-AES128-CCM";
+		public const String TXT_DHE_RSA_WITH_AES_256_CCM   = "DHE-RSA-AES256-CCM";
+
+		public const String TXT_RSA_WITH_AES_128_CCM_8     = "AES128-CCM8";
+		public const String TXT_RSA_WITH_AES_256_CCM_8     = "AES256-CCM8";
+		public const String TXT_DHE_RSA_WITH_AES_128_CCM_8 = "DHE-RSA-AES128-CCM8";
+		public const String TXT_DHE_RSA_WITH_AES_256_CCM_8 = "DHE-RSA-AES256-CCM8";
+
+		public const String TXT_PSK_WITH_AES_128_CCM       = "PSK-AES128-CCM";
+		public const String TXT_PSK_WITH_AES_256_CCM       = "PSK-AES256-CCM";
+		public const String TXT_DHE_PSK_WITH_AES_128_CCM   = "DHE-PSK-AES128-CCM";
+		public const String TXT_DHE_PSK_WITH_AES_256_CCM   = "DHE-PSK-AES256-CCM";
+
+		public const String TXT_PSK_WITH_AES_128_CCM_8     = "PSK-AES128-CCM8";
+		public const String TXT_PSK_WITH_AES_256_CCM_8     = "PSK-AES256-CCM8";
+		public const String TXT_DHE_PSK_WITH_AES_128_CCM_8 = "DHE-PSK-AES128-CCM8";
+		public const String TXT_DHE_PSK_WITH_AES_256_CCM_8 = "DHE-PSK-AES256-CCM8";
+
+		/* CCM ciphersuites from RFC7251 */
+		public const String TXT_ECDHE_ECDSA_WITH_AES_128_CCM   = "ECDHE-ECDSA-AES128-CCM";
+		public const String TXT_ECDHE_ECDSA_WITH_AES_256_CCM   = "ECDHE-ECDSA-AES256-CCM";
+		public const String TXT_ECDHE_ECDSA_WITH_AES_128_CCM_8 = "ECDHE-ECDSA-AES128-CCM8";
+		public const String TXT_ECDHE_ECDSA_WITH_AES_256_CCM_8 = "ECDHE-ECDSA-AES256-CCM8";
+
+		/* ECDH HMAC based ciphersuites from RFC5289 */
+		public const String TXT_ECDHE_ECDSA_WITH_AES_128_SHA256 = "ECDHE-ECDSA-AES128-SHA256";
+		public const String TXT_ECDHE_ECDSA_WITH_AES_256_SHA384 = "ECDHE-ECDSA-AES256-SHA384";
+		public const String TXT_ECDH_ECDSA_WITH_AES_128_SHA256  = "ECDH-ECDSA-AES128-SHA256";
+		public const String TXT_ECDH_ECDSA_WITH_AES_256_SHA384  = "ECDH-ECDSA-AES256-SHA384";
+		public const String TXT_ECDHE_RSA_WITH_AES_128_SHA256   = "ECDHE-RSA-AES128-SHA256";
+		public const String TXT_ECDHE_RSA_WITH_AES_256_SHA384   = "ECDHE-RSA-AES256-SHA384";
+		public const String TXT_ECDH_RSA_WITH_AES_128_SHA256    = "ECDH-RSA-AES128-SHA256";
+		public const String TXT_ECDH_RSA_WITH_AES_256_SHA384    = "ECDH-RSA-AES256-SHA384";
+
+		/* ECDH GCM based ciphersuites from RFC5289 */
+		public const String TXT_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 = "ECDHE-ECDSA-AES128-GCM-SHA256";
+		public const String TXT_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 = "ECDHE-ECDSA-AES256-GCM-SHA384";
+		public const String TXT_ECDH_ECDSA_WITH_AES_128_GCM_SHA256  = "ECDH-ECDSA-AES128-GCM-SHA256";
+		public const String TXT_ECDH_ECDSA_WITH_AES_256_GCM_SHA384  = "ECDH-ECDSA-AES256-GCM-SHA384";
+		public const String TXT_ECDHE_RSA_WITH_AES_128_GCM_SHA256   = "ECDHE-RSA-AES128-GCM-SHA256";
+		public const String TXT_ECDHE_RSA_WITH_AES_256_GCM_SHA384   = "ECDHE-RSA-AES256-GCM-SHA384";
+		public const String TXT_ECDH_RSA_WITH_AES_128_GCM_SHA256    = "ECDH-RSA-AES128-GCM-SHA256";
+		public const String TXT_ECDH_RSA_WITH_AES_256_GCM_SHA384    = "ECDH-RSA-AES256-GCM-SHA384";
+
+		/* ECDHE PSK ciphersuites from RFC 5489 */
+		public const String TXT_ECDHE_PSK_WITH_RC4_128_SHA        = "ECDHE-PSK-RC4-SHA";
+		public const String TXT_ECDHE_PSK_WITH_3DES_EDE_CBC_SHA   = "ECDHE-PSK-3DES-EDE-CBC-SHA";
+		public const String TXT_ECDHE_PSK_WITH_AES_128_CBC_SHA    = "ECDHE-PSK-AES128-CBC-SHA";
+		public const String TXT_ECDHE_PSK_WITH_AES_256_CBC_SHA    = "ECDHE-PSK-AES256-CBC-SHA";
+
+		public const String TXT_ECDHE_PSK_WITH_AES_128_CBC_SHA256 = "ECDHE-PSK-AES128-CBC-SHA256";
+		public const String TXT_ECDHE_PSK_WITH_AES_256_CBC_SHA384 = "ECDHE-PSK-AES256-CBC-SHA384";
+
+		public const String TXT_ECDHE_PSK_WITH_NULL_SHA           = "ECDHE-PSK-NULL-SHA";
+		public const String TXT_ECDHE_PSK_WITH_NULL_SHA256        = "ECDHE-PSK-NULL-SHA256";
+		public const String TXT_ECDHE_PSK_WITH_NULL_SHA384        = "ECDHE-PSK-NULL-SHA384";
+
+		/* Camellia-CBC ciphersuites from RFC6367 */
+		public const String TXT_ECDHE_ECDSA_WITH_CAMELLIA_128_CBC_SHA256 = "ECDHE-ECDSA-CAMELLIA128-SHA256";
+		public const String TXT_ECDHE_ECDSA_WITH_CAMELLIA_256_CBC_SHA384 = "ECDHE-ECDSA-CAMELLIA256-SHA384";
+		public const String TXT_ECDH_ECDSA_WITH_CAMELLIA_128_CBC_SHA256  = "ECDH-ECDSA-CAMELLIA128-SHA256";
+		public const String TXT_ECDH_ECDSA_WITH_CAMELLIA_256_CBC_SHA384  = "ECDH-ECDSA-CAMELLIA256-SHA384";
+		public const String TXT_ECDHE_RSA_WITH_CAMELLIA_128_CBC_SHA256   = "ECDHE-RSA-CAMELLIA128-SHA256";
+		public const String TXT_ECDHE_RSA_WITH_CAMELLIA_256_CBC_SHA384   = "ECDHE-RSA-CAMELLIA256-SHA384";
+		public const String TXT_ECDH_RSA_WITH_CAMELLIA_128_CBC_SHA256    = "ECDH-RSA-CAMELLIA128-SHA256";
+		public const String TXT_ECDH_RSA_WITH_CAMELLIA_256_CBC_SHA384    = "ECDH-RSA-CAMELLIA256-SHA384";
+
+		/* draft-ietf-tls-chacha20-poly1305-03 */
+		public const String TXT_ECDHE_RSA_WITH_CHACHA20_POLY1305   = "ECDHE-RSA-CHACHA20-POLY1305";
+		public const String TXT_ECDHE_ECDSA_WITH_CHACHA20_POLY1305 = "ECDHE-ECDSA-CHACHA20-POLY1305";
+		public const String TXT_DHE_RSA_WITH_CHACHA20_POLY1305     = "DHE-RSA-CHACHA20-POLY1305";
+		public const String TXT_PSK_WITH_CHACHA20_POLY1305         = "PSK-CHACHA20-POLY1305";
+		public const String TXT_ECDHE_PSK_WITH_CHACHA20_POLY1305   = "ECDHE-PSK-CHACHA20-POLY1305";
+		public const String TXT_DHE_PSK_WITH_CHACHA20_POLY1305     = "DHE-PSK-CHACHA20-POLY1305";
+		public const String TXT_RSA_PSK_WITH_CHACHA20_POLY1305     = "RSA-PSK-CHACHA20-POLY1305";
+
+		/* Aria ciphersuites from RFC6209 */
+		public const String TXT_RSA_WITH_ARIA_128_GCM_SHA256         = "ARIA128-GCM-SHA256";
+		public const String TXT_RSA_WITH_ARIA_256_GCM_SHA384         = "ARIA256-GCM-SHA384";
+		public const String TXT_DHE_RSA_WITH_ARIA_128_GCM_SHA256     = "DHE-RSA-ARIA128-GCM-SHA256";
+		public const String TXT_DHE_RSA_WITH_ARIA_256_GCM_SHA384     = "DHE-RSA-ARIA256-GCM-SHA384";
+		public const String TXT_DH_RSA_WITH_ARIA_128_GCM_SHA256      = "DH-RSA-ARIA128-GCM-SHA256";
+		public const String TXT_DH_RSA_WITH_ARIA_256_GCM_SHA384      = "DH-RSA-ARIA256-GCM-SHA384";
+		public const String TXT_DHE_DSS_WITH_ARIA_128_GCM_SHA256     = "DHE-DSS-ARIA128-GCM-SHA256";
+		public const String TXT_DHE_DSS_WITH_ARIA_256_GCM_SHA384     = "DHE-DSS-ARIA256-GCM-SHA384";
+		public const String TXT_DH_DSS_WITH_ARIA_128_GCM_SHA256      = "DH-DSS-ARIA128-GCM-SHA256";
+		public const String TXT_DH_DSS_WITH_ARIA_256_GCM_SHA384      = "DH-DSS-ARIA256-GCM-SHA384";
+		public const String TXT_DH_anon_WITH_ARIA_128_GCM_SHA256     = "ADH-ARIA128-GCM-SHA256";
+		public const String TXT_DH_anon_WITH_ARIA_256_GCM_SHA384     = "ADH-ARIA256-GCM-SHA384";
+		public const String TXT_ECDHE_ECDSA_WITH_ARIA_128_GCM_SHA256 = "ECDHE-ECDSA-ARIA128-GCM-SHA256";
+		public const String TXT_ECDHE_ECDSA_WITH_ARIA_256_GCM_SHA384 = "ECDHE-ECDSA-ARIA256-GCM-SHA384";
+		public const String TXT_ECDH_ECDSA_WITH_ARIA_128_GCM_SHA256  = "ECDH-ECDSA-ARIA128-GCM-SHA256";
+		public const String TXT_ECDH_ECDSA_WITH_ARIA_256_GCM_SHA384  = "ECDH-ECDSA-ARIA256-GCM-SHA384";
+		public const String TXT_ECDHE_RSA_WITH_ARIA_128_GCM_SHA256   = "ECDHE-ARIA128-GCM-SHA256";
+		public const String TXT_ECDHE_RSA_WITH_ARIA_256_GCM_SHA384   = "ECDHE-ARIA256-GCM-SHA384";
+		public const String TXT_ECDH_RSA_WITH_ARIA_128_GCM_SHA256    = "ECDH-ARIA128-GCM-SHA256";
+		public const String TXT_ECDH_RSA_WITH_ARIA_256_GCM_SHA384    = "ECDH-ARIA256-GCM-SHA384";
+		public const String TXT_PSK_WITH_ARIA_128_GCM_SHA256         = "PSK-ARIA128-GCM-SHA256";
+		public const String TXT_PSK_WITH_ARIA_256_GCM_SHA384         = "PSK-ARIA256-GCM-SHA384";
+		public const String TXT_DHE_PSK_WITH_ARIA_128_GCM_SHA256     = "DHE-PSK-ARIA128-GCM-SHA256";
+		public const String TXT_DHE_PSK_WITH_ARIA_256_GCM_SHA384     = "DHE-PSK-ARIA256-GCM-SHA384";
+		public const String TXT_RSA_PSK_WITH_ARIA_128_GCM_SHA256     = "RSA-PSK-ARIA128-GCM-SHA256";
+		public const String TXT_RSA_PSK_WITH_ARIA_256_GCM_SHA384     = "RSA-PSK-ARIA256-GCM-SHA384";
+
+		public const int FINISH_MAC_LENGTH = 12;
+
 		/* Pseudo content types to indicate additional parameters */
 		public const int RT_CRYPTO               = 0x1000;
 		public const int RT_CRYPTO_PREMASTER     = RT_CRYPTO | 0x1;
 		public const int RT_CRYPTO_CLIENT_RANDOM = RT_CRYPTO | 0x2;
 		public const int RT_CRYPTO_SERVER_RANDOM = RT_CRYPTO | 0x3;
 		public const int RT_CRYPTO_MASTER        = RT_CRYPTO | 0x4;
-		
+
 		public const int RT_CRYPTO_READ          = 0x0000;
 		public const int RT_CRYPTO_WRITE         = 0x0100;
 		public const int RT_CRYPTO_MAC           = RT_CRYPTO | 0x5;
@@ -75,20 +1032,20 @@ namespace Beef_Net.OpenSSL
 
 		/* Removed from OpenSSL 1.1.0 */
 		public const int FLAGS_TLS_PADDING_BUG        = 0x0;
-		
+
 		public const int FLAGS_SKIP_CERT_VERIFY       = 0x0010;
-		
+
 		/* Set if we encrypt then mac instead of usual mac then encrypt */
 		public const int FLAGS_ENCRYPT_THEN_MAC_READ  = 0x0100;
 		public const int FLAGS_ENCRYPT_THEN_MAC       = FLAGS_ENCRYPT_THEN_MAC_READ;
-		
+
 		/* Set if extended master secret extension received from peer */
 		public const int FLAGS_RECEIVED_EXTMS         = 0x0200;
-		
+
 		public const int FLAGS_ENCRYPT_THEN_MAC_WRITE = 0x0400;
-		
+
 		public const int FLAGS_STATELESS              = 0x0800;
-		
+
 		/* Set if extended master secret extension required on renegotiation */
 		public const int FLAGS_REQUIRED_EXTMS         = 0x1000;
 
@@ -112,6 +1069,10 @@ namespace Beef_Net.OpenSSL
 	[AlwaysInclude]
 	sealed abstract class TLS1_1
 	{
+		public const int VERSION       = 0x0302;
+		public const int VERSION_MAJOR = 0x03;
+		public const int VERSION_MINOR = 0x02;
+
 		/*
 		** MOVED for convenience
 		** libssl-1_1.dll
@@ -132,6 +1093,14 @@ namespace Beef_Net.OpenSSL
 	[AlwaysInclude]
 	sealed abstract class TLS1_2
 	{
+		public const int VERSION       = 0x0303;
+		public const int VERSION_MAJOR = 0x03;
+		public const int VERSION_MINOR = 0x03;
+
+		/* TLS v1.2 PSK GCM ciphersuites from RFC5487 */
+		public const String TXT_PSK_WITH_AES_128_GCM_SHA256 = "PSK-AES128-GCM-SHA256";
+		public const String TXT_PSK_WITH_AES_256_GCM_SHA384 = "PSK-AES256-GCM-SHA384";
+
 		/*
 		** MOVED for convenience
 		** libssl-1_1.dll
@@ -139,7 +1108,6 @@ namespace Beef_Net.OpenSSL
 		**   489  1E8 00001FCD TLSv1_2_method
 		**   490  1E9 00001122 TLSv1_2_server_method
 		*/
-
 #if !OPENSSL_NO_TLS1_2_METHOD
 		[Import(OPENSSL_LIB_SSL), LinkName("TLSv1_2_client_method")]
 		public extern static SSL.METHOD* client_method();
@@ -153,6 +1121,29 @@ namespace Beef_Net.OpenSSL
 	[AlwaysInclude]
 	sealed abstract class TLS1_3
 	{
+		public const int VERSION       = 0x0304;
+		/* Does not exist in the official header.. Yikes */
+		public const int VERSION_MAJOR = 0x03;
+		public const int VERSION_MINOR = 0x04;
+
+		/* TLSv1.3 alerts */
+		public const int AD_MISSING_EXTENSION    = 109; /* fatal */
+		public const int AD_CERTIFICATE_REQUIRED = 116; /* fatal */
+
+		/* TLS v1.3 ciphersuites */
+		public const int CK_AES_128_GCM_SHA256       = 0x03001301;
+		public const int CK_AES_256_GCM_SHA384       = 0x03001302;
+		public const int CK_CHACHA20_POLY1305_SHA256 = 0x03001303;
+		public const int CK_AES_128_CCM_SHA256       = 0x03001304;
+		public const int CK_AES_128_CCM_8_SHA256     = 0x03001305;
+		
+		/* a bundle of RFC standard cipher names, generated from ssl3.ciphers[] */
+		public const String RFC_AES_128_GCM_SHA256       = "TLS_AES_128_GCM_SHA256";
+		public const String RFC_AES_256_GCM_SHA384       = "TLS_AES_256_GCM_SHA384";
+		public const String RFC_CHACHA20_POLY1305_SHA256 = "TLS_CHACHA20_POLY1305_SHA256";
+		public const String RFC_AES_128_CCM_SHA256       = "TLS_AES_128_CCM_SHA256";
+		public const String RFC_AES_128_CCM_8_SHA256     = "TLS_AES_128_CCM_8_SHA256";
+
 		/* Matches the length of PSK_MAX_PSK_LEN. We keep it the same value for consistency, even in the event of OPENSSL_NO_PSK being defined. */
 		public const int MAX_RESUMPTION_PSK_LENGTH = 256;
 	}

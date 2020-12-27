@@ -207,8 +207,8 @@ namespace Beef_Net.OpenSSL
 		public extern static void with_flags(BIGNUM* dest, BIGNUM* b, int flags);
 
 		/* Wrapper function to make using BN_GENCB easier */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_get_flags")]
-		public extern static int BN_GENCB_call(GENCB* cb, int a, int b);
+		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_GENCB_call")]
+		public extern static int GENCB_call(GENCB* cb, int a, int b);
 
 		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_GENCB_new")]
 		public extern static GENCB* GENCB_new();
