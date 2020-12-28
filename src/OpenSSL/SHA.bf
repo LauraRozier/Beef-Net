@@ -11,7 +11,6 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
-	[AlwaysInclude]
 	sealed abstract class SHA
 	{
 		/*-
@@ -24,7 +23,7 @@ namespace Beef_Net.OpenSSL
 		public const int LAST_BLOCK    = CBLOCK - 8;
 		public const int DIGEST_LENGTH = 20;
 
-		public typealias LONG   = uint;
+		public typealias LONG = uint;
 		public typealias LONG64 = uint64;
 
 		[CRepr]
@@ -73,8 +72,7 @@ namespace Beef_Net.OpenSSL
 		]
 		public extern static void Transform(CTX* c, uint8* data);
 	}
-	
-	[AlwaysInclude]
+
 	sealed abstract class SHA224
 	{
 		public const int DIGEST_LENGTH = 28;
@@ -108,13 +106,10 @@ namespace Beef_Net.OpenSSL
 		]
 		public extern static uint8* SHA224(uint8* d, uint n, uint8* md);
 	}
-	
-	[AlwaysInclude]
+
 	sealed abstract class SHA256
 	{
-		/*
-		 * SHA-256 treats input data as a contiguous array of 32 bit wide big-endian values.
-		 */
+		/* SHA-256 treats input data as a contiguous array of 32 bit wide big-endian values. */
 		public const int CBLOCK        = SHA.LBLOCK * 4;
 		public const int DIGEST_LENGTH = 32;
 
@@ -122,9 +117,11 @@ namespace Beef_Net.OpenSSL
 		public struct state_st
 		{
 		    public SHA.LONG[8] h;
-		    public SHA.LONG Nl, Nh;
+		    public SHA.LONG Nl;
+		    public SHA.LONG Nh;
 		    public SHA.LONG[SHA.LBLOCK] data;
-		    public uint num, md_len;
+		    public uint num;
+		    public uint md_len;
 		}
 		public typealias CTX = state_st;
 
@@ -164,8 +161,7 @@ namespace Beef_Net.OpenSSL
 		]
 		public extern static void Transform(CTX* c, uint8* data);
 	}
-	
-	[AlwaysInclude]
+
 	sealed abstract class SHA384
 	{
 		public const int DIGEST_LENGTH = 48;
@@ -199,13 +195,11 @@ namespace Beef_Net.OpenSSL
 		]
 		public extern static uint8* SHA384(uint8* d, uint n, uint8* md);
 	}
-	
-	[AlwaysInclude]
+
 	sealed abstract class SHA512
 	{
 		/*
-		 * Unlike 32-bit digest algorithms, SHA-512 *relies* on SHA_LONG64 being exactly 64-bit wide.
-		 * See Implementation Notes in sha512.c for further details.
+		 * Unlike 32-bit digest algorithms, SHA-512 *relies* on SHA_LONG64 being exactly 64-bit wide. See Implementation Notes in sha512.c for further details.
 		 *
 		 * SHA-512 treats input data as a contiguous array of 64 bit wide big-endian values.
 		 */
@@ -216,14 +210,17 @@ namespace Beef_Net.OpenSSL
 		public struct state_st
 		{
 		    public SHA.LONG64[8] h;
-		    public SHA.LONG64 Nl, Nh;
+		    public SHA.LONG64 Nl;
+		    public SHA.LONG64 Nh;
 		    public data_struct u;
-		    public uint num, md_len;
+		    public uint num;
+		    public uint md_len;
 
 			[Union, CRepr]
-			public struct data_struct {
-		        SHA.LONG64[SHA.LBLOCK] d;
-		        uint8[CBLOCK] p;
+			public struct data_struct
+			{
+		        public SHA.LONG64[SHA.LBLOCK] d;
+		        public uint8[CBLOCK] p;
 			}
 		}
 		public typealias CTX = state_st;

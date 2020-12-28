@@ -11,7 +11,6 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
-	[AlwaysInclude]
 	sealed abstract class Blowfish
 	{
 #if !OPENSSL_NO_BF
@@ -37,60 +36,60 @@ namespace Beef_Net.OpenSSL
 		public typealias KEY = key_st;
 
 		[
-#if !OPENSSL_LINK_STATIC
+	#if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_SSL),
-#endif
+	#endif
 			LinkName("BF_set_key")
 		]
 		public extern static void set_key(KEY* key, int len, uint8* data);
 
 		[
-#if !OPENSSL_LINK_STATIC
+	#if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_SSL),
-#endif
+	#endif
 			LinkName("BF_encrypt")
 		]
 		public extern static void encrypt(LONG* data, KEY* key);
 		[
-#if !OPENSSL_LINK_STATIC
+	#if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_SSL),
-#endif
+	#endif
 			LinkName("BF_decrypt")
 		]
 		public extern static void decrypt(LONG* data, KEY* key);
 
 		[
-#if !OPENSSL_LINK_STATIC
+	#if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_SSL),
-#endif
+	#endif
 			LinkName("BF_ecb_encrypt")
 		]
-		public extern static void BF_ecb_encrypt(uint8* inVal, uint8* outVal, KEY* key, int enc);
+		public extern static void ecb_encrypt(uint8* inVal, uint8* outVal, KEY* key, int enc);
 		[
-#if !OPENSSL_LINK_STATIC
+	#if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_SSL),
-#endif
+	#endif
 			LinkName("BF_cbc_encrypt")
 		]
-		public extern static void BF_cbc_encrypt(uint8* inVal, uint8* outVal, int length, KEY* schedule, uint8* ivec, int enc);
+		public extern static void cbc_encrypt(uint8* inVal, uint8* outVal, int length, KEY* schedule, uint8* ivec, int enc);
 		[
-#if !OPENSSL_LINK_STATIC
+	#if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_SSL),
-#endif
+	#endif
 			LinkName("BF_cfb64_encrypt")
 		]
-		public extern static void BF_cfb64_encrypt(uint8* inVal, uint8* outVal, int length, KEY* schedule, uint8* ivec, int* num, int enc);
+		public extern static void cfb64_encrypt(uint8* inVal, uint8* outVal, int length, KEY* schedule, uint8* ivec, int* num, int enc);
 		[
-#if !OPENSSL_LINK_STATIC
+	#if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_SSL),
-#endif
+	#endif
 			LinkName("BF_ofb64_encrypt")
 		]
-		public extern static void BF_ofb64_encrypt(uint8* inVal, uint8* outVal, int length, KEY* schedule, uint8* ivec, int* num);
+		public extern static void ofb64_encrypt(uint8* inVal, uint8* outVal, int length, KEY* schedule, uint8* ivec, int* num);
 		[
-#if !OPENSSL_LINK_STATIC
+	#if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_SSL),
-#endif
+	#endif
 			LinkName("BF_options")
 		]
 		public extern static char8* options();

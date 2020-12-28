@@ -11,7 +11,6 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
-	[AlwaysInclude]
 	sealed abstract class TS
 	{
 #if !OPENSSL_NO_TS
@@ -1710,7 +1709,6 @@ namespace Beef_Net.OpenSSL
 #endif
 	}
 
-	[AlwaysInclude]
 	sealed abstract class ESS
 	{
 		public struct stack_st_POLICYINFO {}
@@ -1790,16 +1788,16 @@ namespace Beef_Net.OpenSSL
 #if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_CRYPTO),
 #endif
-			LinkName("")
+			LinkName("ESS_ISSUER_SERIAL_new")
 		]
-		public extern static ISSUER_SERIAL* ESS_ISSUER_SERIAL_new();
+		public extern static ISSUER_SERIAL* ISSUER_SERIAL_new();
 		[
 #if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_CRYPTO),
 #endif
-			LinkName("")
+			LinkName("ESS_ISSUER_SERIAL_free")
 		]
-		public extern static void ESS_ISSUER_SERIAL_free(ISSUER_SERIAL* a);
+		public extern static void ISSUER_SERIAL_free(ISSUER_SERIAL* a);
 		[
 #if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_CRYPTO),
@@ -1818,24 +1816,24 @@ namespace Beef_Net.OpenSSL
 #if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_CRYPTO),
 #endif
-			LinkName("")
+			LinkName("ESS_ISSUER_SERIAL_dup")
 		]
-		public extern static ISSUER_SERIAL* ESS_ISSUER_SERIAL_dup(ISSUER_SERIAL* a);
+		public extern static ISSUER_SERIAL* ISSUER_SERIAL_dup(ISSUER_SERIAL* a);
 
 		[
 #if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_CRYPTO),
 #endif
-			LinkName("")
+			LinkName("ESS_CERT_ID_new")
 		]
-		public extern static CERT_ID* ESS_CERT_ID_new();
+		public extern static CERT_ID* CERT_ID_new();
 		[
 #if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_CRYPTO),
 #endif
-			LinkName("")
+			LinkName("ESS_CERT_ID_free")
 		]
-		public extern static void ESS_CERT_ID_free(CERT_ID* a);
+		public extern static void CERT_ID_free(CERT_ID* a);
 		[
 #if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_CRYPTO),
@@ -1854,24 +1852,24 @@ namespace Beef_Net.OpenSSL
 #if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_CRYPTO),
 #endif
-			LinkName("")
+			LinkName("ESS_CERT_ID_dup")
 		]
-		public extern static CERT_ID* ESS_CERT_ID_dup(CERT_ID* a);
+		public extern static CERT_ID* CERT_ID_dup(CERT_ID* a);
 
 		[
 #if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_CRYPTO),
 #endif
-			LinkName("")
+			LinkName("ESS_SIGNING_CERT_new")
 		]
-		public extern static SIGNING_CERT* ESS_SIGNING_CERT_new();
+		public extern static SIGNING_CERT* SIGNING_CERT_new();
 		[
 #if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_CRYPTO),
 #endif
-			LinkName("")
+			LinkName("ESS_SIGNING_CERT_free")
 		]
-		public extern static void ESS_SIGNING_CERT_free(SIGNING_CERT* a);
+		public extern static void SIGNING_CERT_free(SIGNING_CERT* a);
 		[
 #if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_CRYPTO),
@@ -1890,24 +1888,24 @@ namespace Beef_Net.OpenSSL
 #if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_CRYPTO),
 #endif
-			LinkName("")
+			LinkName("ESS_SIGNING_CERT_dup")
 		]
-		public extern static SIGNING_CERT* ESS_SIGNING_CERT_dup(SIGNING_CERT* a);
+		public extern static SIGNING_CERT* SIGNING_CERT_dup(SIGNING_CERT* a);
 
 		[
 #if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_CRYPTO),
 #endif
-			LinkName("")
+			LinkName("ESS_CERT_ID_V2_new")
 		]
-		public extern static CERT_ID_V2* ESS_CERT_ID_V2_new();
+		public extern static CERT_ID_V2* CERT_ID_V2_new();
 		[
 #if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_CRYPTO),
 #endif
-			LinkName("")
+			LinkName("ESS_CERT_ID_V2_free")
 		]
-		public extern static void ESS_CERT_ID_V2_free(CERT_ID_V2* a);
+		public extern static void CERT_ID_V2_free(CERT_ID_V2* a);
 		[
 #if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_CRYPTO),
@@ -1926,24 +1924,24 @@ namespace Beef_Net.OpenSSL
 #if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_CRYPTO),
 #endif
-			LinkName("")
+			LinkName("ESS_CERT_ID_V2_dup")
 		]
-		public extern static CERT_ID_V2* ESS_CERT_ID_V2_dup(CERT_ID_V2 *a);
+		public extern static CERT_ID_V2* CERT_ID_V2_dup(CERT_ID_V2 *a);
 
 		[
 #if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_CRYPTO),
 #endif
-			LinkName("")
+			LinkName("ESS_SIGNING_CERT_V2_new")
 		]
-		public extern static SIGNING_CERT_V2* ESS_SIGNING_CERT_V2_new();
+		public extern static SIGNING_CERT_V2* SIGNING_CERT_V2_new();
 		[
 #if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_CRYPTO),
 #endif
-			LinkName("")
+			LinkName("ESS_SIGNING_CERT_V2_free")
 		]
-		public extern static void ESS_SIGNING_CERT_V2_free(SIGNING_CERT_V2* a);
+		public extern static void SIGNING_CERT_V2_free(SIGNING_CERT_V2* a);
 		[
 #if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_CRYPTO),
@@ -1964,6 +1962,6 @@ namespace Beef_Net.OpenSSL
 #endif
 			LinkName("ESS_SIGNING_CERT_V2_dup")
 		]
-		public extern static SIGNING_CERT_V2* ESS_SIGNING_CERT_V2_dup(SIGNING_CERT_V2* a);
+		public extern static SIGNING_CERT_V2* SIGNING_CERT_V2_dup(SIGNING_CERT_V2* a);
 	}
 }

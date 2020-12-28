@@ -11,7 +11,6 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
-	[AlwaysInclude]
 	sealed abstract class SSL
 	{
 		/*
@@ -909,8 +908,7 @@ namespace Beef_Net.OpenSSL
 		 *      SRP_username [ 12 ] EXPLICIT OCTET STRING -- optional SRP username
 		 *      flags [ 13 ] EXPLICIT INTEGER -- optional flags
 		 * }
-		 * Look in ssl/ssl_asn1.c for more details
-		 * I'm using EXPLICIT tags so I can read the damn things using asn1parse :-).
+		 * Look in ssl/ssl_asn1.c for more details I'm using EXPLICIT tags so I can read the damn things using asn1parse :-).
 		 */
 		[CRepr]
 		public struct session_st
@@ -1020,7 +1018,7 @@ namespace Beef_Net.OpenSSL
 		    /* Pointer to SSL or SSL_CTX max_version field or NULL if none */
 		    public int* max_version;
 		    /* Current flag table being worked on */
-		    public flag_tbl *tbl;
+		    public flag_tbl* tbl;
 		    /* Size of table */
 		    public uint ntbl;
 		    /* Client CA names */
@@ -2495,17 +2493,17 @@ namespace Beef_Net.OpenSSL
 
 		/* These will only be used when doing non-blocking IO */
 		[Inline]
-		public static bool want_nothing(ssl_st* s)         => want(s) == NOTHING;
+		public static bool want_nothing(ssl_st* s) => want(s) == NOTHING;
 		[Inline]
-		public static bool want_read(ssl_st* s)            => want(s) == READING;
+		public static bool want_read(ssl_st* s) => want(s) == READING;
 		[Inline]
-		public static bool want_write(ssl_st* s)           => want(s) == WRITING;
+		public static bool want_write(ssl_st* s) => want(s) == WRITING;
 		[Inline]
-		public static bool want_x509_lookup(ssl_st* s)     => want(s) == X509_LOOKUP;
+		public static bool want_x509_lookup(ssl_st* s) => want(s) == X509_LOOKUP;
 		[Inline]
-		public static bool want_async(ssl_st* s)           => want(s) == ASYNC_PAUSED;
+		public static bool want_async(ssl_st* s) => want(s) == ASYNC_PAUSED;
 		[Inline]
-		public static bool want_async_job(ssl_st* s)       => want(s) == ASYNC_NO_JOBS;
+		public static bool want_async_job(ssl_st* s) => want(s) == ASYNC_NO_JOBS;
 		[Inline]
 		public static bool want_client_hello_cb(ssl_st* s) => want(s) == CLIENT_HELLO_CB;
 
@@ -5745,18 +5743,14 @@ namespace Beef_Net.OpenSSL
 
 #if !OPENSSL_NO_CT
 		/*
-		 * A callback for verifying that the received SCTs are sufficient.
-		 * Expected to return 1 if they are sufficient, otherwise 0.
-		 * May return a negative integer if an error occurs.
+		 * A callback for verifying that the received SCTs are sufficient. Expected to return 1 if they are sufficient, otherwise 0. May return a negative integer if an error occurs.
 		 * A connection should be aborted if the SCTs are deemed insufficient.
 		 */
 		public function int ct_validation_cb(CT.POLICY_EVAL_CTX* ctx, SCT.stack_st_SCT* scts, void* arg);
 
 		/*
-		 * Sets a |callback| that is invoked upon receipt of ServerHelloDone to validate the received SCTs.
-		 * If the callback returns a non-positive result, the connection is terminated.
-		 * Call this function before beginning a handshake.
-		 * If a NULL |callback| is provided, SCT validation is disabled.
+		 * Sets a |callback| that is invoked upon receipt of ServerHelloDone to validate the received SCTs. If the callback returns a non-positive result, the connection is terminated.
+		 * Call this function before beginning a handshake. If a NULL |callback| is provided, SCT validation is disabled.
 		 * |arg| is arbitrary userdata that will be passed to the callback whenever it is invoked. Ownership of |arg| remains with the caller.
 		 *
 		 * NOTE: A side-effect of setting a CT callback is that an OCSP stapled response will be requested.
@@ -5780,18 +5774,14 @@ namespace Beef_Net.OpenSSL
 		[Inline]
 		public static int CTX_disable_ct(CTX* ctx) => CTX_set_ct_validation_callback(ctx, null, null);
 
-		/*
-		 * The validation type enumerates the available behaviours of the built-in SSL CT validation callback selected via SSL_enable_ct() and SSL_CTX_enable_ct().
-		 * The underlying callback is a static function in libssl.
-		 */
+		/* The validation type enumerates the available behaviours of the built-in SSL CT validation callback selected via enable_ct() and CTX_enable_ct(). The underlying callback is a static function in libssl. */
 		public const int CT_VALIDATION_PERMISSIVE = 0;
 		public const int CT_VALIDATION_STRICT     = 1;
 
 		/*
 		 * Enable CT by setting up a callback that implements one of the built-in validation variants.
 		 * The CT_VALIDATION_PERMISSIVE variant always continues the handshake, the application can make appropriate decisions at handshake completion.
-		 * The CT_VALIDATION_STRICT variant requires at least one valid SCT, or else handshake termination will be requested.
-		 * The handshake may continue anyway if VERIFY_NONE is in effect.
+		 * The CT_VALIDATION_STRICT variant requires at least one valid SCT, or else handshake termination will be requested. The handshake may continue anyway if VERIFY_NONE is in effect.
 		 */
 		[
 #if !OPENSSL_LINK_STATIC
@@ -5834,8 +5824,7 @@ namespace Beef_Net.OpenSSL
 		public extern static SCT.stack_st_SCT* get0_peer_scts(ssl_st* s);
 
 		/*
-		 * Loads the CT log list from the default location.
-		 * If a CTLOG_STORE has previously been set using CTX_set_ctlog_store, the log information loaded from this file will be appended to the CTLOG_STORE.
+		 * Loads the CT log list from the default location. If a CTLOG_STORE has previously been set using CTX_set_ctlog_store, the log information loaded from this file will be appended to the CTLOG_STORE.
 		 * Returns 1 on success, 0 otherwise.
 		 */
 		[
@@ -5847,8 +5836,7 @@ namespace Beef_Net.OpenSSL
 		public extern static int CTX_set_default_ctlog_list_file(CTX* ctx);
 
 		/*
-		 * Loads the CT log list from the specified file path.
-		 * If a CTLOG_STORE has previously been set using CTX_set_ctlog_store, the log information loaded from this file will be appended to the CTLOG_STORE.
+		 * Loads the CT log list from the specified file path. If a CTLOG_STORE has previously been set using CTX_set_ctlog_store, the log information loaded from this file will be appended to the CTLOG_STORE.
 		 * Returns 1 on success, 0 otherwise.
 		 */
 		[
@@ -5859,10 +5847,7 @@ namespace Beef_Net.OpenSSL
 		]
 		public extern static int CTX_set_ctlog_list_file(CTX* ctx, char8* path);
 
-		/*
-		 * Sets the CT log list used by all SSL connections created from this CTX.
-		 * Ownership of the CTLOG_STORE is transferred to the CTX.
-		 */
+		/* Sets the CT log list used by all SSL connections created from this CTX. Ownership of the CTLOG_STORE is transferred to the CTX. */
 		[
 #if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_SSL),
@@ -5872,8 +5857,7 @@ namespace Beef_Net.OpenSSL
 		public extern static void CTX_set0_ctlog_store(CTX* ctx, CTLOG.STORE* logs);
 
 		/*
-		 * Gets the CT log list used by all SSL connections created from this CTX.
-		 * This will be NULL unless one of the following functions has been called:
+		 * Gets the CT log list used by all SSL connections created from this CTX. This will be NULL unless one of the following functions has been called:
 		 * - CTX_set_default_ctlog_list_file
 		 * - CTX_set_ctlog_list_file
 		 * - CTX_set_ctlog_store
@@ -6332,14 +6316,12 @@ namespace Beef_Net.OpenSSL
 #endif
 	}
 
-	[AlwaysInclude]
 	sealed abstract class SSL2
 	{
 		public const int VERSION         = 0x0002;
 		public const int MT_CLIENT_HELLO = 1;
 	}
 
-	[AlwaysInclude]
 	sealed abstract class SSLv2_3
 	{
 		[Inline]
@@ -6350,7 +6332,6 @@ namespace Beef_Net.OpenSSL
 		public static SSL.METHOD* client_method() => TLS.client_method();
 	}
 
-	[AlwaysInclude]
 	sealed abstract class SSL3
 	{
 #if !OPENSSL_NO_COMP
@@ -6678,6 +6659,5 @@ namespace Beef_Net.OpenSSL
 		]
 		public static SSL.METHOD* client_method();
 #endif
-
 	}
 }

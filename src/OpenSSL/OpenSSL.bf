@@ -11,7 +11,6 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
-	[AlwaysInclude]
 	sealed abstract class SSLeay
 	{
 		/* SSLeay compat */
@@ -30,8 +29,7 @@ namespace Beef_Net.OpenSSL
 		[Inline]
 		public static void add_ssl_algorithms() => SSL.library_init();
 	}
-	
-	[AlwaysInclude]
+
 	sealed abstract class OpenSSL
 	{
 		public const int VERSION     = 0;
@@ -43,28 +41,21 @@ namespace Beef_Net.OpenSSL
 
 		/*-
 		 * Numeric release version identifier:
-		 * MNNFFPPS: major minor fix patch status
-		 * The status nibble has one of the values 0 for development, 1 to e for betas
-		 * 1 to 14, and f for release.  The patch level is exactly that.
+		 * MNNFFPPS: major minor fix patch status The status nibble has one of the values 0 for development, 1 to e for betas 1 to 14, and f for release.  The patch level is exactly that.
 		 * For example:
-		 * 0.9.3-dev      0x00903000
-		 * 0.9.3-beta1    0x00903001
+		 * 0.9.3-dev       0x00903000
+		 * 0.9.3-beta1     0x00903001
 		 * 0.9.3-beta2-dev 0x00903002
-		 * 0.9.3-beta2    0x00903002 (same as ...beta2-dev)
-		 * 0.9.3          0x0090300f
-		 * 0.9.3a         0x0090301f
-		 * 0.9.4          0x0090400f
-		 * 1.2.3z         0x102031af
+		 * 0.9.3-beta2     0x00903002 (same as ...beta2-dev)
+		 * 0.9.3           0x0090300f
+		 * 0.9.3a          0x0090301f
+		 * 0.9.4           0x0090400f
+		 * 1.2.3z          0x102031af
 		 *
-		 * For continuity reasons (because 0.9.5 is already out, and is coded
-		 * 0x00905100), between 0.9.5 and 0.9.6 the coding of the patch level
-		 * part is slightly different, by setting the highest bit.  This means
-		 * that 0.9.5a looks like this: 0x0090581f.  At 0.9.6, we can start
-		 * with 0x0090600S...
+		 * For continuity reasons (because 0.9.5 is already out, and is coded 0x00905100), between 0.9.5 and 0.9.6 the coding of the patch level part is slightly different, by setting the highest bit.  This means
+		 * that 0.9.5a looks like this: 0x0090581f.  At 0.9.6, we can start with 0x0090600S...
 		 *
-		 * (Prior to 0.9.3-dev a different scheme was used: 0.9.2b is 0x0922.)
-		 * (Prior to 0.9.5a beta1, a different scheme was used: MMNNFFRBB for
-		 *  major minor fix final patch/beta)
+		 * (Prior to 0.9.3-dev a different scheme was used: 0.9.2b is 0x0922.) (Prior to 0.9.5a beta1, a different scheme was used: MMNNFFRBB for major minor fix final patch/beta)
 		 */
 		public const int VERSION_NUMBER  = 0x1010108FL;
 		public const char8* VERSION_TEXT = "OpenSSL 1.1.1h  22 Sep 2020";
@@ -198,7 +189,13 @@ namespace Beef_Net.OpenSSL
 		public extern static void cleanse(void* ptr, uint len);
 
 		/* die if we have to */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_die"), NoReturn]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_die"),
+			NoReturn
+		]
 		public extern static void die(char8* assertion, char8* file, int line);
 		[Inline]
 		public static void OpenSSLDie(char8* f, int l, char8* a) => die(a, f, l);
@@ -802,9 +799,9 @@ namespace Beef_Net.OpenSSL
 
 #if !OPENSSL_NO_UNIT_TEST
 		[
-#if !OPENSSL_LINK_STATIC
+	#if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_SSL),
-#endif
+	#endif
 			LinkName("SSL_test_functions")
 		]
 		public extern static ssl_test_functions* test_functions();

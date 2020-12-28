@@ -11,7 +11,6 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
-	[AlwaysInclude]
 	sealed abstract class UI
 	{
 #if OPENSSL_NO_UI_CONSOLE

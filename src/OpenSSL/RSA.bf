@@ -11,7 +11,6 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
-	[AlwaysInclude]
 	sealed abstract class RSA
 	{
 		[
@@ -665,7 +664,49 @@ namespace Beef_Net.OpenSSL
 		public extern static int pkey_ctx_ctrl(EVP.PKEY_CTX* ctx, int optype, int cmd, int p1, void* p2);
 		
 		// DECLARE_ASN1_ENCODE_FUNCTIONS_const(RSA, RSAPublicKey)
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
+		public extern static rsa_st* d2i_RSAPublicKey(rsa_st** a, uint8** inVal, int len);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
+		public extern static int i2d_RSAPublicKey(rsa_st* a, uint8** outVal);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
+		public extern static ASN1.ITEM* RSAPublicKey_it();
 		// DECLARE_ASN1_ENCODE_FUNCTIONS_const(RSA, RSAPrivateKey)
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
+		public extern static rsa_st* d2i_RSAPrivateKey(rsa_st** a, uint8** inVal, int len);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
+		public extern static int i2d_RSAPrivateKey(rsa_st* a, uint8** outVal);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
+		public extern static ASN1.ITEM* RSAPrivateKey_it();
 		
 		[CRepr]
 		public struct pss_params_st
@@ -680,6 +721,41 @@ namespace Beef_Net.OpenSSL
 		public typealias PSS_PARAMS = pss_params_st;
 		
 		// DECLARE_ASN1_FUNCTIONS(RSA_PSS_PARAMS)
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_PSS_PARAMS_new")
+		]
+		public extern static PSS_PARAMS* PSS_PARAMS_new();
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_PSS_PARAMS_free")
+		]
+		public extern static void PSS_PARAMS_free(PSS_PARAMS* a);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
+		public extern static PSS_PARAMS* d2i_RSA_PSS_PARAMS(PSS_PARAMS** a, uint8** inVal, int len);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
+		public extern static int i2d_RSA_PSS_PARAMS(PSS_PARAMS* a, uint8** outVal);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_PSS_PARAMS_it")
+		]
+		public extern static ASN1.ITEM* PSS_PARAMS_it();
 
 		[CRepr]
 		public struct oaep_params_st
@@ -693,6 +769,41 @@ namespace Beef_Net.OpenSSL
 		public typealias OAEP_PARAMS = oaep_params_st;
 		
 		// DECLARE_ASN1_FUNCTIONS(RSA_OAEP_PARAMS)
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_OAEP_PARAMS_new")
+		]
+		public extern static OAEP_PARAMS* OAEP_PARAMS_new();
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_OAEP_PARAMS_free")
+		]
+		public extern static void OAEP_PARAMS_free(OAEP_PARAMS* a);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
+		public extern static OAEP_PARAMS* d2i_RSA_OAEP_PARAMS(OAEP_PARAMS** a, uint8** inVal, int len);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
+		public extern static int i2d_RSA_OAEP_PARAMS(OAEP_PARAMS* a, uint8** outVal);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_OAEP_PARAMS_it")
+		]
+		public extern static ASN1.ITEM* OAEP_PARAMS_it();
 		
 	#if !OPENSSL_NO_STDIO
 		[

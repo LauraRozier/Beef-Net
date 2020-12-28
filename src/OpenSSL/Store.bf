@@ -11,7 +11,6 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
-	[AlwaysInclude]
 	sealed abstract class OSSL_Store
 	{
 		/*-
@@ -143,10 +142,7 @@ namespace Beef_Net.OpenSSL
 		]
 		public extern static INFO* load(CTX* ctx);
 
-		/*
-		 * Check if end of data (end of file) is reached
-		 * Returns 1 on end, 0 otherwise.
-		 */
+		/* Check if end of data (end of file) is reached Returns 1 on end, 0 otherwise. */
 		[
 #if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_CRYPTO),
@@ -155,10 +151,7 @@ namespace Beef_Net.OpenSSL
 		]
 		public extern static int eof(CTX* ctx);
 
-		/*
-		 * Check if an error occurred
-		 * Returns 1 if it did, 0 otherwise.
-		 */
+		/* Check if an error occurred Returns 1 if it did, 0 otherwise. */
 		[
 #if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_CRYPTO),
@@ -167,10 +160,7 @@ namespace Beef_Net.OpenSSL
 		]
 		public extern static int error(CTX* ctx);
 
-		/*
-		 * Close the channel
-		 * Returns 1 on success, 0 on error.
-		 */
+		/* Close the channel Returns 1 on success, 0 on error. */
 		[
 #if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_CRYPTO),

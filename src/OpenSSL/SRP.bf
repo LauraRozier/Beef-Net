@@ -11,12 +11,12 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
-	[AlwaysInclude]
 	sealed abstract class SRP
 	{
 #if !OPENSSL_NO_SRP
 		[CRepr]
-		public struct gN_cache_st {
+		public struct gN_cache_st
+		{
 		    public char8* b64_bn;
 		    public BN.BIGNUM* bn;
 		}
@@ -46,7 +46,8 @@ namespace Beef_Net.OpenSSL
 		public extern static void user_pwd_free(user_pwd* user_pwd);
 
 		[CRepr]
-		public struct VBASE_st {
+		public struct VBASE_st
+		{
 		    public user_pwd* users_pwd;
 		    public gN_cache* gN_cache;
 			/* to simulate a user */
@@ -60,7 +61,8 @@ namespace Beef_Net.OpenSSL
 		 * Internal structure storing N and g pair
 		 */
 		[CRepr]
-		public struct gN_st {
+		public struct gN_st
+		{
 		    public char8* id;
 		    public BN.BIGNUM* g;
 		    public BN.BIGNUM* N;

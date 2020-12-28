@@ -11,7 +11,6 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
-	[AlwaysInclude]
 	sealed abstract class RipeMD160
 	{
 #if !OPENSSL_NO_RMD160
@@ -37,37 +36,37 @@ namespace Beef_Net.OpenSSL
 		public typealias CTX = state_st;
 		
 		[
-#if !OPENSSL_LINK_STATIC
+	#if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_CRYPTO),
-#endif
+	#endif
 			LinkName("RIPEMD160_Init")
 		]
 		public extern static int Init(CTX* c);
 		[
-#if !OPENSSL_LINK_STATIC
+	#if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_CRYPTO),
-#endif
+	#endif
 			LinkName("RIPEMD160_Update")
 		]
 		public extern static int Update(CTX* c, void* data, uint len);
 		[
-#if !OPENSSL_LINK_STATIC
+	#if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_CRYPTO),
-#endif
+	#endif
 			LinkName("RIPEMD160_Final")
 		]
 		public extern static int Final(uint8* md, CTX* c);
 		[
-#if !OPENSSL_LINK_STATIC
+	#if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_CRYPTO),
-#endif
+	#endif
 			LinkName("RIPEMD160")
 		]
 		public extern static uint8* RIPEMD160_(uint8* d, uint n, uint8* md);
 		[
-#if !OPENSSL_LINK_STATIC
+	#if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_CRYPTO),
-#endif
+	#endif
 			LinkName("RIPEMD160_Transform")
 		]
 		public extern static void Transform(CTX* c, uint8* b);

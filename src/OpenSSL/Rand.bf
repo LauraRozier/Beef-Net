@@ -11,7 +11,6 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
-	[AlwaysInclude]
 	sealed abstract class Rand
 	{
 		[
@@ -287,8 +286,7 @@ namespace Beef_Net.OpenSSL
 		public extern static int event(uint msg, int wParam, int lparam);
 #endif
 	}
-	
-	[AlwaysInclude]
+
 	sealed abstract class RandDRBG
 	{
 		/* DRBG status values */
@@ -364,9 +362,7 @@ namespace Beef_Net.OpenSSL
 		     */
 		    public Rand.pool_st* seed_pool;
 
-		    /*
-		     * Auxiliary pool for additional data.
-		     */
+		    /* Auxiliary pool for additional data. */
 		    public Rand.pool_st* adin_pool;
 
 		    /*
@@ -391,28 +387,21 @@ namespace Beef_Net.OpenSSL
 
 		    /* Counts the number of generate requests since the last reseed. */
 		    public uint generate_counter;
-		    /*
-		     * Maximum number of generate requests until a reseed is required. This value is ignored if it is zero.
-		     */
+		    /* Maximum number of generate requests until a reseed is required. This value is ignored if it is zero. */
 		    public uint reseed_interval;
 		    /* Stores the time when the last reseeding occurred */
 		    public int64 reseed_time;
-		    /*
-		     * Specifies the maximum time interval (in seconds) between reseeds. This value is ignored if it is zero.
-		     */
+		    /* Specifies the maximum time interval (in seconds) between reseeds. This value is ignored if it is zero. */
 		    public int64 reseed_time_interval;
 
-		    /*
-		     * Enables reseed propagation (see following comment)
-		     */
+		    /* Enables reseed propagation (see following comment) */
 		    public uint enable_reseed_propagation;
 
 		    /*
-		     * Counts the number of reseeds since instantiation.
-		     * This value is ignored if enable_reseed_propagation is zero.
+		     * Counts the number of reseeds since instantiation. This value is ignored if enable_reseed_propagation is zero.
 		     *
 		     * This counter is used only for seed propagation from the <master> DRBG to its two children, the <public> and <private> DRBG. This feature is very special and its sole purpose is to ensure that any randomness which
-		     * is added by RAND_add() or RAND_seed() will have an immediate effect on the output of RAND_bytes() resp. RAND_priv_bytes().
+		     * is added by add() or seed() will have an immediate effect on the output of bytes() resp. priv_bytes().
 		     */
 		    public volatile uint reseed_counter;
 
@@ -445,7 +434,7 @@ namespace Beef_Net.OpenSSL
 		/*
 		 * RAND_DRBG  flags
 		 *
-		 * Note: if new flags are added, the constant `rand_drbg_used_flags` in drbg_lib.c needs to be updated accordingly.
+		 * Note: if new flags are added, the constant `drbg_used_flags` in drbg_lib.c needs to be updated accordingly.
 		 */
 		
 		/* In CTR mode, disable derivation function ctr_df */
@@ -458,7 +447,7 @@ namespace Beef_Net.OpenSSL
 		 * Default security strength (in the sense of [NIST SP 800-90Ar1])
 		 *
 		 * NIST SP 800-90Ar1 supports the strength of the DRBG being smaller than that of the cipher by collecting less entropy. The current DRBG implementation
-		 * does not take RAND_DRBG_STRENGTH into account and sets the strength of the DRBG to that of the cipher.
+		 * does not take DRBG_STRENGTH into account and sets the strength of the DRBG to that of the cipher.
 		 *
 		 * STRENGTH is currently only used for the legacy RAND implementation.
 		 *
@@ -470,9 +459,7 @@ namespace Beef_Net.OpenSSL
 		/* Default drbg flags */
 		public const int FLAGS    = 0;
 
-		/*
-		 * Object lifetime functions.
-		 */
+		/* Object lifetime functions. */
 		[
 #if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_CRYPTO),
@@ -523,9 +510,7 @@ namespace Beef_Net.OpenSSL
 		]
 		public extern static void free(RAND_DRBG* drbg);
 		
-		/*
-		 * Object "use" functions.
-		 */
+		/* Object "use" functions. */
 		[
 #if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_CRYPTO),
@@ -593,9 +578,7 @@ namespace Beef_Net.OpenSSL
 		]
 		public extern static RAND_DRBG* get0_private();
 		
-		/*
-		 * EXDATA
-		 */
+		/* EXDATA */
 		[Inline]
 		public static int get_ex_new_index(int l, void* p, Crypto.EX_new newf, Crypto.EX_dup dupf, Crypto.EX_free freef) => Crypto.get_ex_new_index(Crypto.EX_INDEX_DRBG, l, p, newf, dupf, freef);
 		[

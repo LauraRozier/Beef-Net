@@ -11,7 +11,6 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
-	[AlwaysInclude]
 	sealed abstract class XN
 	{
 		/* The field separator information */
@@ -51,7 +50,6 @@ namespace Beef_Net.OpenSSL
 		public const int FLAG_MULTILINE = ASN1.STRFLGS_ESC_CTRL | ASN1.STRFLGS_ESC_MSB | FLAG_SEP_MULTILINE | FLAG_SPC_EQ | FLAG_FN_LN | FLAG_FN_ALIGN;
 	}
 
-	[AlwaysInclude]
 	sealed abstract class X509
 	{
 		[
@@ -2275,10 +2273,7 @@ namespace Beef_Net.OpenSSL
 		[Inline]
 		public static int set_notAfter(x509_st* x, ASN1.TIME* tm) => set1_notAfter(x, tm);
 
-		/*
-		 * This one is only used so that a binary form can output, as in
-		 * i2d_X509_PUBKEY(X509_get_X509_PUBKEY(x), &buf)
-		 */
+		/* This one is only used so that a binary form can output, as in i2d_X509_PUBKEY(X509_get_X509_PUBKEY(x), &buf) */
 		[
 #if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_CRYPTO),
@@ -2977,10 +2972,7 @@ namespace Beef_Net.OpenSSL
 		]
 		public extern static int NAME_get_text_by_OBJ(NAME* name, ASN1.OBJECT* obj, char8* buf, int len);
 
-		/*
-		 * NOTE: you should be passing -1, not 0 as lastpos. The functions that use
-		 * lastpos, search after that position on.
-		 */
+		/* NOTE: you should be passing -1, not 0 as lastpos. The functions that use lastpos, search after that position on. */
 		[
 #if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_CRYPTO),
@@ -3599,8 +3591,7 @@ namespace Beef_Net.OpenSSL
 		]
 		public extern static int TRUST_get_trust(TRUST* xp);
 	}
-	
-	[AlwaysInclude]
+
 	sealed abstract class X509v3
 	{
 		[
@@ -4074,8 +4065,7 @@ namespace Beef_Net.OpenSSL
 		]
 		public extern static X509.stack_st_X509_EXTENSION* add_ext(X509.stack_st_X509_EXTENSION** x, X509.EXTENSION* ex, int loc);
 	}
-	
-	[AlwaysInclude]
+
 	sealed abstract class X509Vfy
 	{
 		[CRepr]

@@ -11,7 +11,6 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
-	[AlwaysInclude]
 	sealed abstract class OSSL
 	{
 		/* Binary/behaviour compatibility levels */
@@ -20,7 +19,6 @@ namespace Beef_Net.OpenSSL
 		public const uint DYNAMIC_OLDEST  = 0x00030000U;
 	}
 
-	[AlwaysInclude]
 	sealed abstract class OSSLType
 	{
 		[CRepr]
@@ -107,7 +105,8 @@ namespace Beef_Net.OpenSSL
 		typealias LPSOCKADDR_IN = sockaddr_in*;
 		
 		[CRepr]
-		public struct in6_addr {
+		public struct in6_addr
+		{
 			public u_struct u;
 
 			[CRepr, Union]

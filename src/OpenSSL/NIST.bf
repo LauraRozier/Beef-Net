@@ -11,7 +11,6 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
-	[AlwaysInclude]
 	sealed abstract class NISTP224
 	{
 		public typealias limb = uint64;
@@ -35,7 +34,6 @@ namespace Beef_Net.OpenSSL
 		public typealias PRE_COMP = pre_comp_st;
 	}
 
-	[AlwaysInclude]
 	sealed abstract class NISTP256
 	{
 		private const int NLIMBS = 4;
@@ -58,7 +56,6 @@ namespace Beef_Net.OpenSSL
 		public typealias PRE_COMP = pre_comp_st;
 	}
 
-	[AlwaysInclude]
 	sealed abstract class NISTP521
 	{
 		private const int NLIMBS = 9;
@@ -82,7 +79,6 @@ namespace Beef_Net.OpenSSL
 		public typealias PRE_COMP = pre_comp_st;
 	}
 
-	[AlwaysInclude]
 	sealed abstract class NISTZ256
 	{
 		/* structure for precomputed multiples of the generator */

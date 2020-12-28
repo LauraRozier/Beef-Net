@@ -11,7 +11,6 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
-	[AlwaysInclude]
 	sealed abstract class BIO
 	{
 		[
@@ -667,9 +666,9 @@ namespace Beef_Net.OpenSSL
 #if CONST_STRICT
 		/* If you are wondering why this isn't defined, its because CONST_STRICT is purely a compile-time kludge to allow const to be checked. */
 		[
-#if !OPENSSL_LINK_STATIC
+	#if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_CRYPTO),
-#endif
+	#endif
 			LinkName("BIO_read_filename")
 		]
 		public extern static int read_filename(bio_st* b, char8* name);
@@ -1948,9 +1947,9 @@ namespace Beef_Net.OpenSSL
 
 #if CONST_STRICT
 		[
-#if !OPENSSL_LINK_STATIC
+	#if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_CRYPTO),
-#endif
+	#endif
 			LinkName("BIO_set_md")
 		]
 		public extern static void set_md(bio_st*, MD* md);
@@ -2030,9 +2029,9 @@ namespace Beef_Net.OpenSSL
 
 #if ZLIB
 		[
-#if !OPENSSL_LINK_STATIC
+	#if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_CRYPTO),
-#endif
+	#endif
 			LinkName("BIO_f_zlib")
 		]
 		public extern static METHOD* f_zlib();

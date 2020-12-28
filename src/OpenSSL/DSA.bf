@@ -11,7 +11,6 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
-	[AlwaysInclude]
 	sealed abstract class DSA
 	{
 #if !OPENSSL_NO_DSA
@@ -693,7 +692,6 @@ namespace Beef_Net.OpenSSL
 #endif
 	}
 
-	[AlwaysInclude]
 	sealed abstract class DSAparams
 	{
 #if !OPENSSL_NO_DSA

@@ -11,7 +11,6 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
-	[AlwaysInclude]
 	sealed abstract class EC
 	{
 #if !OPENSSL_NO_EC
@@ -2023,8 +2022,7 @@ namespace Beef_Net.OpenSSL
 		public static extern void KEY_set_conv_form(KEY* eckey, point_conversion_form_t cform);
 
 		[Inline]
-		public static int KEY_get_ex_new_index(int l, void* p, Crypto.EX_new newf, Crypto.EX_dup dupf, Crypto.EX_free freef) =>
-			Crypto.get_ex_new_index(Crypto.EX_INDEX_EC_KEY, l, p, newf, dupf, freef);
+		public static int KEY_get_ex_new_index(int l, void* p, Crypto.EX_new newf, Crypto.EX_dup dupf, Crypto.EX_free freef) => Crypto.get_ex_new_index(Crypto.EX_INDEX_EC_KEY, l, p, newf, dupf, freef);
 		[
 #if !OPENSSL_LINK_STATIC
 			Import(OPENSSL_LIB_CRYPTO),
@@ -2428,7 +2426,6 @@ namespace Beef_Net.OpenSSL
 #endif
 	}
 
-	[AlwaysInclude]
 	sealed abstract class ECParameters
 	{
 #if !OPENSSL_NO_EC
@@ -2501,7 +2498,6 @@ namespace Beef_Net.OpenSSL
 #endif
 	}
 
-	[AlwaysInclude]
 	sealed abstract class ECPKParameters
 	{
 #if !OPENSSL_NO_EC
@@ -2564,7 +2560,6 @@ namespace Beef_Net.OpenSSL
 #endif
 	}
 
-	[AlwaysInclude]
 	sealed abstract class ECX
 	{
 #if !OPENSSL_NO_EC
@@ -2582,8 +2577,7 @@ namespace Beef_Net.OpenSSL
 		public typealias KEY = key_st;
 #endif
 	}
-	
-	[AlwaysInclude]
+
 	sealed abstract class ECDH
 	{
 #if !OPENSSL_NO_EC
@@ -2607,8 +2601,7 @@ namespace Beef_Net.OpenSSL
 		public static extern int compute_key(void* outVal, int outlen, EC.POINT* pub_key, EC.KEY* ecdh, function void*(void* inVal, int inlen, void* outVal, int* outlen) KDF);
 #endif
 	}
-	
-	[AlwaysInclude]
+
 	sealed abstract class ECDSA
 	{
 #if !OPENSSL_NO_EC

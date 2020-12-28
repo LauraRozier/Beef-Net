@@ -11,7 +11,6 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
-	[AlwaysInclude]
 	sealed abstract class DH
 	{
 #if !OPENSSL_NO_DH
@@ -647,7 +646,6 @@ namespace Beef_Net.OpenSSL
 #endif
 	}
 
-	[AlwaysInclude]
 	sealed abstract class DHparams
 	{
 #if !OPENSSL_NO_DH

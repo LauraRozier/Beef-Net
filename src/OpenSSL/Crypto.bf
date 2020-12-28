@@ -11,7 +11,6 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
-	[AlwaysInclude]
 	sealed abstract class Crypto
 	{
 		/*-------------------------------------------------------------------------------
@@ -463,9 +462,8 @@ namespace Beef_Net.OpenSSL
 		public extern static int FIPS_mode_set(int r);
 
 		/*
-		 * memcmp returns zero iff the |len| bytes at |a| and |b| are equal.
-		 * It takes an amount of time dependent on |len|, but independent of the contents of |a| and |b|. Unlike memcmp, it cannot be used to put elements into a defined order as the return value when a != b is undefined, other
-		 * than to be non-zero.
+		 * memcmp returns zero iff the |len| bytes at |a| and |b| are equal. It takes an amount of time dependent on |len|, but independent of the contents of |a| and |b|.
+		 * Unlike memcmp, it cannot be used to put elements into a defined order as the return value when a != b is undefined, other than to be non-zero.
 		 */
 		[
 #if !OPENSSL_LINK_STATIC

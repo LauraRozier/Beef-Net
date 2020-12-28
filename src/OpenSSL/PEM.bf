@@ -11,7 +11,6 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
-	[AlwaysInclude]
 	sealed abstract class PEM
 	{
 		[
@@ -298,38 +297,694 @@ namespace Beef_Net.OpenSSL
 			LinkName("PEM_proc_type")
 		]
 		public static extern void proc_type(char8* buf, int type);
+
+		/*
+		 * DECLARE_PEM stuff
+		 */
+
 		/*
 		DECLARE_PEM_rw(X509, X509)
+		*/
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_read_bio_X509")
+		]
+		public static extern X509.x509_st* read_bio_X509(BIO* bp, X509.x509_st** x, password_cb* cb, void* u);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_read_X509")
+		]
+		public static extern X509.x509_st* read_X509(Platform.BfpFile* fp, X509.x509_st** x, password_cb* cb, void* u);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_write_bio_X509")
+		]
+		public static extern int write_bio_X509(BIO.bio_st* bp, X509.x509_st* x);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_write_X509")
+		]
+		public static extern int write_X509(Platform.BfpFile* fp, X509.x509_st* x);
+
+		/*
 		DECLARE_PEM_rw(X509_AUX, X509)
+		*/
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_read_bio_X509_AUX")
+		]
+		public static extern X509.x509_st* read_bio_X509_AUX(BIO* bp, X509.x509_st** x, password_cb* cb, void* u);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_read_X509_AUX")
+		]
+		public static extern X509.x509_st* read_X509_AUX(Platform.BfpFile* fp, X509.x509_st** x, password_cb* cb, void* u);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_write_bio_X509_AUX")
+		]
+		public static extern int write_bio_X509_AUX(BIO.bio_st* bp, X509.x509_st* x);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_write_X509_AUX")
+		]
+		public static extern int write_X509_AUX(Platform.BfpFile* fp, X509.x509_st* x);
+
+		/*
 		DECLARE_PEM_rw(X509_REQ, X509_REQ)
+		*/
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_read_bio_X509_REQ")
+		]
+		public static extern X509.REQ* read_bio_X509_REQ(BIO* bp, X509.REQ** x, password_cb* cb, void* u);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_read_X509_REQ")
+		]
+		public static extern X509.REQ* read_X509_REQ(Platform.BfpFile* fp, X509.REQ** x, password_cb* cb, void* u);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_write_bio_X509_REQ")
+		]
+		public static extern int write_bio_X509_REQ(BIO.bio_st* bp, X509.REQ* x);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_write_X509_REQ")
+		]
+		public static extern int write_X509_REQ(Platform.BfpFile* fp, X509.REQ* x);
+
+		/*
 		DECLARE_PEM_write(X509_REQ_NEW, X509_REQ)
+		*/
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_write_bio_X509_REQ_NEW")
+		]
+		public static extern int write_bio_X509_REQ_NEW(BIO.bio_st* bp, X509.REQ* x);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_write_X509_REQ_NEW")
+		]
+		public static extern int write_X509_REQ_NEW(Platform.BfpFile* fp, X509.REQ* x);
+
+		/*
 		DECLARE_PEM_rw(X509_CRL, X509_CRL)
+		*/
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_read_bio_X509_CRL")
+		]
+		public static extern X509.CRL* read_bio_X509_CRL(BIO* bp, X509.CRL** x, password_cb* cb, void* u);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_read_X509_CRL")
+		]
+		public static extern X509.CRL* read_X509_CRL(Platform.BfpFile* fp, X509.CRL** x, password_cb* cb, void* u);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_write_bio_X509_CRL")
+		]
+		public static extern int write_bio_X509_CRL(BIO.bio_st* bp, X509.CRL* x);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_write_X509_CRL")
+		]
+		public static extern int write_X509_CRL(Platform.BfpFile* fp, X509.CRL* x);
+
+		/*
 		DECLARE_PEM_rw(PKCS7, PKCS7)
+		*/
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_read_bio_PKCS7")
+		]
+		public static extern PKCS7.pkcs7_st* read_bio_PKCS7(BIO* bp, PKCS7.pkcs7_st** x, password_cb* cb, void* u);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_read_PKCS7")
+		]
+		public static extern PKCS7.pkcs7_st* read_PKCS7(Platform.BfpFile* fp, PKCS7.pkcs7_st** x, password_cb* cb, void* u);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_write_bio_PKCS7")
+		]
+		public static extern int write_bio_PKCS7(BIO.bio_st* bp, PKCS7.pkcs7_st* x);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_write_PKCS7")
+		]
+		public static extern int write_PKCS7(Platform.BfpFile* fp, PKCS7.pkcs7_st* x);
+
+		/*
 		DECLARE_PEM_rw(NETSCAPE_CERT_SEQUENCE, NETSCAPE_CERT_SEQUENCE)
+		*/
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_read_bio_NETSCAPE_CERT_SEQUENCE")
+		]
+		public static extern X509.NETSCAPE_CERT_SEQUENCE* read_bio_NETSCAPE_CERT_SEQUENCE(BIO* bp, X509.NETSCAPE_CERT_SEQUENCE** x, password_cb* cb, void* u);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_read_NETSCAPE_CERT_SEQUENCE")
+		]
+		public static extern X509.NETSCAPE_CERT_SEQUENCE* read_NETSCAPE_CERT_SEQUENCE(Platform.BfpFile* fp, X509.NETSCAPE_CERT_SEQUENCE** x, password_cb* cb, void* u);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_write_bio_NETSCAPE_CERT_SEQUENCE")
+		]
+		public static extern int write_bio_NETSCAPE_CERT_SEQUENCE(BIO.bio_st* bp, X509.NETSCAPE_CERT_SEQUENCE* x);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_write_NETSCAPE_CERT_SEQUENCE")
+		]
+		public static extern int write_NETSCAPE_CERT_SEQUENCE(Platform.BfpFile* fp, X509.NETSCAPE_CERT_SEQUENCE* x);
+
+		/*
 		DECLARE_PEM_rw(PKCS8, X509_SIG)
+		*/
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_read_bio_PKCS8")
+		]
+		public static extern X509.SIG* read_bio_PKCS8(BIO* bp, X509.SIG** x, password_cb* cb, void* u);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_read_PKCS8")
+		]
+		public static extern X509.SIG* read_PKCS8(Platform.BfpFile* fp, X509.SIG** x, password_cb* cb, void* u);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_write_bio_PKCS8")
+		]
+		public static extern int write_bio_PKCS8(BIO.bio_st* bp, X509.SIG* x);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_write_PKCS8")
+		]
+		public static extern int write_PKCS8(Platform.BfpFile* fp, X509.SIG* x);
+
+		/*
 		DECLARE_PEM_rw(PKCS8_PRIV_KEY_INFO, PKCS8_PRIV_KEY_INFO)
+		*/
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_read_bio_PKCS8_PRIV_KEY_INFO")
+		]
+		public static extern PKCS8.PRIV_KEY_INFO* read_bio_PKCS8_PRIV_KEY_INFO(BIO* bp, PKCS8.PRIV_KEY_INFO** x, password_cb* cb, void* u);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_read_PKCS8_PRIV_KEY_INFO")
+		]
+		public static extern PKCS8.PRIV_KEY_INFO* read_PKCS8_PRIV_KEY_INFO(Platform.BfpFile* fp, PKCS8.PRIV_KEY_INFO** x, password_cb* cb, void* u);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_write_bio_PKCS8_PRIV_KEY_INFO")
+		]
+		public static extern int write_bio_PKCS8_PRIV_KEY_INFO(BIO.bio_st* bp, PKCS8.PRIV_KEY_INFO* x);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_write_PKCS8_PRIV_KEY_INFO")
+		]
+		public static extern int write_PKCS8_PRIV_KEY_INFO(Platform.BfpFile* fp, PKCS8.PRIV_KEY_INFO* x);
 #if !OPENSSL_NO_RSA
+		/*
 		DECLARE_PEM_rw_cb(RSAPrivateKey, RSA)
+		*/
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_read_bio_RSAPrivateKey")
+		]
+		public static extern RSA.rsa_st* read_bio_RSAPrivateKey(BIO* bp, RSA.rsa_st** x, password_cb* cb, void* u);
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_read_RSAPrivateKey")
+		]
+		public static extern RSA.rsa_st* read_RSAPrivateKey(Platform.BfpFile* fp, RSA.rsa_st** x, password_cb* cb, void* u);
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_write_bio_RSAPrivateKey")
+		]
+		public static extern int write_bio_RSAPrivateKey(BIO.bio_st* bp, RSA.rsa_st* x, EVP.CIPHER* enc, uint8* kstr, int klen, password_cb* cb, void* u);
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_write_RSAPrivateKey")
+		]
+		public static extern int write_RSAPrivateKey(Platform.BfpFile* fp, RSA.rsa_st* x, EVP.CIPHER* enc, uint8* kstr, int klen, password_cb* cb, void* u);
+
+		/*
 		DECLARE_PEM_rw_const(RSAPublicKey, RSA)
+		*/
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_read_bio_RSAPublicKey")
+		]
+		public static extern RSA.rsa_st* read_bio_RSAPublicKey(BIO* bp, RSA.rsa_st** x, password_cb* cb, void* u);
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_read_RSAPublicKey")
+		]
+		public static extern RSA.rsa_st* read_RSAPublicKey(Platform.BfpFile* fp, RSA.rsa_st** x, password_cb* cb, void* u);
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_write_bio_RSAPublicKey")
+		]
+		public static extern int write_bio_RSAPublicKey(BIO.bio_st* bp, RSA.rsa_st* x);
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_write_RSAPublicKey")
+		]
+		public static extern int write_RSAPublicKey(Platform.BfpFile* fp, RSA.rsa_st* x);
+
+		/*
 		DECLARE_PEM_rw(RSA_PUBKEY, RSA)
+		*/
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_read_bio_RSA_PUBKEY")
+		]
+		public static extern RSA.rsa_st* read_bio_RSA_PUBKEY(BIO* bp, RSA.rsa_st** x, password_cb* cb, void* u);
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_read_RSA_PUBKEY")
+		]
+		public static extern RSA.rsa_st* read_RSA_PUBKEY(Platform.BfpFile* fp, RSA.rsa_st** x, password_cb* cb, void* u);
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_write_bio_RSA_PUBKEY")
+		]
+		public static extern int write_bio_RSA_PUBKEY(BIO.bio_st* bp, RSA.rsa_st* x);
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_write_RSA_PUBKEY")
+		]
+		public static extern int write_RSA_PUBKEY(Platform.BfpFile* fp, RSA.rsa_st* x);
 #endif
 #if !OPENSSL_NO_DSA
+		/*
 		DECLARE_PEM_rw_cb(DSAPrivateKey, DSA)
+		*/
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_read_bio_DSAPrivateKey")
+		]
+		public static extern DSA.dsa_st* read_bio_DSAPrivateKey(BIO* bp, DSA.dsa_st** x, password_cb* cb, void* u);
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_read_DSAPrivateKey")
+		]
+		public static extern DSA.dsa_st* read_DSAPrivateKey(Platform.BfpFile* fp, DSA.dsa_st** x, password_cb* cb, void* u);
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_write_bio_DSAPrivateKey")
+		]
+		public static extern int write_bio_DSAPrivateKey(BIO.bio_st* bp, DSA.dsa_st* x, EVP.CIPHER* enc, uint8* kstr, int klen, password_cb* cb, void* u);
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_write_DSAPrivateKey")
+		]
+		public static extern int write_DSAPrivateKey(Platform.BfpFile* fp, DSA.dsa_st* x, EVP.CIPHER* enc, uint8* kstr, int klen, password_cb* cb, void* u);
+
+		/*
 		DECLARE_PEM_rw(DSA_PUBKEY, DSA)
+		*/
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_read_bio_DSA_PUBKEY")
+		]
+		public static extern DSA.dsa_st* read_bio_DSA_PUBKEY(BIO* bp, DSA.dsa_st** x, password_cb* cb, void* u);
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_read_DSA_PUBKEY")
+		]
+		public static extern DSA.dsa_st* read_DSA_PUBKEY(Platform.BfpFile* fp, DSA.dsa_st** x, password_cb* cb, void* u);
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_write_bio_DSA_PUBKEY")
+		]
+		public static extern int write_bio_DSA_PUBKEY(BIO.bio_st* bp, DSA.dsa_st* x);
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_write_DSA_PUBKEY")
+		]
+		public static extern int write_DSA_PUBKEY(Platform.BfpFile* fp, DSA.dsa_st* x);
+
+		/*
 		DECLARE_PEM_rw_const(DSAparams, DSA)
+		*/
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_read_bio_DSAparams")
+		]
+		public static extern DSA.dsa_st* read_bio_DSAparams(BIO* bp, DSA.dsa_st** x, password_cb* cb, void* u);
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_read_DSAparams")
+		]
+		public static extern DSA.dsa_st* read_DSAparams(Platform.BfpFile* fp, DSA.dsa_st** x, password_cb* cb, void* u);
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_write_bio_DSAparams")
+		]
+		public static extern int write_bio_DSAparams(BIO.bio_st* bp, DSA.dsa_st* x);
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_write_DSAparams")
+		]
+		public static extern int write_DSAparams(Platform.BfpFile* fp, DSA.dsa_st* x);
 #endif
 #if !OPENSSL_NO_EC
+		/*
 		DECLARE_PEM_rw_const(ECPKParameters, EC_GROUP)
+		*/
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_read_bio_ECPKParameters")
+		]
+		public static extern EC.GROUP* read_bio_ECPKParameters(BIO* bp, EC.GROUP** x, password_cb* cb, void* u);
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_read_ECPKParameters")
+		]
+		public static extern EC.GROUP* read_ECPKParameters(Platform.BfpFile* fp, EC.GROUP** x, password_cb* cb, void* u);
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_write_bio_ECPKParameters")
+		]
+		public static extern int write_bio_ECPKParameters(BIO.bio_st* bp, EC.GROUP* x);
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_write_ECPKParameters")
+		]
+		public static extern int write_ECPKParameters(Platform.BfpFile* fp, EC.GROUP* x);
+
+		/*
 		DECLARE_PEM_rw_cb(ECPrivateKey, EC_KEY)
+		*/
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_read_bio_ECPrivateKey")
+		]
+		public static extern EC.KEY* read_bio_ECPrivateKey(BIO* bp, EC.KEY** x, password_cb* cb, void* u);
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_read_ECPrivateKey")
+		]
+		public static extern EC.KEY* read_ECPrivateKey(Platform.BfpFile* fp, EC.KEY** x, password_cb* cb, void* u);
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_write_bio_ECPrivateKey")
+		]
+		public static extern int write_bio_ECPrivateKey(BIO.bio_st* bp, EC.KEY* x, EVP.CIPHER* enc, uint8* kstr, int klen, password_cb* cb, void* u);
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_write_ECPrivateKey")
+		]
+		public static extern int write_ECPrivateKey(Platform.BfpFile* fp, EC.KEY* x, EVP.CIPHER* enc, uint8* kstr, int klen, password_cb* cb, void* u);
+
+		/*
 		DECLARE_PEM_rw(EC_PUBKEY, EC_KEY)
+		*/
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_read_bio_EC_PUBKEY")
+		]
+		public static extern EC.KEY* read_bio_EC_PUBKEY(BIO* bp, EC.KEY** x, password_cb* cb, void* u);
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_read_EC_PUBKEY")
+		]
+		public static extern EC.KEY* read_EC_PUBKEY(Platform.BfpFile* fp, EC.KEY** x, password_cb* cb, void* u);
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_write_bio_EC_PUBKEY")
+		]
+		public static extern int write_bio_EC_PUBKEY(BIO.bio_st* bp, EC.KEY* x);
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_write_EC_PUBKEY")
+		]
+		public static extern int write_EC_PUBKEY(Platform.BfpFile* fp, EC.KEY* x);
 #endif
 #if !OPENSSL_NO_DH
+		/*
 		DECLARE_PEM_rw_const(DHparams, DH)
+		*/
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_read_bio_DHparams")
+		]
+		public static extern DH.dh_st* read_bio_DHparams(BIO* bp, DH.dh_st** x, password_cb* cb, void* u);
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_read_DHparams")
+		]
+		public static extern DH.dh_st* read_DHparams(Platform.BfpFile* fp, DH.dh_st** x, password_cb* cb, void* u);
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_write_bio_DHparams")
+		]
+		public static extern int write_bio_DHparams(BIO.bio_st* bp, DH.dh_st* x);
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_write_DHparams")
+		]
+		public static extern int write_DHparams(Platform.BfpFile* fp, DH.dh_st* x);
+
+		/*
 		DECLARE_PEM_write_const(DHxparams, DH)
+		*/
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_write_bio_DHxparams")
+		]
+		public static extern int write_bio_DHxparams(BIO.bio_st* bp, DH.dh_st* x);
+		[
+	#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+	#endif
+			LinkName("PEM_write_DHxparams")
+		]
+		public static extern int write_DHxparams(Platform.BfpFile* fp, DH.dh_st* x);
 #endif
+
+		/*
 		DECLARE_PEM_rw_cb(PrivateKey, EVP_PKEY)
+		*/
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_read_bio_PrivateKey")
+		]
+		public static extern EVP.PKEY* read_bio_PrivateKey(BIO* bp, EVP.PKEY** x, password_cb* cb, void* u);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_read_PrivateKey")
+		]
+		public static extern EVP.PKEY* read_PrivateKey(Platform.BfpFile* fp, EVP.PKEY** x, password_cb* cb, void* u);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_write_bio_PrivateKey")
+		]
+		public static extern int write_bio_PrivateKey(BIO.bio_st* bp, EVP.PKEY* x, EVP.CIPHER* enc, uint8* kstr, int klen, password_cb* cb, void* u);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_write_PrivateKey")
+		]
+		public static extern int write_PrivateKey(Platform.BfpFile* fp, EVP.PKEY* x, EVP.CIPHER* enc, uint8* kstr, int klen, password_cb* cb, void* u);
+
+		/*
 		DECLARE_PEM_rw(PUBKEY, EVP_PKEY)
 		*/
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_read_bio_PUBKEY")
+		]
+		public static extern EVP.PKEY* read_bio_PUBKEY(BIO* bp, EVP.PKEY** x, password_cb* cb, void* u);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_read_PUBKEY")
+		]
+		public static extern EVP.PKEY* read_PUBKEY(Platform.BfpFile* fp, EVP.PKEY** x, password_cb* cb, void* u);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_write_bio_PUBKEY")
+		]
+		public static extern int write_bio_PUBKEY(BIO.bio_st* bp, EVP.PKEY* x);
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PEM_write_PUBKEY")
+		]
+		public static extern int write_PUBKEY(Platform.BfpFile* fp, EVP.PKEY* x);
+
+		/*
+		 * END DECLARE_PEM stuff
+		 */
 
 		[
 #if !OPENSSL_LINK_STATIC

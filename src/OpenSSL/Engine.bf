@@ -11,7 +11,6 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
-	[AlwaysInclude]
 	sealed abstract class Engine
 	{
 		/* This is a structure for storing implementations of various crypto algorithms and functions. */

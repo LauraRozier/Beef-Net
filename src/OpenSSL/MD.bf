@@ -11,7 +11,6 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
-	[AlwaysInclude]
 	sealed abstract class MD2
 	{
 #if !OPENSSL_NO_MD2
@@ -67,8 +66,7 @@ namespace Beef_Net.OpenSSL
 		public extern static uint8* MD2_(uint8* d, uint n, uint8* md);
 #endif
 	}
-	
-	[AlwaysInclude]
+
 	sealed abstract class MD4
 	{
 #if !OPENSSL_NO_MD4
@@ -134,8 +132,7 @@ namespace Beef_Net.OpenSSL
 		public extern static void Transform(CTX* c, uint8* b);
 #endif
 	}
-	
-	[AlwaysInclude]
+
 	sealed abstract class MD5
 	{
 #if !OPENSSL_NO_MD5
@@ -201,8 +198,7 @@ namespace Beef_Net.OpenSSL
 		public extern static void Transform(CTX* c, uint8* b);
 #endif
 	}
-	
-	[AlwaysInclude]
+
 	sealed abstract class MDC2
 	{
 #if !OPENSSL_NO_MDC2

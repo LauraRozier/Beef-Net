@@ -10,26 +10,27 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
-	[AlwaysInclude]
 	static {
-#if BF_PLATFORM_WINDOWS
-	#if !(BF_32_BIT || BF_64_BIT)
-		#error Unsupported CPU
+#if !OPENSSL_LINK_STATIC
+	#if BF_PLATFORM_WINDOWS
+		#if !(BF_32_BIT || BF_64_BIT)
+			#error Unsupported CPU
+		#endif
+	
+			public const String OPENSSL_LIB_SSL    = "libssl-1_1.dll";
+			public const String OPENSSL_LIB_CRYPTO = "libcrypto-1_1.dll";
+	#elif BF_PLATFORM_LINUX
+		#if !BF_64_BIT
+			#error Unsupported CPU
+		#endif
+	
+			public const String OPENSSL_LIB_SSL    = "libssl.so";
+			public const String OPENSSL_LIB_CRYPTO = "libcrypto.so";
+	#else
+		#error Unsupported platform
 	#endif
-
-		public const String OPENSSL_LIB_SSL    = "libssl-1_1.dll";
-		public const String OPENSSL_LIB_CRYPTO = "libcrypto-1_1.dll";
-#elif BF_PLATFORM_LINUX
-	#if !BF_64_BIT
-		#error Unsupported CPU
-	#endif
-
-		public const String OPENSSL_LIB_SSL    = "libssl.so";
-		public const String OPENSSL_LIB_CRYPTO = "libcrypto.so";
-#else
-	#error Unsupported platform
 #endif
-		
+
 		/*-
 		 * The macros below are to be used for shared library (.so, .dll, ...)
 		 * versioning.  That kind of versioning works a bit differently between

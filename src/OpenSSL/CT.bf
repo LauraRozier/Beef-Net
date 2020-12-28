@@ -11,7 +11,6 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
-	[AlwaysInclude]
 	sealed abstract class CT
 	{
 #if !OPENSSL_NO_CT
@@ -197,7 +196,6 @@ namespace Beef_Net.OpenSSL
 #endif
 	}
 
-	[AlwaysInclude]
 	sealed abstract class CTLOG
 	{
 #if !OPENSSL_NO_CT
@@ -333,7 +331,6 @@ namespace Beef_Net.OpenSSL
 #endif
 	}
 
-	[AlwaysInclude]
 	sealed abstract class SCT
 	{
 #if !OPENSSL_NO_CT

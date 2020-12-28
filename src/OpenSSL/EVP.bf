@@ -11,7 +11,6 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
-	[AlwaysInclude]
 	sealed abstract class EVP
 	{
 		[
@@ -3922,9 +3921,7 @@ namespace Beef_Net.OpenSSL
 		public const int PKEY_ALG_CTRL             = 0x1000;
 		
 		public const int PKEY_FLAG_AUTOARGLEN      = 2;
-		/*
-		 * Method handles all operations: don't assume any digest related defaults.
-		 */
+		/* Method handles all operations: don't assume any digest related defaults. */
 		public const int PKEY_FLAG_SIGCTX_CUSTOM   = 4;
 
 		[

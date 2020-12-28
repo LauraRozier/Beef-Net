@@ -11,7 +11,6 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
-	[AlwaysInclude]
 	sealed abstract class DTLS
 	{
 		public const int MIN_VERSION   = DTLS1.VERSION;

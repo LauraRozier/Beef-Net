@@ -11,7 +11,6 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
-	[AlwaysInclude]
 	sealed abstract class TLS
 	{
 		/* TLS Session Ticket extension struct */
@@ -124,7 +123,6 @@ namespace Beef_Net.OpenSSL
 		public extern static SSL.METHOD* client_method();
 	}
 
-	[AlwaysInclude]
 	sealed abstract class TLSEXT
 	{
 		/* ExtensionType values from RFC3546 / RFC4366 / RFC6066 */
@@ -239,7 +237,6 @@ namespace Beef_Net.OpenSSL
 		public const int MAXLEN_host_name = 255;
 	}
 
-	[AlwaysInclude]
 	sealed abstract class TLS1
 	{
 		public const int VERSION       = 0x0301;
@@ -1095,8 +1092,7 @@ namespace Beef_Net.OpenSSL
 		public extern static SSL.METHOD* server_method();
 #endif
 	}
-	
-	[AlwaysInclude]
+
 	sealed abstract class TLS1_1
 	{
 		public const int VERSION       = 0x0302;
@@ -1134,8 +1130,7 @@ namespace Beef_Net.OpenSSL
 		public extern static SSL.METHOD* server_method();
 #endif
 	}
-	
-	[AlwaysInclude]
+
 	sealed abstract class TLS1_2
 	{
 		public const int VERSION       = 0x0303;
@@ -1177,8 +1172,7 @@ namespace Beef_Net.OpenSSL
 		public extern static SSL.METHOD* server_method();
 #endif
 	}
-	
-	[AlwaysInclude]
+
 	sealed abstract class TLS1_3
 	{
 		public const int VERSION       = 0x0304;

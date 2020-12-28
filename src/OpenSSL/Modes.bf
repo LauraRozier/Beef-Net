@@ -11,7 +11,6 @@ using System;
 
 namespace Beef_Net.OpenSSL
 {
-	[AlwaysInclude]
 	sealed abstract class Modes
 	{
 		public function void block128_f(uint8[16] inVal, uint8[16] outVal, void* key);
