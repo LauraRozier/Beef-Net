@@ -36,23 +36,63 @@ namespace Beef_Net.OpenSSL
 		}
 		public typealias KEY = key_st;
 
-		[Import(OPENSSL_LIB_SSL), LinkName("BF_set_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("BF_set_key")
+		]
 		public extern static void set_key(KEY* key, int len, uint8* data);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("BF_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("BF_encrypt")
+		]
 		public extern static void encrypt(LONG* data, KEY* key);
-		[Import(OPENSSL_LIB_SSL), LinkName("BF_decrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("BF_decrypt")
+		]
 		public extern static void decrypt(LONG* data, KEY* key);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("BF_ecb_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("BF_ecb_encrypt")
+		]
 		public extern static void BF_ecb_encrypt(uint8* inVal, uint8* outVal, KEY* key, int enc);
-		[Import(OPENSSL_LIB_SSL), LinkName("BF_cbc_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("BF_cbc_encrypt")
+		]
 		public extern static void BF_cbc_encrypt(uint8* inVal, uint8* outVal, int length, KEY* schedule, uint8* ivec, int enc);
-		[Import(OPENSSL_LIB_SSL), LinkName("BF_cfb64_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("BF_cfb64_encrypt")
+		]
 		public extern static void BF_cfb64_encrypt(uint8* inVal, uint8* outVal, int length, KEY* schedule, uint8* ivec, int* num, int enc);
-		[Import(OPENSSL_LIB_SSL), LinkName("BF_ofb64_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("BF_ofb64_encrypt")
+		]
 		public extern static void BF_ofb64_encrypt(uint8* inVal, uint8* outVal, int length, KEY* schedule, uint8* ivec, int* num);
-		[Import(OPENSSL_LIB_SSL), LinkName("BF_options")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("BF_options")
+		]
 		public extern static char8* options();
 #endif
 	}

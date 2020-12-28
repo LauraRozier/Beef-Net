@@ -54,7 +54,12 @@ namespace Beef_Net.OpenSSL
 	[AlwaysInclude]
 	sealed abstract class X509
 	{
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int ERR_load_X509_strings();
 
 		/*
@@ -897,272 +902,852 @@ namespace Beef_Net.OpenSSL
 		[Inline]
 		public static int name_cmp(NAME* a, NAME* b) => NAME_cmp(a, b);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_set_default_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_set_default_method")
+		]
 		public extern static void CRL_set_default_method(CRL_METHOD* meth);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_METHOD_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_METHOD_new")
+		]
 		public extern static CRL_METHOD* CRL_METHOD_new(function int(CRL* crl) crl_init, function int(CRL* crl) crl_free, function int(CRL* crl, REVOKED** ret, ASN1.INTEGER* ser, NAME* issuer) crl_lookup,
 			function int(CRL* crl, EVP.PKEY* pk) crl_verify);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_METHOD_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_METHOD_free")
+		]
 		public extern static void CRL_METHOD_free(CRL_METHOD* m);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_set_meth_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_set_meth_data")
+		]
 		public extern static void CRL_set_meth_data(CRL* crl, void* dat);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_get_meth_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_get_meth_data")
+		]
 		public extern static void* CRL_get_meth_data(CRL* crl);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_verify_cert_error_string")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_verify_cert_error_string")
+		]
 		public extern static char8* verify_cert_error_string(int n);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_verify")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_verify")
+		]
 		public extern static int verify(x509_st* a, EVP.PKEY* r);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REQ_verify")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REQ_verify")
+		]
 		public extern static int REQ_verify(REQ* a, EVP.PKEY* r);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_verify")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_verify")
+		]
 		public extern static int CRL_verify(CRL* a, EVP.PKEY* r);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int NETSCAPE_SPKI_verify(NETSCAPE_SPKI* a, EVP.PKEY* r);
 
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static NETSCAPE_SPKI* NETSCAPE_SPKI_b64_decode(char8* str, int len);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static char8* NETSCAPE_SPKI_b64_encode(NETSCAPE_SPKI* x);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static EVP.PKEY* NETSCAPE_SPKI_get_pubkey(NETSCAPE_SPKI* x);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int NETSCAPE_SPKI_set_pubkey(NETSCAPE_SPKI* x, EVP.PKEY* pkey);
 
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int NETSCAPE_SPKI_print(BIO.bio_st* outVal, NETSCAPE_SPKI* spki);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_signature_dump")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_signature_dump")
+		]
 		public extern static int signature_dump(BIO.bio_st* bp, ASN1.STRING* sig, int indent);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_signature_print")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_signature_print")
+		]
 		public extern static int signature_print(BIO.bio_st* bp, ALGOR* alg, ASN1.STRING* sig);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_sign")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_sign")
+		]
 		public extern static int sign(x509_st* x, EVP.PKEY* pkey, EVP.MD* md);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_sign_ctx")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_sign_ctx")
+		]
 		public extern static int sign_ctx(x509_st* x, EVP.MD_CTX* ctx);
 #if !OPENSSL_NO_OCSP
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_http_nbio")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_http_nbio")
+		]
 		public extern static int http_nbio(OCSP.REQ_CTX* rctx, x509_st** pcert);
 #endif
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REQ_sign")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REQ_sign")
+		]
 		public extern static int REQ_sign(REQ* x, EVP.PKEY* pkey, EVP.MD* md);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REQ_sign_ctx")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REQ_sign_ctx")
+		]
 		public extern static int REQ_sign_ctx(REQ* x, EVP.MD_CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_sign")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_sign")
+		]
 		public extern static int CRL_sign(CRL* x, EVP.PKEY* pkey, EVP.MD* md);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_sign_ctx")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_sign_ctx")
+		]
 		public extern static int CRL_sign_ctx(CRL* x, EVP.MD_CTX* ctx);
 #if !OPENSSL_NO_OCSP
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_http_nbio")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_http_nbio")
+		]
 		public extern static int CRL_http_nbio(OCSP.REQ_CTX* rctx, CRL** pcrl);
 #endif
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int NETSCAPE_SPKI_sign(NETSCAPE_SPKI* x, EVP.PKEY* pkey, EVP.MD* md);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_pubkey_digest")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_pubkey_digest")
+		]
 		public extern static int pubkey_digest(x509_st* data, EVP.MD* type, uint8* md, uint* len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_digest")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_digest")
+		]
 		public extern static int digest(x509_st* data, EVP.MD* type, uint8* md, uint* len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_digest")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_digest")
+		]
 		public extern static int CRL_digest(CRL* data, EVP.MD* type, uint8* md, uint* len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REQ_digest")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REQ_digest")
+		]
 		public extern static int REQ_digest(REQ* data, EVP.MD* type, uint8* md, uint* len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_NAME_digest")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_NAME_digest")
+		]
 		public extern static int NAME_digest(NAME* data, EVP.MD* type, uint8* md, uint* len);
 
 #if !OPENSSL_NO_STDIO
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static x509_st* d2i_X509_fp(Platform.BfpFile* fp, x509_st** x509);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_X509_fp(Platform.BfpFile* fp, x509_st* x509);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static CRL* d2i_X509_CRL_fp(Platform.BfpFile* fp, CRL** crl);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_X509_CRL_fp(Platform.BfpFile* fp, CRL* crl);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static REQ* d2i_X509_REQ_fp(Platform.BfpFile* fp, REQ** req);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_X509_REQ_fp(Platform.BfpFile* fp, REQ* req);
 	#if !OPENSSL_NO_RSA
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static RSA.rsa_st* d2i_RSAPrivateKey_fp(Platform.BfpFile* fp, RSA.rsa_st** rsa);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_RSAPrivateKey_fp(Platform.BfpFile* fp, RSA.rsa_st* rsa);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static RSA.rsa_st* d2i_RSAPublicKey_fp(Platform.BfpFile* fp, RSA.rsa_st** rsa);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_RSAPublicKey_fp(Platform.BfpFile* fp, RSA.rsa_st* rsa);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static RSA.rsa_st* d2i_RSA_PUBKEY_fp(Platform.BfpFile* fp, RSA.rsa_st** rsa);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_RSA_PUBKEY_fp(Platform.BfpFile* fp, RSA.rsa_st* rsa);
 	#endif
 	#if !OPENSSL_NO_DSA
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static DSA.dsa_st* d2i_DSA_PUBKEY_fp(Platform.BfpFile* fp, DSA.dsa_st** dsa);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_DSA_PUBKEY_fp(Platform.BfpFile* fp, DSA.dsa_st* dsa);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static DSA.dsa_st* d2i_DSAPrivateKey_fp(Platform.BfpFile* fp, DSA.dsa_st** dsa);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_DSAPrivateKey_fp(Platform.BfpFile* fp, DSA.dsa_st* dsa);
 	#endif
 	#if !OPENSSL_NO_EC
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static EC.KEY* d2i_EC_PUBKEY_fp(Platform.BfpFile* fp, EC.KEY** eckey);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_EC_PUBKEY_fp(Platform.BfpFile* fp, EC.KEY* eckey);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static EC.KEY* d2i_ECPrivateKey_fp(Platform.BfpFile* fp, EC.KEY** eckey);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_ECPrivateKey_fp(Platform.BfpFile* fp, EC.KEY* eckey);
 	#endif
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static SIG* d2i_PKCS8_fp(Platform.BfpFile* fp, SIG** p8);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_PKCS8_fp(Platform.BfpFile* fp, SIG* p8);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static PKCS8.PRIV_KEY_INFO* d2i_PKCS8_PRIV_KEY_INFO_fp(Platform.BfpFile* fp, PKCS8.PRIV_KEY_INFO** p8inf);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_PKCS8_PRIV_KEY_INFO_fp(Platform.BfpFile* fp, PKCS8.PRIV_KEY_INFO* p8inf);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_PKCS8PrivateKeyInfo_fp(Platform.BfpFile* fp, EVP.PKEY* key);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_PrivateKey_fp(Platform.BfpFile* fp, EVP.PKEY* pkey);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static EVP.PKEY* d2i_PrivateKey_fp(Platform.BfpFile* fp, EVP.PKEY** a);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_PUBKEY_fp(Platform.BfpFile* fp, EVP.PKEY* pkey);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static EVP.PKEY* d2i_PUBKEY_fp(Platform.BfpFile* fp, EVP.PKEY** a);
 #endif
 
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static x509_st* d2i_X509_bio(BIO.bio_st* bp, x509_st** x509);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_X509_bio(BIO.bio_st* bp, x509_st* x509);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static CRL* d2i_X509_CRL_bio(BIO.bio_st* bp, CRL** crl);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_X509_CRL_bio(BIO.bio_st* bp, CRL* crl);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static REQ* d2i_X509_REQ_bio(BIO.bio_st* bp, REQ** req);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_X509_REQ_bio(BIO.bio_st* bp, REQ* req);
 #if !OPENSSL_NO_RSA
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static RSA.rsa_st* d2i_RSAPrivateKey_bio(BIO.bio_st* bp, RSA.rsa_st** rsa);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_RSAPrivateKey_bio(BIO.bio_st* bp, RSA.rsa_st* rsa);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static RSA.rsa_st* d2i_RSAPublicKey_bio(BIO.bio_st* bp, RSA.rsa_st** rsa);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_RSAPublicKey_bio(BIO.bio_st* bp, RSA.rsa_st* rsa);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static RSA.rsa_st* d2i_RSA_PUBKEY_bio(BIO.bio_st* bp, RSA.rsa_st** rsa);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_RSA_PUBKEY_bio(BIO.bio_st* bp, RSA.rsa_st* rsa);
 #endif
 #if !OPENSSL_NO_DSA
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static DSA.dsa_st* d2i_DSA_PUBKEY_bio(BIO.bio_st* bp, DSA.dsa_st** dsa);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_DSA_PUBKEY_bio(BIO.bio_st* bp, DSA.dsa_st* dsa);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static DSA.dsa_st* d2i_DSAPrivateKey_bio(BIO.bio_st* bp, DSA.dsa_st** dsa);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_DSAPrivateKey_bio(BIO.bio_st* bp, DSA.dsa_st* dsa);
 #endif
 #if !OPENSSL_NO_EC
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static EC.KEY* d2i_EC_PUBKEY_bio(BIO.bio_st* bp, EC.KEY** eckey);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_EC_PUBKEY_bio(BIO.bio_st* bp, EC.KEY* eckey);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static EC.KEY* d2i_ECPrivateKey_bio(BIO.bio_st* bp, EC.KEY** eckey);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_ECPrivateKey_bio(BIO.bio_st* bp, EC.KEY* eckey);
 #endif
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static SIG* d2i_PKCS8_bio(BIO.bio_st* bp, SIG** p8);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_PKCS8_bio(BIO.bio_st* bp, SIG* p8);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static PKCS8.PRIV_KEY_INFO* d2i_PKCS8_PRIV_KEY_INFO_bio(BIO.bio_st* bp, PKCS8.PRIV_KEY_INFO** p8inf);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_PKCS8_PRIV_KEY_INFO_bio(BIO.bio_st* bp, PKCS8.PRIV_KEY_INFO* p8inf);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_PKCS8PrivateKeyInfo_bio(BIO.bio_st* bp, EVP.PKEY* key);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_PrivateKey_bio(BIO.bio_st* bp, EVP.PKEY* pkey);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static EVP.PKEY* d2i_PrivateKey_bio(BIO.bio_st* bp, EVP.PKEY** a);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_PUBKEY_bio(BIO.bio_st* bp, EVP.PKEY* pkey);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static EVP.PKEY* d2i_PUBKEY_bio(BIO.bio_st* bp, EVP.PKEY** a);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_dup")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_dup")
+		]
 		public extern static x509_st* dup(x509_st* x509);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_ATTRIBUTE_dup")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_ATTRIBUTE_dup")
+		]
 		public extern static ATTRIBUTE* ATTRIBUTE_dup(ATTRIBUTE* xa);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_EXTENSION_dup")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_EXTENSION_dup")
+		]
 		public extern static EXTENSION* EXTENSION_dup(EXTENSION* ex);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_dup")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_dup")
+		]
 		public extern static CRL* CRL_dup(CRL* crl);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REVOKED_dup")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REVOKED_dup")
+		]
 		public extern static REVOKED* REVOKED_dup(REVOKED* rev);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REQ_dup")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REQ_dup")
+		]
 		public extern static REQ* REQ_dup(REQ* req);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_ALGOR_dup")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_ALGOR_dup")
+		]
 		public extern static ALGOR* ALGOR_dup(ALGOR* xn);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_ALGOR_set0")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_ALGOR_set0")
+		]
 		public extern static int ALGOR_set0(ALGOR* alg, ASN1.OBJECT* aobj, int ptype, void* pval);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_ALGOR_get0")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_ALGOR_get0")
+		]
 		public extern static void ALGOR_get0(ASN1.OBJECT** paobj, int* pptype, void** ppval, ALGOR* algor);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_ALGOR_set_md")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_ALGOR_set_md")
+		]
 		public extern static void ALGOR_set_md(ALGOR* alg, EVP.MD* md);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_ALGOR_cmp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_ALGOR_cmp")
+		]
 		public extern static int ALGOR_cmp(ALGOR* a, ALGOR* b);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_ALGOR_copy")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_ALGOR_copy")
+		]
 		public extern static int ALGOR_copy(ALGOR* dest, ALGOR* src);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_NAME_dup")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_NAME_dup")
+		]
 		public extern static NAME* NAME_dup(NAME* xn);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_NAME_ENTRY_dup")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_NAME_ENTRY_dup")
+		]
 		public extern static NAME_ENTRY* NAME_ENTRY_dup(NAME_ENTRY* ne);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_cmp_time")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_cmp_time")
+		]
 		public extern static int cmp_time(ASN1.TIME* s, int64* t);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_cmp_current_time")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_cmp_current_time")
+		]
 		public extern static int cmp_current_time(ASN1.TIME* s);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_time_adj")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_time_adj")
+		]
 		public extern static ASN1.TIME* time_adj(ASN1.TIME* s, int adj, int64* t);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_time_adj_ex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_time_adj_ex")
+		]
 		public extern static ASN1.TIME* time_adj_ex(ASN1.TIME* s, int offset_day, int offset_sec, int64* t);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_gmtime_adj")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_gmtime_adj")
+		]
 		public extern static ASN1.TIME* gmtime_adj(ASN1.TIME* s, int adj);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_get_default_cert_area")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_get_default_cert_area")
+		]
 		public extern static char8* get_default_cert_area();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_get_default_cert_dir")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_get_default_cert_dir")
+		]
 		public extern static char8* get_default_cert_dir();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_get_default_cert_file")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_get_default_cert_file")
+		]
 		public extern static char8* get_default_cert_file();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_get_default_cert_dir_env")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_get_default_cert_dir_env")
+		]
 		public extern static char8* get_default_cert_dir_env();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_get_default_cert_file_env")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_get_default_cert_file_env")
+		]
 		public extern static char8* get_default_cert_file_env();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_get_default_private_dir")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_get_default_private_dir")
+		]
 		public extern static char8* get_default_private_dir();
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_to_X509_REQ")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_to_X509_REQ")
+		]
 		public extern static REQ* to_X509_REQ(x509_st* x, EVP.PKEY* pkey, EVP.MD* md);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REQ_to_X509")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REQ_to_X509")
+		]
 		public extern static x509_st* REQ_to_X509(REQ* r, int days, EVP.PKEY* pkey);
 
 		//DECLARE_ASN1_FUNCTIONS(X509_ALGOR)
@@ -1171,50 +1756,130 @@ namespace Beef_Net.OpenSSL
 
 		//DECLARE_ASN1_FUNCTIONS(X509_PUBKEY)
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_PUBKEY_set")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_PUBKEY_set")
+		]
 		public extern static int PUBKEY_set(PUBKEY** x, EVP.PKEY* pkey);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_PUBKEY_get0")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_PUBKEY_get0")
+		]
 		public extern static EVP.PKEY* PUBKEY_get0(PUBKEY* key);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_PUBKEY_get")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_PUBKEY_get")
+		]
 		public extern static EVP.PKEY* PUBKEY_get(PUBKEY* key);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_get_pubkey_parameters")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_get_pubkey_parameters")
+		]
 		public extern static int get_pubkey_parameters(EVP.PKEY* pkey, stack_st_X509* chain);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_get_pathlen")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_get_pathlen")
+		]
 		public extern static int get_pathlen(x509_st* x);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_PUBKEY(EVP.PKEY* a, uint8** pp);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static EVP.PKEY* d2i_PUBKEY(EVP.PKEY** a, uint8** pp, int length);
 #if !OPENSSL_NO_RSA
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_RSA_PUBKEY(RSA.rsa_st* a, uint8** pp);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static RSA.rsa_st* d2i_RSA_PUBKEY(RSA.rsa_st** a, uint8** pp, int length);
 #endif
 #if !OPENSSL_NO_DSA
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_DSA_PUBKEY(DSA.dsa_st* a, uint8** pp);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static DSA.dsa_st* d2i_DSA_PUBKEY(DSA.dsa_st** a, uint8** pp, int length);
 #endif
 #if !OPENSSL_NO_EC
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_EC_PUBKEY(EC.KEY* a, uint8** pp);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static EC.KEY* d2i_EC_PUBKEY(EC.KEY** a, uint8** pp, int length);
 #endif
 
 		//DECLARE_ASN1_FUNCTIONS(X509_SIG)
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_SIG_get0")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_SIG_get0")
+		]
 		public extern static void SIG_get0(SIG* sig, ALGOR** palg, ASN1.OCTET_STRING** pdigest);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_SIG_getm")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_SIG_getm")
+		]
 		public extern static void SIG_getm(SIG* sig, ALGOR** palg, ASN1.OCTET_STRING** pdigest);
 
 		//DECLARE_ASN1_FUNCTIONS(X509_REQ_INFO)
 		//DECLARE_ASN1_FUNCTIONS(X509_REQ)
 
 		//DECLARE_ASN1_FUNCTIONS(X509_ATTRIBUTE)
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_ATTRIBUTE_create")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_ATTRIBUTE_create")
+		]
 		public extern static ATTRIBUTE* ATTRIBUTE_create(int nid, int atrtype, void* value);
 
 		//DECLARE_ASN1_FUNCTIONS(X509_EXTENSION)
@@ -1224,7 +1889,12 @@ namespace Beef_Net.OpenSSL
 
 		//DECLARE_ASN1_FUNCTIONS(X509_NAME)
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_NAME_set")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_NAME_set")
+		]
 		public extern static int NAME_set(NAME** xn, NAME* name);
 
 		//DECLARE_ASN1_FUNCTIONS(X509_CINF)
@@ -1234,121 +1904,366 @@ namespace Beef_Net.OpenSSL
 
 		[Inline]
 		public static int get_ex_new_index(int l, void* p, Crypto.EX_new newf, Crypto.EX_dup dupf, Crypto.EX_free freef) => Crypto.get_ex_new_index(Crypto.EX_INDEX_X509, l, p, newf, dupf, freef);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_set_ex_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_set_ex_data")
+		]
 		public extern static int set_ex_data(x509_st* r, int idx, void* arg);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_get_ex_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_get_ex_data")
+		]
 		public extern static void* get_ex_data(x509_st* r, int idx);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_X509_AUX(x509_st* a, uint8** pp);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static x509_st* d2i_X509_AUX(x509_st** a, uint8** pp, int length);
 
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_re_X509_tbs(x509_st* x, uint8** pp);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_SIG_INFO_get")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_SIG_INFO_get")
+		]
 		public extern static int SIG_INFO_get(SIG_INFO* siginf, int* mdnid, int* pknid, int* secbits, uint32* flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_SIG_INFO_set")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_SIG_INFO_set")
+		]
 		public extern static void SIG_INFO_set(SIG_INFO* siginf, int mdnid, int pknid, int secbits, uint32 flags);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_get_signature_info")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_get_signature_info")
+		]
 		public extern static int get_signature_info(x509_st* x, int* mdnid, int* pknid, int* secbits, uint32* flags);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_get0_signature")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_get0_signature")
+		]
 		public extern static void get0_signature(ASN1.BIT_STRING** psig, ALGOR** palg, x509_st* x);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_get_signature_nid")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_get_signature_nid")
+		]
 		public extern static int get_signature_nid(x509_st* x);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_trusted")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_trusted")
+		]
 		public extern static int trusted(x509_st* x);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_alias_set1")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_alias_set1")
+		]
 		public extern static int alias_set1(x509_st* x, uint8* name, int len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_keyid_set1")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_keyid_set1")
+		]
 		public extern static int keyid_set1(x509_st* x, uint8* id, int len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_alias_get0")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_alias_get0")
+		]
 		public extern static uint8* alias_get0(x509_st* x, int* len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_keyid_get0")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_keyid_get0")
+		]
 		public extern static uint8* keyid_get0(x509_st* x, int* len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_TRUST_set_default")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_TRUST_set_default")
+		]
 		public extern static function int(int, x509_st*, int) TRUST_set_default(function int(int, x509_st*, int) trust);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_TRUST_set")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_TRUST_set")
+		]
 		public extern static int TRUST_set(int* t, int trust);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_add1_trust_object")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_add1_trust_object")
+		]
 		public extern static int add1_trust_object(x509_st* x, ASN1.OBJECT* obj);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_add1_reject_object")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_add1_reject_object")
+		]
 		public extern static int add1_reject_object(x509_st* x, ASN1.OBJECT* obj);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_trust_clear")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_trust_clear")
+		]
 		public extern static void trust_clear(x509_st* x);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_reject_clear")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_reject_clear")
+		]
 		public extern static void reject_clear(x509_st* x);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_get0_trust_objects")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_get0_trust_objects")
+		]
 		public extern static ASN1.stack_st_ASN1_OBJECT* get0_trust_objects(x509_st* x);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_get0_reject_objects")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_get0_reject_objects")
+		]
 		public extern static ASN1.stack_st_ASN1_OBJECT* get0_reject_objects(x509_st* x);
 
 		//DECLARE_ASN1_FUNCTIONS(X509_REVOKED)
 		//DECLARE_ASN1_FUNCTIONS(X509_CRL_INFO)
 		//DECLARE_ASN1_FUNCTIONS(X509_CRL)
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_add0_revoked")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_add0_revoked")
+		]
 		public extern static int CRL_add0_revoked(CRL* crl, REVOKED* rev);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_get0_by_serial")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_get0_by_serial")
+		]
 		public extern static int CRL_get0_by_serial(CRL* crl, REVOKED** ret, ASN1.INTEGER* serial);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_get0_by_cert")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_get0_by_cert")
+		]
 		public extern static int CRL_get0_by_cert(CRL* crl, REVOKED** ret, x509_st* x);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_PKEY_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_PKEY_new")
+		]
 		public extern static PKEY* PKEY_new();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_PKEY_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_PKEY_free")
+		]
 		public extern static void PKEY_free(PKEY* a);
 
 		//DECLARE_ASN1_FUNCTIONS(NETSCAPE_SPKI)
 		//DECLARE_ASN1_FUNCTIONS(NETSCAPE_SPKAC)
 		//DECLARE_ASN1_FUNCTIONS(NETSCAPE_CERT_SEQUENCE)
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_INFO_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_INFO_new")
+		]
 		public extern static INFO* INFO_new();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_INFO_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_INFO_free")
+		]
 		public extern static void INFO_free(INFO* a);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_NAME_oneline")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_NAME_oneline")
+		]
 		public extern static char8* NAME_oneline(NAME* a, char8* buf, int size);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_get_version")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_get_version")
+		]
 		public extern static int get_version(x509_st* x);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_set_version")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_set_version")
+		]
 		public extern static int set_version(x509_st* x, int version);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_set_serialNumber")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_set_serialNumber")
+		]
 		public extern static int set_serialNumber(x509_st* x, ASN1.INTEGER* serial);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_get_serialNumber")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_get_serialNumber")
+		]
 		public extern static ASN1.INTEGER* get_serialNumber(x509_st* x);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_get0_serialNumber")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_get0_serialNumber")
+		]
 		public extern static ASN1.INTEGER* get0_serialNumber(x509_st* x);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_set_issuer_name")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_set_issuer_name")
+		]
 		public extern static int set_issuer_name(x509_st* x, NAME* name);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_get_issuer_name")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_get_issuer_name")
+		]
 		public extern static NAME* get_issuer_name(x509_st* a);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_set_subject_name")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_set_subject_name")
+		]
 		public extern static int set_subject_name(x509_st* x, NAME* name);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_get_subject_name")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_get_subject_name")
+		]
 		public extern static NAME* get_subject_name(x509_st* a);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_get0_notBefore")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_get0_notBefore")
+		]
 		public extern static ASN1.TIME* get0_notBefore(x509_st* x);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_getm_notBefore")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_getm_notBefore")
+		]
 		public extern static ASN1.TIME* getm_notBefore(x509_st* x);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_set1_notBefore")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_set1_notBefore")
+		]
 		public extern static int set1_notBefore(x509_st* x, ASN1.TIME* tm);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_get0_notAfter")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_get0_notAfter")
+		]
 		public extern static ASN1.TIME* get0_notAfter(x509_st* x);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_getm_notAfter")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_getm_notAfter")
+		]
 		public extern static ASN1.TIME* getm_notAfter(x509_st* x);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_set1_notAfter")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_set1_notAfter")
+		]
 		public extern static int set1_notAfter(x509_st* x, ASN1.TIME* tm);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_set_pubkey")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_set_pubkey")
+		]
 		public extern static int set_pubkey(x509_st* x, EVP.PKEY* pkey);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_up_ref")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_up_ref")
+		]
 		public extern static int up_ref(x509_st* x);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_get_signature_type")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_get_signature_type")
+		]
 		public extern static int get_signature_type(x509_st* x);
 
 		[Inline]
@@ -1364,92 +2279,302 @@ namespace Beef_Net.OpenSSL
 		 * This one is only used so that a binary form can output, as in
 		 * i2d_X509_PUBKEY(X509_get_X509_PUBKEY(x), &buf)
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_get_X509_PUBKEY")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_get_X509_PUBKEY")
+		]
 		public extern static PUBKEY* get_X509_PUBKEY(x509_st* x);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_get0_extensions")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_get0_extensions")
+		]
 		public extern static stack_st_X509_EXTENSION* get0_extensions(x509_st* x);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_get0_uids")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_get0_uids")
+		]
 		public extern static void get0_uids(x509_st* x, ASN1.BIT_STRING** piuid, ASN1.BIT_STRING** psuid);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_get0_tbs_sigalg")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_get0_tbs_sigalg")
+		]
 		public extern static ALGOR* get0_tbs_sigalg(x509_st* x);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_get0_pubkey")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_get0_pubkey")
+		]
 		public extern static EVP.PKEY* get0_pubkey(x509_st* x);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_get_pubkey")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_get_pubkey")
+		]
 		public extern static EVP.PKEY* get_pubkey(x509_st* x);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_get0_pubkey_bitstr")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_get0_pubkey_bitstr")
+		]
 		public extern static ASN1.BIT_STRING* get0_pubkey_bitstr(x509_st* x);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_certificate_type")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_certificate_type")
+		]
 		public extern static int certificate_type(x509_st* x, EVP.PKEY* pubkey);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REQ_get_version")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REQ_get_version")
+		]
 		public extern static int REQ_get_version(REQ* req);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REQ_set_version")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REQ_set_version")
+		]
 		public extern static int REQ_set_version(REQ* x, int version);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REQ_get_subject_name")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REQ_get_subject_name")
+		]
 		public extern static NAME* REQ_get_subject_name(REQ* req);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REQ_set_subject_name")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REQ_set_subject_name")
+		]
 		public extern static int REQ_set_subject_name(REQ* req, NAME* name);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REQ_get0_signature")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REQ_get0_signature")
+		]
 		public extern static void REQ_get0_signature(REQ* req, ASN1.BIT_STRING** psig, ALGOR** palg);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REQ_set0_signature")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REQ_set0_signature")
+		]
 		public extern static void REQ_set0_signature(REQ* req, ASN1.BIT_STRING* psig);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REQ_set1_signature_algo")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REQ_set1_signature_algo")
+		]
 		public extern static int REQ_set1_signature_algo(REQ* req, ALGOR* palg);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REQ_get_signature_nid")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REQ_get_signature_nid")
+		]
 		public extern static int REQ_get_signature_nid(REQ* req);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_re_X509_REQ_tbs(REQ* req, uint8** pp);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REQ_set_pubkey")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REQ_set_pubkey")
+		]
 		public extern static int REQ_set_pubkey(REQ* x, EVP.PKEY* pkey);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REQ_get_pubkey")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REQ_get_pubkey")
+		]
 		public extern static EVP.PKEY* REQ_get_pubkey(REQ* req);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REQ_get0_pubkey")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REQ_get0_pubkey")
+		]
 		public extern static EVP.PKEY* REQ_get0_pubkey(REQ* req);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REQ_get_X509_PUBKEY")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REQ_get_X509_PUBKEY")
+		]
 		public extern static PUBKEY* REQ_get_X509_PUBKEY(REQ* req);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REQ_extension_nid")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REQ_extension_nid")
+		]
 		public extern static int REQ_extension_nid(int nid);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REQ_get_extension_nids")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REQ_get_extension_nids")
+		]
 		public extern static int* REQ_get_extension_nids();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REQ_set_extension_nids")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REQ_set_extension_nids")
+		]
 		public extern static void REQ_set_extension_nids(int* nids);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REQ_get_extensions")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REQ_get_extensions")
+		]
 		public extern static stack_st_X509_EXTENSION* REQ_get_extensions(REQ* req);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REQ_add_extensions_nid")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REQ_add_extensions_nid")
+		]
 		public extern static int REQ_add_extensions_nid(REQ* req, stack_st_X509_EXTENSION* exts, int nid);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REQ_add_extensions")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REQ_add_extensions")
+		]
 		public extern static int REQ_add_extensions(REQ* req, stack_st_X509_EXTENSION* exts);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REQ_get_attr_count")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REQ_get_attr_count")
+		]
 		public extern static int REQ_get_attr_count(REQ* req);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REQ_get_attr_by_NID")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REQ_get_attr_by_NID")
+		]
 		public extern static int REQ_get_attr_by_NID(REQ* req, int nid, int lastpos);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REQ_get_attr_by_OBJ")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REQ_get_attr_by_OBJ")
+		]
 		public extern static int REQ_get_attr_by_OBJ(REQ* req, ASN1.OBJECT* obj, int lastpos);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REQ_get_attr")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REQ_get_attr")
+		]
 		public extern static ATTRIBUTE* REQ_get_attr(REQ* req, int loc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REQ_delete_attr")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REQ_delete_attr")
+		]
 		public extern static ATTRIBUTE* REQ_delete_attr(REQ* req, int loc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REQ_add1_attr")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REQ_add1_attr")
+		]
 		public extern static int REQ_add1_attr(REQ* req, ATTRIBUTE* attr);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REQ_add1_attr_by_OBJ")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REQ_add1_attr_by_OBJ")
+		]
 		public extern static int REQ_add1_attr_by_OBJ(REQ* req, ASN1.OBJECT* obj, int type, uint8* bytes, int len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REQ_add1_attr_by_NID")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REQ_add1_attr_by_NID")
+		]
 		public extern static int REQ_add1_attr_by_NID(REQ* req, int nid, int type, uint8* bytes, int len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REQ_add1_attr_by_txt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REQ_add1_attr_by_txt")
+		]
 		public extern static int REQ_add1_attr_by_txt(REQ* req, char8* attrname, int type, uint8* bytes, int len);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_set_version")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_set_version")
+		]
 		public extern static int CRL_set_version(CRL* x, int version);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_set_issuer_name")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_set_issuer_name")
+		]
 		public extern static int CRL_set_issuer_name(CRL* x, NAME* name);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_set1_lastUpdate")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_set1_lastUpdate")
+		]
 		public extern static int CRL_set1_lastUpdate(CRL* x, ASN1.TIME* tm);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_set1_nextUpdate")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_set1_nextUpdate")
+		]
 		public extern static int CRL_set1_nextUpdate(CRL* x, ASN1.TIME* tm);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_sort")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_sort")
+		]
 		public extern static int CRL_sort(CRL* crl);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_up_ref")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_up_ref")
+		]
 		public extern static int CRL_up_ref(CRL* crl);
 
 		[Inline]
@@ -1457,291 +2582,931 @@ namespace Beef_Net.OpenSSL
 		[Inline]
 		public static int CRL_set_nextUpdate(CRL* x, ASN1.TIME* tm) => CRL_set1_nextUpdate(x, tm);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_get_version")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_get_version")
+		]
 		public extern static int CRL_get_version(CRL* crl);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_get0_lastUpdate")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_get0_lastUpdate")
+		]
 		public extern static ASN1.TIME* CRL_get0_lastUpdate(CRL* crl);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_get0_nextUpdate")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_get0_nextUpdate")
+		]
 		public extern static ASN1.TIME* CRL_get0_nextUpdate(CRL* crl);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_get_lastUpdate")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_get_lastUpdate")
+		]
 		public extern static ASN1.TIME* CRL_get_lastUpdate(CRL* crl);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_get_nextUpdate")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_get_nextUpdate")
+		]
 		public extern static ASN1.TIME* CRL_get_nextUpdate(CRL* crl);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_get_issuer")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_get_issuer")
+		]
 		public extern static NAME* CRL_get_issuer(CRL* crl);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_get0_extensions")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_get0_extensions")
+		]
 		public extern static stack_st_X509_EXTENSION* CRL_get0_extensions(CRL* crl);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_get_REVOKED")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_get_REVOKED")
+		]
 		public extern static stack_st_X509_REVOKED* CRL_get_REVOKED(CRL* crl);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_get0_signature")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_get0_signature")
+		]
 		public extern static void CRL_get0_signature(CRL* crl, ASN1.BIT_STRING** psig, ALGOR** palg);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_get_signature_nid")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_get_signature_nid")
+		]
 		public extern static int CRL_get_signature_nid(CRL* crl);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_re_X509_CRL_tbs(CRL* req, uint8** pp);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REVOKED_get0_serialNumber")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REVOKED_get0_serialNumber")
+		]
 		public extern static ASN1.INTEGER* REVOKED_get0_serialNumber(REVOKED* x);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REVOKED_set_serialNumber")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REVOKED_set_serialNumber")
+		]
 		public extern static int REVOKED_set_serialNumber(REVOKED* x, ASN1.INTEGER* serial);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REVOKED_get0_revocationDate")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REVOKED_get0_revocationDate")
+		]
 		public extern static ASN1.TIME* REVOKED_get0_revocationDate(REVOKED* x);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REVOKED_set_revocationDate")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REVOKED_set_revocationDate")
+		]
 		public extern static int REVOKED_set_revocationDate(REVOKED* r, ASN1.TIME* tm);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REVOKED_get0_extensions")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REVOKED_get0_extensions")
+		]
 		public extern static stack_st_X509_EXTENSION* REVOKED_get0_extensions(REVOKED* r);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_diff")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_diff")
+		]
 		public extern static CRL* CRL_diff(CRL* base_, CRL* newer, EVP.PKEY* skey, EVP.MD* md, uint flags);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REQ_check_private_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REQ_check_private_key")
+		]
 		public extern static int REQ_check_private_key(REQ* x509, EVP.PKEY* pkey);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_check_private_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_check_private_key")
+		]
 		public extern static int check_private_key(x509_st* x509, EVP.PKEY* pkey);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_chain_check_suiteb")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_chain_check_suiteb")
+		]
 		public extern static int chain_check_suiteb(int* perror_depth, x509_st* x, stack_st_X509* chain, uint flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_check_suiteb")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_check_suiteb")
+		]
 		public extern static int CRL_check_suiteb(CRL* crl, EVP.PKEY* pk, uint flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_chain_up_ref")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_chain_up_ref")
+		]
 		public extern static stack_st_X509* chain_up_ref(stack_st_X509* chain);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_issuer_and_serial_cmp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_issuer_and_serial_cmp")
+		]
 		public extern static int issuer_and_serial_cmp(x509_st* a, x509_st* b);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_issuer_and_serial_hash")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_issuer_and_serial_hash")
+		]
 		public extern static uint issuer_and_serial_hash(x509_st* a);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_issuer_name_cmp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_issuer_name_cmp")
+		]
 		public extern static int issuer_name_cmp(x509_st* a, x509_st* b);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_issuer_name_hash")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_issuer_name_hash")
+		]
 		public extern static uint issuer_name_hash(x509_st* a);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_subject_name_cmp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_subject_name_cmp")
+		]
 		public extern static int subject_name_cmp(x509_st* a, x509_st* b);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_subject_name_hash")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_subject_name_hash")
+		]
 		public extern static uint subject_name_hash(x509_st* x);
 
 #if !OPENSSL_NO_MD5
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_issuer_name_hash_old")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_issuer_name_hash_old")
+		]
 		public extern static uint issuer_name_hash_old(x509_st* a);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_subject_name_hash_old")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_subject_name_hash_old")
+		]
 		public extern static uint subject_name_hash_old(x509_st* x);
 #endif
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_cmp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_cmp")
+		]
 		public extern static int cmp(x509_st* a, x509_st* b);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_NAME_cmp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_NAME_cmp")
+		]
 		public extern static int NAME_cmp(NAME* a, NAME* b);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_NAME_hash")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_NAME_hash")
+		]
 		public extern static uint NAME_hash(NAME* x);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_NAME_hash_old")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_NAME_hash_old")
+		]
 		public extern static uint NAME_hash_old(NAME* x);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_cmp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_cmp")
+		]
 		public extern static int CRL_cmp(CRL* a, CRL* b);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_match")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_match")
+		]
 		public extern static int CRL_match(CRL* a, CRL* b);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_aux_print")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_aux_print")
+		]
 		public extern static int aux_print(BIO.bio_st* outVal, x509_st* x, int indent);
 #if !OPENSSL_NO_STDIO
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_print_ex_fp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_print_ex_fp")
+		]
 		public extern static int print_ex_fp(Platform.BfpFile* bp, x509_st* x, uint nmflag, uint cflag);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_print_fp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_print_fp")
+		]
 		public extern static int print_fp(Platform.BfpFile* bp, x509_st* x);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_print_fp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_print_fp")
+		]
 		public extern static int CRL_print_fp(Platform.BfpFile* bp, CRL* x);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REQ_print_fp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REQ_print_fp")
+		]
 		public extern static int REQ_print_fp(Platform.BfpFile* bp, REQ* req);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_NAME_print_ex_fp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_NAME_print_ex_fp")
+		]
 		public extern static int NAME_print_ex_fp(Platform.BfpFile* fp, NAME* nm, int indent, uint flags);
 #endif
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_NAME_print")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_NAME_print")
+		]
 		public extern static int NAME_print(BIO.bio_st* bp, NAME* name, int obase);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_NAME_print_ex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_NAME_print_ex")
+		]
 		public extern static int NAME_print_ex(BIO.bio_st* outVal, NAME* nm, int indent, uint flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_print_ex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_print_ex")
+		]
 		public extern static int print_ex(BIO.bio_st* bp, x509_st* x, uint nmflag, uint cflag);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_print")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_print")
+		]
 		public extern static int print(BIO.bio_st* bp, x509_st* x);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_ocspid_print")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_ocspid_print")
+		]
 		public extern static int ocspid_print(BIO.bio_st* bp, x509_st* x);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_print_ex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_print_ex")
+		]
 		public extern static int CRL_print_ex(BIO.bio_st* outVal, CRL* x, uint nmflag);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_print")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_print")
+		]
 		public extern static int CRL_print(BIO.bio_st* bp, CRL* x);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REQ_print_ex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REQ_print_ex")
+		]
 		public extern static int REQ_print_ex(BIO.bio_st* bp, REQ* x, uint nmflag, uint cflag);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REQ_print")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REQ_print")
+		]
 		public extern static int REQ_print(BIO.bio_st* bp, REQ* req);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_NAME_entry_count")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_NAME_entry_count")
+		]
 		public extern static int NAME_entry_count(NAME* name);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_NAME_get_text_by_NID")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_NAME_get_text_by_NID")
+		]
 		public extern static int NAME_get_text_by_NID(NAME* name, int nid, char8* buf, int len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_NAME_get_text_by_OBJ")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_NAME_get_text_by_OBJ")
+		]
 		public extern static int NAME_get_text_by_OBJ(NAME* name, ASN1.OBJECT* obj, char8* buf, int len);
 
 		/*
 		 * NOTE: you should be passing -1, not 0 as lastpos. The functions that use
 		 * lastpos, search after that position on.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_NAME_get_index_by_NID")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_NAME_get_index_by_NID")
+		]
 		public extern static int NAME_get_index_by_NID(NAME* name, int nid, int lastpos);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_NAME_get_index_by_OBJ")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_NAME_get_index_by_OBJ")
+		]
 		public extern static int NAME_get_index_by_OBJ(NAME* name, ASN1.OBJECT* obj, int lastpos);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_NAME_get_entry")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_NAME_get_entry")
+		]
 		public extern static NAME_ENTRY* NAME_get_entry(NAME* name, int loc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_NAME_delete_entry")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_NAME_delete_entry")
+		]
 		public extern static NAME_ENTRY* NAME_delete_entry(NAME* name, int loc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_NAME_add_entry")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_NAME_add_entry")
+		]
 		public extern static int NAME_add_entry(NAME* name, NAME_ENTRY* ne, int loc, int set);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_NAME_add_entry_by_OBJ")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_NAME_add_entry_by_OBJ")
+		]
 		public extern static int NAME_add_entry_by_OBJ(NAME* name, ASN1.OBJECT* obj, int type, uint8* bytes, int len, int loc, int set);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_NAME_add_entry_by_NID")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_NAME_add_entry_by_NID")
+		]
 		public extern static int NAME_add_entry_by_NID(NAME* name, int nid, int type, uint8* bytes, int len, int loc, int set);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_NAME_ENTRY_create_by_txt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_NAME_ENTRY_create_by_txt")
+		]
 		public extern static NAME_ENTRY* NAME_ENTRY_create_by_txt(NAME_ENTRY** ne, char8* field, int type, uint8* bytes, int len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_NAME_ENTRY_create_by_NID")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_NAME_ENTRY_create_by_NID")
+		]
 		public extern static NAME_ENTRY* NAME_ENTRY_create_by_NID(NAME_ENTRY** ne, int nid, int type, uint8* bytes, int len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_NAME_add_entry_by_txt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_NAME_add_entry_by_txt")
+		]
 		public extern static int NAME_add_entry_by_txt(NAME* name, char8* field, int type, uint8* bytes, int len, int loc, int set);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_NAME_ENTRY_create_by_OBJ")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_NAME_ENTRY_create_by_OBJ")
+		]
 		public extern static NAME_ENTRY* NAME_ENTRY_create_by_OBJ(NAME_ENTRY** ne, ASN1.OBJECT* obj, int type, uint8* bytes, int len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_NAME_ENTRY_set_object")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_NAME_ENTRY_set_object")
+		]
 		public extern static int NAME_ENTRY_set_object(NAME_ENTRY* ne, ASN1.OBJECT* obj);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_NAME_ENTRY_set_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_NAME_ENTRY_set_data")
+		]
 		public extern static int NAME_ENTRY_set_data(NAME_ENTRY* ne, int type, uint8* bytes, int len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_NAME_ENTRY_get_object")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_NAME_ENTRY_get_object")
+		]
 		public extern static ASN1.OBJECT* NAME_ENTRY_get_object(NAME_ENTRY* ne);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_NAME_ENTRY_get_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_NAME_ENTRY_get_data")
+		]
 		public extern static ASN1.STRING* NAME_ENTRY_get_data(NAME_ENTRY* ne);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_NAME_ENTRY_set")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_NAME_ENTRY_set")
+		]
 		public extern static int NAME_ENTRY_set(NAME_ENTRY* ne);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_NAME_get0_der")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_NAME_get0_der")
+		]
 		public extern static int NAME_get0_der(NAME* nm, uint8** pder, uint* pderlen);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_get_ext_count")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_get_ext_count")
+		]
 		public extern static int get_ext_count(x509_st* x);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_get_ext_by_NID")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_get_ext_by_NID")
+		]
 		public extern static int get_ext_by_NID(x509_st* x, int nid, int lastpos);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_get_ext_by_OBJ")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_get_ext_by_OBJ")
+		]
 		public extern static int get_ext_by_OBJ(x509_st* x, ASN1.OBJECT* obj, int lastpos);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_get_ext_by_critical")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_get_ext_by_critical")
+		]
 		public extern static int get_ext_by_critical(x509_st* x, int crit, int lastpos);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_get_ext")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_get_ext")
+		]
 		public extern static EXTENSION* get_ext(x509_st* x, int loc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_delete_ext")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_delete_ext")
+		]
 		public extern static EXTENSION* delete_ext(x509_st* x, int loc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_add_ext")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_add_ext")
+		]
 		public extern static int add_ext(x509_st* x, EXTENSION* ex, int loc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_get_ext_d2i")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_get_ext_d2i")
+		]
 		public extern static void* get_ext_d2i(x509_st* x, int nid, int* crit, int* idx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_add1_ext_i2d")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_add1_ext_i2d")
+		]
 		public extern static int add1_ext_i2d(x509_st* x, int nid, void* value, int crit, uint flags);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_get_ext_count")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_get_ext_count")
+		]
 		public extern static int CRL_get_ext_count(CRL* x);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_get_ext_by_NID")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_get_ext_by_NID")
+		]
 		public extern static int CRL_get_ext_by_NID(CRL* x, int nid, int lastpos);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_get_ext_by_OBJ")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_get_ext_by_OBJ")
+		]
 		public extern static int CRL_get_ext_by_OBJ(CRL* x, ASN1.OBJECT* obj, int lastpos);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_get_ext_by_critical")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_get_ext_by_critical")
+		]
 		public extern static int CRL_get_ext_by_critical(CRL* x, int crit, int lastpos);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_get_ext")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_get_ext")
+		]
 		public extern static EXTENSION* CRL_get_ext(CRL* x, int loc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_delete_ext")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_delete_ext")
+		]
 		public extern static EXTENSION* CRL_delete_ext(CRL* x, int loc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_add_ext")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_add_ext")
+		]
 		public extern static int CRL_add_ext(CRL* x, EXTENSION* ex, int loc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_get_ext_d2i")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_get_ext_d2i")
+		]
 		public extern static void* CRL_get_ext_d2i(CRL* x, int nid, int* crit, int* idx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_CRL_add1_ext_i2d")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_CRL_add1_ext_i2d")
+		]
 		public extern static int CRL_add1_ext_i2d(CRL* x, int nid, void* value, int crit, uint flags);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REVOKED_get_ext_count")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REVOKED_get_ext_count")
+		]
 		public extern static int REVOKED_get_ext_count(REVOKED* x);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REVOKED_get_ext_by_NID")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REVOKED_get_ext_by_NID")
+		]
 		public extern static int REVOKED_get_ext_by_NID(REVOKED* x, int nid, int lastpos);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REVOKED_get_ext_by_OBJ")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REVOKED_get_ext_by_OBJ")
+		]
 		public extern static int REVOKED_get_ext_by_OBJ(REVOKED* x, ASN1.OBJECT* obj, int lastpos);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REVOKED_get_ext_by_critical")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REVOKED_get_ext_by_critical")
+		]
 		public extern static int REVOKED_get_ext_by_critical(REVOKED* x, int crit, int lastpos);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REVOKED_get_ext")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REVOKED_get_ext")
+		]
 		public extern static EXTENSION* REVOKED_get_ext(REVOKED* x, int loc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REVOKED_delete_ext")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REVOKED_delete_ext")
+		]
 		public extern static EXTENSION* REVOKED_delete_ext(REVOKED* x, int loc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REVOKED_add_ext")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REVOKED_add_ext")
+		]
 		public extern static int REVOKED_add_ext(REVOKED* x, EXTENSION* ex, int loc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REVOKED_get_ext_d2i")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REVOKED_get_ext_d2i")
+		]
 		public extern static void* REVOKED_get_ext_d2i(REVOKED* x, int nid, int* crit, int* idx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_REVOKED_add1_ext_i2d")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_REVOKED_add1_ext_i2d")
+		]
 		public extern static int REVOKED_add1_ext_i2d(REVOKED* x, int nid, void* value, int crit, uint flags);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_EXTENSION_create_by_NID")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_EXTENSION_create_by_NID")
+		]
 		public extern static EXTENSION* EXTENSION_create_by_NID(EXTENSION** ex, int nid, int crit, ASN1.OCTET_STRING* data);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_EXTENSION_create_by_OBJ")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_EXTENSION_create_by_OBJ")
+		]
 		public extern static EXTENSION* EXTENSION_create_by_OBJ(EXTENSION** ex, ASN1.OBJECT* obj, int crit, ASN1.OCTET_STRING* data);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_EXTENSION_set_object")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_EXTENSION_set_object")
+		]
 		public extern static int EXTENSION_set_object(EXTENSION* ex, ASN1.OBJECT* obj);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_EXTENSION_set_critical")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_EXTENSION_set_critical")
+		]
 		public extern static int EXTENSION_set_critical(EXTENSION* ex, int crit);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_EXTENSION_set_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_EXTENSION_set_data")
+		]
 		public extern static int EXTENSION_set_data(EXTENSION* ex, ASN1.OCTET_STRING* data);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_EXTENSION_get_object")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_EXTENSION_get_object")
+		]
 		public extern static ASN1.OBJECT* EXTENSION_get_object(EXTENSION* ex);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_EXTENSION_get_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_EXTENSION_get_data")
+		]
 		public extern static ASN1.OCTET_STRING* EXTENSION_get_data(EXTENSION* ne);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_EXTENSION_get_critical")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_EXTENSION_get_critical")
+		]
 		public extern static int EXTENSION_get_critical(EXTENSION* ex);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509at_get_attr_count")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509at_get_attr_count")
+		]
 		public extern static int at_get_attr_count(stack_st_X509_ATTRIBUTE* x);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509at_get_attr_by_NID")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509at_get_attr_by_NID")
+		]
 		public extern static int at_get_attr_by_NID(stack_st_X509_ATTRIBUTE* x, int nid, int lastpos);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509at_get_attr_by_OBJ")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509at_get_attr_by_OBJ")
+		]
 		public extern static int at_get_attr_by_OBJ(stack_st_X509_ATTRIBUTE* sk, ASN1.OBJECT* obj, int lastpos);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509at_get_attr")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509at_get_attr")
+		]
 		public extern static ATTRIBUTE* at_get_attr(stack_st_X509_ATTRIBUTE* x, int loc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509at_delete_attr")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509at_delete_attr")
+		]
 		public extern static ATTRIBUTE* at_delete_attr(stack_st_X509_ATTRIBUTE* x, int loc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509at_add1_attr")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509at_add1_attr")
+		]
 		public extern static stack_st_X509_ATTRIBUTE* at_add1_attr(stack_st_X509_ATTRIBUTE** x, ATTRIBUTE* attr);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509at_add1_attr_by_OBJ")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509at_add1_attr_by_OBJ")
+		]
 		public extern static stack_st_X509_ATTRIBUTE* at_add1_attr_by_OBJ(stack_st_X509_ATTRIBUTE** x, ASN1.OBJECT* obj, int type, uint8* bytes, int len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509at_add1_attr_by_NID")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509at_add1_attr_by_NID")
+		]
 		public extern static stack_st_X509_ATTRIBUTE* at_add1_attr_by_NID(stack_st_X509_ATTRIBUTE** x, int nid, int type, uint8* bytes, int len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509at_add1_attr_by_txt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509at_add1_attr_by_txt")
+		]
 		public extern static stack_st_X509_ATTRIBUTE* at_add1_attr_by_txt(stack_st_X509_ATTRIBUTE** x, char8* attrname, int type, uint8* bytes, int len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509at_get0_data_by_OBJ")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509at_get0_data_by_OBJ")
+		]
 		public extern static void* at_get0_data_by_OBJ(stack_st_X509_ATTRIBUTE* x, ASN1.OBJECT* obj, int lastpos, int type);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_ATTRIBUTE_create_by_NID")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_ATTRIBUTE_create_by_NID")
+		]
 		public extern static ATTRIBUTE* ATTRIBUTE_create_by_NID(ATTRIBUTE** attr, int nid, int atrtype, void* data, int len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_ATTRIBUTE_create_by_OBJ")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_ATTRIBUTE_create_by_OBJ")
+		]
 		public extern static ATTRIBUTE* ATTRIBUTE_create_by_OBJ(ATTRIBUTE** attr, ASN1.OBJECT* obj, int atrtype, void* data, int len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_ATTRIBUTE_create_by_txt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_ATTRIBUTE_create_by_txt")
+		]
 		public extern static ATTRIBUTE* ATTRIBUTE_create_by_txt(ATTRIBUTE** attr, char8* atrname, int type, uint8* bytes, int len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_ATTRIBUTE_set1_object")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_ATTRIBUTE_set1_object")
+		]
 		public extern static int ATTRIBUTE_set1_object(ATTRIBUTE* attr, ASN1.OBJECT* obj);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_ATTRIBUTE_set1_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_ATTRIBUTE_set1_data")
+		]
 		public extern static int ATTRIBUTE_set1_data(ATTRIBUTE* attr, int attrtype, void* data, int len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_ATTRIBUTE_get0_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_ATTRIBUTE_get0_data")
+		]
 		public extern static void* ATTRIBUTE_get0_data(ATTRIBUTE* attr, int idx, int atrtype, void* data);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_ATTRIBUTE_count")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_ATTRIBUTE_count")
+		]
 		public extern static int ATTRIBUTE_count(ATTRIBUTE* attr);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_ATTRIBUTE_get0_object")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_ATTRIBUTE_get0_object")
+		]
 		public extern static ASN1.OBJECT* ATTRIBUTE_get0_object(ATTRIBUTE* attr);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_ATTRIBUTE_get0_type")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_ATTRIBUTE_get0_type")
+		]
 		public extern static ASN1.TYPE* ATTRIBUTE_get0_type(ATTRIBUTE* attr, int idx);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_verify_cert")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_verify_cert")
+		]
 		public extern static int verify_cert(STORE_CTX* ctx);
 
 		/* lookup a cert from a X509 STACK */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_find_by_issuer_and_serial")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_find_by_issuer_and_serial")
+		]
 		public extern static x509_st* find_by_issuer_and_serial(stack_st_X509* sk, NAME* name, ASN1.INTEGER* serial);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_find_by_subject")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_find_by_subject")
+		]
 		public extern static x509_st* find_by_subject(stack_st_X509* sk, NAME* name);
 
 		// DECLARE_ASN1_FUNCTIONS(PBEPARAM)
@@ -1755,35 +3520,95 @@ namespace Beef_Net.OpenSSL
 
 		// DECLARE_ASN1_FUNCTIONS(PKCS8_PRIV_KEY_INFO)
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_PUBKEY_set0_param")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_PUBKEY_set0_param")
+		]
 		public extern static int PUBKEY_set0_param(PUBKEY* pub, ASN1.OBJECT* aobj, int ptype, void* pval, uint8* penc, int penclen);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_PUBKEY_get0_param")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_PUBKEY_get0_param")
+		]
 		public extern static int PUBKEY_get0_param(ASN1.OBJECT** ppkalg, uint8** pk, int* ppklen, ALGOR** pa, PUBKEY* pub);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_check_trust")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_check_trust")
+		]
 		public extern static int check_trust(x509_st* x, int id, int flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_TRUST_get_count")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_TRUST_get_count")
+		]
 		public extern static int TRUST_get_count();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_TRUST_get0")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_TRUST_get0")
+		]
 		public extern static TRUST* TRUST_get0(int idx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_TRUST_get_by_id")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_TRUST_get_by_id")
+		]
 		public extern static int TRUST_get_by_id(int id);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_TRUST_add")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_TRUST_add")
+		]
 		public extern static int TRUST_add(int id, int flags, function int(TRUST*, x509_st*, int) ck, char8* name, int arg1, void* arg2);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_TRUST_cleanup")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_TRUST_cleanup")
+		]
 		public extern static void TRUST_cleanup();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_TRUST_get_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_TRUST_get_flags")
+		]
 		public extern static int TRUST_get_flags(TRUST* xp);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_TRUST_get0_name")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_TRUST_get0_name")
+		]
 		public extern static char8* TRUST_get0_name(TRUST* xp);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509_TRUST_get_trust")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509_TRUST_get_trust")
+		]
 		public extern static int TRUST_get_trust(TRUST* xp);
 	}
 	
 	[AlwaysInclude]
 	sealed abstract class X509v3
 	{
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int ERR_load_X509V3_strings();
 
 		/*
@@ -2199,19 +4024,54 @@ namespace Beef_Net.OpenSSL
 		public const int KU_DECIPHER_ONLY     = 0x8000;
 		public const int KU_UNDEF             = 0xffff;
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509v3_get_ext_count")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509v3_get_ext_count")
+		]
 		public extern static int get_ext_count(X509.stack_st_X509_EXTENSION* x);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509v3_get_ext_by_NID")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509v3_get_ext_by_NID")
+		]
 		public extern static int get_ext_by_NID(X509.stack_st_X509_EXTENSION* x, int nid, int lastpos);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509v3_get_ext_by_OBJ")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509v3_get_ext_by_OBJ")
+		]
 		public extern static int get_ext_by_OBJ(X509.stack_st_X509_EXTENSION* x, ASN1.OBJECT* obj, int lastpos);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509v3_get_ext_by_critical")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509v3_get_ext_by_critical")
+		]
 		public extern static int get_ext_by_critical(X509.stack_st_X509_EXTENSION* x, int crit, int lastpos);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509v3_get_ext")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509v3_get_ext")
+		]
 		public extern static X509.EXTENSION* get_ext(X509.stack_st_X509_EXTENSION* x, int loc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509v3_delete_ext")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509v3_delete_ext")
+		]
 		public extern static X509.EXTENSION* delete_ext(X509.stack_st_X509_EXTENSION* x, int loc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("X509v3_add_ext")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("X509v3_add_ext")
+		]
 		public extern static X509.stack_st_X509_EXTENSION* add_ext(X509.stack_st_X509_EXTENSION** x, X509.EXTENSION* ex, int loc);
 	}
 	

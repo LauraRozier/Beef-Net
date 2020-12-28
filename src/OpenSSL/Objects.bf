@@ -1288,48 +1288,153 @@ namespace Beef_Net.OpenSSL
 		[Inline]
 		public static int create_and_add_object(char8* oid, char8* sn, char8* ln) => create(oid, sn, ln);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_NAME_init")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OBJ_NAME_init")
+		]
 		public extern static int NAME_init();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_NAME_new_index")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OBJ_NAME_new_index")
+		]
 		public extern static int NAME_new_index(function uint(char8*) hash_func, function int(char8*, char8*) cmp_func, function void(char8*, int, char8*) free_func);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_NAME_get")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OBJ_NAME_get")
+		]
 		public extern static char8* NAME_get(char8* name, int type);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_NAME_add")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OBJ_NAME_add")
+		]
 		public extern static int NAME_add(char8* name, int type, char8* data);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_NAME_remove")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OBJ_NAME_remove")
+		]
 		public extern static int NAME_remove(char8* name, int type);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_NAME_cleanup")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OBJ_NAME_cleanup")
+		]
 		public extern static void NAME_cleanup(int type); /* -1 for everything */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_NAME_do_all")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OBJ_NAME_do_all")
+		]
 		public extern static void NAME_do_all(int type, function void(NAME*, void* arg) fn, void* arg);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_NAME_do_all_sorted")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OBJ_NAME_do_all_sorted")
+		]
 		public extern static void NAME_do_all_sorted(int type, function void(NAME*, void* arg) fn, void* arg);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_dup")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OBJ_dup")
+		]
 		public extern static ASN1.OBJECT* dup(ASN1.OBJECT* o);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_nid2obj")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OBJ_nid2obj")
+		]
 		public extern static ASN1.OBJECT* nid2obj(int n);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_nid2ln")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OBJ_nid2ln")
+		]
 		public extern static char8* nid2ln(int n);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_nid2sn")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OBJ_nid2sn")
+		]
 		public extern static char8* nid2sn(int n);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_obj2nid")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OBJ_obj2nid")
+		]
 		public extern static int obj2nid(ASN1.OBJECT* o);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_txt2obj")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OBJ_txt2obj")
+		]
 		public extern static ASN1.OBJECT* txt2obj(char8* s, int no_name);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_obj2txt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OBJ_obj2txt")
+		]
 		public extern static int obj2txt(char8* buf, int buf_len, ASN1.OBJECT* a, int no_name);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_txt2nid")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OBJ_txt2nid")
+		]
 		public extern static int txt2nid(char8* s);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_ln2nid")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OBJ_ln2nid")
+		]
 		public extern static int ln2nid(char8* s);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_sn2nid")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OBJ_sn2nid")
+		]
 		public extern static int sn2nid(char8* s);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_cmp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OBJ_cmp")
+		]
 		public extern static int cmp(ASN1.OBJECT* a, ASN1.OBJECT* b);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_bsearch_")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OBJ_bsearch_")
+		]
 		public extern static void* bsearch_(void* key, void* base_, int num, int size, function int(void*, void*) cmp);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_bsearch_ex_")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OBJ_bsearch_ex_")
+		]
 		public extern static void* bsearch_ex_(void* key, void* base_, int num, int size, function int(void*, void*) cmp, int flags);
 
 		/** FIXME: Good luck translating this. **/
@@ -1346,9 +1451,7 @@ namespace Beef_Net.OpenSSL
 		*/
 
 		/*-
-		 * Unsolved problem: if a type is actually a pointer type, like
-		 * nid_triple is, then its impossible to get a const where you need
-		 * it. Consider:
+		 * Unsolved problem: if a type is actually a pointer type, like nid_triple is, then its impossible to get a const where you need it. Consider:
 		 *
 		 * typedef int nid_triple[3];
 		 * const void* a_;
@@ -1358,18 +1461,13 @@ namespace Beef_Net.OpenSSL
 		 *
 		 * const int const * const *a = a_;
 		 *
-		 * But if you do that, you lose the fact that a is an array of 3 ints,
-		 * which breaks comparison functions.
+		 * But if you do that, you lose the fact that a is an array of 3 ints, which breaks comparison functions.
 		 *
-		 * Thus we end up having to cast, sadly, or unpack the
-		 * declarations. Or, as I finally did in this case, declare nid_triple
-		 * to be a struct, which it should have been in the first place.
+		 * Thus we end up having to cast, sadly, or unpack the declarations. Or, as I finally did in this case, declare nid_triple to be a struct, which it should have been in the first place.
 		 *
 		 * Ben, August 2008.
 		 *
-		 * Also, strictly speaking not all types need be const, but handling
-		 * the non-constness means a lot of complication, and in practice
-		 * comparison routines do always not touch their arguments.
+		 * Also, strictly speaking not all types need be const, but handling the non-constness means a lot of complication, and in practice comparison routines do always not touch their arguments.
 		 */
 
 		/** FIXME: Good luck translating this. **/
@@ -1418,31 +1516,81 @@ namespace Beef_Net.OpenSSL
 		*/
 
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_new_nid")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OBJ_new_nid")
+		]
 		public extern static int new_nid(int num);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_add_object")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OBJ_add_object")
+		]
 		public extern static int add_object(ASN1.OBJECT* obj);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_create")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OBJ_create")
+		]
 		public extern static int create(char8* oid, char8* sn, char8* ln);
 		
 		[Inline, Obsolete("No longer available, no-op", true)]
 		public static void cleanup() { while(false) continue; }
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_create_objects")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OBJ_create_objects")
+		]
 		public extern static int create_objects(BIO.bio_st* inVal);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_length")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OBJ_length")
+		]
 		public extern static uint length(ASN1.OBJECT* obj);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_get0_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OBJ_get0_data")
+		]
 		public extern static uint8* get0_data(ASN1.OBJECT* obj);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_find_sigid_algs")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OBJ_find_sigid_algs")
+		]
 		public extern static int find_sigid_algs(int signid, int* pdig_nid, int* ppkey_nid);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_find_sigid_by_algs")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OBJ_find_sigid_by_algs")
+		]
 		public extern static int find_sigid_by_algs(int* psignid, int dig_nid, int pkey_nid);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_add_sigid")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OBJ_add_sigid")
+		]
 		public extern static int add_sigid(int signid, int dig_id, int pkey_id);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OBJ_sigid_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OBJ_sigid_free")
+		]
 		public extern static void sigid_free();
 	}
 }

@@ -14,7 +14,12 @@ namespace Beef_Net.OpenSSL
 	[AlwaysInclude]
 	sealed abstract class KDF
 	{
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int ERR_load_KDF_strings();
 		
 		/*

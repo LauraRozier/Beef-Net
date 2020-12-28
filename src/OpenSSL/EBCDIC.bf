@@ -15,15 +15,25 @@ namespace Beef_Net.OpenSSL
 	sealed abstract class EBCDIC
 	{
 		/** TODO: Once BeefLang is able to handle extern vars/consts these can be ported. **/
-		// extern const unsigned char os_toascii[256];
-		// extern const unsigned char os_toebcdic[256];
+		// public extern const unsigned char os_toascii[256];
+		// public extern const unsigned char os_toebcdic[256];
 
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static void* ebcdic2ascii(void* dest, void* srce, uint count);
 		[Inline]
 		public static void* _openssl_ebcdic2ascii(void* dest, void* srce, uint count) => ebcdic2ascii(dest, srce, count);
 
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static void* ascii2ebcdic(void* dest, void* srce, uint count);
 		[Inline]
 		public static void* _openssl_ascii2ebcdic(void* dest, void* srce, uint count) => ascii2ebcdic(dest, srce, count);

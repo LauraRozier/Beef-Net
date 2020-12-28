@@ -14,7 +14,12 @@ namespace Beef_Net.OpenSSL
 	[AlwaysInclude]
 	sealed abstract class Rand
 	{
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int ERR_load_RAND_strings();
 		
 		/*
@@ -124,61 +129,161 @@ namespace Beef_Net.OpenSSL
 		    public uint entropy_requested; /* requested entropy count in bits */
 		}
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_set_rand_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_set_rand_method")
+		]
 		public extern static int set_rand_method(METHOD* meth);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_get_rand_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_get_rand_method")
+		]
 		public extern static METHOD* get_rand_method();
 #if !OPENSSL_NO_ENGINE
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_set_rand_engine")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_set_rand_engine")
+		]
 		public extern static int set_rand_engine(Engine.ENGINE* engine);
 #endif
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_OpenSSL")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_OpenSSL")
+		]
 		public extern static METHOD* OpenSSL();
 		
 		[Inline, Obsolete("No longer available, no-op", true)]
 		public static void cleanup() { while(false) continue; }
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_bytes")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_bytes")
+		]
 		public extern static int bytes(uint8* buf, int num);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_priv_bytes")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_priv_bytes")
+		]
 		public extern static int priv_bytes(uint8* buf, int num);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_pseudo_bytes")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_pseudo_bytes")
+		]
 		public extern static int pseudo_bytes(uint8* buf, int num);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_seed")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_seed")
+		]
 		public extern static void seed(void* buf, int num);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_keep_random_devices_open")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_keep_random_devices_open")
+		]
 		public extern static void keep_random_devices_open(int keep);
 		
 		// __NDK_FPABI__	/* __attribute__((pcs("aapcs"))) on ARM */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_add")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_add")
+		]
 		public extern static void add(void* buf, int num, double randomness);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_load_file")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_load_file")
+		]
 		public extern static int load_file(char8* file, int max_bytes);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_write_file")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_write_file")
+		]
 		public extern static int write_file(char8* file);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_file_name")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_file_name")
+		]
 		public extern static char8* file_name(char8* file, uint num);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_status")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_status")
+		]
 		public extern static int status();
 		
 #if !OPENSSL_NO_EGD
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_query_egd_bytes")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_query_egd_bytes")
+		]
 		public extern static int query_egd_bytes(char8* path, uint8* buf, int bytes);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_egd")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_egd")
+		]
 		public extern static int egd(char8* path);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_egd_bytes")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_egd_bytes")
+		]
 		public extern static int egd_bytes(char8* path, int bytes);
 #endif
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_poll")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_poll")
+		]
 		public extern static int poll();
 		
 #if BF_PLATFORM_WINDOWS
 		/* application has to include <windows.h> in order to use these */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_screen")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_screen")
+		]
 		public extern static void screen();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_event")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_event")
+		]
 		public extern static int event(uint msg, int wParam, int lparam);
 #endif
 	}
@@ -368,44 +473,124 @@ namespace Beef_Net.OpenSSL
 		/*
 		 * Object lifetime functions.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_DRBG_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_DRBG_new")
+		]
 		public extern static RAND_DRBG* new_(int type, uint flags, RAND_DRBG* parent);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_DRBG_secure_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_DRBG_secure_new")
+		]
 		public extern static RAND_DRBG* secure_new(int type, uint flags, RAND_DRBG* parent);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_DRBG_set")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_DRBG_set")
+		]
 		public extern static int set(RAND_DRBG* drbg, int type, uint flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_DRBG_set_defaults")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_DRBG_set_defaults")
+		]
 		public extern static int set_defaults(int type, uint flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_DRBG_instantiate")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_DRBG_instantiate")
+		]
 		public extern static int instantiate(RAND_DRBG* drbg, uint8* pers, uint perslen);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_DRBG_uninstantiate")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_DRBG_uninstantiate")
+		]
 		public extern static int uninstantiate(RAND_DRBG* drbg);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_DRBG_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_DRBG_free")
+		]
 		public extern static void free(RAND_DRBG* drbg);
 		
 		/*
 		 * Object "use" functions.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_DRBG_reseed")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_DRBG_reseed")
+		]
 		public extern static int reseed(RAND_DRBG* drbg, uint8* adin, uint adinlen, int prediction_resistance);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_DRBG_generate")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_DRBG_generate")
+		]
 		public extern static int generate(RAND_DRBG* drbg, uint8* outVal, uint outlen, int prediction_resistance, uint8* adin, uint adinlen);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_DRBG_bytes")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_DRBG_bytes")
+		]
 		public extern static int bytes(RAND_DRBG* drbg, uint8* outVal, uint outlen);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_DRBG_set_reseed_interval")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_DRBG_set_reseed_interval")
+		]
 		public extern static int set_reseed_interval(RAND_DRBG* drbg, uint interval);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_DRBG_set_reseed_time_interval")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_DRBG_set_reseed_time_interval")
+		]
 		public extern static int set_reseed_time_interval(RAND_DRBG* drbg, int64 interval);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_DRBG_set_reseed_defaults")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_DRBG_set_reseed_defaults")
+		]
 		public extern static int set_reseed_defaults(uint master_reseed_interval, uint slave_reseed_interval, int64 master_reseed_time_interval, int64 slave_reseed_time_interval);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_DRBG_get0_master")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_DRBG_get0_master")
+		]
 		public extern static RAND_DRBG* get0_master();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_DRBG_get0_public")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_DRBG_get0_public")
+		]
 		public extern static RAND_DRBG* get0_public();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_DRBG_get0_private")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_DRBG_get0_private")
+		]
 		public extern static RAND_DRBG* get0_private();
 		
 		/*
@@ -413,9 +598,19 @@ namespace Beef_Net.OpenSSL
 		 */
 		[Inline]
 		public static int get_ex_new_index(int l, void* p, Crypto.EX_new newf, Crypto.EX_dup dupf, Crypto.EX_free freef) => Crypto.get_ex_new_index(Crypto.EX_INDEX_DRBG, l, p, newf, dupf, freef);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_DRBG_set_ex_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_DRBG_set_ex_data")
+		]
 		public extern static int set_ex_data(RAND_DRBG* drbg, int idx, void* arg);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_DRBG_get_ex_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_DRBG_get_ex_data")
+		]
 		public extern static void* get_ex_data(RAND_DRBG* drbg, int idx);
 		
 		/*
@@ -426,7 +621,12 @@ namespace Beef_Net.OpenSSL
 		public function uint get_nonce_fn(RAND_DRBG* drbg, uint8** pout, int entropy, uint min_len, uint max_len);
 		public function void cleanup_nonce_fn(RAND_DRBG* drbg, uint8* outVal, uint outlen);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RAND_DRBG_set_callbacks")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RAND_DRBG_set_callbacks")
+		]
 		public extern static int set_callbacks(RAND_DRBG* drbg, get_entropy_fn get_entropy, cleanup_entropy_fn cleanup_entropy, get_nonce_fn get_nonce, cleanup_nonce_fn cleanup_nonce);
 	}
 }

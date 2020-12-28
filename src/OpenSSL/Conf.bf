@@ -14,7 +14,12 @@ namespace Beef_Net.OpenSSL
 	[AlwaysInclude]
 	sealed abstract class Conf
 	{
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int ERR_load_CONF_strings();
 		
 		/*
@@ -137,31 +142,86 @@ namespace Beef_Net.OpenSSL
 		public const int MFLAGS_IGNORE_MISSING_FILE = 0x10;
 		public const int MFLAGS_DEFAULT_SECTION     = 0x20;
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CONF_set_default_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CONF_set_default_method")
+		]
 		public extern static int set_default_method(METHOD* meth);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CONF_set_nconf")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CONF_set_nconf")
+		]
 		public extern static void set_nconf(conf_st* conf, lhash_st_CONF_VALUE* hash);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CONF_load")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CONF_load")
+		]
 		public extern static lhash_st_CONF_VALUE* load(lhash_st_CONF_VALUE* conf, char8* file, int* eline);
 #if !OPENSSL_NO_STDIO
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CONF_load_fp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CONF_load_fp")
+		]
 		public extern static lhash_st_CONF_VALUE* load_fp(lhash_st_CONF_VALUE* conf, Platform.BfpFile* fp, int* eline);
 #endif
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CONF_load_bio")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CONF_load_bio")
+		]
 		public extern static lhash_st_CONF_VALUE* load_bio(lhash_st_CONF_VALUE* conf, BIO *bp, int* eline);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CONF_get_section")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CONF_get_section")
+		]
 		public extern static stack_st_CONF_VALUE* get_section(lhash_st_CONF_VALUE* conf, char8* section);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CONF_get_string")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CONF_get_string")
+		]
 		public extern static char8* get_string(lhash_st_CONF_VALUE* conf, char8* group, char8* name);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CONF_get_number")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CONF_get_number")
+		]
 		public extern static int get_number(lhash_st_CONF_VALUE* conf, char8* group, char8* name);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CONF_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CONF_free")
+		]
 		public extern static void free(lhash_st_CONF_VALUE* conf);
 #if !OPENSSL_NO_STDIO
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CONF_dump_fp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CONF_dump_fp")
+		]
 		public extern static int dump_fp(lhash_st_CONF_VALUE* conf, Platform.BfpFile* outVal);
 #endif
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CONF_dump_bio")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CONF_dump_bio")
+		]
 		public extern static int dump_bio(lhash_st_CONF_VALUE* conf, BIO.bio_st* outVal);
 
 		/* New conf code.  The semantics are different from the functions above. If that wasn't the case, the above functions would have been replaced */
@@ -175,100 +235,285 @@ namespace Beef_Net.OpenSSL
 		public typealias CONF = conf_st;
 
 		/* Module functions */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CONF_modules_load")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CONF_modules_load")
+		]
 		public extern static int modules_load(conf_st* cnf, char8* appname, uint flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CONF_modules_load_file")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CONF_modules_load_file")
+		]
 		public extern static int modules_load_file(char8* filename, char8* appname, uint flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CONF_modules_unload")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CONF_modules_unload")
+		]
 		public extern static void modules_unload(int all);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CONF_modules_finish")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CONF_modules_finish")
+		]
 		public extern static void modules_finish();
 		[Inline, Obsolete("No longer available, no-op", true)]
 		public static void modules_free() { while(false) continue; }
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CONF_module_add")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CONF_module_add")
+		]
 		public extern static int module_add(char8* name, conf_init_func* ifunc, conf_finish_func* ffunc);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CONF_imodule_get_name")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CONF_imodule_get_name")
+		]
 		public extern static char8* imodule_get_name(IMODULE* md);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CONF_imodule_get_value")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CONF_imodule_get_value")
+		]
 		public extern static char8* imodule_get_value(IMODULE* md);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CONF_imodule_get_usr_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CONF_imodule_get_usr_data")
+		]
 		public extern static void* imodule_get_usr_data(IMODULE* md);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CONF_imodule_set_usr_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CONF_imodule_set_usr_data")
+		]
 		public extern static void imodule_set_usr_data(IMODULE* md, void* usr_data);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CONF_imodule_get_module")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CONF_imodule_get_module")
+		]
 		public extern static MODULE* imodule_get_module(IMODULE* md);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CONF_imodule_get_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CONF_imodule_get_flags")
+		]
 		public extern static uint imodule_get_flags(IMODULE* md);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CONF_imodule_set_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CONF_imodule_set_flags")
+		]
 		public extern static void imodule_set_flags(IMODULE* md, uint flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CONF_module_get_usr_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CONF_module_get_usr_data")
+		]
 		public extern static void* module_get_usr_data(MODULE* pmod);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CONF_module_set_usr_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CONF_module_set_usr_data")
+		]
 		public extern static void module_set_usr_data(MODULE* pmod, void* usr_data);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CONF_get1_default_config_file")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CONF_get1_default_config_file")
+		]
 		public extern static char8* get1_default_config_file();
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CONF_parse_list")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CONF_parse_list")
+		]
 		public extern static int parse_list(char8* list, int sep, int nospc, function int(char8* elem, int len, void* usr) list_cb, void* arg);
 
 		/* Up until OpenSSL 0.9.5a, this was new_section */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("_CONF_new_section")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("_CONF_new_section")
+		]
 		public extern static VALUE* new_section(conf_st* conf, char8* section);
 		/* Up until OpenSSL 0.9.5a, this was get_section */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("_CONF_get_section")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("_CONF_get_section")
+		]
 		public extern static VALUE* get_section(conf_st* conf, char8* section);
 		/* Up until OpenSSL 0.9.5a, this was CONF_get_section */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("_CONF_get_section_values")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("_CONF_get_section_values")
+		]
 		public extern static stack_st_CONF_VALUE* get_section_values(conf_st* conf, char8* section);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("_CONF_add_string")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("_CONF_add_string")
+		]
 		public extern static int add_string(conf_st* conf, VALUE* section, VALUE* value);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("_CONF_get_string")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("_CONF_get_string")
+		]
 		public extern static char8* get_string(conf_st* conf, char8* section, char8* name);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("_CONF_get_number")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("_CONF_get_number")
+		]
 		public extern static int get_number(conf_st* conf, char8* section, char8* name);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("_CONF_new_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("_CONF_new_data")
+		]
 		public extern static int new_data(conf_st* conf);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("_CONF_free_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("_CONF_free_data")
+		]
 		public extern static void free_data(conf_st* conf);
 	}
 
 	[AlwaysInclude]
 	sealed abstract class NConf
 	{
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("NCONF_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("NCONF_new")
+		]
 		public extern static Conf.conf_st* new_(Conf.METHOD* meth);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("NCONF_default")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("NCONF_default")
+		]
 		public extern static Conf.METHOD* default_();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("NCONF_WIN32")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("NCONF_WIN32")
+		]
 		public extern static Conf.METHOD* WIN32();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("NCONF_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("NCONF_free")
+		]
 		public extern static void free(Conf.conf_st* conf);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("NCONF_free_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("NCONF_free_data")
+		]
 		public extern static void free_data(Conf.conf_st* conf);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("NCONF_load")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("NCONF_load")
+		]
 		public extern static int load(Conf.conf_st* conf, char8* file, int* eline);
 #if !OPENSSL_NO_STDIO
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("NCONF_load_fp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("NCONF_load_fp")
+		]
 		public extern static int load_fp(Conf.conf_st* conf, Platform.BfpFile* fp, int* eline);
 #endif
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("NCONF_load_bio")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("NCONF_load_bio")
+		]
 		public extern static int load_bio(Conf.conf_st* conf, BIO.bio_st* bp, int* eline);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("NCONF_get_section")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("NCONF_get_section")
+		]
 		public extern static Conf.stack_st_CONF_VALUE* get_section(Conf.conf_st* conf, char8* section);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("NCONF_get_string")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("NCONF_get_string")
+		]
 		public extern static char8* get_string(Conf.conf_st* conf, char8* group, char8* name);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("NCONF_get_number_e")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("NCONF_get_number_e")
+		]
 		public extern static int get_number_e(Conf.conf_st* conf, char8* group, char8* name, int* result);
 #if !OPENSSL_NO_STDIO
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("NCONF_dump_fp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("NCONF_dump_fp")
+		]
 		public extern static int dump_fp(Conf.conf_st* conf, Platform.BfpFile* outVal);
 #endif
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("NCONF_dump_bio")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("NCONF_dump_bio")
+		]
 		public extern static int dump_bio(Conf.conf_st* conf, BIO.bio_st* outVal);
 
 		[Inline]

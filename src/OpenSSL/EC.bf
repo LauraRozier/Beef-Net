@@ -15,7 +15,12 @@ namespace Beef_Net.OpenSSL
 	sealed abstract class EC
 	{
 #if !OPENSSL_NO_EC
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int ERR_load_EC_strings();
 		
 		/*
@@ -382,19 +387,15 @@ namespace Beef_Net.OpenSSL
 		     *        + ...
 		     *        + points[num-1] * scalars[num-1].
 		     *
-		     * For a fixed point multiplication (scalar != NULL, num == 0) or a variable point multiplication (scalar == NULL, num == 1),
-		     * mul() must use a constant time algorithm: in both cases callers should provide an input scalar (either scalar or scalars[0])
-		     * in the range [0, ec_group_order); for robustness, implementers should handle the case when the scalar has not been reduced, but
+		     * For a fixed point multiplication (scalar != NULL, num == 0) or a variable point multiplication (scalar == NULL, num == 1), mul() must use a constant time algorithm:
+			 * in both cases callers should provide an input scalar (either scalar or scalars[0]) in the range [0, ec_group_order); for robustness, implementers should handle the case when the scalar has not been reduced, but
 		     * may treat it as an unusual input, without any constant-timeness guarantee.
 		     */
 		    public function int(GROUP* group, POINT* r, BN.BIGNUM* scalar, int num, POINT*[] points, BN.BIGNUM*[] scalars, BN.CTX*) mul;
 		    public function int(GROUP* group, BN.CTX*) precompute_mult;
 		    public function int(GROUP* group) have_precompute_mult;
 		    /* internal functions */
-		    /*
-		     * 'field_mul', 'field_sqr', and 'field_div' can be used by 'add' and 'dbl' so that the same implementations of point operations can be used
-		     * with different optimized implementations of expensive field operations:
-		     */
+		    /* 'field_mul', 'field_sqr', and 'field_div' can be used by 'add' and 'dbl' so that the same implementations of point operations can be used with different optimized implementations of expensive field operations: */
 		    public function int(GROUP*, BN.BIGNUM* r, BN.BIGNUM* a, BN.BIGNUM* b, BN.CTX*) field_mul;
 		    public function int(GROUP*, BN.BIGNUM* r, BN.BIGNUM* a, BN.CTX*) field_sqr;
 		    public function int(GROUP*, BN.BIGNUM* r, BN.BIGNUM* a, BN.BIGNUM* b, BN.CTX*) field_div;
@@ -446,14 +447,13 @@ namespace Beef_Net.OpenSSL
 		    /* Field specification. For curves over GF(p), this is the modulus; for curves over GF(2^m), this is the irreducible polynomial defining the field. */
 		    public BN.BIGNUM* field;
 		    /*
-		     * Field specification for curves over GF(2^m). The irreducible f(t) is then of the form: t^poly[0] + t^poly[1] + ... + t^poly[k] where m =
-		     * poly[0] > poly[1] > ... > poly[k] = 0. The array is terminated with poly[k+1]=-1. All elliptic curve irreducibles have at most 5 non-zero terms.
+		     * Field specification for curves over GF(2^m). The irreducible f(t) is then of the form: t^poly[0] + t^poly[1] + ... + t^poly[k] where m = poly[0] > poly[1] > ... > poly[k] = 0.
+			 * The array is terminated with poly[k+1]=-1. All elliptic curve irreducibles have at most 5 non-zero terms.
 		     */
 		    public int[6] poly;
 		    /*
-		     * Curve coefficients. (Here the assumption is that BIGNUMs can be used or abused for all kinds of fields, not just GF(p).) For characteristic
-		     * > 3, the curve is defined by a Weierstrass equation of the form y^2 = x^3 + a*x + b. For characteristic 2, the curve is defined by an
-		     * equation of the form y^2 + x*y = x^3 + a*x^2 + b.
+		     * Curve coefficients. (Here the assumption is that BIGNUMs can be used or abused for all kinds of fields, not just GF(p).) For characteristic > 3, the curve is defined by a Weierstrass equation
+			 * of the form y^2 = x^3 + a*x + b. For characteristic 2, the curve is defined by an equation of the form y^2 + x*y = x^3 + a*x^2 + b.
 		     */
 		    public BN.BIGNUM* a;
 			public BN.BIGNUM* b;
@@ -617,38 +617,68 @@ namespace Beef_Net.OpenSSL
 		/** Returns the basic GFp ec methods which provides the basis for the optimized methods.
 		 *  \return  METHOD object
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GFp_simple_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GFp_simple_method")
+		]
 		public static extern METHOD* GFp_simple_method();
 
 		/** Returns GFp methods using montgomery multiplication.
 		 *  \return  METHOD object
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GFp_mont_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GFp_mont_method")
+		]
 		public static extern METHOD* GFp_mont_method();
 
 		/** Returns GFp methods using optimized methods for NIST recommended curves
 		 *  \return  METHOD object
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GFp_nist_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GFp_nist_method")
+		]
 		public static extern METHOD* GFp_nist_method();
 
 	#if !OPENSSL_NO_EC_NISTP_64_GCC_128
 		/** Returns 64-bit optimized methods for nistp224
 		 *  \return  METHOD object
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GFp_nistp224_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GFp_nistp224_method")
+		]
 		public static extern METHOD* GFp_nistp224_method();
 
 		/** Returns 64-bit optimized methods for nistp256
 		 *  \return  METHOD object
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GFp_nistp256_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GFp_nistp256_method")
+		]
 		public static extern METHOD* GFp_nistp256_method();
 
 		/** Returns 64-bit optimized methods for nistp521
 		 *  \return  METHOD object
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GFp_nistp521_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GFp_nistp521_method")
+		]
 		public static extern METHOD* GFp_nistp521_method();
 	#endif
 
@@ -660,7 +690,12 @@ namespace Beef_Net.OpenSSL
 		/** Returns the basic GF2m ec method
 		 *  \return  METHOD object
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GF2m_simple_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GF2m_simple_method")
+		]
 		public static extern METHOD* GF2m_simple_method();
 
 	#endif
@@ -673,19 +708,34 @@ namespace Beef_Net.OpenSSL
 		 *  \param   meth  METHOD to use
 		 *  \return  newly created EC_GROUP object or NULL in case of an error.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_new")
+		]
 		public static extern GROUP* GROUP_new(METHOD* meth);
 
 		/** Frees a GROUP object
 		 *  \param  group  GROUP object to be freed.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_free")
+		]
 		public static extern void GROUP_free(GROUP* group);
 
 		/** Clears and frees a GROUP object
 		 *  \param  group  GROUP object to be cleared and freed.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_clear_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_clear_free")
+		]
 		public static extern void GROUP_clear_free(GROUP* group);
 
 		/** Copies GROUP objects. Note: both GROUPs must use the same METHOD.
@@ -693,28 +743,48 @@ namespace Beef_Net.OpenSSL
 		 *  \param  src  source GROUP object
 		 *  \return 1 on success and 0 if an error occurred.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_copy")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_copy")
+		]
 		public static extern int GROUP_copy(GROUP* dst, GROUP* src);
 
 		/** Creates a new GROUP object and copies the copies the content form src to the newly created KEY object
 		 *  \param  src  source GROUP object
 		 *  \return newly created GROUP object or NULL in case of an error.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_dup")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_dup")
+		]
 		public static extern GROUP* GROUP_dup(GROUP* src);
 
 		/** Returns the METHOD of the GROUP object.
 		 *  \param  group  GROUP object
 		 *  \return METHOD used in this GROUP object.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_method_of")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_method_of")
+		]
 		public static extern METHOD* GROUP_method_of(GROUP* group);
 
 		/** Returns the field type of the METHOD.
 		 *  \param  meth  METHOD object
 		 *  \return NID of the underlying field type OID.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_METHOD_get_field_type")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_METHOD_get_field_type")
+		]
 		public static extern int METHOD_get_field_type(METHOD* meth);
 
 		/** Sets the generator and its order/cofactor of a GROUP object.
@@ -724,21 +794,36 @@ namespace Beef_Net.OpenSSL
 		 *  \param  cofactor   the index of the sub-group generated by the generator in the group of all points on the elliptic curve.
 		 *  \return 1 on success and 0 if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_set_generator")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_set_generator")
+		]
 		public static extern int GROUP_set_generator(GROUP* group, POINT* generator, BN.BIGNUM* order, BN.BIGNUM* cofactor);
 
 		/** Returns the generator of a GROUP object.
 		 *  \param  group  GROUP object
 		 *  \return the currently used generator (possibly NULL).
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_get0_generator")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_get0_generator")
+		]
 		public static extern POINT* GROUP_get0_generator(GROUP* group);
 
 		/** Returns the montgomery data for order(Generator)
 		 *  \param  group  GROUP object
 		 *  \return the currently used montgomery data (possibly NULL).
 		*/
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_get_mont_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_get_mont_data")
+		]
 		public static extern BN.MONT_CTX* GROUP_get_mont_data(GROUP* group);
 
 		/** Gets the order of a GROUP
@@ -747,21 +832,36 @@ namespace Beef_Net.OpenSSL
 		 *  \param  ctx    unused
 		 *  \return 1 on success and 0 if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_get_order")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_get_order")
+		]
 		public static extern int GROUP_get_order(GROUP* group, BN.BIGNUM* order, BN.CTX* ctx);
 
 		/** Gets the order of an GROUP
 		 *  \param  group  GROUP object
 		 *  \return the group order
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_get0_order")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_get0_order")
+		]
 		public static extern BN.BIGNUM* GROUP_get0_order(GROUP* group);
 
 		/** Gets the number of bits of the order of an GROUP
 		 *  \param  group  GROUP object
 		 *  \return number of bits of group order.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_order_bits")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_order_bits")
+		]
 		public static extern int GROUP_order_bits(GROUP* group);
 
 		/** Gets the cofactor of a GROUP
@@ -770,45 +870,100 @@ namespace Beef_Net.OpenSSL
 		 *  \param  ctx       unused
 		 *  \return 1 on success and 0 if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_get_cofactor")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_get_cofactor")
+		]
 		public static extern int GROUP_get_cofactor(GROUP* group, BN.BIGNUM* cofactor, BN.CTX* ctx);
 
 		/** Gets the cofactor of an GROUP
 		 *  \param  group  GROUP object
 		 *  \return the group cofactor
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_get0_cofactor")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_get0_cofactor")
+		]
 		public static extern BN.BIGNUM* GROUP_get0_cofactor(GROUP* group);
 
 		/** Sets the name of a GROUP object
 		 *  \param  group  GROUP object
 		 *  \param  nid    NID of the curve name OID
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_set_curve_name")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_set_curve_name")
+		]
 		public static extern void GROUP_set_curve_name(GROUP* group, int nid);
 
 		/** Returns the curve name of a GROUP object
 		 *  \param  group  GROUP object
 		 *  \return NID of the curve name OID or 0 if not set.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_get_curve_name")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_get_curve_name")
+		]
 		public static extern int GROUP_get_curve_name(GROUP* group);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_set_asn1_flag")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_set_asn1_flag")
+		]
 		public static extern void GROUP_set_asn1_flag(GROUP* group, int flag);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_get_asn1_flag")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_get_asn1_flag")
+		]
 		public static extern int GROUP_get_asn1_flag(GROUP* group);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_set_point_conversion_form")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_set_point_conversion_form")
+		]
 		public static extern void GROUP_set_point_conversion_form(GROUP* group, point_conversion_form_t form);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_get_point_conversion_form")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_get_point_conversion_form")
+		]
 		public static extern point_conversion_form_t GROUP_get_point_conversion_form(GROUP* group);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_get0_seed")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_get0_seed")
+		]
 		public static extern uint8* GROUP_get0_seed(GROUP* group);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_get_seed_len")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_get_seed_len")
+		]
 		public static extern int GROUP_get_seed_len(GROUP* group);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_set_seed")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_set_seed")
+		]
 		public static extern int GROUP_set_seed(GROUP* group, uint8* p, int len);
 
 		/** Sets the parameters of a ec curve defined by y^2 = x^3 + a*x + b (for GFp) or y^2 + x*y = x^3 + a*x^2 + b (for GF2m)
@@ -819,7 +974,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  ctx    BN.CTX object (optional)
 		 *  \return 1 on success and 0 if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_set_curve")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_set_curve")
+		]
 		public static extern int GROUP_set_curve(GROUP* group, BN.BIGNUM* p, BN.BIGNUM* a, BN.BIGNUM* b, BN.CTX* ctx);
 
 		/** Gets the parameters of the ec curve defined by y^2 = x^3 + a*x + b (for GFp) or y^2 + x*y = x^3 + a*x^2 + b (for GF2m)
@@ -830,7 +990,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  ctx    BN.CTX object (optional)
 		 *  \return 1 on success and 0 if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_get_curve")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_get_curve")
+		]
 		public static extern int GROUP_get_curve(GROUP* group, BN.BIGNUM* p, BN.BIGNUM* a, BN.BIGNUM* b, BN.CTX* ctx);
 
 		/** Sets the parameters of an ec curve. Synonym for GROUP_set_curve
@@ -841,7 +1006,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  ctx    BN.CTX object (optional)
 		 *  \return 1 on success and 0 if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_set_curve_GFp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_set_curve_GFp")
+		]
 		public static extern int GROUP_set_curve_GFp(GROUP* group, BN.BIGNUM* p, BN.BIGNUM* a, BN.BIGNUM* b, BN.CTX* ctx);
 
 		/** Gets the parameters of an ec curve. Synonym for GROUP_get_curve
@@ -852,7 +1022,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  ctx    BN.CTX object (optional)
 		 *  \return 1 on success and 0 if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_get_curve_GFp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_get_curve_GFp")
+		]
 		public static extern int GROUP_get_curve_GFp(GROUP* group, BN.BIGNUM* p, BN.BIGNUM* a, BN.BIGNUM* b, BN.CTX* ctx);
 
 	#if !OPENSSL_NO_EC2M
@@ -864,7 +1039,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  ctx    BN.CTX object (optional)
 		 *  \return 1 on success and 0 if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_set_curve_GF2m")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_set_curve_GF2m")
+		]
 		public static extern int GROUP_set_curve_GF2m(GROUP* group, BN.BIGNUM* p, BN.BIGNUM* a, BN.BIGNUM* b, BN.CTX* ctx);
 
 		/** Gets the parameters of an ec curve. Synonym for GROUP_get_curve
@@ -875,14 +1055,24 @@ namespace Beef_Net.OpenSSL
 		 *  \param  ctx    BN.CTX object (optional)
 		 *  \return 1 on success and 0 if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_get_curve_GF2m")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_get_curve_GF2m")
+		]
 		public static extern int GROUP_get_curve_GF2m(GROUP* group, BN.BIGNUM* p, BN.BIGNUM* a, BN.BIGNUM* b, BN.CTX* ctx);
 	#endif
 		/** Returns the number of bits needed to represent a field element
 		 *  \param  group  GROUP object
 		 *  \return number of bits needed to represent a field element
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_get_degree")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_get_degree")
+		]
 		public static extern int GROUP_get_degree(GROUP* group);
 
 		/** Checks whether the parameter in the GROUP define a valid ec group
@@ -890,7 +1080,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  ctx    BN.CTX object (optional)
 		 *  \return 1 if group is a valid ec group and 0 otherwise
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_check")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_check")
+		]
 		public static extern int GROUP_check(GROUP* group, BN.CTX* ctx);
 
 		/** Checks whether the discriminant of the elliptic curve is zero or not
@@ -898,7 +1093,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  ctx    BN.CTX object (optional)
 		 *  \return 1 if the discriminant is not zero and 0 otherwise
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_check_discriminant")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_check_discriminant")
+		]
 		public static extern int GROUP_check_discriminant(GROUP* group, BN.CTX* ctx);
 
 		/** Compares two GROUP objects
@@ -907,7 +1107,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  ctx  BN.CTX object (optional)
 		 *  \return 0 if the groups are equal, 1 if not, or -1 on error
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_cmp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_cmp")
+		]
 		public static extern int GROUP_cmp(GROUP* a, GROUP* b, BN.CTX* ctx);
 
 		/*
@@ -921,7 +1126,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  ctx  BN.CTX object (optional)
 		 *  \return newly created GROUP object with the specified parameters
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_new_curve_GFp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_new_curve_GFp")
+		]
 		public static extern GROUP* GROUP_new_curve_GFp(BN.BIGNUM* p, BN.BIGNUM* a, BN.BIGNUM* b, BN.CTX* ctx);
 	#if !OPENSSL_NO_EC2M
 		/** Creates a new GROUP object with the specified parameters defined over GF2m (defined by the equation y^2 + x*y = x^3 + a*x^2 + b)
@@ -931,7 +1141,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  ctx  BN.CTX object (optional)
 		 *  \return newly created GROUP object with the specified parameters
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_new_curve_GF2m")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_new_curve_GF2m")
+		]
 		public static extern GROUP* GROUP_new_curve_GF2m(BN.BIGNUM* p, BN.BIGNUM* a, BN.BIGNUM* b, BN.CTX* ctx);
 	#endif
 
@@ -939,14 +1154,24 @@ namespace Beef_Net.OpenSSL
 		 *  \param  nid  NID of the OID of the curve name
 		 *  \return newly created GROUP object with specified curve or NULL if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_new_by_curve_name")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_new_by_curve_name")
+		]
 		public static extern GROUP* GROUP_new_by_curve_name(int nid);
 
 		/** Creates a new GROUP object from an ECPARAMETERS object
 		 *  \param  params  pointer to the ECPARAMETERS object
 		 *  \return newly created GROUP object with specified curve or NULL if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_new_from_ecparameters")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_new_from_ecparameters")
+		]
 		public static extern GROUP* GROUP_new_from_ecparameters(ECPARAMETERS* params_);
 
 		/** Creates an ECPARAMETERS object for the given GROUP object.
@@ -954,14 +1179,24 @@ namespace Beef_Net.OpenSSL
 		 *  \param  params  pointer to an existing ECPARAMETERS object or NULL
 		 *  \return pointer to the new ECPARAMETERS object or NULL if an error occurred.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_get_ecparameters")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_get_ecparameters")
+		]
 		public static extern ECPARAMETERS* GROUP_get_ecparameters(GROUP* group, ECPARAMETERS* params_);
 
 		/** Creates a new GROUP object from an ECPKPARAMETERS object
 		 *  \param  params  pointer to an existing ECPKPARAMETERS object, or NULL
 		 *  \return newly created GROUP object with specified curve, or NULL if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_new_from_ecpkparameters")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_new_from_ecpkparameters")
+		]
 		public static extern GROUP* GROUP_new_from_ecpkparameters(ECPKPARAMETERS* params_);
 
 		/** Creates an ECPKPARAMETERS object for the given GROUP object.
@@ -969,7 +1204,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  params  pointer to an existing ECPKPARAMETERS object or NULL
 		 *  \return pointer to the new ECPKPARAMETERS object or NULL if an error occurred.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_get_ecpkparameters")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_get_ecpkparameters")
+		]
 		public static extern ECPKPARAMETERS* GROUP_get_ecpkparameters(GROUP* group, ECPKPARAMETERS* params_);
 
 		/********************************************************************/
@@ -986,12 +1226,27 @@ namespace Beef_Net.OpenSSL
 		 * builtin_curves(EC_builtin_curve *r, int size) returns number of all available curves or zero if a error occurred. In case r is not zero,
 		 * nitems builtin_curve structures are filled with the data of the first nitems internal groups
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_get_builtin_curves")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_get_builtin_curves")
+		]
 		public static extern int get_builtin_curves(builtin_curve* r, int nitems);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_curve_nid2nist")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_curve_nid2nist")
+		]
 		public static extern char8* curve_nid2nist(int nid);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_curve_nist2nid")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_curve_nist2nid")
+		]
 		public static extern int curve_nist2nid(char8* name);
 
 		/********************************************************************/
@@ -1002,19 +1257,34 @@ namespace Beef_Net.OpenSSL
 		 *  \param  group  GROUP the underlying GROUP object
 		 *  \return newly created POINT object or NULL if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_POINT_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_POINT_new")
+		]
 		public static extern POINT* POINT_new(GROUP* group);
 
 		/** Frees a POINT object
 		 *  \param  point  POINT object to be freed
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_POINT_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_POINT_free")
+		]
 		public static extern void POINT_free(POINT* point);
 
 		/** Clears and frees a POINT object
 		 *  \param  point  POINT object to be cleared and freed
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_POINT_clear_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_POINT_clear_free")
+		]
 		public static extern void POINT_clear_free(POINT* point);
 
 		/** Copies POINT object
@@ -1022,7 +1292,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  src  source POINT object
 		 *  \return 1 on success and 0 if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_POINT_copy")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_POINT_copy")
+		]
 		public static extern int POINT_copy(POINT* dst, POINT* src);
 
 		/** Creates a new POINT object and copies the content of the supplied POINT
@@ -1030,14 +1305,24 @@ namespace Beef_Net.OpenSSL
 		 *  \param  group  underlying the GROUP object
 		 *  \return newly created POINT object or NULL if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_POINT_dup")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_POINT_dup")
+		]
 		public static extern POINT* POINT_dup(POINT* src, GROUP* group);
 
 		/** Returns the METHOD used in POINT object
 		 *  \param  point  POINT object
 		 *  \return the METHOD used
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_POINT_method_of")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_POINT_method_of")
+		]
 		public static extern METHOD* POINT_method_of(POINT* point);
 
 		/** Sets a point to infinity (neutral element)
@@ -1045,7 +1330,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  point  POINT to set to infinity
 		 *  \return 1 on success and 0 if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_POINT_set_to_infinity")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_POINT_set_to_infinity")
+		]
 		public static extern int POINT_set_to_infinity(GROUP* group, POINT* point);
 
 		/** Sets the jacobian projective coordinates of a POINT over GFp
@@ -1057,7 +1347,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  ctx    BN.CTX object (optional)
 		 *  \return 1 on success and 0 if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_POINT_set_Jprojective_coordinates_GFp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_POINT_set_Jprojective_coordinates_GFp")
+		]
 		public static extern int POINT_set_Jprojective_coordinates_GFp(GROUP* group, POINT* p, BN.BIGNUM* x, BN.BIGNUM* y, BN.BIGNUM* z, BN.CTX* ctx);
 
 		/** Gets the jacobian projective coordinates of a POINT over GFp
@@ -1069,7 +1364,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  ctx    BN.CTX object (optional)
 		 *  \return 1 on success and 0 if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_POINT_get_Jprojective_coordinates_GFp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_POINT_get_Jprojective_coordinates_GFp")
+		]
 		public static extern int POINT_get_Jprojective_coordinates_GFp(GROUP* group, POINT* p, BN.BIGNUM* x, BN.BIGNUM* y, BN.BIGNUM* z, BN.CTX* ctx);
 
 		/** Sets the affine coordinates of an POINT
@@ -1080,7 +1380,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  ctx    BN.CTX object (optional)
 		 *  \return 1 on success and 0 if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_POINT_set_affine_coordinates")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_POINT_set_affine_coordinates")
+		]
 		public static extern int POINT_set_affine_coordinates(GROUP* group, POINT* p, BN.BIGNUM* x, BN.BIGNUM* y, BN.CTX* ctx);
 
 		/** Gets the affine coordinates of an POINT.
@@ -1091,7 +1396,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  ctx    BN.CTX object (optional)
 		 *  \return 1 on success and 0 if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_POINT_get_affine_coordinates")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_POINT_get_affine_coordinates")
+		]
 		public static extern int POINT_get_affine_coordinates(GROUP* group, POINT* p, BN.BIGNUM* x, BN.BIGNUM* y, BN.CTX* ctx);
 
 		/** Sets the affine coordinates of an POINT. A synonym of POINT_set_affine_coordinates
@@ -1102,7 +1412,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  ctx    BN.CTX object (optional)
 		 *  \return 1 on success and 0 if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_POINT_set_affine_coordinates_GFp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_POINT_set_affine_coordinates_GFp")
+		]
 		public static extern int POINT_set_affine_coordinates_GFp(GROUP* group, POINT* p, BN.BIGNUM* x, BN.BIGNUM* y, BN.CTX* ctx);
 
 		/** Gets the affine coordinates of an POINT. A synonym of POINT_get_affine_coordinates
@@ -1113,7 +1428,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  ctx    BN.CTX object (optional)
 		 *  \return 1 on success and 0 if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_POINT_get_affine_coordinates_GFp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_POINT_get_affine_coordinates_GFp")
+		]
 		public static extern int POINT_get_affine_coordinates_GFp(GROUP* group, POINT* p, BN.BIGNUM* x, BN.BIGNUM* y, BN.CTX* ctx);
 
 		/** Sets the x9.62 compressed coordinates of a POINT
@@ -1124,7 +1444,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  ctx    BN.CTX object (optional)
 		 *  \return 1 on success and 0 if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_POINT_set_compressed_coordinates")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_POINT_set_compressed_coordinates")
+		]
 		public static extern int POINT_set_compressed_coordinates(GROUP* group, POINT* p, BN.BIGNUM* x, int y_bit, BN.CTX* ctx);
 
 		/** Sets the x9.62 compressed coordinates of a POINT. A synonym of POINT_set_compressed_coordinates
@@ -1135,7 +1460,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  ctx    BN.CTX object (optional)
 		 *  \return 1 on success and 0 if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_POINT_set_compressed_coordinates_GFp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_POINT_set_compressed_coordinates_GFp")
+		]
 		public static extern int POINT_set_compressed_coordinates_GFp(GROUP* group, POINT* p, BN.BIGNUM* x, int y_bit, BN.CTX* ctx);
 	#if !OPENSSL_NO_EC2M
 		/** Sets the affine coordinates of an POINT. A synonym of POINT_set_affine_coordinates
@@ -1146,7 +1476,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  ctx    BN.CTX object (optional)
 		 *  \return 1 on success and 0 if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_POINT_set_affine_coordinates_GF2m")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_POINT_set_affine_coordinates_GF2m")
+		]
 		public static extern int POINT_set_affine_coordinates_GF2m(GROUP* group, POINT* p, BN.BIGNUM* x, BN.BIGNUM* y, BN.CTX* ctx);
 
 		/** Gets the affine coordinates of an POINT. A synonym of POINT_get_affine_coordinates
@@ -1157,7 +1492,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  ctx    BN.CTX object (optional)
 		 *  \return 1 on success and 0 if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_POINT_get_affine_coordinates_GF2m")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_POINT_get_affine_coordinates_GF2m")
+		]
 		public static extern int POINT_get_affine_coordinates_GF2m(GROUP* group, POINT* p, BN.BIGNUM* x, BN.BIGNUM* y, BN.CTX* ctx);
 
 		/** Sets the x9.62 compressed coordinates of a POINT. A synonym of POINT_set_compressed_coordinates
@@ -1168,7 +1508,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  ctx    BN.CTX object (optional)
 		 *  \return 1 on success and 0 if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_POINT_set_compressed_coordinates_GF2m")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_POINT_set_compressed_coordinates_GF2m")
+		]
 		public static extern int POINT_set_compressed_coordinates_GF2m(GROUP* group, POINT* p, BN.BIGNUM* x, int y_bit, BN.CTX* ctx);
 	#endif
 		/** Encodes a POINT object to a octet string
@@ -1180,7 +1525,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  ctx    BN.CTX object (optional)
 		 *  \return the length of the encoded octet string or 0 if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_POINT_point2oct")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_POINT_point2oct")
+		]
 		public static extern int POINT_point2oct(GROUP* group, POINT* p, point_conversion_form_t form, uint8* buf, int len, BN.CTX* ctx);
 
 		/** Decodes a POINT from a octet string
@@ -1191,7 +1541,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  ctx    BN.CTX object (optional)
 		 *  \return 1 on success and 0 if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_POINT_oct2point")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_POINT_oct2point")
+		]
 		public static extern int POINT_oct2point(GROUP* group, POINT* p, uint8* buf, int len, BN.CTX* ctx);
 
 		/** Encodes an POINT object to an allocated octet string
@@ -1202,17 +1557,42 @@ namespace Beef_Net.OpenSSL
 		 *  \param  ctx    BN.CTX object (optional)
 		 *  \return the length of the encoded octet string or 0 if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_POINT_point2buf")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_POINT_point2buf")
+		]
 		public static extern int POINT_point2buf(GROUP* group, POINT* point, point_conversion_form_t form, uint8** pbuf, BN.CTX* ctx);
 
 		/* other interfaces to point2oct/oct2point: */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_POINT_point2bn")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_POINT_point2bn")
+		]
 		public static extern BN.BIGNUM* POINT_point2bn(GROUP* group, POINT* point, point_conversion_form_t form, BN.BIGNUM* pbuf, BN.CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_POINT_bn2point")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_POINT_bn2point")
+		]
 		public static extern POINT* POINT_bn2point(GROUP* group, BN.BIGNUM* pbuf, POINT* point, BN.CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_POINT_point2hex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_POINT_point2hex")
+		]
 		public static extern char8* POINT_point2hex(GROUP* group, POINT* point, point_conversion_form_t form, BN.CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_POINT_hex2point")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_POINT_hex2point")
+		]
 		public static extern POINT* POINT_hex2point(GROUP* group, char8* pbuf, POINT* point, BN.CTX* ctx);
 
 		/********************************************************************/
@@ -1227,7 +1607,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  ctx    BN.CTX object (optional)
 		 *  \return 1 on success and 0 if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_POINT_add")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_POINT_add")
+		]
 		public static extern int POINT_add(GROUP* group, POINT* r, POINT* a, POINT* b, BN.CTX* ctx);
 
 		/** Computes the double of a POINT
@@ -1237,7 +1622,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  ctx    BN.CTX object (optional)
 		 *  \return 1 on success and 0 if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_POINT_dbl")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_POINT_dbl")
+		]
 		public static extern int POINT_dbl(GROUP* group, POINT* r, POINT* a, BN.CTX* ctx);
 
 		/** Computes the inverse of a POINT
@@ -1246,7 +1636,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  ctx    BN.CTX object (optional)
 		 *  \return 1 on success and 0 if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_POINT_invert")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_POINT_invert")
+		]
 		public static extern int POINT_invert(GROUP* group, POINT* a, BN.CTX* ctx);
 
 		/** Checks whether the point is the neutral element of the group
@@ -1254,7 +1649,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  p      POINT object
 		 *  \return 1 if the point is the neutral element and 0 otherwise
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_POINT_is_at_infinity")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_POINT_is_at_infinity")
+		]
 		public static extern int POINT_is_at_infinity(GROUP* group, POINT* p);
 
 		/** Checks whether the point is on the curve
@@ -1263,7 +1663,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  ctx    BN.CTX object (optional)
 		 *  \return 1 if the point is on the curve, 0 if not, or -1 on error
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_POINT_is_on_curve")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_POINT_is_on_curve")
+		]
 		public static extern int POINT_is_on_curve(GROUP* group, POINT* point, BN.CTX* ctx);
 
 		/** Compares two POINTs
@@ -1273,12 +1678,27 @@ namespace Beef_Net.OpenSSL
 		 *  \param  ctx    BN.CTX object (optional)
 		 *  \return 1 if the points are not equal, 0 if they are, or -1 on error
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_POINT_cmp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_POINT_cmp")
+		]
 		public static extern int POINT_cmp(GROUP* group, POINT* a, POINT* b, BN.CTX* ctx);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_POINT_make_affine")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_POINT_make_affine")
+		]
 		public static extern int POINT_make_affine(GROUP* group, POINT* point, BN.CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_POINTs_make_affine")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_POINTs_make_affine")
+		]
 		public static extern int POINTs_make_affine(GROUP* group, int num, POINT*[] points, BN.CTX* ctx);
 
 		/** Computes r = generator * n + sum_{i=0}^{num-1} p[i] * m[i]
@@ -1291,7 +1711,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  ctx    BN.CTX object (optional)
 		 *  \return 1 on success and 0 if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_POINTs_mul")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_POINTs_mul")
+		]
 		public static extern int POINTs_mul(GROUP* group, POINT* r, BN.BIGNUM* n, int num, POINT*[] p, BN.BIGNUM*[] m, BN.CTX* ctx);
 
 		/** Computes r = generator * n + q * m
@@ -1303,7 +1728,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  ctx    BN.CTX object (optional)
 		 *  \return 1 on success and 0 if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_POINT_mul")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_POINT_mul")
+		]
 		public static extern int POINT_mul(GROUP* group, POINT* r, BN.BIGNUM* n, POINT* q, BN.BIGNUM* m, BN.CTX* ctx);
 
 		/** Stores multiples of generator for faster point multiplication
@@ -1311,14 +1741,24 @@ namespace Beef_Net.OpenSSL
 		 *  \param  ctx    BN.CTX object (optional)
 		 *  \return 1 on success and 0 if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_precompute_mult")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_precompute_mult")
+		]
 		public static extern int GROUP_precompute_mult(GROUP* group, BN.CTX* ctx);
 
 		/** Reports whether a precomputation has been done
 		 *  \param  group  GROUP object
 		 *  \return 1 if a pre-computation has been done and 0 otherwise
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_have_precompute_mult")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_have_precompute_mult")
+		]
 		public static extern int GROUP_have_precompute_mult(GROUP* group);
 
 		/********************************************************************/
@@ -1326,12 +1766,27 @@ namespace Beef_Net.OpenSSL
 		/********************************************************************/
 
 		/* GROUP_get_basis_type() returns the NID of the basis type used to represent the field elements */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_get_basis_type")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_get_basis_type")
+		]
 		public static extern int GROUP_get_basis_type(GROUP* group);
 	#if !OPENSSL_NO_EC2M
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_get_trinomial_basis")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_get_trinomial_basis")
+		]
 		public static extern int GROUP_get_trinomial_basis(GROUP* group, uint* k);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_GROUP_get_pentanomial_basis")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_GROUP_get_pentanomial_basis")
+		]
 		public static extern int GROUP_get_pentanomial_basis(GROUP* group, uint* k1, uint* k2, uint* k3);
 	#endif
 
@@ -1351,32 +1806,67 @@ namespace Beef_Net.OpenSSL
 		/** Creates a new KEY object.
 		 *  \return KEY object or NULL if an error occurred.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_new")
+		]
 		public static extern KEY* KEY_new();
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_get_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_get_flags")
+		]
 		public static extern int KEY_get_flags(KEY* key);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_set_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_set_flags")
+		]
 		public static extern void KEY_set_flags(KEY* key, int flags);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_clear_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_clear_flags")
+		]
 		public static extern void KEY_clear_flags(KEY* key, int flags);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_decoded_from_explicit_params")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_decoded_from_explicit_params")
+		]
 		public static extern int KEY_decoded_from_explicit_params(KEY* key);
 
 		/** Creates a new KEY object using a named curve as underlying GROUP object.
 		 *  \param  nid  NID of the named curve.
 		 *  \return KEY object or NULL if an error occurred.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_new_by_curve_name")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_new_by_curve_name")
+		]
 		public static extern KEY* KEY_new_by_curve_name(int nid);
 
 		/** Frees a KEY object.
 		 *  \param  key  KEY object to be freed.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_free")
+		]
 		public static extern void KEY_free(KEY* key);
 
 		/** Copies a KEY object.
@@ -1384,35 +1874,60 @@ namespace Beef_Net.OpenSSL
 		 *  \param  src  src KEY object
 		 *  \return dst or NULL if an error occurred.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_copy")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_copy")
+		]
 		public static extern KEY* KEY_copy(KEY* dst, KEY* src);
 
 		/** Creates a new KEY object and copies the content from src to it.
 		 *  \param  src  the source KEY object
 		 *  \return newly created KEY object or NULL if an error occurred.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_dup")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_dup")
+		]
 		public static extern KEY* KEY_dup(KEY* src);
 
 		/** Increases the internal reference count of a KEY object.
 		 *  \param  key  KEY object
 		 *  \return 1 on success and 0 if an error occurred.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_up_ref")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_up_ref")
+		]
 		public static extern int KEY_up_ref(KEY* key);
 
 		/** Returns the Engine.ENGINE object of a KEY object
 		 *  \param  eckey  KEY object
 		 *  \return the Engine.ENGINE object (possibly NULL).
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_get0_engine")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_get0_engine")
+		]
 		public static extern Engine.ENGINE* KEY_get0_engine(KEY* eckey);
 
 		/** Returns the GROUP object of a KEY object
 		 *  \param  key  KEY object
 		 *  \return the GROUP object (possibly NULL).
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_get0_group")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_get0_group")
+		]
 		public static extern GROUP* KEY_get0_group(KEY* key);
 
 		/** Sets the GROUP of a KEY object.
@@ -1420,14 +1935,24 @@ namespace Beef_Net.OpenSSL
 		 *  \param  group  GROUP to use in the KEY object (note: the KEY object will use an own copy of the GROUP).
 		 *  \return 1 on success and 0 if an error occurred.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_set_group")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_set_group")
+		]
 		public static extern int KEY_set_group(KEY* key, GROUP* group);
 
 		/** Returns the private key of a KEY object.
 		 *  \param  key  KEY object
 		 *  \return a BN.BIGNUM with the private key (possibly NULL).
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_get0_private_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_get0_private_key")
+		]
 		public static extern BN.BIGNUM* KEY_get0_private_key(KEY* key);
 
 		/** Sets the private key of a KEY object.
@@ -1435,14 +1960,24 @@ namespace Beef_Net.OpenSSL
 		 *  \param  prv  BN.BIGNUM with the private key (note: the KEY object will use an own copy of the BIGNUM).
 		 *  \return 1 on success and 0 if an error occurred.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_set_private_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_set_private_key")
+		]
 		public static extern int KEY_set_private_key(KEY* key, BN.BIGNUM* prv);
 
 		/** Returns the public key of a KEY object.
 		 *  \param  key  the KEY object
 		 *  \return a POINT object with the public key (possibly NULL)
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_get0_public_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_get0_public_key")
+		]
 		public static extern POINT* KEY_get0_public_key(KEY* key);
 
 		/** Sets the public key of a KEY object.
@@ -1450,28 +1985,68 @@ namespace Beef_Net.OpenSSL
 		 *  \param  pub  POINT object with the public key (note: the KEY object will use an own copy of the POINT object).
 		 *  \return 1 on success and 0 if an error occurred.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_set_public_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_set_public_key")
+		]
 		public static extern int KEY_set_public_key(KEY* key, POINT* pub);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_get_enc_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_get_enc_flags")
+		]
 		public static extern uint KEY_get_enc_flags(KEY* key);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_set_enc_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_set_enc_flags")
+		]
 		public static extern void KEY_set_enc_flags(KEY* eckey, uint flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_get_conv_form")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_get_conv_form")
+		]
 		public static extern point_conversion_form_t KEY_get_conv_form(KEY* key);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_set_conv_form")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_set_conv_form")
+		]
 		public static extern void KEY_set_conv_form(KEY* eckey, point_conversion_form_t cform);
 
 		[Inline]
 		public static int KEY_get_ex_new_index(int l, void* p, Crypto.EX_new newf, Crypto.EX_dup dupf, Crypto.EX_free freef) =>
 			Crypto.get_ex_new_index(Crypto.EX_INDEX_EC_KEY, l, p, newf, dupf, freef);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_set_ex_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_set_ex_data")
+		]
 		public static extern int KEY_set_ex_data(KEY* key, int idx, void* arg);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_get_ex_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_get_ex_data")
+		]
 		public static extern void* KEY_get_ex_data(KEY* key, int idx);
 
 		/* wrapper functions for the underlying GROUP object */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_set_asn1_flag")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_set_asn1_flag")
+		]
 		public static extern void EC_KEY_set_asn1_flag(KEY* eckey, int asn1_flag);
 
 		/** Creates a table of pre-computed multiples of the generator to accelerate further KEY operations.
@@ -1479,28 +2054,48 @@ namespace Beef_Net.OpenSSL
 		 *  \param  ctx  BN.CTX object (optional)
 		 *  \return 1 on success and 0 if an error occurred.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_precompute_mult")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_precompute_mult")
+		]
 		public static extern int KEY_precompute_mult(KEY* key, BN.CTX* ctx);
 
 		/** Creates a new ec private (and optional a new public) key.
 		 *  \param  key  KEY object
 		 *  \return 1 on success and 0 if an error occurred.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_generate_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_generate_key")
+		]
 		public static extern int KEY_generate_key(KEY* key);
 
 		/** Verifies that a private and/or public key is valid.
 		 *  \param  key  the KEY object
 		 *  \return 1 on success and 0 otherwise.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_check_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_check_key")
+		]
 		public static extern int KEY_check_key(KEY* key);
 
 		/** Indicates if an KEY can be used for signing.
 		 *  \param  eckey  the KEY object
 		 *  \return 1 if can can sign and 0 otherwise.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_can_sign")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_can_sign")
+		]
 		public static extern int KEY_can_sign(KEY* eckey);
 
 		/** Sets a public key from affine coordinates performing necessary NIST PKV tests.
@@ -1509,7 +2104,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  y    public key y coordinate
 		 *  \return 1 on success and 0 otherwise.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_set_public_key_affine_coordinates")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_set_public_key_affine_coordinates")
+		]
 		public static extern int KEY_set_public_key_affine_coordinates(KEY* key, BN.BIGNUM* x, BN.BIGNUM* y);
 
 		/** Encodes an KEY public key to an allocated octet string
@@ -1519,7 +2119,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  ctx    BN.CTX object (optional)
 		 *  \return the length of the encoded octet string or 0 if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_key2buf")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_key2buf")
+		]
 		public static extern int KEY_key2buf(KEY* key, point_conversion_form_t form, uint8** pbuf, BN.CTX* ctx);
 
 		/** Decodes a KEY public key from a octet string
@@ -1530,7 +2135,12 @@ namespace Beef_Net.OpenSSL
 		 *  \return 1 on success and 0 if an error occurred
 		 */
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_oct2key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_oct2key")
+		]
 		public static extern int KEY_oct2key(KEY* key, uint8* buf, int len, BN.CTX* ctx);
 
 		/** Decodes an KEY private key from an octet string
@@ -1540,7 +2150,12 @@ namespace Beef_Net.OpenSSL
 		 *  \return 1 on success and 0 if an error occurred
 		 */
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_oct2priv")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_oct2priv")
+		]
 		public static extern int KEY_oct2priv(KEY* key, uint8* buf, int len);
 
 		/** Encodes a KEY private key to an octet string
@@ -1550,7 +2165,12 @@ namespace Beef_Net.OpenSSL
 		 *  \return the length of the encoded octet string or 0 if an error occurred
 		 */
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_priv2oct")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_priv2oct")
+		]
 		public static extern int KEY_priv2oct(KEY* key, uint8* buf, int len);
 
 		/** Encodes an KEY private key to an allocated octet string
@@ -1558,7 +2178,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  pbuf   returns pointer to allocated buffer
 		 *  \return the length of the encoded octet string or 0 if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_priv2buf")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_priv2buf")
+		]
 		public static extern int KEY_priv2buf(KEY* eckey, uint8** pbuf);
 
 		/********************************************************************/
@@ -1571,7 +2196,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  len  length of the DER encoded private key
 		 *  \return the decoded private key or NULL if an error occurred.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public static extern KEY* d2i_ECPrivateKey(KEY** key, uint8** inVal, int len);
 
 		/** Encodes a private key object and stores the result in a buffer.
@@ -1579,7 +2209,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  out  the buffer for the result (if NULL the function returns number of bytes needed).
 		 *  \return 1 on success and 0 if an error occurred.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public static extern int i2d_ECPrivateKey(KEY* key, uint8** outVal);
 
 		/********************************************************************/
@@ -1593,7 +2228,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  len  length of the encoded public key
 		 *  \return KEY object with decoded public key or NULL if an error occurred.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public static extern KEY* o2i_ECPublicKey(KEY** key, uint8** inVal, int len);
 
 		/** Encodes a ec public key in an octet string.
@@ -1601,7 +2241,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  out  the buffer for the result (if NULL the function returns number of bytes needed).
 		 *  \return 1 on success and 0 if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public static extern int i2o_ECPublicKey(KEY* key, uint8** outVal);
 
 		/** Prints out the contents of a KEY object
@@ -1610,7 +2255,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  off  line offset
 		 *  \return 1 on success and 0 if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_print")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_print")
+		]
 		public static extern int KEY_print(BIO.bio_st* bp, KEY* key, int off);
 
 	#if !OPENSSL_NO_STDIO
@@ -1620,64 +2270,159 @@ namespace Beef_Net.OpenSSL
 		 *  \param  off  line offset
 		 *  \return 1 on success and 0 if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_print_fp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_print_fp")
+		]
 		public static extern int KEY_print_fp(Platform.BfpFile* fp, KEY* key, int off);
 	#endif
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_OpenSSL")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_OpenSSL")
+		]
 		public static extern KEY_METHOD* KEY_OpenSSL();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_get_default_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_get_default_method")
+		]
 		public static extern KEY_METHOD* KEY_get_default_method();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_set_default_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_set_default_method")
+		]
 		public static extern void KEY_set_default_method(KEY_METHOD* meth);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_get_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_get_method")
+		]
 		public static extern KEY_METHOD* KEY_get_method(KEY* key);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_set_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_set_method")
+		]
 		public static extern int KEY_set_method(KEY* key, KEY_METHOD* meth);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_new_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_new_method")
+		]
 		public static extern KEY* KEY_new_method(Engine.ENGINE* engine);
 
 		/********************************************************************/
 		/*    KEY_METHOD constructors, destructors, writers and accessors   */
 		/********************************************************************/
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_METHOD_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_METHOD_new")
+		]
 		public static extern KEY_METHOD* KEY_METHOD_new(KEY_METHOD* meth);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_METHOD_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_METHOD_free")
+		]
 		public static extern void KEY_METHOD_free(KEY_METHOD* meth);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_METHOD_set_init")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_METHOD_set_init")
+		]
 		public static extern void KEY_METHOD_set_init(KEY_METHOD* meth, function int(KEY* key) init, function void(KEY* key) finish, function int(KEY* dest, KEY* src) copy, function int(KEY* key, GROUP* grp) set_group,
 			function int(KEY* key, BN.BIGNUM* priv_key) set_private, function int(KEY* key, POINT* pub_key) set_public);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_METHOD_set_keygen")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_METHOD_set_keygen")
+		]
 		public static extern void KEY_METHOD_set_keygen(KEY_METHOD* meth, function int(KEY* key) keygen);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_METHOD_set_compute_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_METHOD_set_compute_key")
+		]
 		public static extern void KEY_METHOD_set_compute_key(KEY_METHOD* meth, function int(uint8** psec, int *pseclen, POINT* pub_key, KEY* ecdh) ckey);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_METHOD_set_sign")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_METHOD_set_sign")
+		]
 		public static extern void KEY_METHOD_set_sign(KEY_METHOD* meth, function int(int type, uint8* dgst, int dlen, uint8* sig, uint* siglen, BN.BIGNUM* kinv, BN.BIGNUM* r, KEY* eckey) sign,
 			function int(KEY* eckey, BN.CTX* ctx_in, BN.BIGNUM** kinvp, BN.BIGNUM** rp) sign_setup, function ECDSA.SIG*(uint8* dgst, int dgst_len, BN.BIGNUM* in_kinv, BN.BIGNUM* in_r, KEY* eckey) sign_sig);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_METHOD_set_verify")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_METHOD_set_verify")
+		]
 		public static extern void KEY_METHOD_set_verify(KEY_METHOD* meth, function int(int type, uint8* dgst, int dgst_len, uint8* sigbuf, int sig_len, KEY* eckey) verify,
 			function int(uint8* dgst, int dgst_len, ECDSA.SIG* sig, KEY* eckey) verify_sig);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_METHOD_get_init")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_METHOD_get_init")
+		]
 		public static extern void KEY_METHOD_get_init(KEY_METHOD* meth, function int(KEY* key)* pinit, function void(KEY* key)* pfinish, function int(KEY* dest, KEY* src)* pcopy, function int(KEY* key, GROUP* grp)* pset_group,
 			function int(KEY* key, BN.BIGNUM* priv_key)* pset_private, function int(KEY* key, POINT* pub_key)* pset_public);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_METHOD_get_keygen")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_METHOD_get_keygen")
+		]
 		public static extern void KEY_METHOD_get_keygen(KEY_METHOD* meth, function int(KEY* key)* pkeygen);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_METHOD_get_compute_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_METHOD_get_compute_key")
+		]
 		public static extern void KEY_METHOD_get_compute_key(KEY_METHOD* meth, function int(uint8** psec, int *pseclen, POINT* pub_key, KEY* ecdh)* pck);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_METHOD_get_sign")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_METHOD_get_sign")
+		]
 		public static extern void KEY_METHOD_get_sign(KEY_METHOD* meth, function int(int type, uint8* dgst, int dlen, uint8* sig, uint* siglen, BN.BIGNUM* kinv, BN.BIGNUM* r, KEY* eckey)* psign,
 			function int(KEY* eckey, BN.CTX* ctx_in, BN.BIGNUM** kinvp, BN.BIGNUM** rp)* psign_setup, function ECDSA.SIG*(uint8* dgst, int dgst_len, BN.BIGNUM* in_kinv, BN.BIGNUM* in_r, KEY* eckey)* psign_sig);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("EC_KEY_METHOD_get_verify")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("EC_KEY_METHOD_get_verify")
+		]
 		public static extern void KEY_METHOD_get_verify(KEY_METHOD* meth, function int(int type, uint8* dgst, int dgst_len, uint8* sigbuf, int sig_len, KEY* eckey)* pverify,
 			function int(uint8* dgst, int dgst_len, ECDSA.SIG* sig, KEY* eckey)* pverify_sig);
 #endif
@@ -1697,7 +2442,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  len  length of the DER encoded ec parameters
 		 *  \return a KEY object with the decoded parameters or NULL if an error occurred.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public static extern EC.KEY* d2i_ECParameters(EC.KEY** key, uint8** inVal, int len);
 
 		/** Encodes ec parameter and stores the result in a buffer.
@@ -1705,7 +2455,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  out  the buffer for the result (if NULL the function returns number of bytes needed).
 		 *  \return 1 on success and 0 if an error occurred.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public static extern int i2d_ECParameters(EC.KEY* key, uint8** outVal);
 
 		/** Prints out the ec parameters on human readable form.
@@ -1713,7 +2468,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  key  KEY object
 		 *  \return 1 on success and 0 if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ECParameters_print")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ECParameters_print")
+		]
 		public static extern int print(BIO.bio_st* bp, EC.KEY* key);
 
 	#if !OPENSSL_NO_STDIO
@@ -1722,7 +2482,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  key  KEY object
 		 *  \return 1 on success and 0 if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ECParameters_print_fp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ECParameters_print_fp")
+		]
 		public static extern int print_fp(Platform.BfpFile* fp, EC.KEY* key);
 	#endif
 
@@ -1740,9 +2505,19 @@ namespace Beef_Net.OpenSSL
 	sealed abstract class ECPKParameters
 	{
 #if !OPENSSL_NO_EC
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public static extern EC.GROUP* d2i_ECPKParameters(EC.GROUP** group, uint8** inVal, int len);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public static extern int i2d_ECPKParameters(EC.GROUP* group, uint8** outVal);
 
 		[Inline]
@@ -1770,10 +2545,20 @@ namespace Beef_Net.OpenSSL
 			return ASN1.i2d_fp(=> internalF, fp, (uint8*)x);
 		}
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ECPKParameters_print")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ECPKParameters_print")
+		]
 		public static extern int print(BIO.bio_st* bp, EC.GROUP* x, int off);
 	#if !OPENSSL_NO_STDIO
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ECPKParameters_print_fp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ECPKParameters_print_fp")
+		]
 		public static extern int print_fp(Platform.BfpFile* fp, EC.GROUP* x, int off);
 	#endif
 #endif
@@ -1802,15 +2587,23 @@ namespace Beef_Net.OpenSSL
 	sealed abstract class ECDH
 	{
 #if !OPENSSL_NO_EC
-
-		/** The old name for ecdh_KDF_X9_63
-		 *  The ECDH KDF specification has been mistakingly attributed to ANSI X9.62, it is actually specified in ANSI X9.63.
+		/** The old name for ecdh_KDF_X9_63 The ECDH KDF specification has been mistakingly attributed to ANSI X9.62, it is actually specified in ANSI X9.63.
 		 *  This identifier is retained for backwards compatibility
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ECDH_KDF_X9_62")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ECDH_KDF_X9_62")
+		]
 		public static extern int KDF_X9_62(uint8* outVal, int outlen, uint8* Z, int Zlen, uint8* sinfo, int sinfolen, EVP.MD* md);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ECDH_compute_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ECDH_compute_key")
+		]
 		public static extern int compute_key(void* outVal, int outlen, EC.POINT* pub_key, EC.KEY* ecdh, function void*(void* inVal, int inlen, void* outVal, int* outlen) KDF);
 #endif
 	}
@@ -1820,7 +2613,8 @@ namespace Beef_Net.OpenSSL
 	{
 #if !OPENSSL_NO_EC
 		[CRepr]
-		public struct SIG_st {
+		public struct SIG_st
+		{
 		    public BN.BIGNUM* r;
 		    public BN.BIGNUM* s;
 		}
@@ -1829,13 +2623,23 @@ namespace Beef_Net.OpenSSL
 		/** Allocates and initialize a SIG structure
 		 *  \return pointer to a SIG structure or NULL if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ECDSA_SIG_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ECDSA_SIG_new")
+		]
 		public static extern SIG* SIG_new();
 
 		/** frees a SIG structure
 		 *  \param  sig  pointer to the SIG structure
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ECDSA_SIG_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ECDSA_SIG_free")
+		]
 		public static extern void SIG_free(SIG* sig);
 
 		/** DER encode content of SIG object (note: this function modifies *pp (*pp += length of the DER encoded signature)).
@@ -1843,7 +2647,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  pp   pointer to a unsigned char pointer for the output or NULL
 		 *  \return the length of the DER encoded SIG object or a negative value on error
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public static extern int i2d_ECDSA_SIG(SIG* sig, uint8** pp);
 
 		/** Decodes a DER encoded ECDSA signature (note: this function changes *pp (*pp += len)).
@@ -1852,7 +2661,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  len  length of the buffer
 		 *  \return pointer to the decoded SIG structure (or NULL)
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public static extern SIG* d2i_ECDSA_SIG(SIG** sig, uint8** pp, int len);
 
 		/** Accessor for r and s fields of SIG
@@ -1860,19 +2674,34 @@ namespace Beef_Net.OpenSSL
 		 *  \param  pr   pointer to BN.BIGNUM pointer for r (may be NULL)
 		 *  \param  ps   pointer to BN.BIGNUM pointer for s (may be NULL)
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ECDSA_SIG_get0")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ECDSA_SIG_get0")
+		]
 		public static extern void SIG_get0(SIG* sig, BN.BIGNUM** pr, BN.BIGNUM** ps);
 
 		/** Accessor for r field of SIG
 		 *  \param  sig  pointer to SIG structure
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ECDSA_SIG_get0_r")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ECDSA_SIG_get0_r")
+		]
 		public static extern BN.BIGNUM* SIG_get0_r(SIG* sig);
 
 		/** Accessor for s field of SIG
 		 *  \param  sig  pointer to SIG structure
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ECDSA_SIG_get0_s")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ECDSA_SIG_get0_s")
+		]
 		public static extern BN.BIGNUM* SIG_get0_s(SIG* sig);
 
 		/** Setter for r and s fields of SIG
@@ -1880,7 +2709,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  r    pointer to BN.BIGNUM for r (may be NULL)
 		 *  \param  s    pointer to BN.BIGNUM for s (may be NULL)
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ECDSA_SIG_set0")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ECDSA_SIG_set0")
+		]
 		public static extern int SIG_set0(SIG* sig, BN.BIGNUM* r, BN.BIGNUM* s);
 
 		/** Computes the ECDSA signature of the given hash value using the supplied private key and returns the created signature.
@@ -1889,7 +2723,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  eckey     EC.KEY object containing a private EC key
 		 *  \return pointer to a SIG structure or NULL if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ECDSA_do_sign")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ECDSA_do_sign")
+		]
 		public static extern SIG* do_sign(uint8* dgst, int dgst_len, EC.KEY* eckey);
 
 		/** Computes ECDSA signature of a given hash value using the supplied private key (note: sig must point to size(eckey) bytes of memory).
@@ -1900,7 +2739,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  eckey    EC.KEY object containing a private EC key
 		 *  \return pointer to a SIG structure or NULL if an error occurred
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ECDSA_do_sign_ex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ECDSA_do_sign_ex")
+		]
 		public static extern SIG* do_sign_ex(uint8* dgst, int dgstlen, BN.BIGNUM* kinv, BN.BIGNUM* rp, EC.KEY* eckey);
 
 		/** Verifies that the supplied signature is a valid ECDSA signature of the supplied hash value using the supplied public key.
@@ -1910,7 +2754,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  eckey     EC.KEY object containing a public EC key
 		 *  \return 1 if the signature is valid, 0 if the signature is invalid and -1 on error
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ECDSA_do_verify")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ECDSA_do_verify")
+		]
 		public static extern int do_verify(uint8* dgst, int dgst_len, SIG* sig, EC.KEY* eckey);
 
 		/** Precompute parts of the signing operation
@@ -1920,7 +2769,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  rp     BN.BIGNUM pointer for x coordinate of k * generator
 		 *  \return 1 on success and 0 otherwise
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ECDSA_sign_setup")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ECDSA_sign_setup")
+		]
 		public static extern int sign_setup(EC.KEY* eckey, BN.CTX* ctx, BN.BIGNUM** kinv, BN.BIGNUM** rp);
 
 		/** Computes ECDSA signature of a given hash value using the supplied private key (note: sig must point to size(eckey) bytes of memory).
@@ -1932,7 +2786,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  eckey    EC.KEY object containing a private EC key
 		 *  \return 1 on success and 0 otherwise
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ECDSA_sign")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ECDSA_sign")
+		]
 		public static extern int sign(int type, uint8* dgst, int dgstlen, uint8* sig, uint* siglen, EC.KEY* eckey);
 
 		/** Computes ECDSA signature of a given hash value using the supplied private key (note: sig must point to size(eckey) bytes of memory).
@@ -1946,7 +2805,12 @@ namespace Beef_Net.OpenSSL
 		 *  \param  eckey    EC.KEY object containing a private EC key
 		 *  \return 1 on success and 0 otherwise
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ECDSA_sign_ex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ECDSA_sign_ex")
+		]
 		public static extern int sign_ex(int type, uint8* dgst, int dgstlen, uint8* sig, uint* siglen, BN.BIGNUM* kinv, BN.BIGNUM* rp, EC.KEY* eckey);
 
 		/** Verifies that the given signature is valid ECDSA signature of the supplied hash value using the specified public key.
@@ -1958,14 +2822,24 @@ namespace Beef_Net.OpenSSL
 		 *  \param  eckey    EC.KEY object containing a public EC key
 		 *  \return 1 if the signature is valid, 0 if the signature is invalid and -1 on error
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ECDSA_verify")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ECDSA_verify")
+		]
 		public static extern int verify(int type, uint8* dgst, int dgstlen, uint8* sig, int siglen, EC.KEY* eckey);
 
 		/** Returns the maximum length of the DER encoded signature
 		 *  \param  eckey  EC. KEY object
 		 *  \return numbers of bytes required for the DER encoded signature
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ECDSA_size")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ECDSA_size")
+		]
 		public static extern int size(EC.KEY* eckey);
 #endif
 	}

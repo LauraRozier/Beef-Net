@@ -26,32 +26,92 @@ namespace Beef_Net.OpenSSL
 		}
 		public typealias CTX = ctx_st;
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("HMAC_size")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("HMAC_size")
+		]
 		public extern static uint size(CTX* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("HMAC_CTX_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("HMAC_CTX_new")
+		]
 		public extern static CTX* CTX_new();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("HMAC_CTX_reset")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("HMAC_CTX_reset")
+		]
 		public extern static int CTX_reset(CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("HMAC_CTX_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("HMAC_CTX_free")
+		]
 		public extern static void CTX_free(CTX* ctx);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("HMAC_Init")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("HMAC_Init")
+		]
 		public extern static int Init(CTX* ctx, void* key, int len, EVP.MD* md);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("HMAC_Init_ex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("HMAC_Init_ex")
+		]
 		public extern static int Init_ex(CTX* ctx, void* key, int len, EVP.MD* md, Engine.ENGINE* impl);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("HMAC_Update")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("HMAC_Update")
+		]
 		public extern static int Update(CTX* ctx, uint8* data, uint len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("HMAC_Final")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("HMAC_Final")
+		]
 		public extern static int Final(CTX* ctx, uint8* md, uint* len);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static uint8* HMAC(EVP.MD* evp_md, void* key, int key_len, uint8* d, uint n, uint8* md, uint* md_len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("HMAC_CTX_copy")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("HMAC_CTX_copy")
+		]
 		public extern static int CTX_copy(CTX* dctx, CTX* sctx);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("HMAC_CTX_set_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("HMAC_CTX_set_flags")
+		]
 		public extern static void CTX_set_flags(CTX* ctx, uint flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("HMAC_CTX_get_md")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("HMAC_CTX_get_md")
+		]
 		public extern static EVP.MD* CTX_get_md(CTX* ctx);
 	}
 }

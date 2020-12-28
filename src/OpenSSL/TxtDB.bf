@@ -38,17 +38,47 @@ namespace Beef_Net.OpenSSL
 		}
 		public typealias TXT_DB = txt_db_st;
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("TXT_DB_read")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("TXT_DB_read")
+		]
 		public extern static TXT_DB* read(BIO.bio_st* inVal, int num);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("TXT_DB_write")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("TXT_DB_write")
+		]
 		public extern static int write(BIO.bio_st* outVal, TXT_DB* db);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("TXT_DB_create_index")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("TXT_DB_create_index")
+		]
 		public extern static int create_index(TXT_DB* db, int field, function int(SafeStack.OPENSSL_STRING*) qual, OpenSSL.LH_HASHFUNC hash, OpenSSL.LH_COMPFUNC cmp);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("TXT_DB_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("TXT_DB_free")
+		]
 		public extern static void free(TXT_DB* db);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("TXT_DB_get_by_index")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("TXT_DB_get_by_index")
+		]
 		public extern static SafeStack.OPENSSL_STRING* get_by_index(TXT_DB* db, int idx, SafeStack.OPENSSL_STRING* value);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("TXT_DB_insert")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("TXT_DB_insert")
+		]
 		public extern static int insert(TXT_DB*db, SafeStack.OPENSSL_STRING* value);
 	}
 }

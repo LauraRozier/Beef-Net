@@ -24,26 +24,67 @@ namespace Beef_Net.OpenSSL
 		public const int KEY_LENGTH = 16;
 
 		[CRepr]
-		public struct key_st {
+		public struct key_st
+		{
 		    public IDEA_INT[9][6] data;
 		}
 		public typealias KEY_SCHEDULE = key_st;
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("IDEA_options")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("IDEA_options")
+		]
 		public extern static char8* options();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("IDEA_ecb_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("IDEA_ecb_encrypt")
+		]
 		public extern static void ecb_encrypt(uint8* inVal, uint8* outVal, KEY_SCHEDULE* ks);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("IDEA_set_encrypt_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("IDEA_set_encrypt_key")
+		]
 		public extern static void set_encrypt_key(uint8* key, KEY_SCHEDULE* ks);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("IDEA_set_decrypt_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("IDEA_set_decrypt_key")
+		]
 		public extern static void set_decrypt_key(KEY_SCHEDULE* ek, KEY_SCHEDULE* dk);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("IDEA_cbc_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("IDEA_cbc_encrypt")
+		]
 		public extern static void cbc_encrypt(uint8* inVal, uint8* outVal, int length, KEY_SCHEDULE* ks, uint8* iv, int enc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("IDEA_cfb64_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("IDEA_cfb64_encrypt")
+		]
 		public extern static void cfb64_encrypt(uint8* inVal, uint8* outVal, int length, KEY_SCHEDULE* ks, uint8* iv, int* num, int enc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("IDEA_ofb64_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("IDEA_ofb64_encrypt")
+		]
 		public extern static void ofb64_encrypt(uint8* inVal, uint8* outVal, int length, KEY_SCHEDULE* ks, uint8* iv, int* num);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("IDEA_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("IDEA_encrypt")
+		]
 		public extern static void encrypt(uint* inVal, KEY_SCHEDULE* ks);
 #endif
 	}

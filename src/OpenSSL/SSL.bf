@@ -18,7 +18,12 @@ namespace Beef_Net.OpenSSL
 		** libssl-1_1.dll
 		**	  19   12 00001A1E ERR_load_SSL_strings
 		*/
-		[Import(OPENSSL_LIB_SSL), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			CLink
+		]
 		public extern static int ERR_load_SSL_strings();
 
 		/*
@@ -1974,21 +1979,48 @@ namespace Beef_Net.OpenSSL
 		**	 495  1EE 00001659 i2d_SSL_SESSION
 		*/
 
-		/*
-		 * Note: SSL[_CTX]_set_{options,mode} use |= op on the previous value, they
-		 * cannot be used to clear bits.
-		 */
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_get_options")]
+		/* Note: SSL[_CTX]_set_{options,mode} use |= op on the previous value, they cannot be used to clear bits. */
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_get_options")
+		]
 		public extern static uint SSL_CTX_get_options(CTX* ctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_options")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_options")
+		]
 		public extern static uint SSL_get_options(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_clear_options")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_clear_options")
+		]
 		public extern static uint SSL_CTX_clear_options(CTX* ctx, uint op);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_clear_options")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_clear_options")
+		]
 		public extern static uint SSL_clear_options(ssl_st* s, uint op);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_options")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_options")
+		]
 		public extern static uint SSL_CTX_set_options(CTX* ctx, uint op);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_options")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_options")
+		]
 		public extern static uint SSL_set_options(ssl_st* s, uint op);
 
 		[Inline]
@@ -2023,9 +2055,19 @@ namespace Beef_Net.OpenSSL
 		[Inline]
 		public static int clear_cert_flags(ssl_st* s, int op) => ctrl(s, CTRL_CLEAR_CERT_FLAGS, op, null);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_msg_callback")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_msg_callback")
+		]
 		public extern static void CTX_set_msg_callback(CTX* ctx, function void(int write_p, int version, int content_type, void* buf, uint len, ssl_st* ssl, void* arg) cb);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_msg_callback")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_msg_callback")
+		]
 		public extern static void set_msg_callback(ssl_st* ssl, function void(int write_p, int version, int content_type, void* buf, uint len, ssl_st* ssl, void* arg) cb);
 		[Inline]
 		public static int CTX_set_msg_callback_arg(CTX* ctx, void* arg) => CTX_ctrl(ctx, CTRL_SET_MSG_CALLBACK_ARG, 0, arg);
@@ -2037,15 +2079,40 @@ namespace Beef_Net.OpenSSL
 
 #if !OPENSSL_NO_SRP
 		/* see tls_srp.c */
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SRP_CTX_init")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SRP_CTX_init")
+		]
 		public extern static int SRP_CTX_init(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_SRP_CTX_init")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_SRP_CTX_init")
+		]
 		public extern static int CTX_SRP_CTX_init(CTX* ctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SRP_CTX_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SRP_CTX_free")
+		]
 		public extern static int SRP_CTX_free(ssl_st* ctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_SRP_CTX_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_SRP_CTX_free")
+		]
 		public extern static int CTX_SRP_CTX_free(CTX* ctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_srp_server_param_with_username")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_srp_server_param_with_username")
+		]
 		public extern static int srp_server_param_with_username(ssl_st* s, int* ad);
 
 #endif
@@ -2098,70 +2165,185 @@ namespace Beef_Net.OpenSSL
 		[Inline]
 		public static int CTX_sess_cache_full(CTX* ctx) => CTX_ctrl(ctx, CTRL_SESS_CACHE_FULL, 0, null);
 		
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_sess_set_new_cb")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_sess_set_new_cb")
+		]
 		public extern static void CTX_sess_set_new_cb(CTX* ctx, function int(ssl_st* ssl, SESSION* sess) new_session_cb);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_sess_get_new_cb")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_sess_get_new_cb")
+		]
 		public extern static function int(ssl_st* ssl, SESSION* sess) CTX_sess_get_new_cb(CTX* ctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_sess_set_remove_cb")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_sess_set_remove_cb")
+		]
 		public extern static void CTX_sess_set_remove_cb(CTX* ctx, function void(ctx_st* ctx, SESSION* sess) remove_session_cb);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_sess_get_remove_cb")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_sess_get_remove_cb")
+		]
 		public extern static function void(ctx_st* ctx, SESSION* sess) CTX_sess_get_remove_cb(CTX* ctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_sess_set_get_cb")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_sess_set_get_cb")
+		]
 		public extern static void CTX_sess_set_get_cb(CTX* ctx, function SESSION*(ssl_st* ssl, uint8* data, int len, int* copy) get_session_cb);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_sess_get_get_cb")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_sess_get_get_cb")
+		]
 		public extern static function SESSION*(ssl_st* ssl, uint8* data, int len, int* copy) CTX_sess_get_get_cb(CTX* ctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_info_callback")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_info_callback")
+		]
 		public extern static void CTX_set_info_callback(CTX* ctx, function void(ssl_st* ssl, int type, int val) cb);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_get_info_callback")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_get_info_callback")
+		]
 		public extern static function void(ssl_st* ssl, int type, int val) CTX_get_info_callback(CTX* ctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_client_cert_cb")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_client_cert_cb")
+		]
 		public extern static void CTX_set_client_cert_cb(CTX* ctx, function int(ssl_st* ssl, X509.x509_st** x509, EVP.PKEY** pkey) client_cert_cb);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_get_client_cert_cb")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_get_client_cert_cb")
+		]
 		public extern static function int(ssl_st* ssl, X509.x509_st** x509, EVP.PKEY** pkey) CTX_get_client_cert_cb(CTX* ctx);
 #if !OPENSSL_NO_ENGINE
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_client_cert_engine")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_client_cert_engine")
+		]
 		public extern static int CTX_set_client_cert_engine(CTX* ctx, Engine.ENGINE* e);
 #endif
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_cookie_generate_cb")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_cookie_generate_cb")
+		]
 		public extern static void CTX_set_cookie_generate_cb(CTX* ctx, function int(ssl_st* ssl, uint8* cookie, uint* cookie_len) app_gen_cookie_cb);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_cookie_verify_cb")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_cookie_verify_cb")
+		]
 		public extern static void CTX_set_cookie_verify_cb(CTX* ctx, function int(ssl_st* ssl, uint8* cookie, uint cookie_len) app_verify_cookie_cb);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_stateless_cookie_generate_cb")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_stateless_cookie_generate_cb")
+		]
 		public extern static void CTX_set_stateless_cookie_generate_cb(CTX* ctx, function int(ssl_st* ssl, uint8* cookie, uint* cookie_len) gen_stateless_cookie_cb);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_stateless_cookie_verify_cb")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_stateless_cookie_verify_cb")
+		]
 		public extern static void CTX_set_stateless_cookie_verify_cb(CTX* ctx, function int(ssl_st* ssl, uint8* cookie, uint cookie_len) verify_stateless_cookie_cb);
 #if !OPENSSL_NO_NEXTPROTONEG
 
 		public function int CTX_npn_advertised_cb_func(ssl_st* ssl, uint8** outVal, uint* outlen, void* arg);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_next_protos_advertised_cb")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_next_protos_advertised_cb")
+		]
 		public extern static void CTX_set_next_protos_advertised_cb(CTX* s, CTX_npn_advertised_cb_func cb, void* arg);
 		[Inline]
 		public static void CTX_set_npn_advertised_cb(CTX* s, CTX_npn_advertised_cb_func cb, void* arg) => CTX_set_next_protos_advertised_cb(s, cb, arg);
 
 		public function int CTX_npn_select_cb_func(ssl_st* s, uint8** outVal, uint8* outlen, uint8* inVal, uint inlen, void* arg);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_next_proto_select_cb")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_next_proto_select_cb")
+		]
 		public extern static void CTX_set_next_proto_select_cb(CTX* s, CTX_npn_select_cb_func cb, void* arg);
 		[Inline]
 		public static void CTX_set_npn_select_cb(CTX* s, CTX_npn_select_cb_func cb, void* arg) => CTX_set_next_proto_select_cb(s, cb, arg);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get0_next_proto_negotiated")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get0_next_proto_negotiated")
+		]
 		public extern static void get0_next_proto_negotiated(ssl_st* s, uint8** data, uint* len);
 		[Inline]
 		public static void get0_npn_negotiated(ssl_st* s, uint8** data, uint* len) => get0_next_proto_negotiated(s, data, len);
 #endif
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_select_next_proto")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_select_next_proto")
+		]
 		public extern static int select_next_proto(uint8** outVal, uint8* outlen, uint8* inVal, uint inlen, uint8* client, uint client_len);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_alpn_protos")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_alpn_protos")
+		]
 		public extern static int CTX_set_alpn_protos(CTX* ctx, uint8* protos, uint protos_len);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_alpn_protos")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_alpn_protos")
+		]
 		public extern static int set_alpn_protos(ssl_st* ssl, uint8* protos, uint protos_len);
 		public function int CTX_alpn_select_cb_func(ssl_st* ssl, uint8** outVal, uint8* outlen, uint8* inVal, uint inlen, void* arg);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_alpn_select_cb")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_alpn_select_cb")
+		]
 		public extern static void CTX_set_alpn_select_cb(CTX* ctx, CTX_alpn_select_cb_func cb, void* arg);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get0_alpn_selected")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get0_alpn_selected")
+		]
 		public extern static void get0_alpn_selected(ssl_st* ssl,  uint8** data, uint* len);
 
 #if !OPENSSL_NO_PSK
@@ -2169,53 +2351,138 @@ namespace Beef_Net.OpenSSL
 		public const int PSK_MAX_IDENTITY_LEN = 128;
 		public const int PSK_MAX_PSK_LEN      = 256;
 		public function uint psk_client_cb_func(ssl_st* ssl, char8* hint, char8* identity, uint max_identity_len, uint8* psk, uint max_psk_len);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_psk_client_callback")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_psk_client_callback")
+		]
 		public extern static void CTX_set_psk_client_callback(CTX* ctx, psk_client_cb_func cb);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_psk_client_callback")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_psk_client_callback")
+		]
 		public extern static void set_psk_client_callback(ssl_st* ssl, psk_client_cb_func cb);
 
 		public function uint psk_server_cb_func(ssl_st* ssl, char8* identity, uint8* psk, uint max_psk_len);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_psk_server_callback")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_psk_server_callback")
+		]
 		public extern static void CTX_set_psk_server_callback(CTX* ctx, psk_server_cb_func cb);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_psk_server_callback")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_psk_server_callback")
+		]
 		public extern static void set_psk_server_callback(ssl_st* ssl, psk_server_cb_func cb);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_use_psk_identity_hint")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_use_psk_identity_hint")
+		]
 		public extern static int CTX_use_psk_identity_hint(CTX* ctx, char8* identity_hint);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_use_psk_identity_hint")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_use_psk_identity_hint")
+		]
 		public extern static int use_psk_identity_hint(ssl_st* s, char8* identity_hint);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_psk_identity_hint")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_psk_identity_hint")
+		]
 		public extern static char8* get_psk_identity_hint(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_psk_identity")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_psk_identity")
+		]
 		public extern static char8* get_psk_identity(ssl_st* s);
 #endif
 
 		public function int psk_find_session_cb_func(ssl_st* ssl, uint8* identity, uint identity_len, SESSION** sess);
 		public function int psk_use_session_cb_func(ssl_st* ssl, EVP.MD* md, uint8** id, uint* idlen, SESSION** sess);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_psk_find_session_callback")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_psk_find_session_callback")
+		]
 		public extern static void set_psk_find_session_callback(ssl_st* s, psk_find_session_cb_func cb);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_psk_find_session_callback")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_psk_find_session_callback")
+		]
 		public extern static void CTX_set_psk_find_session_callback(CTX* ctx, psk_find_session_cb_func cb);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_psk_use_session_callback")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_psk_use_session_callback")
+		]
 		public extern static void set_psk_use_session_callback(ssl_st* s, psk_use_session_cb_func cb);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_psk_use_session_callback")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_psk_use_session_callback")
+		]
 		public extern static void CTX_set_psk_use_session_callback(CTX* ctx, psk_use_session_cb_func cb);
 
 		/* Register callbacks to handle custom TLS Extensions for client or server. */
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_has_client_custom_ext")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_has_client_custom_ext")
+		]
 		public extern static int CTX_has_client_custom_ext(CTX* ctx, uint ext_type);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_add_client_custom_ext")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_add_client_custom_ext")
+		]
 		public extern static int CTX_add_client_custom_ext(CTX* ctx, uint ext_type, custom_ext_add_cb add_cb, custom_ext_free_cb free_cb, void* add_arg, custom_ext_parse_cb parse_cb, void* parse_arg);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_add_server_custom_ext")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_add_server_custom_ext")
+		]
 		public extern static int CTX_add_server_custom_ext(CTX* ctx, uint ext_type, custom_ext_add_cb add_cb, custom_ext_free_cb free_cb, void* add_arg, custom_ext_parse_cb parse_cb, void* parse_arg);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_add_custom_ext")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_add_custom_ext")
+		]
 		public extern static int CTX_add_custom_ext(CTX* ctx, uint ext_type, uint context, custom_ext_add_cb_ex add_cb, custom_ext_free_cb_ex free_cb, void* add_arg, custom_ext_parse_cb_ex parse_cb, void* parse_arg);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_extension_supported")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_extension_supported")
+		]
 		public extern static int extension_supported(uint ext_type);
 
 		public const int NOTHING         = 1;
@@ -2249,28 +2516,78 @@ namespace Beef_Net.OpenSSL
 		public function void CTX_keylog_cb_func(ssl_st* ssl, char8* line);
 
 		/* CTX_set_keylog_callback configures a callback to log key material. This is intended for debugging use with tools like Wireshark. The cb function should log line followed by a newline. */
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_keylog_callback")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_keylog_callback")
+		]
 		public extern static void CTX_set_keylog_callback(CTX* ctx, CTX_keylog_cb_func cb);
 
 		/* CTX_get_keylog_callback returns the callback configured by CTX_set_keylog_callback. */
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_get_keylog_callback")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_get_keylog_callback")
+		]
 		public extern static CTX_keylog_cb_func CTX_get_keylog_callback(CTX* ctx);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_max_early_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_max_early_data")
+		]
 		public extern static int CTX_set_max_early_data(CTX* ctx, uint32 max_early_data);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_get_max_early_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_get_max_early_data")
+		]
 		public extern static uint32 CTX_get_max_early_data(CTX* ctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_max_early_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_max_early_data")
+		]
 		public extern static int set_max_early_data(ssl_st* s, uint32 max_early_data);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_max_early_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_max_early_data")
+		]
 		public extern static uint32 get_max_early_data(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_recv_max_early_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_recv_max_early_data")
+		]
 		public extern static int CTX_set_recv_max_early_data(CTX* ctx, uint32 recv_max_early_data);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_get_recv_max_early_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_get_recv_max_early_data")
+		]
 		public extern static uint32 CTX_get_recv_max_early_data(CTX* ctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_recv_max_early_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_recv_max_early_data")
+		]
 		public extern static int set_recv_max_early_data(ssl_st* s, uint32 recv_max_early_data);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_recv_max_early_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_recv_max_early_data")
+		]
 		public extern static uint32 get_recv_max_early_data(ssl_st* s);
 
 		/* compatibility */
@@ -2286,7 +2603,12 @@ namespace Beef_Net.OpenSSL
 		public static void* CTX_get_app_data(CTX* ctx) => CTX_get_ex_data(ctx, 0);
 		[Inline]
 		public static int CTX_set_app_data(CTX* ctx, char8* arg) => CTX_set_ex_data(ctx, 0, arg);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_debug")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_debug")
+		]
 		public extern static void set_debug(ssl_st* s, int debug);
 
 		/* TLSv1.3 KeyUpdate message types */
@@ -2390,11 +2712,26 @@ namespace Beef_Net.OpenSSL
 		public static bool in_connect_init(ssl_st* a) => (in_init(a) > 0) && !(is_server(a) > 0);
 		[Inline]
 		public static bool in_accept_init(ssl_st* a) => (in_init(a) > 0) && (is_server(a) > 0);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_in_init")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_in_init")
+		]
 		public extern static int in_init(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_in_before")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_in_before")
+		]
 		public extern static int in_before(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_is_init_finished")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_is_init_finished")
+		]
 		public extern static int is_init_finished(ssl_st* s);
 
 		/* The following 3 states are kept in ssl->rlayer.rstate when reads fail, you should not need these */
@@ -2408,9 +2745,19 @@ namespace Beef_Net.OpenSSL
 		 *   -- that we expected from peer (SSL_get_peer_finished).
 		 * Returns length (0 == no Finished so far), copies up to 'count' bytes.
 		 */
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_finished")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_finished")
+		]
 		public extern static uint get_finished(ssl_st* s, void* buf, uint count);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_peer_finished")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_peer_finished")
+		]
 		public extern static uint get_peer_finished(ssl_st* s, void* buf, uint count);
 
 		/* use either SSL_VERIFY_NONE or SSL_VERIFY_PEER, the last 3 options are 'ored' with SSL_VERIFY_PEER if they are desired */
@@ -2810,131 +3157,416 @@ namespace Beef_Net.OpenSSL
 		[Inline]
 		public static bool set_ecdh_auto(void* dummy, int onoff) => onoff != 0;
 		/* We "pretend" to call the callback to avoid warnings about unused static functions. */
-		[Inline]
-		public static void CTX_set_tmp_rsa_callback(CTX* ctx, function RSA.rsa_st*(ssl_st* ssl, int is_export, int keylength) cb) { while(false) { cb(null, 0, 0); } }
-		[Inline]
-		public static void set_tmp_rsa_callback(ssl_st* ssl, function RSA.rsa_st*(ssl_st* ssl, int is_export, int keylength) cb) { while(false) { cb(null, 0, 0); } }
+		[Inline, Obsolete("No longer available, no-op", true)]
+		public static void CTX_set_tmp_rsa_callback(CTX* ctx, function RSA.rsa_st*(ssl_st* ssl, int is_export, int keylength) cb) { while(false) cb(null, 0, 0); }
+		[Inline, Obsolete("No longer available, no-op", true)]
+		public static void set_tmp_rsa_callback(ssl_st* ssl, function RSA.rsa_st*(ssl_st* ssl, int is_export, int keylength) cb) { while(false) cb(null, 0, 0); }
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_cipher_list")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_cipher_list")
+		]
 		public extern static int CTX_set_cipher_list(CTX* ctx, char8* str);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_new")
+		]
 		public extern static CTX* CTX_new(METHOD* meth);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_up_ref")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_up_ref")
+		]
 		public extern static int CTX_up_ref(CTX* ctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_free")
+		]
 		public extern static void CTX_free(CTX* ctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_timeout")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_timeout")
+		]
 		public extern static int CTX_set_timeout(CTX* ctx, int t);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_get_timeout")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_get_timeout")
+		]
 		public extern static int CTX_get_timeout(CTX* ctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_get_cert_store")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_get_cert_store")
+		]
 		public extern static X509.STORE* CTX_get_cert_store(CTX* ctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_cert_store")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_cert_store")
+		]
 		public extern static void CTX_set_cert_store(CTX* ctx, X509.STORE* st);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set1_cert_store")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set1_cert_store")
+		]
 		public extern static void CTX_set1_cert_store(CTX* ctx, X509.STORE* st);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_want")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_want")
+		]
 		public extern static int want(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_clear")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_clear")
+		]
 		public extern static int clear(ssl_st* s);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_flush_sessions")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_flush_sessions")
+		]
 		public extern static void CTX_flush_sessions(CTX* ctx, int tm);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_current_cipher")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_current_cipher")
+		]
 		public extern static CIPHER* get_current_cipher(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_pending_cipher")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_pending_cipher")
+		]
 		public extern static CIPHER* get_pending_cipher(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CIPHER_get_bits")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CIPHER_get_bits")
+		]
 		public extern static int CIPHER_get_bits(CIPHER* c, int* alg_bits);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CIPHER_get_version")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CIPHER_get_version")
+		]
 		public extern static char8* CIPHER_get_version(CIPHER* c);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CIPHER_get_name")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CIPHER_get_name")
+		]
 		public extern static char8* CIPHER_get_name(CIPHER* c);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CIPHER_standard_name")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CIPHER_standard_name")
+		]
 		public extern static char8* CIPHER_standard_name(CIPHER* c);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CIPHER_get_id")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CIPHER_get_id")
+		]
 		public extern static uint32 CIPHER_get_id(CIPHER* c);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CIPHER_get_protocol_id")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CIPHER_get_protocol_id")
+		]
 		public extern static uint16 CIPHER_get_protocol_id(CIPHER* c);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CIPHER_get_kx_nid")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CIPHER_get_kx_nid")
+		]
 		public extern static int CIPHER_get_kx_nid(CIPHER* c);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CIPHER_get_auth_nid")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CIPHER_get_auth_nid")
+		]
 		public extern static int CIPHER_get_auth_nid(CIPHER* c);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CIPHER_get_handshake_digest")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CIPHER_get_handshake_digest")
+		]
 		public extern static EVP.MD* CIPHER_get_handshake_digest(CIPHER* c);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CIPHER_is_aead")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CIPHER_is_aead")
+		]
 		public extern static int CIPHER_is_aead(CIPHER* c);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_fd")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_fd")
+		]
 		public extern static int get_fd(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_rfd")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_rfd")
+		]
 		public extern static int get_rfd(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_wfd")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_wfd")
+		]
 		public extern static int get_wfd(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_cipher_list")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_cipher_list")
+		]
 		public extern static char8* get_cipher_list(ssl_st* s, int n);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_shared_ciphers")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_shared_ciphers")
+		]
 		public extern static char8* get_shared_ciphers(ssl_st* s, char8* buf, int size);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_read_ahead")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_read_ahead")
+		]
 		public extern static int get_read_ahead(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_pending")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_pending")
+		]
 		public extern static int pending(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_has_pending")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_has_pending")
+		]
 		public extern static int has_pending(ssl_st* s);
 #if !OPENSSL_NO_SOCK
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_fd")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_fd")
+		]
 		public extern static int set_fd(ssl_st* s, int fd);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_rfd")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_rfd")
+		]
 		public extern static int set_rfd(ssl_st* s, int fd);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_wfd")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_wfd")
+		]
 		public extern static int set_wfd(ssl_st* s, int fd);
 #endif
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set0_rbio")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set0_rbio")
+		]
 		public extern static void set0_rbio(ssl_st* s, BIO.bio_st* rbio);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set0_wbio")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set0_wbio")
+		]
 		public extern static void set0_wbio(ssl_st* s, BIO.bio_st* wbio);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_bio")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_bio")
+		]
 		public extern static void set_bio(ssl_st* s, BIO.bio_st* rbio, BIO.bio_st* wbio);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_rbio")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_rbio")
+		]
 		public extern static BIO.bio_st* get_rbio(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_wbio")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_wbio")
+		]
 		public extern static BIO.bio_st* get_wbio(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_cipher_list")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_cipher_list")
+		]
 		public extern static int set_cipher_list(ssl_st* s, char8* str);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_ciphersuites")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_ciphersuites")
+		]
 		public extern static int CTX_set_ciphersuites(CTX* ctx, char8* str);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_ciphersuites")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_ciphersuites")
+		]
 		public extern static int set_ciphersuites(ssl_st* s, char8* str);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_read_ahead")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_read_ahead")
+		]
 		public extern static void set_read_ahead(ssl_st* s, int yes);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_verify_mode")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_verify_mode")
+		]
 		public extern static int get_verify_mode(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_verify_depth")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_verify_depth")
+		]
 		public extern static int get_verify_depth(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_verify_callback")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_verify_callback")
+		]
 		public extern static verify_cb get_verify_callback(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_verify")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_verify")
+		]
 		public extern static void set_verify(ssl_st* s, int mode, verify_cb callback);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_verify_depth")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_verify_depth")
+		]
 		public extern static void set_verify_depth(ssl_st* s, int depth);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_cert_cb")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_cert_cb")
+		]
 		public extern static void set_cert_cb(ssl_st* s, function int(ssl_st* ssl, void* arg) cb, void* arg);
 #if !OPENSSL_NO_RSA
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_use_RSAPrivateKey")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_use_RSAPrivateKey")
+		]
 		public extern static int use_RSAPrivateKey(ssl_st* ssl, RSA.rsa_st* rsa);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_use_RSAPrivateKey_ASN1")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_use_RSAPrivateKey_ASN1")
+		]
 		public extern static int use_RSAPrivateKey_ASN1(ssl_st* ssl, uint8* d, int len);
 #endif
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_use_PrivateKey")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_use_PrivateKey")
+		]
 		public extern static int use_PrivateKey(ssl_st* ssl, EVP.PKEY* pkey);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_use_PrivateKey_ASN1")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_use_PrivateKey_ASN1")
+		]
 		public extern static int use_PrivateKey_ASN1(int pk, ssl_st* ssl, uint8* d, int len);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_use_certificate")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_use_certificate")
+		]
 		public extern static int use_certificate(ssl_st* ssl, X509.x509_st* x);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_use_certificate_ASN1")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_use_certificate_ASN1")
+		]
 		public extern static int use_certificate_ASN1(ssl_st* ssl, uint8* d, int len);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_use_cert_and_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_use_cert_and_key")
+		]
 		public extern static int use_cert_and_key(ssl_st* ssl, X509.x509_st* x509, EVP.PKEY* privatekey, X509.stack_st_X509* chain, int override_);
 
 		/* serverinfo file format versions */
@@ -2942,296 +3574,921 @@ namespace Beef_Net.OpenSSL
 		public const int SERVERINFOV2 = 2;
 
 		/* Set serverinfo data for the current active cert. */
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_use_serverinfo")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_use_serverinfo")
+		]
 		public extern static int CTX_use_serverinfo(CTX* ctx, uint8* serverinfo, uint serverinfo_length);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_use_serverinfo_ex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_use_serverinfo_ex")
+		]
 		public extern static int CTX_use_serverinfo_ex(CTX* ctx, uint version, uint8* serverinfo, uint serverinfo_length);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_use_serverinfo_file")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_use_serverinfo_file")
+		]
 		public extern static int CTX_use_serverinfo_file(CTX* ctx, char8* file);
 
 #if !OPENSSL_NO_RSA
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_use_RSAPrivateKey_file")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_use_RSAPrivateKey_file")
+		]
 		public extern static int use_RSAPrivateKey_file(ssl_st* ssl, char8* file, int type);
 #endif
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_use_PrivateKey_file")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_use_PrivateKey_file")
+		]
 		public extern static int use_PrivateKey_file(ssl_st* ssl, char8* file, int type);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_use_certificate_file")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_use_certificate_file")
+		]
 		public extern static int use_certificate_file(ssl_st* ssl, char8* file, int type);
 
 #if !OPENSSL_NO_RSA
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_use_RSAPrivateKey_file")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_use_RSAPrivateKey_file")
+		]
 		public extern static int CTX_use_RSAPrivateKey_file(CTX* ctx, char8* file, int type);
 #endif
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_use_PrivateKey_file")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_use_PrivateKey_file")
+		]
 		public extern static int CTX_use_PrivateKey_file(CTX* ctx, char8* file, int type);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_use_certificate_file")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_use_certificate_file")
+		]
 		public extern static int CTX_use_certificate_file(CTX* ctx, char8* file, int type);
 		/* PEM type */
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_use_certificate_chain_file")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_use_certificate_chain_file")
+		]
 		public extern static int CTX_use_certificate_chain_file(CTX* ctx, char8* file);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_use_certificate_chain_file")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_use_certificate_chain_file")
+		]
 		public extern static int use_certificate_chain_file(ssl_st* ssl, char8* file);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_load_client_CA_file")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_load_client_CA_file")
+		]
 		public extern static X509.stack_st_X509_NAME* load_client_CA_file(char8* file);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_add_file_cert_subjects_to_stack")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_add_file_cert_subjects_to_stack")
+		]
 		public extern static int add_file_cert_subjects_to_stack(X509.stack_st_X509_NAME* stackCAs, char8* file);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_add_dir_cert_subjects_to_stack")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_add_dir_cert_subjects_to_stack")
+		]
 		public extern static int add_dir_cert_subjects_to_stack(X509.stack_st_X509_NAME* stackCAs, char8* dir);
 
 		[Inline]
 		public static int load_error_strings() => OpenSSL.init_ssl(OpenSSL.INIT_LOAD_SSL_STRINGS | OpenSSL.INIT_LOAD_CRYPTO_STRINGS, null);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_state_string")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_state_string")
+		]
 		public extern static char8* state_string(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_rstate_string")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_rstate_string")
+		]
 		public extern static char8* rstate_string(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_state_string_long")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_state_string_long")
+		]
 		public extern static char8* state_string_long(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_rstate_string_long")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_rstate_string_long")
+		]
 		public extern static char8* rstate_string_long(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SESSION_get_time")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SESSION_get_time")
+		]
 		public extern static int SESSION_get_time(SESSION* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SESSION_set_time")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SESSION_set_time")
+		]
 		public extern static int SESSION_set_time(SESSION* s, int t);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SESSION_get_timeout")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SESSION_get_timeout")
+		]
 		public extern static int SESSION_get_timeout(SESSION* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SESSION_set_timeout")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SESSION_set_timeout")
+		]
 		public extern static int SESSION_set_timeout(SESSION* s, int t);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SESSION_get_protocol_version")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SESSION_get_protocol_version")
+		]
 		public extern static int SESSION_get_protocol_version(SESSION* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SESSION_set_protocol_version")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SESSION_set_protocol_version")
+		]
 		public extern static int SESSION_set_protocol_version(SESSION* s, int version);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SESSION_get0_hostname")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SESSION_get0_hostname")
+		]
 		public extern static char8* SESSION_get0_hostname(SESSION* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SESSION_set1_hostname")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SESSION_set1_hostname")
+		]
 		public extern static int SESSION_set1_hostname(SESSION* s, char8* hostname);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SESSION_get0_alpn_selected")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SESSION_get0_alpn_selected")
+		]
 		public extern static void SESSION_get0_alpn_selected(SESSION* s, uint8** alpn, uint* len);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SESSION_set1_alpn_selected")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SESSION_set1_alpn_selected")
+		]
 		public extern static int SESSION_set1_alpn_selected(SESSION* s, uint8* alpn, uint len);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SESSION_get0_cipher")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SESSION_get0_cipher")
+		]
 		public extern static CIPHER* SESSION_get0_cipher(SESSION* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SESSION_set_cipher")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SESSION_set_cipher")
+		]
 		public extern static int SESSION_set_cipher(SESSION* s, CIPHER* cipher);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SESSION_has_ticket")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SESSION_has_ticket")
+		]
 		public extern static int SESSION_has_ticket(SESSION* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SESSION_get_ticket_lifetime_hint")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SESSION_get_ticket_lifetime_hint")
+		]
 		public extern static uint SESSION_get_ticket_lifetime_hint(SESSION* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SESSION_get0_ticket")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SESSION_get0_ticket")
+		]
 		public extern static void SESSION_get0_ticket(SESSION* s, uint8** tick, uint* len);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SESSION_get_max_early_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SESSION_get_max_early_data")
+		]
 		public extern static uint32 SESSION_get_max_early_data(SESSION* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SESSION_set_max_early_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SESSION_set_max_early_data")
+		]
 		public extern static int SESSION_set_max_early_data(SESSION* s, uint32 max_early_data);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_copy_session_id")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_copy_session_id")
+		]
 		public extern static int copy_session_id(ssl_st* to, ssl_st* from);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SESSION_get0_peer")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SESSION_get0_peer")
+		]
 		public extern static X509.x509_st* SESSION_get0_peer(SESSION* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SESSION_set1_id_context")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SESSION_set1_id_context")
+		]
 		public extern static int SESSION_set1_id_context(SESSION* s, uint8* sid_ctx, uint sid_ctx_len);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SESSION_set1_id")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SESSION_set1_id")
+		]
 		public extern static int SESSION_set1_id(SESSION* s, uint8* sid, uint sid_len);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SESSION_is_resumable")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SESSION_is_resumable")
+		]
 		public extern static int SESSION_is_resumable(SESSION* s);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SESSION_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SESSION_new")
+		]
 		public extern static SESSION* SESSION_new();
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SESSION_dup")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SESSION_dup")
+		]
 		public extern static SESSION* SESSION_dup(SESSION* src);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SESSION_get_id")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SESSION_get_id")
+		]
 		public extern static uint8* SESSION_get_id(SESSION* s, uint* len);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SESSION_get0_id_context")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SESSION_get0_id_context")
+		]
 		public extern static uint8* SESSION_get0_id_context(SESSION* s, uint* len);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SESSION_get_compress_id")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SESSION_get_compress_id")
+		]
 		public extern static uint SESSION_get_compress_id(SESSION* s);
 #if !OPENSSL_NO_STDIO
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SESSION_print_fp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SESSION_print_fp")
+		]
 		public extern static int SESSION_print_fp(Platform.BfpFile* fp, SESSION* ses);
 #endif
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SESSION_print")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SESSION_print")
+		]
 		public extern static int SESSION_print(BIO.bio_st* fp, SESSION* ses);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SESSION_print_keylog")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SESSION_print_keylog")
+		]
 		public extern static int SESSION_print_keylog(BIO.bio_st* bp, SESSION* x);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SESSION_up_ref")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SESSION_up_ref")
+		]
 		public extern static int SESSION_up_ref(SESSION* ses);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SESSION_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SESSION_free")
+		]
 		public extern static void SESSION_free(SESSION* ses);
-		[Import(OPENSSL_LIB_SSL), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			CLink
+		]
 		public extern static int i2d_SSL_SESSION(SESSION* inVal, uint8** pp);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_session")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_session")
+		]
 		public extern static int set_session(ssl_st* to, SESSION* session);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_add_session")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_add_session")
+		]
 		public extern static int CTX_add_session(CTX* ctx, SESSION* session);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_remove_session")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_remove_session")
+		]
 		public extern static int CTX_remove_session(CTX* ctx, SESSION* session);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_generate_session_id")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_generate_session_id")
+		]
 		public extern static int CTX_set_generate_session_id(CTX* ctx, GEN_SESSION_CB cb);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_generate_session_id")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_generate_session_id")
+		]
 		public extern static int set_generate_session_id(ssl_st* s, GEN_SESSION_CB cb);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_has_matching_session_id")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_has_matching_session_id")
+		]
 		public extern static int has_matching_session_id(ssl_st* s, uint8* id, uint id_len);
-		[Import(OPENSSL_LIB_SSL), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			CLink
+		]
 		public extern static SESSION* d2i_SSL_SESSION(SESSION** a, uint8** pp, int length);
 
 #if HEADER_X509_H
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_peer_certificate")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_peer_certificate")
+		]
 		public extern static X509.x509_st* get_peer_certificate(ssl_st* s);
 #endif
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_peer_cert_chain")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_peer_cert_chain")
+		]
 		public extern static X509.stack_st_X509* get_peer_cert_chain(ssl_st* s);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_get_verify_mode")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_get_verify_mode")
+		]
 		public extern static int CTX_get_verify_mode(CTX* ctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_get_verify_depth")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_get_verify_depth")
+		]
 		public extern static int CTX_get_verify_depth(CTX* ctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_get_verify_callback")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_get_verify_callback")
+		]
 		public extern static verify_cb CTX_get_verify_callback(CTX* ctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_verify")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_verify")
+		]
 		public extern static void CTX_set_verify(CTX* ctx, int mode, verify_cb callback);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_verify_depth")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_verify_depth")
+		]
 		public extern static void CTX_set_verify_depth(CTX* ctx, int depth);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_cert_verify_callback")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_cert_verify_callback")
+		]
 		public extern static void CTX_set_cert_verify_callback(CTX* ctx, function int(X509.STORE_CTX* sctx, void* arg) cb, void* arg);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_cert_cb")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_cert_cb")
+		]
 		public extern static void CTX_set_cert_cb(CTX* c, function int(ssl_st* ssl, void* arg) cb, void* arg);
 #if !OPENSSL_NO_RSA
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_use_RSAPrivateKey")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_use_RSAPrivateKey")
+		]
 		public extern static int CTX_use_RSAPrivateKey(CTX* ctx, RSA *rsa);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_use_RSAPrivateKey_ASN1")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_use_RSAPrivateKey_ASN1")
+		]
 		public extern static int CTX_use_RSAPrivateKey_ASN1(CTX* ctx, uint8* d, int len);
 #endif
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_use_PrivateKey")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_use_PrivateKey")
+		]
 		public extern static int CTX_use_PrivateKey(CTX* ctx, EVP.PKEY* pkey);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_use_PrivateKey_ASN1")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_use_PrivateKey_ASN1")
+		]
 		public extern static int CTX_use_PrivateKey_ASN1(int pk, CTX* ctx, uint8* d, int len);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_use_certificate")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_use_certificate")
+		]
 		public extern static int CTX_use_certificate(CTX* ctx, X509.x509_st* x);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_use_certificate_ASN1")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_use_certificate_ASN1")
+		]
 		public extern static int CTX_use_certificate_ASN1(CTX* ctx, int len, uint8* d);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_use_cert_and_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_use_cert_and_key")
+		]
 		public extern static int CTX_use_cert_and_key(CTX* ctx, X509.x509_st* x509, EVP.PKEY* privatekey, X509.stack_st_X509* chain, int override_);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_default_passwd_cb")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_default_passwd_cb")
+		]
 		public extern static void CTX_set_default_passwd_cb(CTX* ctx, PEM.password_cb cb);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_default_passwd_cb_userdata")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_default_passwd_cb_userdata")
+		]
 		public extern static void CTX_set_default_passwd_cb_userdata(CTX* ctx, void* u);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_get_default_passwd_cb")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_get_default_passwd_cb")
+		]
 		public extern static PEM.password_cb CTX_get_default_passwd_cb(CTX* ctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_get_default_passwd_cb_userdata")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_get_default_passwd_cb_userdata")
+		]
 		public extern static void* CTX_get_default_passwd_cb_userdata(CTX* ctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_default_passwd_cb")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_default_passwd_cb")
+		]
 		public extern static void set_default_passwd_cb(ssl_st* s, PEM.password_cb cb);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_default_passwd_cb_userdata")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_default_passwd_cb_userdata")
+		]
 		public extern static void set_default_passwd_cb_userdata(ssl_st* s, void* u);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_default_passwd_cb")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_default_passwd_cb")
+		]
 		public extern static PEM.password_cb get_default_passwd_cb(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_default_passwd_cb_userdata")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_default_passwd_cb_userdata")
+		]
 		public extern static void* get_default_passwd_cb_userdata(ssl_st* s);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_check_private_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_check_private_key")
+		]
 		public extern static int CTX_check_private_key(CTX* ctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_check_private_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_check_private_key")
+		]
 		public extern static int check_private_key(ssl_st* ctx);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_session_id_context")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_session_id_context")
+		]
 		public extern static int CTX_set_session_id_context(CTX* ctx, uint8* sid_ctx, uint sid_ctx_len);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_new")
+		]
 		public extern static ssl_st* new_(CTX* ctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_up_ref")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_up_ref")
+		]
 		public extern static int up_ref(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_is_dtls")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_is_dtls")
+		]
 		public extern static int is_dtls(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_session_id_context")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_session_id_context")
+		]
 		public extern static int set_session_id_context(ssl_st* ssl, uint8* sid_ctx, uint sid_ctx_len);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_purpose")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_purpose")
+		]
 		public extern static int CTX_set_purpose(CTX* ctx, int purpose);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_purpose")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_purpose")
+		]
 		public extern static int set_purpose(ssl_st* ssl, int purpose);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_trust")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_trust")
+		]
 		public extern static int CTX_set_trust(CTX* ctx, int trust);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_trust")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_trust")
+		]
 		public extern static int set_trust(ssl_st* ssl, int trust);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set1_host")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set1_host")
+		]
 		public extern static int set1_host(ssl_st* s, char8* hostname);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_add1_host")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_add1_host")
+		]
 		public extern static int add1_host(ssl_st* s, char8* hostname);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get0_peername")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get0_peername")
+		]
 		public extern static char8* get0_peername(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_hostflags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_hostflags")
+		]
 		public extern static void set_hostflags(ssl_st* s, uint flags);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_dane_enable")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_dane_enable")
+		]
 		public extern static int CTX_dane_enable(CTX* ctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_dane_mtype_set")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_dane_mtype_set")
+		]
 		public extern static int CTX_dane_mtype_set(CTX* ctx, EVP.MD* md, uint8 mtype, uint8 ord);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_dane_enable")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_dane_enable")
+		]
 		public extern static int dane_enable(ssl_st* s, char8* basedomain);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_dane_tlsa_add")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_dane_tlsa_add")
+		]
 		public extern static int dane_tlsa_add(ssl_st* s, uint8 usage, uint8 selector, uint8 mtype, uint8* data, uint dlen);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get0_dane_authority")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get0_dane_authority")
+		]
 		public extern static int get0_dane_authority(ssl_st* s, X509.x509_st** mcert, EVP.PKEY** mspki);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get0_dane_tlsa")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get0_dane_tlsa")
+		]
 		public extern static int get0_dane_tlsa(ssl_st* s, uint8* usage, uint8* selector, uint8* mtype, uint8** data, uint* dlen);
 		/* Bridge opacity barrier between libcrypt and libssl, also needed to support offline testing in test/danetest.c */
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get0_dane")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get0_dane")
+		]
 		public extern static DANE* get0_dane(ssl_st* ssl);
 		/*
 		 * DANE flags
 		 */
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_dane_set_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_dane_set_flags")
+		]
 		public extern static uint CTX_dane_set_flags(CTX* ctx, uint flags);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_dane_clear_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_dane_clear_flags")
+		]
 		public extern static uint CTX_dane_clear_flags(CTX* ctx, uint flags);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_dane_set_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_dane_set_flags")
+		]
 		public extern static uint dane_set_flags(ssl_st* ssl, uint flags);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_dane_clear_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_dane_clear_flags")
+		]
 		public extern static uint dane_clear_flags(ssl_st* ssl, uint flags);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set1_param")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set1_param")
+		]
 		public extern static int CTX_set1_param(CTX* ctx, X509.VERIFY_PARAM* vpm);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set1_param")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set1_param")
+		]
 		public extern static int set1_param(ssl_st* ssl, X509.VERIFY_PARAM* vpm);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_get0_param")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_get0_param")
+		]
 		public extern static X509.VERIFY_PARAM* CTX_get0_param(CTX* ctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get0_param")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get0_param")
+		]
 		public extern static X509.VERIFY_PARAM* get0_param(ssl_st* ssl);
 
 #if !OPENSSL_NO_SRP
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_srp_username")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_srp_username")
+		]
 		public extern static int CTX_set_srp_username(CTX* ctx, char8* name);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_srp_password")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_srp_password")
+		]
 		public extern static int CTX_set_srp_password(CTX* ctx, char8* password);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_srp_strength")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_srp_strength")
+		]
 		public extern static int CTX_set_srp_strength(CTX* ctx, int strength);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_srp_client_pwd_callback")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_srp_client_pwd_callback")
+		]
 		public extern static int CTX_set_srp_client_pwd_callback(CTX* ctx, function char8*(ssl_st*, void*) cb);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_srp_verify_param_callback")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_srp_verify_param_callback")
+		]
 		public extern static int CTX_set_srp_verify_param_callback(CTX* ctx, function int(ssl_st*, void*) cb);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_srp_username_callback")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_srp_username_callback")
+		]
 		public extern static int CTX_set_srp_username_callback(CTX* ctx, function int(ssl_st*, int*, void*) cb);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_srp_cb_arg")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_srp_cb_arg")
+		]
 		public extern static int CTX_set_srp_cb_arg(CTX* ctx, void* arg);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_srp_server_param")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_srp_server_param")
+		]
 		public extern static int set_srp_server_param(ssl_st* s, BN.BIGNUM* N, BN.BIGNUM* g, BN.BIGNUM* sa, BN.BIGNUM* v, char8* info);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_srp_server_param_pw")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_srp_server_param_pw")
+		]
 		public extern static int set_srp_server_param_pw(ssl_st* s, char8* user, char8* pass, char8* grp);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_srp_g")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_srp_g")
+		]
 		public extern static BN.BIGNUM* get_srp_g(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_srp_N")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_srp_N")
+		]
 		public extern static BN.BIGNUM* get_srp_N(ssl_st* s);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_srp_username")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_srp_username")
+		]
 		public extern static char8* get_srp_username(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_srp_userinfo")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_srp_userinfo")
+		]
 		public extern static char8* get_srp_userinfo(ssl_st* s);
 #endif
 
@@ -3241,274 +4498,829 @@ namespace Beef_Net.OpenSSL
 		public const int CLIENT_HELLO_RETRY   = -1;
 
 		public function int client_hello_cb_fn(ssl_st* s, int* al, void* arg);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_client_hello_cb")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_client_hello_cb")
+		]
 		public extern static void CTX_set_client_hello_cb(CTX* c, client_hello_cb_fn cb, void* arg);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_client_hello_isv2")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_client_hello_isv2")
+		]
 		public extern static int client_hello_isv2(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_client_hello_get0_legacy_version")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_client_hello_get0_legacy_version")
+		]
 		public extern static uint client_hello_get0_legacy_version(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_client_hello_get0_random")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_client_hello_get0_random")
+		]
 		public extern static uint client_hello_get0_random(ssl_st* s, uint8** outVal);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_client_hello_get0_session_id")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_client_hello_get0_session_id")
+		]
 		public extern static uint client_hello_get0_session_id(ssl_st* s, uint8** outVal);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_client_hello_get0_ciphers")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_client_hello_get0_ciphers")
+		]
 		public extern static uint client_hello_get0_ciphers(ssl_st* s, uint8** outVal);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_client_hello_get0_compression_methods")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_client_hello_get0_compression_methods")
+		]
 		public extern static uint client_hello_get0_compression_methods(ssl_st* s, uint8** outVal);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_client_hello_get1_extensions_present")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_client_hello_get1_extensions_present")
+		]
 		public extern static int client_hello_get1_extensions_present(ssl_st* s, int** outVal, uint* outlen);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_client_hello_get0_ext")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_client_hello_get0_ext")
+		]
 		public extern static int client_hello_get0_ext(ssl_st* s, uint type, uint8** outVal, uint* outlen);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_certs_clear")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_certs_clear")
+		]
 		public extern static void certs_clear(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_free")
+		]
 		public extern static void free(ssl_st* ssl);
 #if OSSL_ASYNC_FD
 		/* Windows application developer has to include windows.h to use these. */
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_waiting_for_async")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_waiting_for_async")
+		]
 		public extern static int waiting_for_async(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_all_async_fds")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_all_async_fds")
+		]
 		public extern static int get_all_async_fds(ssl_st* s, OSSL.ASYNC_FD* fds, uint* numfds);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_changed_async_fds")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_changed_async_fds")
+		]
 		public extern static int get_changed_async_fds(ssl_st* s, OSSL.ASYNC_FD* addfd, uint* numaddfds, OSSL.ASYNC_FD* delfd, uint* numdelfds);
 #endif
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_accept")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_accept")
+		]
 		public extern static int accept(ssl_st* ssl);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_stateless")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_stateless")
+		]
 		public extern static int stateless(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_connect")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_connect")
+		]
 		public extern static int connect(ssl_st* ssl);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_read")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_read")
+		]
 		public extern static int read(ssl_st* ssl, void* buf, int num);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_read_ex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_read_ex")
+		]
 		public extern static int read_ex(ssl_st* ssl, void* buf, uint num, uint* readbytes);
 
 		public const int READ_EARLY_DATA_ERROR   = 0;
 		public const int READ_EARLY_DATA_SUCCESS = 1;
 		public const int READ_EARLY_DATA_FINISH  = 2;
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_read_early_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_read_early_data")
+		]
 		public extern static int read_early_data(ssl_st* s, void* buf, uint num, uint* readbytes);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_peek")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_peek")
+		]
 		public extern static int peek(ssl_st* ssl, void* buf, int num);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_peek_ex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_peek_ex")
+		]
 		public extern static int peek_ex(ssl_st* ssl, void* buf, uint num, uint* readbytes);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_write")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_write")
+		]
 		public extern static int write(ssl_st* ssl, void* buf, int num);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_write_ex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_write_ex")
+		]
 		public extern static int write_ex(ssl_st* s, void* buf, uint num, uint* written);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_write_early_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_write_early_data")
+		]
 		public extern static int write_early_data(ssl_st* s, void* buf, uint num, uint* written);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_ctrl")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_ctrl")
+		]
 		public extern static int ctrl(ssl_st* ssl, int cmd, int larg, void* parg);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_callback_ctrl")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_callback_ctrl")
+		]
 		public extern static int callback_ctrl(ssl_st* s, int larg, function void() cb);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_ctrl")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_ctrl")
+		]
 		public extern static int CTX_ctrl(CTX* ctx, int cmd, int larg, void* parg);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_callback_ctrl")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_callback_ctrl")
+		]
 		public extern static int CTX_callback_ctrl(CTX* ctx, int larg, function void() cb);
 
 		public const int EARLY_DATA_NOT_SENT = 0;
 		public const int EARLY_DATA_REJECTED = 1;
 		public const int EARLY_DATA_ACCEPTED = 2;
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_early_data_status")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_early_data_status")
+		]
 		public extern static int get_early_data_status(ssl_st* s);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_error")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_error")
+		]
 		public extern static int get_error(ssl_st* s, int ret_code);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_version")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_version")
+		]
 		public extern static char8* get_version(ssl_st* s);
 
 		/* This sets the 'default' SSL version that SSL_new() will create */
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_ssl_version")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_ssl_version")
+		]
 		public extern static int CTX_set_ssl_version(CTX* ctx, METHOD* meth);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_ciphers")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_ciphers")
+		]
 		public extern static stack_st_SSL_CIPHER* get_ciphers(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_get_ciphers")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_get_ciphers")
+		]
 		public extern static stack_st_SSL_CIPHER* CTX_get_ciphers(CTX* ctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_client_ciphers")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_client_ciphers")
+		]
 		public extern static stack_st_SSL_CIPHER* get_client_ciphers(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get1_supported_ciphers")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get1_supported_ciphers")
+		]
 		public extern static stack_st_SSL_CIPHER* get1_supported_ciphers(ssl_st* s);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_do_handshake")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_do_handshake")
+		]
 		public extern static int do_handshake(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_key_update")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_key_update")
+		]
 		public extern static int key_update(ssl_st* s, int updatetype);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_key_update_type")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_key_update_type")
+		]
 		public extern static int get_key_update_type(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_renegotiate")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_renegotiate")
+		]
 		public extern static int renegotiate(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_renegotiate_abbreviated")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_renegotiate_abbreviated")
+		]
 		public extern static int renegotiate_abbreviated(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_renegotiate_pending")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_renegotiate_pending")
+		]
 		public extern static int renegotiate_pending(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_shutdown")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_shutdown")
+		]
 		public extern static int shutdown(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_verify_client_post_handshake")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_verify_client_post_handshake")
+		]
 		public extern static int verify_client_post_handshake(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_post_handshake_auth")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_post_handshake_auth")
+		]
 		public extern static void CTX_set_post_handshake_auth(CTX* ctx, int val);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_post_handshake_auth")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_post_handshake_auth")
+		]
 		public extern static void set_post_handshake_auth(ssl_st* s, int val);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_get_ssl_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_get_ssl_method")
+		]
 		public extern static METHOD* CTX_get_ssl_method(CTX* ctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_ssl_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_ssl_method")
+		]
 		public extern static METHOD* get_ssl_method(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_ssl_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_ssl_method")
+		]
 		public extern static int set_ssl_method(ssl_st* s, METHOD* method);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_alert_type_string_long")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_alert_type_string_long")
+		]
 		public extern static char8* alert_type_string_long(int value);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_alert_type_string")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_alert_type_string")
+		]
 		public extern static char8* alert_type_string(int value);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_alert_desc_string_long")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_alert_desc_string_long")
+		]
 		public extern static char8* alert_desc_string_long(int value);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_alert_desc_string")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_alert_desc_string")
+		]
 		public extern static char8* alert_desc_string(int value);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set0_CA_list")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set0_CA_list")
+		]
 		public extern static void set0_CA_list(ssl_st* s, X509.stack_st_X509_NAME* name_list);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set0_CA_list")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set0_CA_list")
+		]
 		public extern static void CTX_set0_CA_list(CTX* ctx, X509.stack_st_X509_NAME* name_list);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get0_CA_list")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get0_CA_list")
+		]
 		public extern static X509.stack_st_X509_NAME* get0_CA_list(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_get0_CA_list")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_get0_CA_list")
+		]
 		public extern static X509.stack_st_X509_NAME* CTX_get0_CA_list(CTX* ctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_add1_to_CA_list")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_add1_to_CA_list")
+		]
 		public extern static int add1_to_CA_list(ssl_st* ssl, X509.x509_st* x);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_add1_to_CA_list")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_add1_to_CA_list")
+		]
 		public extern static int CTX_add1_to_CA_list(CTX* ctx, X509.x509_st* x);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get0_peer_CA_list")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get0_peer_CA_list")
+		]
 		public extern static X509.stack_st_X509_NAME* get0_peer_CA_list(ssl_st* s);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_client_CA_list")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_client_CA_list")
+		]
 		public extern static void set_client_CA_list(ssl_st* s, X509.stack_st_X509_NAME* name_list);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_client_CA_list")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_client_CA_list")
+		]
 		public extern static void CTX_set_client_CA_list(CTX* ctx, X509.stack_st_X509_NAME* name_list);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_client_CA_list")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_client_CA_list")
+		]
 		public extern static X509.stack_st_X509_NAME* get_client_CA_list(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_get_client_CA_list")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_get_client_CA_list")
+		]
 		public extern static X509.stack_st_X509_NAME* CTX_get_client_CA_list(CTX* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_add_client_CA")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_add_client_CA")
+		]
 		public extern static int add_client_CA(ssl_st* ssl, X509.x509_st* x);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_add_client_CA")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_add_client_CA")
+		]
 		public extern static int CTX_add_client_CA(CTX* ctx, X509.x509_st* x);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_connect_state")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_connect_state")
+		]
 		public extern static void set_connect_state(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_accept_state")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_accept_state")
+		]
 		public extern static void set_accept_state(ssl_st* s);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_default_timeout")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_default_timeout")
+		]
 		public extern static int get_default_timeout(ssl_st* s);
 
 		[Inline]
 		public static int library_init() => OpenSSL.init_ssl(0, null);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CIPHER_description")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CIPHER_description")
+		]
 		public extern static char8* CIPHER_description(CIPHER* c, char8* buf, int size);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_dup_CA_list")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_dup_CA_list")
+		]
 		public extern static X509.stack_st_X509_NAME* dup_CA_list(X509.stack_st_X509_NAME* sk);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_dup")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_dup")
+		]
 		public extern static ssl_st* dup(ssl_st* ssl);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_certificate")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_certificate")
+		]
 		public extern static X509.x509_st* get_certificate(ssl_st* ssl);
 		/*
 		 * EVP_PKEY
 		 */
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_privatekey")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_privatekey")
+		]
 		public extern static EVP.pkey_st* get_privatekey(ssl_st* ssl);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_get0_certificate")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_get0_certificate")
+		]
 		public extern static X509.x509_st* CTX_get0_certificate(CTX* ctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_get0_privatekey")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_get0_privatekey")
+		]
 		public extern static EVP.PKEY* CTX_get0_privatekey(CTX* ctx);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_quiet_shutdown")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_quiet_shutdown")
+		]
 		public extern static void CTX_set_quiet_shutdown(CTX* ctx, int mode);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_get_quiet_shutdown")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_get_quiet_shutdown")
+		]
 		public extern static int CTX_get_quiet_shutdown(CTX* ctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_quiet_shutdown")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_quiet_shutdown")
+		]
 		public extern static void set_quiet_shutdown(ssl_st* ssl, int mode);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_quiet_shutdown")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_quiet_shutdown")
+		]
 		public extern static int get_quiet_shutdown(ssl_st* ssl);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_shutdown")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_shutdown")
+		]
 		public extern static void set_shutdown(ssl_st* ssl, int mode);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_shutdown")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_shutdown")
+		]
 		public extern static int get_shutdown(ssl_st* ssl);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_version")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_version")
+		]
 		public extern static int version(ssl_st* ssl);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_client_version")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_client_version")
+		]
 		public extern static int client_version(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_default_verify_paths")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_default_verify_paths")
+		]
 		public extern static int CTX_set_default_verify_paths(CTX* ctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_default_verify_dir")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_default_verify_dir")
+		]
 		public extern static int CTX_set_default_verify_dir(CTX* ctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_default_verify_file")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_default_verify_file")
+		]
 		public extern static int CTX_set_default_verify_file(CTX* ctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_load_verify_locations")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_load_verify_locations")
+		]
 		public extern static int CTX_load_verify_locations(CTX* ctx, char8* CAfile, char8* CApath);
 		[Inline]
 		public static SESSION* get0_session(ssl_st* ssl) => get_session(ssl); /* just ~~peek at pointer~~ "alias" the method */
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_session")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_session")
+		]
 		public extern static SESSION* get_session(ssl_st* ssl);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get1_session")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get1_session")
+		]
 		public extern static SESSION* get1_session(ssl_st* ssl); /* obtain a reference count */
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_SSL_CTX")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_SSL_CTX")
+		]
 		public extern static CTX* get_SSL_CTX(ssl_st* ssl);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_SSL_CTX")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_SSL_CTX")
+		]
 		public extern static CTX* set_SSL_CTX(ssl_st* ssl, CTX* ctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_info_callback")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_info_callback")
+		]
 		public extern static void set_info_callback(ssl_st* ssl, function void(ssl_st* ssl, int type, int val) cb);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_info_callback")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_info_callback")
+		]
 		public extern static function void(ssl_st* ssl, int type, int val) get_info_callback(ssl_st* ssl);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_state")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_state")
+		]
 		public extern static OSSL_HANDSHAKE_STATE get_state(ssl_st* ssl);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_verify_result")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_verify_result")
+		]
 		public extern static void set_verify_result(ssl_st* ssl, int v);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_verify_result")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_verify_result")
+		]
 		public extern static int get_verify_result(ssl_st* ssl);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get0_verified_chain")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get0_verified_chain")
+		]
 		public extern static X509.stack_st_X509* get0_verified_chain(ssl_st* s);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_client_random")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_client_random")
+		]
 		public extern static uint get_client_random(ssl_st* ssl, uint8* outVal, uint outlen);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_server_random")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_server_random")
+		]
 		public extern static uint get_server_random(ssl_st* ssl, uint8* outVal, uint outlen);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SESSION_get_master_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SESSION_get_master_key")
+		]
 		public extern static uint SESSION_get_master_key(SESSION* sess, uint8* outVal, uint outlen);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SESSION_set1_master_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SESSION_set1_master_key")
+		]
 		public extern static int SESSION_set1_master_key(SESSION* sess, uint8* inVal, uint len);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SESSION_get_max_fragment_length")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SESSION_get_max_fragment_length")
+		]
 		public extern static uint8 SESSION_get_max_fragment_length(SESSION* sess);
 
 		[Inline]
 		public static int get_ex_new_index(int l, void* p, Crypto.EX_new newf, Crypto.EX_dup dupf, Crypto.EX_free freef) => Crypto.get_ex_new_index(Crypto.EX_INDEX_SSL, l, p, newf, dupf, freef);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_ex_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_ex_data")
+		]
 		public extern static int set_ex_data(ssl_st* ssl, int idx, void* data);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_ex_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_ex_data")
+		]
 		public extern static void* get_ex_data(ssl_st* ssl, int idx);
 		[Inline]
 		public static int SESSION_get_ex_new_index(int l, void* p, Crypto.EX_new newf, Crypto.EX_dup dupf, Crypto.EX_free freef) => Crypto.get_ex_new_index(Crypto.EX_INDEX_SSL_SESSION, l, p, newf, dupf, freef);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SESSION_set_ex_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SESSION_set_ex_data")
+		]
 		public extern static int SESSION_set_ex_data(SESSION* ss, int idx, void* data);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SESSION_get_ex_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SESSION_get_ex_data")
+		]
 		public extern static void* SESSION_get_ex_data(SESSION* ss, int idx);
 		[Inline]
 		public static int CTX_get_ex_new_index(int l, void* p, Crypto.EX_new newf, Crypto.EX_dup dupf, Crypto.EX_free freef) => Crypto.get_ex_new_index(Crypto.EX_INDEX_SSL_CTX, l, p, newf, dupf, freef);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_ex_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_ex_data")
+		]
 		public extern static int CTX_set_ex_data(CTX* ssl, int idx, void* data);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_get_ex_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_get_ex_data")
+		]
 		public extern static void* CTX_get_ex_data(CTX* ssl, int idx);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_ex_data_X509_STORE_CTX_idx")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_ex_data_X509_STORE_CTX_idx")
+		]
 		public extern static int get_ex_data_X509_STORE_CTX_idx();
 
 		[Inline]
@@ -3550,134 +5362,384 @@ namespace Beef_Net.OpenSSL
 		[Inline]
 		public static int set_max_pipelines(ssl_st* ssl, int m) => ctrl(ssl, CTRL_SET_MAX_PIPELINES, m, null);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_default_read_buffer_len")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_default_read_buffer_len")
+		]
 		public extern static void CTX_set_default_read_buffer_len(CTX* ctx, uint len);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_default_read_buffer_len")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_default_read_buffer_len")
+		]
 		public extern static void set_default_read_buffer_len(ssl_st* s, uint len);
 
 #if !OPENSSL_NO_DH
 		/* NB: the |keylength| is only applicable when is_export is true */
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_tmp_dh_callback")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_tmp_dh_callback")
+		]
 		public extern static void CTX_set_tmp_dh_callback(CTX* ctx,function DH.dh_st*(ssl_st* ssl, int is_export, int keylength) dh);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_tmp_dh_callback")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_tmp_dh_callback")
+		]
 		public extern static void set_tmp_dh_callback(ssl_st* ssl, function DH.dh_st*(ssl_st* ssl, int is_export, int keylength) dh);
 #endif
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_current_compression")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_current_compression")
+		]
 		public extern static Comp.METHOD* get_current_compression(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_current_expansion")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_current_expansion")
+		]
 		public extern static Comp.METHOD* get_current_expansion(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_COMP_get_name")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_COMP_get_name")
+		]
 		public extern static char8* COMP_get_name(Comp.METHOD* comp);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_COMP_get0_name")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_COMP_get0_name")
+		]
 		public extern static char8* COMP_get0_name(COMP* comp);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_COMP_get_id")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_COMP_get_id")
+		]
 		public extern static int COMP_get_id(COMP* comp);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_COMP_get_compression_methods")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_COMP_get_compression_methods")
+		]
 		public extern static stack_st_SSL_COMP* COMP_get_compression_methods();
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_COMP_set0_compression_methods")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_COMP_set0_compression_methods")
+		]
 		public extern static stack_st_SSL_COMP* COMP_set0_compression_methods(stack_st_SSL_COMP* meths);
-		[Inline]
-		public static void COMP_free_compression_methods() { while(false) { continue; } }
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_COMP_add_compression_method")]
+		[Inline, Obsolete("No longer available, no-op", true)]
+		public static void COMP_free_compression_methods() { while(false) continue; }
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_COMP_add_compression_method")
+		]
 		public extern static int COMP_add_compression_method(int id, Comp.METHOD* cm);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CIPHER_find")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CIPHER_find")
+		]
 		public extern static CIPHER* CIPHER_find(ssl_st* ssl, uint8* ptr);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CIPHER_get_cipher_nid")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CIPHER_get_cipher_nid")
+		]
 		public extern static int CIPHER_get_cipher_nid(CIPHER* c);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CIPHER_get_digest_nid")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CIPHER_get_digest_nid")
+		]
 		public extern static int CIPHER_get_digest_nid(CIPHER* c);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_bytes_to_cipher_list")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_bytes_to_cipher_list")
+		]
 		public extern static int bytes_to_cipher_list(ssl_st* s, uint8* bytes, uint len, int isv2format, stack_st_SSL_CIPHER** sk, stack_st_SSL_CIPHER** scsvs);
 
 		/* TLS extensions functions */
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_session_ticket_ext")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_session_ticket_ext")
+		]
 		public extern static int set_session_ticket_ext(ssl_st* s, void* ext_data, int ext_len);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_session_ticket_ext_cb")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_session_ticket_ext_cb")
+		]
 		public extern static int set_session_ticket_ext_cb(ssl_st* s, TLS.session_ticket_ext_cb_fn cb, void* arg);
 
 		/* Pre-shared secret session resumption functions */
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_session_secret_cb")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_session_secret_cb")
+		]
 		public extern static int set_session_secret_cb(ssl_st* s, TLS.session_secret_cb_fn session_secret_cb, void* arg);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_not_resumable_session_callback")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_not_resumable_session_callback")
+		]
 		public extern static void CTX_set_not_resumable_session_callback(CTX* ctx, function int(ssl_st* ssl, int is_forward_secure) cb);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_not_resumable_session_callback")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_not_resumable_session_callback")
+		]
 		public extern static void set_not_resumable_session_callback(ssl_st* ssl, function int(ssl_st* ssl, int is_forward_secure) cb);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_record_padding_callback")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_record_padding_callback")
+		]
 		public extern static void CTX_set_record_padding_callback(CTX* ctx, function uint(ssl_st* ssl, int type, uint len, void* arg) cb);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_record_padding_callback_arg")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_record_padding_callback_arg")
+		]
 		public extern static void CTX_set_record_padding_callback_arg(CTX* ctx, void* arg);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_get_record_padding_callback_arg")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_get_record_padding_callback_arg")
+		]
 		public extern static void* CTX_get_record_padding_callback_arg(CTX* ctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_block_padding")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_block_padding")
+		]
 		public extern static int CTX_set_block_padding(CTX* ctx, uint block_size);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_record_padding_callback")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_record_padding_callback")
+		]
 		public extern static void set_record_padding_callback(ssl_st* ssl, function uint(ssl_st* ssl, int type, uint len, void* arg) cb);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_record_padding_callback_arg")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_record_padding_callback_arg")
+		]
 		public extern static void set_record_padding_callback_arg(ssl_st* ssl, void* arg);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_record_padding_callback_arg")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_record_padding_callback_arg")
+		]
 		public extern static void* get_record_padding_callback_arg(ssl_st* ssl);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_block_padding")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_block_padding")
+		]
 		public extern static int set_block_padding(ssl_st* ssl, uint block_size);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_num_tickets")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_num_tickets")
+		]
 		public extern static int set_num_tickets(ssl_st* s, uint num_tickets);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_num_tickets")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_num_tickets")
+		]
 		public extern static uint get_num_tickets(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_num_tickets")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_num_tickets")
+		]
 		public extern static int CTX_set_num_tickets(CTX* ctx, uint num_tickets);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_get_num_tickets")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_get_num_tickets")
+		]
 		public extern static uint CTX_get_num_tickets(CTX* ctx);
 
 		[Inline]
 		public static int cache_hit(ssl_st* s) => session_reused(s);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_session_reused")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_session_reused")
+		]
 		public extern static int session_reused(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_is_server")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_is_server")
+		]
 		public extern static int is_server(ssl_st* s);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CONF_CTX_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CONF_CTX_new")
+		]
 		public extern static CONF_CTX* CONF_CTX_new();
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CONF_CTX_finish")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CONF_CTX_finish")
+		]
 		public extern static int CONF_CTX_finish(CONF_CTX* cctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CONF_CTX_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CONF_CTX_free")
+		]
 		public extern static void CONF_CTX_free(CONF_CTX* cctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CONF_CTX_set_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CONF_CTX_set_flags")
+		]
 		public extern static uint CONF_CTX_set_flags(CONF_CTX* cctx, uint flags);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CONF_CTX_clear_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CONF_CTX_clear_flags")
+		]
 		public extern static uint CONF_CTX_clear_flags(CONF_CTX* cctx,
 		                                             uint flags);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CONF_CTX_set1_prefix")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CONF_CTX_set1_prefix")
+		]
 		public extern static int CONF_CTX_set1_prefix(CONF_CTX* cctx, char8* pre);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CONF_CTX_set_ssl")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CONF_CTX_set_ssl")
+		]
 		public extern static void CONF_CTX_set_ssl(CONF_CTX* cctx, ssl_st* ssl);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CONF_CTX_set_ssl_ctx")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CONF_CTX_set_ssl_ctx")
+		]
 		public extern static void CONF_CTX_set_ssl_ctx(CONF_CTX* cctx, CTX* ctx);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CONF_cmd")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CONF_cmd")
+		]
 		public extern static int CONF_cmd(CONF_CTX* cctx, char8* cmd, char8* value);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CONF_cmd_argv")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CONF_cmd_argv")
+		]
 		public extern static int CONF_cmd_argv(CONF_CTX* cctx, int *pargc, char8*** pargv);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CONF_cmd_value_type")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CONF_cmd_value_type")
+		]
 		public extern static int CONF_cmd_value_type(CONF_CTX* cctx, char8* cmd);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_add_ssl_module")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_add_ssl_module")
+		]
 		public extern static void add_ssl_module();
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_config")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_config")
+		]
 		public extern static int config(ssl_st* s, char8* name);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_config")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_config")
+		]
 		public extern static int CTX_config(CTX* ctx, char8* name);
 
 #if !OPENSSL_NO_SSL_TRACE
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_trace")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_trace")
+		]
 		public extern static void trace(int write_p, int version, int content_type, void* buf, uint len, ssl_st* ssl, void* arg);
 #endif
 
@@ -3699,9 +5761,19 @@ namespace Beef_Net.OpenSSL
 		 *
 		 * NOTE: A side-effect of setting a CT callback is that an OCSP stapled response will be requested.
 		 */
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_ct_validation_callback")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_ct_validation_callback")
+		]
 		public extern static int set_ct_validation_callback(ssl_st* s, ct_validation_cb callback, void* arg);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_ct_validation_callback")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_ct_validation_callback")
+		]
 		public extern static int CTX_set_ct_validation_callback(CTX* ctx, ct_validation_cb callback, void* arg);
 		[Inline]
 		public static int disable_ct(ssl_st* s) => set_ct_validation_callback(s, null, null);
@@ -3721,19 +5793,44 @@ namespace Beef_Net.OpenSSL
 		 * The CT_VALIDATION_STRICT variant requires at least one valid SCT, or else handshake termination will be requested.
 		 * The handshake may continue anyway if VERIFY_NONE is in effect.
 		 */
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_enable_ct")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_enable_ct")
+		]
 		public extern static int enable_ct(ssl_st* s, int validation_mode);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_enable_ct")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_enable_ct")
+		]
 		public extern static int CTX_enable_ct(CTX* ctx, int validation_mode);
 
 		/* Report whether a non-NULL callback is enabled. */
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_ct_is_enabled")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_ct_is_enabled")
+		]
 		public extern static int ct_is_enabled(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_ct_is_enabled")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_ct_is_enabled")
+		]
 		public extern static int CTX_ct_is_enabled(CTX* ctx);
 
 		/* Gets the SCTs received from a connection */
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get0_peer_scts")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get0_peer_scts")
+		]
 		public extern static SCT.stack_st_SCT* get0_peer_scts(ssl_st* s);
 
 		/*
@@ -3741,7 +5838,12 @@ namespace Beef_Net.OpenSSL
 		 * If a CTLOG_STORE has previously been set using CTX_set_ctlog_store, the log information loaded from this file will be appended to the CTLOG_STORE.
 		 * Returns 1 on success, 0 otherwise.
 		 */
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_default_ctlog_list_file")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_default_ctlog_list_file")
+		]
 		public extern static int CTX_set_default_ctlog_list_file(CTX* ctx);
 
 		/*
@@ -3749,14 +5851,24 @@ namespace Beef_Net.OpenSSL
 		 * If a CTLOG_STORE has previously been set using CTX_set_ctlog_store, the log information loaded from this file will be appended to the CTLOG_STORE.
 		 * Returns 1 on success, 0 otherwise.
 		 */
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_ctlog_list_file")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_ctlog_list_file")
+		]
 		public extern static int CTX_set_ctlog_list_file(CTX* ctx, char8* path);
 
 		/*
 		 * Sets the CT log list used by all SSL connections created from this CTX.
 		 * Ownership of the CTLOG_STORE is transferred to the CTX.
 		 */
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set0_ctlog_store")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set0_ctlog_store")
+		]
 		public extern static void CTX_set0_ctlog_store(CTX* ctx, CTLOG.STORE* logs);
 
 		/*
@@ -3766,7 +5878,12 @@ namespace Beef_Net.OpenSSL
 		 * - CTX_set_ctlog_list_file
 		 * - CTX_set_ctlog_store
 		 */
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_get0_ctlog_store")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_get0_ctlog_store")
+		]
 		public extern static CTLOG.STORE* CTX_get0_ctlog_store(CTX* ctx);
 #endif /* OPENSSL_NO_CT */
 
@@ -3828,35 +5945,105 @@ namespace Beef_Net.OpenSSL
 		/* Peer CA digest algorithm in certificate */
 		public const int SECOP_PEER_CA_MD       = SECOP_CA_MD | SECOP_PEER;
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_security_level")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_security_level")
+		]
 		public extern static void set_security_level(ssl_st* s, int level);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_security_level")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_security_level")
+		]
 		public extern static int get_security_level(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_security_callback")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_security_callback")
+		]
 		public extern static void set_security_callback(ssl_st* s, function int(ssl_st* s, CTX* ctx, int op, int bits, int nid, void* other, void* ex) cb);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_security_callback")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_security_callback")
+		]
 		public extern static function int(ssl_st* s, CTX* ctx, int op, int bits, int nid, void* other, void* ex) get_security_callback(ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set0_security_ex_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set0_security_ex_data")
+		]
 		public extern static void set0_security_ex_data(ssl_st* s, void* ex);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get0_security_ex_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get0_security_ex_data")
+		]
 		public extern static void* get0_security_ex_data(ssl_st* s);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_security_level")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_security_level")
+		]
 		public extern static void CTX_set_security_level(CTX* ctx, int level);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_get_security_level")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_get_security_level")
+		]
 		public extern static int CTX_get_security_level(CTX* ctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_security_callback")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_security_callback")
+		]
 		public extern static void CTX_set_security_callback(CTX* ctx, function int(ssl_st* s, CTX* ctx, int op, int bits, int nid, void* other, void* ex) cb);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_get_security_callback")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_get_security_callback")
+		]
 		public extern static function int(ssl_st* s, CTX* ctx, int op, int bits, int nid, void* other, void* ex) CTX_get_security_callback(CTX* ctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set0_security_ex_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set0_security_ex_data")
+		]
 		public extern static void CTX_set0_security_ex_data(CTX* ctx, void* ex);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_get0_security_ex_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_get0_security_ex_data")
+		]
 		public extern static void* CTX_get0_security_ex_data(CTX* ctx);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_free_buffers")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_free_buffers")
+		]
 		public extern static int free_buffers(ssl_st* ssl);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_alloc_buffers")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_alloc_buffers")
+		]
 		public extern static int alloc_buffers(ssl_st* ssl);
 
 		/* Status codes passed to the decrypt session ticket callback. Some of these are for internal use only and are never passed to the callback. */
@@ -3894,68 +6081,168 @@ namespace Beef_Net.OpenSSL
 
 		public function int CTX_generate_session_ticket_fn(ssl_st* s, void* arg);
 		public function TICKET_RETURN CTX_decrypt_session_ticket_fn(ssl_st* s, SESSION* ss, uint8* keyname, uint keyname_length, TICKET_STATUS status, void* arg);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_session_ticket_cb")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_session_ticket_cb")
+		]
 		public extern static int CTX_set_session_ticket_cb(CTX* ctx, CTX_generate_session_ticket_fn gen_cb, CTX_decrypt_session_ticket_fn dec_cb, void* arg);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SESSION_set1_ticket_appdata")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SESSION_set1_ticket_appdata")
+		]
 		public extern static int SESSION_set1_ticket_appdata(SESSION* ss, void* data, uint len);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_SESSION_get0_ticket_appdata")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_SESSION_get0_ticket_appdata")
+		]
 		public extern static int SESSION_get0_ticket_appdata(SESSION* ss, void** data, uint* len);
 
 		// extern const char SSL_version_str[]; // Not portable right now
 
 		public function int allow_early_data_cb_fn(ssl_st* s, void* arg);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_allow_early_data_cb")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_allow_early_data_cb")
+		]
 		public extern static void CTX_set_allow_early_data_cb(CTX* ctx, allow_early_data_cb_fn cb, void* arg);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_allow_early_data_cb")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_allow_early_data_cb")
+		]
 		public extern static void set_allow_early_data_cb(ssl_st* s, allow_early_data_cb_fn cb, void* arg);
 
 #if !OPENSSL_NO_SRTP
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_tlsext_use_srtp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_tlsext_use_srtp")
+		]
 		public extern static int CTX_set_tlsext_use_srtp(CTX* ctx, char8* profiles);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_tlsext_use_srtp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_tlsext_use_srtp")
+		]
 		public extern static int set_tlsext_use_srtp(ssl_st* ssl, char8* profiles);
 		
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_srtp_profiles")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_srtp_profiles")
+		]
 		public extern static SRTP.stack_st_SRTP_PROTECTION_PROFILE* get_srtp_profiles(ssl_st* ssl);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_selected_srtp_profile")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_selected_srtp_profile")
+		]
 		public extern static SRTP.PROTECTION_PROFILE* get_selected_srtp_profile(ssl_st* s);
 #endif
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_CTX_set_tlsext_max_fragment_length")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_CTX_set_tlsext_max_fragment_length")
+		]
 		public extern static int CTX_set_tlsext_max_fragment_length(CTX* ctx, uint8 mode);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_set_tlsext_max_fragment_length")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_set_tlsext_max_fragment_length")
+		]
 		public extern static int set_tlsext_max_fragment_length(ssl_st* ssl, uint8 mode);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_servername")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_servername")
+		]
 		public extern static char8* get_servername(ssl_st* s, int type);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_servername_type")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_servername_type")
+		]
 		public extern static int get_servername_type(ssl_st* s);
 		/*
 		 * export_keying_material exports a value derived from the master secret, as specified in RFC 5705. It writes |olen| bytes to |out| given a label and optional context. (Since a zero length context is allowed,
 		 * the |use_context| flag controls whether a context is included.) It returns 1 on success and 0 or -1 otherwise.
 		 */
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_export_keying_material")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_export_keying_material")
+		]
 		public extern static int export_keying_material(ssl_st* s, uint8* outVal, uint olen, char8* label, uint llen, uint8* context, uint contextlen, int use_context);
 
 		/*
 		 * export_keying_material_early exports a value derived from the early exporter master secret, as specified in https://tools.ietf.org/html/draft-ietf-tls-tls13-23. It writes
 		 * |olen| bytes to |out| given a label and optional context. It returns 1 on success and 0 otherwise.
 		 */
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_export_keying_material_early")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_export_keying_material_early")
+		]
 		public extern static int export_keying_material_early(ssl_st* s, uint8* outVal, uint olen, char8* label, uint llen, uint8* context, uint contextlen);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_peer_signature_type_nid")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_peer_signature_type_nid")
+		]
 		public extern static int get_peer_signature_type_nid(ssl_st* s, int* pnid);
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_signature_type_nid")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_signature_type_nid")
+		]
 		public extern static int get_signature_type_nid(ssl_st* s, int* pnid);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_sigalgs")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_sigalgs")
+		]
 		public extern static int get_sigalgs(ssl_st* s, int idx, int* psign, int* phash, int* psignandhash, uint8* rsig, uint8* rhash);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_get_shared_sigalgs")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_get_shared_sigalgs")
+		]
 		public extern static int get_shared_sigalgs(ssl_st* s, int idx, int* psign, int* phash, int* psignandhash, uint8* rsig, uint8* rhash);
 
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_check_chain")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_check_chain")
+		]
 		public extern static int check_chain(ssl_st* s, X509.x509_st* x, EVP.PKEY* pk, X509.stack_st_X509* chain);
 
 		[Inline]
@@ -4369,11 +6656,26 @@ namespace Beef_Net.OpenSSL
 		public const int CHANGE_CIPHER_SERVER_WRITE     = CC_SERVER | CC_WRITE;
 
 #if !OPENSSL_NO_SSL3_METHOD
-		[Import(OPENSSL_LIB_SSL), LinkName("SSLv3_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSLv3_method")
+		]
 		public static SSL.METHOD* method(); /* SSLv3 */
-		[Import(OPENSSL_LIB_SSL), LinkName("SSLv3_server_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSLv3_server_method")
+		]
 		public static SSL.METHOD* server_method();
-		[Import(OPENSSL_LIB_SSL), LinkName("SSLv3_client_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSLv3_client_method")
+		]
 		public static SSL.METHOD* client_method();
 #endif
 

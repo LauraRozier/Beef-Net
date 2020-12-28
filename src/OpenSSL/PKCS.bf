@@ -15,7 +15,12 @@ namespace Beef_Net.OpenSSL
 	sealed abstract class PKCS1
 	{
 #if !OPENSSL_NO_RSA
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS1_MGF1")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS1_MGF1")
+		]
 		public extern static int MGF1(uint8* mask, int len, uint8* seed, int seedlen, EVP.MD* dgst);
 #endif
 	}
@@ -28,47 +33,112 @@ namespace Beef_Net.OpenSSL
 		public const int DEFAULT_ITER = 2048;
 
 		/* PKCS5 password based encryption */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS5_PBE_keyivgen")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS5_PBE_keyivgen")
+		]
 		public extern static int PBE_keyivgen(EVP.CIPHER_CTX* ctx, char8* pass, int passlen, ASN1.TYPE* param, EVP.CIPHER* cipher, EVP.MD* md, int en_de);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS5_PBKDF2_HMAC_SHA1")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS5_PBKDF2_HMAC_SHA1")
+		]
 		public extern static int PBKDF2_HMAC_SHA1(char8* pass, int passlen, uint8* salt, int saltlen, int iter, int keylen, uint8* outVal);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS5_PBKDF2_HMAC")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS5_PBKDF2_HMAC")
+		]
 		public extern static int PBKDF2_HMAC(char8* pass, int passlen, uint8* salt, int saltlen, int iter, EVP.MD* digest, int keylen, uint8* outVal);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS5_v2_PBE_keyivgen")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS5_v2_PBE_keyivgen")
+		]
 		public extern static int v2_PBE_keyivgen(EVP.CIPHER_CTX* ctx, char8* pass, int passlen, ASN1.TYPE* param, EVP.CIPHER* cipher, EVP.MD* md, int en_de);
 
 #if !OPENSSL_NO_SCRYPT
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS5_v2_scrypt_keyivgen")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS5_v2_scrypt_keyivgen")
+		]
 		public extern static int v2_scrypt_keyivgen(EVP.CIPHER_CTX* ctx, char8* pass, int passlen, ASN1.TYPE* param, EVP.CIPHER* c, EVP.MD* md, int en_de);
 #endif
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS5_PBE_add")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS5_PBE_add")
+		]
 		public extern static void PBE_add();
 		
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS5_pbe_set0_algor")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS5_pbe_set0_algor")
+		]
 		public extern static int pbe_set0_algor(X509.ALGOR* algor, int alg, int iter, uint8* salt, int saltlen);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS5_pbe_set")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS5_pbe_set")
+		]
 		public extern static X509.ALGOR* pbe_set(int alg, int iter, uint8* salt, int saltlen);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS5_pbe2_set")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS5_pbe2_set")
+		]
 		public extern static X509.ALGOR* pbe2_set(EVP.CIPHER* cipher, int iter, uint8* salt, int saltlen);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS5_pbe2_set_iv")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS5_pbe2_set_iv")
+		]
 		public extern static X509.ALGOR* pbe2_set_iv(EVP.CIPHER* cipher, int iter, uint8* salt, int saltlen, uint8* aiv, int prf_nid);
 
 #if !OPENSSL_NO_SCRYPT
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS5_pbe2_set_scrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS5_pbe2_set_scrypt")
+		]
 		public extern static X509.ALGOR* pbe2_set_scrypt(EVP.CIPHER* cipher, uint8* salt, int saltlen, uint8* aiv, uint64 N, uint64 r, uint64 p);
 #endif
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS5_pbkdf2_set")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS5_pbkdf2_set")
+		]
 		public extern static X509.ALGOR* pbkdf2_set(int iter, uint8* salt, int saltlen, int prf_nid, int keylen);
 	}
 	
 	[AlwaysInclude]
 	sealed abstract class PKCS7
 	{
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int ERR_load_PKCS7_strings();
 		
 		/*
@@ -356,21 +426,56 @@ namespace Beef_Net.OpenSSL
 		public const int NO_DUAL_CONTENT = 0x10000;
 
 		// DECLARE_ASN1_FUNCTIONS(ISSUER_AND_SERIAL)
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("")
+		]
 		public extern static int PKCS7_ISSUER_AND_SERIAL_digest(ISSUER_AND_SERIAL* data, EVP.MD* type, uint8* md, uint* len);
 #if !OPENSSL_NO_STDIO
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static pkcs7_st* d2i_PKCS7_fp(Platform.BfpFile* fp, pkcs7_st** p7);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_PKCS7_fp(Platform.BfpFile* fp, pkcs7_st* p7);
 #endif
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("")
+		]
 		public extern static pkcs7_st* PKCS7_dup(pkcs7_st* p7);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static pkcs7_st* d2i_PKCS7_bio(BIO.bio_st* bp, pkcs7_st** p7);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_PKCS7_bio(BIO.bio_st* bp, pkcs7_st* p7);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_PKCS7_bio_stream(BIO.bio_st* outVal, pkcs7_st* p7, BIO.bio_st* inVal, int flags);
 
 		/*
@@ -391,112 +496,352 @@ namespace Beef_Net.OpenSSL
 		DECLARE_ASN1_PRINT_FUNCTION(PKCS7)
 		*/
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_ctrl")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_ctrl")
+		]
 		public extern static int ctrl(pkcs7_st* p7, int cmd, int larg, char8* parg);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_set_type")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_set_type")
+		]
 		public extern static int set_type(pkcs7_st* p7, int type);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_set0_type_other")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_set0_type_other")
+		]
 		public extern static int set0_type_other(pkcs7_st* p7, int type, ASN1.TYPE* other);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_set_content")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_set_content")
+		]
 		public extern static int set_content(pkcs7_st* p7, pkcs7_st* p7_data);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_SIGNER_INFO_set")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_SIGNER_INFO_set")
+		]
 		public extern static int SIGNER_INFO_set(SIGNER_INFO* p7i, X509.x509_st* x509, EVP.PKEY* pkey, EVP.MD* dgst);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_SIGNER_INFO_sign")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_SIGNER_INFO_sign")
+		]
 		public extern static int SIGNER_INFO_sign(SIGNER_INFO* si);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_add_signer")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_add_signer")
+		]
 		public extern static int add_signer(pkcs7_st* p7, SIGNER_INFO* p7i);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_add_certificate")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_add_certificate")
+		]
 		public extern static int add_certificate(pkcs7_st* p7, X509.x509_st* x509);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_add_crl")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_add_crl")
+		]
 		public extern static int add_crl(pkcs7_st* p7, X509.CRL* x509);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_content_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_content_new")
+		]
 		public extern static int content_new(pkcs7_st* p7, int nid);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_dataVerify")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_dataVerify")
+		]
 		public extern static int dataVerify(X509.STORE* cert_store, X509.STORE_CTX* ctx, BIO.bio_st* bio, pkcs7_st* p7, SIGNER_INFO* si);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_signatureVerify")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_signatureVerify")
+		]
 		public extern static int signatureVerify(BIO.bio_st* bio, pkcs7_st* p7, SIGNER_INFO* si, X509.x509_st* x509);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_dataInit")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_dataInit")
+		]
 		public extern static BIO.bio_st* dataInit(pkcs7_st* p7, BIO.bio_st* bio);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_dataFinal")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_dataFinal")
+		]
 		public extern static int dataFinal(pkcs7_st* p7, BIO.bio_st* bio);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_dataDecode")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_dataDecode")
+		]
 		public extern static BIO.bio_st* dataDecode(pkcs7_st* p7, EVP.PKEY* pkey, BIO.bio_st* in_bio, X509.x509_st* pcert);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_add_signature")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_add_signature")
+		]
 		public extern static SIGNER_INFO* add_signature(pkcs7_st* p7, X509.x509_st* x509, EVP.PKEY* pkey, EVP.MD* dgst);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_cert_from_signer_info")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_cert_from_signer_info")
+		]
 		public extern static X509.x509_st* cert_from_signer_info(pkcs7_st* p7, SIGNER_INFO* si);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_set_digest")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_set_digest")
+		]
 		public extern static int set_digest(pkcs7_st* p7, EVP.MD* md);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_get_signer_info")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_get_signer_info")
+		]
 		public extern static stack_st_PKCS7_SIGNER_INFO* get_signer_info(pkcs7_st* p7);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_add_recipient")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_add_recipient")
+		]
 		public extern static RECIP_INFO* add_recipient(pkcs7_st* p7, X509.x509_st* x509);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_SIGNER_INFO_get0_algs")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_SIGNER_INFO_get0_algs")
+		]
 		public extern static void SIGNER_INFO_get0_algs(SIGNER_INFO* si, EVP.PKEY** pk, X509.ALGOR** pdig, X509.ALGOR** psig);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_RECIP_INFO_get0_alg")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_RECIP_INFO_get0_alg")
+		]
 		public extern static void RECIP_INFO_get0_alg(RECIP_INFO * ri, X509.ALGOR**penc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_add_recipient_info")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_add_recipient_info")
+		]
 		public extern static int add_recipient_info(pkcs7_st* p7, RECIP_INFO* ri);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_RECIP_INFO_set")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_RECIP_INFO_set")
+		]
 		public extern static int RECIP_INFO_set(RECIP_INFO* p7i, X509.x509_st* x509);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_set_cipher")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_set_cipher")
+		]
 		public extern static int set_cipher(pkcs7_st* p7, EVP.CIPHER* cipher);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_stream")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_stream")
+		]
 		public extern static int stream(uint8*** boundary, pkcs7_st* p7);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_get_issuer_and_serial")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_get_issuer_and_serial")
+		]
 		public extern static ISSUER_AND_SERIAL* get_issuer_and_serial(pkcs7_st* p7, int idx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_digest_from_attributes")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_digest_from_attributes")
+		]
 		public extern static ASN1.OCTET_STRING* digest_from_attributes(X509.stack_st_X509_ATTRIBUTE* sk);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_add_signed_attribute")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_add_signed_attribute")
+		]
 		public extern static int add_signed_attribute(SIGNER_INFO* p7si, int nid, int type, void* data);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_add_attribute")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_add_attribute")
+		]
 		public extern static int add_attribute(SIGNER_INFO* p7si, int nid, int atrtype, void* value);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_get_attribute")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_get_attribute")
+		]
 		public extern static ASN1.TYPE* get_attribute(SIGNER_INFO* si, int nid);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_get_signed_attribute")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_get_signed_attribute")
+		]
 		public extern static ASN1.TYPE* get_signed_attribute(SIGNER_INFO* si, int nid);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_set_signed_attributes")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_set_signed_attributes")
+		]
 		public extern static int set_signed_attributes(SIGNER_INFO* p7si, X509.stack_st_X509_ATTRIBUTE* sk);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_set_attributes")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_set_attributes")
+		]
 		public extern static int set_attributes(SIGNER_INFO* p7si, X509.stack_st_X509_ATTRIBUTE* sk);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_sign")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_sign")
+		]
 		public extern static pkcs7_st* sign(X509.x509_st* signcert, EVP.PKEY* pkey, X509.stack_st_X509* certs, BIO.bio_st* data, int flags);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_sign_add_signer")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_sign_add_signer")
+		]
 		public extern static SIGNER_INFO* sign_add_signer(pkcs7_st* p7, X509.x509_st* signcert, EVP.PKEY* pkey, EVP.MD* md, int flags);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_final")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_final")
+		]
 		public extern static int final(pkcs7_st* p7, BIO.bio_st* data, int flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_verify")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_verify")
+		]
 		public extern static int verify(pkcs7_st* p7, X509.stack_st_X509* certs, X509.STORE* store, BIO.bio_st* indata, BIO.bio_st* outVal, int flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_get0_signers")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_get0_signers")
+		]
 		public extern static X509.stack_st_X509* get0_signers(pkcs7_st* p7, X509.stack_st_X509* certs, int flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_encrypt")
+		]
 		public extern static pkcs7_st* encrypt(X509.stack_st_X509* certs, BIO.bio_st* inVal, EVP.CIPHER* cipher, int flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_decrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_decrypt")
+		]
 		public extern static int decrypt(pkcs7_st* p7, EVP.PKEY* pkey, X509.x509_st* cert, BIO.bio_st* data, int flags);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_add_attrib_smimecap")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_add_attrib_smimecap")
+		]
 		public extern static int add_attrib_smimecap(SIGNER_INFO* si, X509.stack_st_X509_ALGOR* cap);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_get_smimecap")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_get_smimecap")
+		]
 		public extern static X509.stack_st_X509_ALGOR* get_smimecap(SIGNER_INFO* si);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_simple_smimecap")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_simple_smimecap")
+		]
 		public extern static int simple_smimecap(X509.stack_st_X509_ALGOR* sk, int nid, int arg);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_add_attrib_content_type")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_add_attrib_content_type")
+		]
 		public extern static int add_attrib_content_type(SIGNER_INFO* si, ASN1.OBJECT* coid);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_add0_attrib_signing_time")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_add0_attrib_signing_time")
+		]
 		public extern static int add0_attrib_signing_time(SIGNER_INFO* si, ASN1.TIME* t);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_add1_attrib_digest")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_add1_attrib_digest")
+		]
 		public extern static int add1_attrib_digest(SIGNER_INFO* si, uint8* md, int mdlen);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS7_to_TS_TST_INFO")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS7_to_TS_TST_INFO")
+		]
 		public extern static TS.TST_INFO* to_TS_TST_INFO(pkcs7_st* token);
 	}
 	
@@ -514,32 +859,82 @@ namespace Beef_Net.OpenSSL
 		}
 		public typealias PRIV_KEY_INFO = priv_key_info_st;
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS8_get_attr")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS8_get_attr")
+		]
 		public extern static ASN1.TYPE* get_attr(PRIV_KEY_INFO* p8, int attr_nid);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS8_decrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS8_decrypt")
+		]
 		public extern static PRIV_KEY_INFO* decrypt(X509.SIG* p8, char8* pass, int passlen);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS8_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS8_encrypt")
+		]
 		public extern static X509.SIG* encrypt(int pbe_nid, EVP.CIPHER* cipher, char8* pass, int passlen, uint8* salt, int saltlen, int iter, PRIV_KEY_INFO* p8);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS8_set0_pbe")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS8_set0_pbe")
+		]
 		public extern static X509.SIG* set0_pbe(char8* pass, int passlen, PRIV_KEY_INFO* p8inf, X509.ALGOR* pbe);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS8_add_keyusage")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS8_add_keyusage")
+		]
 		public extern static int add_keyusage(PRIV_KEY_INFO* p8, int usage);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS8_pkey_set0")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS8_pkey_set0")
+		]
 		public extern static int pkey_set0(PRIV_KEY_INFO* priv, ASN1.OBJECT* aobj, int version, int ptype, void* pval, uint8* penc, int penclen);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS8_pkey_get0")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS8_pkey_get0")
+		]
 		public extern static int pkey_get0(ASN1.OBJECT** ppkalg, uint8** pk, int* ppklen, X509.ALGOR** pa, PRIV_KEY_INFO* p8);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS8_pkey_get0_attrs")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS8_pkey_get0_attrs")
+		]
 		public extern static X509.stack_st_X509_ATTRIBUTE* pkey_get0_attrs(PRIV_KEY_INFO* p8);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS8_pkey_add1_attr_by_NID")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS8_pkey_add1_attr_by_NID")
+		]
 		public extern static int pkey_add1_attr_by_NID(PRIV_KEY_INFO* p8, int nid, int type, uint8* bytes, int len);
 	}
 	
 	[AlwaysInclude]
 	sealed abstract class PKCS12
 	{
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int ERR_load_PKCS12_strings();
 		
 		/*
@@ -711,102 +1106,327 @@ namespace Beef_Net.OpenSSL
 		public static SAFEBAG* MAKE_SHKEYBAG(int pbe_nid, char8* pass, int passlen, uint8* salt, int saltlen, int iter, PKCS8.PRIV_KEY_INFO* p8inf) =>
 			SAFEBAG_create_pkcs8_encrypt(pbe_nid, pass, passlen, salt, saltlen, iter, p8inf);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_get_attr")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_get_attr")
+		]
 		public extern static ASN1.TYPE* get_attr(SAFEBAG* bag, int attr_nid);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_mac_present")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_mac_present")
+		]
 		public extern static int mac_present(PKCS12_st* p12);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_get0_mac")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_get0_mac")
+		]
 		public extern static void get0_mac(ASN1.OCTET_STRING** pmac, X509.ALGOR** pmacalg, ASN1.OCTET_STRING** psalt, ASN1.INTEGER** piter, PKCS12_st* p12);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_SAFEBAG_get0_attr")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_SAFEBAG_get0_attr")
+		]
 		public extern static ASN1.TYPE* SAFEBAG_get0_attr(SAFEBAG* bag, int attr_nid);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_SAFEBAG_get0_type")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_SAFEBAG_get0_type")
+		]
 		public extern static ASN1.OBJECT* SAFEBAG_get0_type(SAFEBAG* bag);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_SAFEBAG_get_nid")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_SAFEBAG_get_nid")
+		]
 		public extern static int SAFEBAG_get_nid(SAFEBAG* bag);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_SAFEBAG_get_bag_nid")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_SAFEBAG_get_bag_nid")
+		]
 		public extern static int SAFEBAG_get_bag_nid(SAFEBAG* bag);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_SAFEBAG_get1_cert")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_SAFEBAG_get1_cert")
+		]
 		public extern static X509.x509_st* SAFEBAG_get1_cert(SAFEBAG* bag);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_SAFEBAG_get1_crl")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_SAFEBAG_get1_crl")
+		]
 		public extern static X509.CRL* SAFEBAG_get1_crl(SAFEBAG* bag);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_SAFEBAG_get0_safes")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_SAFEBAG_get0_safes")
+		]
 		public extern static stack_st_PKCS12_SAFEBAG* SAFEBAG_get0_safes(SAFEBAG* bag);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_SAFEBAG_get0_p8inf")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_SAFEBAG_get0_p8inf")
+		]
 		public extern static PKCS8.PRIV_KEY_INFO* SAFEBAG_get0_p8inf(SAFEBAG* bag);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_SAFEBAG_get0_pkcs8")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_SAFEBAG_get0_pkcs8")
+		]
 		public extern static X509.SIG* SAFEBAG_get0_pkcs8(SAFEBAG* bag);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_SAFEBAG_create_cert")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_SAFEBAG_create_cert")
+		]
 		public extern static SAFEBAG* SAFEBAG_create_cert(X509.x509_st* x509);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_SAFEBAG_create_crl")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_SAFEBAG_create_crl")
+		]
 		public extern static SAFEBAG* SAFEBAG_create_crl(X509.CRL* crl);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_SAFEBAG_create0_p8inf")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_SAFEBAG_create0_p8inf")
+		]
 		public extern static SAFEBAG* SAFEBAG_create0_p8inf(PKCS8.PRIV_KEY_INFO* p8);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_SAFEBAG_create0_pkcs8")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_SAFEBAG_create0_pkcs8")
+		]
 		public extern static SAFEBAG* SAFEBAG_create0_pkcs8(X509.SIG* p8);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_SAFEBAG_create_pkcs8_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_SAFEBAG_create_pkcs8_encrypt")
+		]
 		public extern static SAFEBAG* SAFEBAG_create_pkcs8_encrypt(int pbe_nid, char8* pass, int passlen, uint8* salt, int saltlen, int iter, PKCS8.PRIV_KEY_INFO* p8inf);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_item_pack_safebag")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_item_pack_safebag")
+		]
 		public extern static SAFEBAG* item_pack_safebag(void* obj, ASN1.ITEM* it, int nid1, int nid2);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_decrypt_skey")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_decrypt_skey")
+		]
 		public extern static PKCS8.PRIV_KEY_INFO* decrypt_skey(SAFEBAG* bag, char8* pass, int passlen);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_pack_p7data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_pack_p7data")
+		]
 		public extern static PKCS7.pkcs7_st* pack_p7data(stack_st_PKCS12_SAFEBAG *sk);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_unpack_p7data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_unpack_p7data")
+		]
 		public extern static stack_st_PKCS12_SAFEBAG* unpack_p7data(PKCS7.pkcs7_st* p7);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_pack_p7encdata")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_pack_p7encdata")
+		]
 		public extern static PKCS7.pkcs7_st* pack_p7encdata(int pbe_nid, char8* pass, int passlen, uint8* salt, int saltlen, int iter, stack_st_PKCS12_SAFEBAG* bags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_unpack_p7encdata")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_unpack_p7encdata")
+		]
 		public extern static stack_st_PKCS12_SAFEBAG* unpack_p7encdata(PKCS7.pkcs7_st* p7, char8* pass, int passlen);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_pack_authsafes")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_pack_authsafes")
+		]
 		public extern static int pack_authsafes(PKCS12_st* p12, PKCS7.stack_st_PKCS7* safes);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_unpack_authsafes")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_unpack_authsafes")
+		]
 		public extern static PKCS7.stack_st_PKCS7* unpack_authsafes(PKCS12_st* p12);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_add_localkeyid")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_add_localkeyid")
+		]
 		public extern static int add_localkeyid(SAFEBAG* bag, uint8* name, int namelen);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_add_friendlyname_asc")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_add_friendlyname_asc")
+		]
 		public extern static int add_friendlyname_asc(SAFEBAG* bag, char8* name, int namelen);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_add_friendlyname_utf8")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_add_friendlyname_utf8")
+		]
 		public extern static int add_friendlyname_utf8(SAFEBAG* bag, char8* name, int namelen);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_add_CSPName_asc")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_add_CSPName_asc")
+		]
 		public extern static int add_CSPName_asc(SAFEBAG* bag, char8* name, int namelen);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_add_friendlyname_uni")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_add_friendlyname_uni")
+		]
 		public extern static int add_friendlyname_uni(SAFEBAG* bag, uint8* name, int namelen);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_get_attr_gen")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_get_attr_gen")
+		]
 		public extern static ASN1.TYPE* get_attr_gen(X509.stack_st_X509_ATTRIBUTE* attrs, int attr_nid);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_get_friendlyname")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_get_friendlyname")
+		]
 		public extern static char8* get_friendlyname(SAFEBAG* bag);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_SAFEBAG_get0_attrs")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_SAFEBAG_get0_attrs")
+		]
 		public extern static X509.stack_st_X509_ATTRIBUTE* SAFEBAG_get0_attrs(SAFEBAG* bag);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_pbe_crypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_pbe_crypt")
+		]
 		public extern static uint8* pbe_crypt(X509.ALGOR* algor, char8* pass, int passlen,  uint8* inVal, int inlen, uint8** data, int* datalen, int en_de);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_item_decrypt_d2i")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_item_decrypt_d2i")
+		]
 		public extern static void* item_decrypt_d2i(X509.ALGOR* algor, ASN1.ITEM* it, char8* pass, int passlen, ASN1.OCTET_STRING* oct, int zbuf);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_item_i2d_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_item_i2d_encrypt")
+		]
 		public extern static ASN1.OCTET_STRING* item_i2d_encrypt(X509.ALGOR* algor, ASN1.ITEM* it, char8* pass, int passlen, void* obj, int zbuf);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_init")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_init")
+		]
 		public extern static PKCS12_st* init(int mode);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_key_gen_asc")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_key_gen_asc")
+		]
 		public extern static int key_gen_asc(char8* pass, int passlen, uint8* salt, int saltlen, int id, int iter, int n, uint8* outVal, EVP.MD* md_type);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_key_gen_uni")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_key_gen_uni")
+		]
 		public extern static int key_gen_uni(uint8* pass, int passlen, uint8* salt, int saltlen, int id, int iter, int n, uint8* outVal, EVP.MD* md_type);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_key_gen_utf8")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_key_gen_utf8")
+		]
 		public extern static int key_gen_utf8(char8* pass, int passlen, uint8* salt, int saltlen, int id, int iter, int n, uint8* outVal, EVP.MD* md_type);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_PBE_keyivgen")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_PBE_keyivgen")
+		]
 		public extern static int PBE_keyivgen(EVP.CIPHER_CTX* ctx, char8* pass, int passlen, ASN1.TYPE* param, EVP.CIPHER* cipher, EVP.MD* md_type, int en_de);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_gen_mac")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_gen_mac")
+		]
 		public extern static int gen_mac(PKCS12_st* p12, char8* pass, int passlen, uint8* mac, uint* maclen);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_verify_mac")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_verify_mac")
+		]
 		public extern static int verify_mac(PKCS12_st* p12, char8* pass, int passlen);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_set_mac")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_set_mac")
+		]
 		public extern static int set_mac(PKCS12_st* p12, char8* pass, int passlen, uint8* salt, int saltlen, int iter, EVP.MD* md_type);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_setup_mac")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_setup_mac")
+		]
 		public extern static int setup_mac(PKCS12_st* p12, int iter, uint8* salt, int saltlen, EVP.MD* md_type);
 
 		/*
@@ -819,35 +1439,95 @@ namespace Beef_Net.OpenSSL
 		DECLARE_ASN1_ITEM(PKCS12_AUTHSAFES)
 		*/
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_PBE_add")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_PBE_add")
+		]
 		public extern static void PBE_add();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_parse")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_parse")
+		]
 		public extern static int parse(PKCS12_st* p12, char8* pass, EVP.PKEY** pkey, X509.x509_st** cert, X509.stack_st_X509** ca);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_create")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_create")
+		]
 		public extern static PKCS12_st* create(char8* pass, char8* name, EVP.PKEY* pkey, X509.x509_st* cert, X509.stack_st_X509* ca, int nid_key, int nid_cert, int iter, int mac_iter, int keytype);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_add_cert")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_add_cert")
+		]
 		public extern static SAFEBAG* add_cert(stack_st_PKCS12_SAFEBAG** pbags, X509.x509_st* cert);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_add_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_add_key")
+		]
 		public extern static SAFEBAG* add_key(stack_st_PKCS12_SAFEBAG** pbags, EVP.PKEY* key, int key_usage, int iter, int key_nid, char8* pass);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_add_safe")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_add_safe")
+		]
 		public extern static int add_safe(PKCS7.stack_st_PKCS7** psafes, stack_st_PKCS12_SAFEBAG* bags, int safe_nid, int iter, char8* pass);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_add_safes")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_add_safes")
+		]
 		public extern static PKCS12_st* add_safes(PKCS7.stack_st_PKCS7* safes, int p7_nid);
 
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_PKCS12_bio(BIO.bio_st* bp, PKCS12_st* p12 );
 #if !OPENSSL_NO_STDIO
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_PKCS12_fp(Platform.BfpFile* fp, PKCS12_st* p12);
 #endif
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static PKCS12_st* d2i_PKCS12_bio(BIO.bio_st* bp, PKCS12_st** p12);
 #if !OPENSSL_NO_STDIO
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static PKCS12_st* d2i_PKCS12_fp(Platform.BfpFile* fp, PKCS12_st** p12);
 #endif
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("PKCS12_newpass")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("PKCS12_newpass")
+		]
 		public extern static int newpass(PKCS12_st* p12, char8* oldpass, char8* newpass);
 	}
 }

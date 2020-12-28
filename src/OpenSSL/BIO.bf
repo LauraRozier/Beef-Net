@@ -14,7 +14,12 @@ namespace Beef_Net.OpenSSL
 	[AlwaysInclude]
 	sealed abstract class BIO
 	{
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int ERR_load_BIO_strings();
 
 		/*
@@ -320,13 +325,33 @@ namespace Beef_Net.OpenSSL
 		}
 		public typealias ADDRINFO = addrinfo_st;
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_get_new_index")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_get_new_index")
+		]
 		public extern static int get_new_index();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_set_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_set_flags")
+		]
 		public extern static void set_flags(bio_st* b, int flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_test_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_test_flags")
+		]
 		public extern static int test_flags(bio_st* b, int flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_clear_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_clear_flags")
+		]
 		public extern static void clear_flags(bio_st* b, int flags);
 
 		[Inline]
@@ -386,24 +411,64 @@ namespace Beef_Net.OpenSSL
 		[Inline]
         public static bool cb_post(int a) => (a & CB_RETURN) > 0;
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_get_callback")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_get_callback")
+		]
 		public extern static callback_fn get_callback(bio_st* b);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_set_callback")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_set_callback")
+		]
 		public extern static void set_callback(bio_st* b, callback_fn callback);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_get_callback_ex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_get_callback_ex")
+		]
 		public extern static callback_fn_ex get_callback_ex(bio_st* b);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_set_callback_ex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_set_callback_ex")
+		]
 		public extern static void set_callback_ex(bio_st* b, callback_fn_ex callback);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_get_callback_arg")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_get_callback_arg")
+		]
 		public extern static char8* get_callback_arg(bio_st* b);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_set_callback_arg")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_set_callback_arg")
+		]
 		public extern static void set_callback_arg(bio_st* b, char8* arg);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_method_name")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_method_name")
+		]
 		public extern static char8* method_name(bio_st* b);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_method_type")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_method_type")
+		]
 		public extern static int method_type(bio_st* b);
 
 		/* Prefix and suffix callback in ASN1 BIO */
@@ -601,7 +666,12 @@ namespace Beef_Net.OpenSSL
 		/* name is cast to lose const, but might be better to route through a function so we can do it safely */
 #if CONST_STRICT
 		/* If you are wondering why this isn't defined, its because CONST_STRICT is purely a compile-time kludge to allow const to be checked. */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_read_filename")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_read_filename")
+		]
 		public extern static int read_filename(bio_st* b, char8* name);
 #else
 		[Inline]
@@ -674,9 +744,19 @@ namespace Beef_Net.OpenSSL
 		[Inline]
 		public static int wpending(bio_st* b) => ctrl(b, CTRL_WPENDING, 0, null);
 		/* ...pending macros have inappropriate return type */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_ctrl_pending")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_ctrl_pending")
+		]
 		public extern static uint ctrl_pending(bio_st* b);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_ctrl_wpending")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_ctrl_wpending")
+		]
 		public extern static uint ctrl_wpending(bio_st* b);
 		[Inline]
 		public static int flush(bio_st* b) => ctrl(b, CTRL_FLUSH, 0, null);
@@ -707,11 +787,26 @@ namespace Beef_Net.OpenSSL
 		public static int get_write_guarantee(bio_st* b) => ctrl(b, C_GET_WRITE_GUARANTEE, 0, null);
 		[Inline]
 		public static int get_read_request(bio_st* b) => ctrl(b, C_GET_READ_REQUEST, 0, null);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_ctrl_get_write_guarantee")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_ctrl_get_write_guarantee")
+		]
 		public extern static uint ctrl_get_write_guarantee(bio_st* b);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_ctrl_get_read_request")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_ctrl_get_read_request")
+		]
 		public extern static uint ctrl_get_read_request(bio_st* b);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_ctrl_reset_read_request")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_ctrl_reset_read_request")
+		]
 		public extern static int ctrl_reset_read_request(bio_st* b);
 
 		/* ctrl macros for dgram */
@@ -733,222 +828,707 @@ namespace Beef_Net.OpenSSL
 		[Inline]
 		public static int get_ex_new_index(int argl, void* argp, Crypto.EX_new new_func, Crypto.EX_dup dup_func, Crypto.EX_free free_func) =>
 		    Crypto.get_ex_new_index(Crypto.EX_INDEX_BIO, argl, argp, new_func, dup_func, free_func);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_set_ex_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_set_ex_data")
+		]
 		public extern static int set_ex_data(bio_st* bio, int idx, void* data);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_get_ex_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_get_ex_data")
+		]
 		public extern static void* get_ex_data(bio_st* bio, int idx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_number_read")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_number_read")
+		]
 		public extern static uint64 number_read(bio_st* bio);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_number_written")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_number_written")
+		]
 		public extern static uint64 number_written(bio_st* bio);
 
 		/* For f_asn1() */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_asn1_set_prefix")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_asn1_set_prefix")
+		]
 		public extern static int asn1_set_prefix(bio_st* b, asn1_ps_func* prefix, asn1_ps_func* prefix_free);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_asn1_get_prefix")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_asn1_get_prefix")
+		]
 		public extern static int asn1_get_prefix(bio_st* b, asn1_ps_func** pprefix, asn1_ps_func** pprefix_free);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_asn1_set_suffix")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_asn1_set_suffix")
+		]
 		public extern static int asn1_set_suffix(bio_st* b, asn1_ps_func* suffix, asn1_ps_func* suffix_free);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_asn1_get_suffix")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_asn1_get_suffix")
+		]
 		public extern static int asn1_get_suffix(bio_st* b, asn1_ps_func** psuffix, asn1_ps_func** psuffix_free);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_s_file")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_s_file")
+		]
 		public extern static METHOD* s_file();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_new_file")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_new_file")
+		]
 		public extern static bio_st* new_file(char8* filename, char8* mode);
 #if !OPENSSL_NO_STDIO
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_new_fp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_new_fp")
+		]
 		public extern static bio_st* new_fp(Platform.BfpFile* stream, int close_flag);
 #endif
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_new")
+		]
 		public extern static bio_st* new_(METHOD* type);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_free")
+		]
 		public extern static int free(bio_st* a);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_set_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_set_data")
+		]
 		public extern static void set_data(bio_st* a, void* ptr);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_get_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_get_data")
+		]
 		public extern static void* get_data(bio_st* a);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_set_init")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_set_init")
+		]
 		public extern static void set_init(bio_st* a, int init);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_get_init")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_get_init")
+		]
 		public extern static int get_init(bio_st* a);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_set_shutdown")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_set_shutdown")
+		]
 		public extern static void set_shutdown(bio_st* a, int shut);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_get_shutdown")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_get_shutdown")
+		]
 		public extern static int get_shutdown(bio_st* a);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_vfree")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_vfree")
+		]
 		public extern static void vfree(bio_st* a);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_up_ref")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_up_ref")
+		]
 		public extern static int up_ref(bio_st* a);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_read")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_read")
+		]
 		public extern static int read(bio_st* b, void* data, int dlen);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_read_ex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_read_ex")
+		]
 		public extern static int read_ex(bio_st* b, void* data, uint dlen, uint* readbytes);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_gets")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_gets")
+		]
 		public extern static int gets(bio_st* bp, char8* buf, int size);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_write")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_write")
+		]
 		public extern static int write(bio_st* b, void* data, int dlen);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_write_ex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_write_ex")
+		]
 		public extern static int write_ex(bio_st* b, void* data, uint dlen, uint* written);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_puts")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_puts")
+		]
 		public extern static int puts(bio_st* bp, char8* buf);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_indent")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_indent")
+		]
 		public extern static int indent(bio_st* b, int indent, int max);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_ctrl")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_ctrl")
+		]
 		public extern static int ctrl(bio_st* bp, int cmd, int larg, void* parg);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_callback_ctrl")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_callback_ctrl")
+		]
 		public extern static int callback_ctrl(bio_st* b, int cmd, info_cb* fp);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_ptr_ctrl")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_ptr_ctrl")
+		]
 		public extern static void* ptr_ctrl(bio_st* bp, int cmd, int larg);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_int_ctrl")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_int_ctrl")
+		]
 		public extern static int int_ctrl(bio_st* bp, int cmd, int larg, int iarg);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_push")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_push")
+		]
 		public extern static bio_st* push(bio_st* b, bio_st* append_);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_pop")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_pop")
+		]
 		public extern static bio_st* pop(bio_st* b);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_free_all")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_free_all")
+		]
 		public extern static void free_all(bio_st* a);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_find_type")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_find_type")
+		]
 		public extern static bio_st* find_type(bio_st* b, int bio_type);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_next")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_next")
+		]
 		public extern static bio_st* next(bio_st* b);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_set_next")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_set_next")
+		]
 		public extern static void set_next(bio_st* b, bio_st* next);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_get_retry_BIO")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_get_retry_BIO")
+		]
 		public extern static bio_st* get_retry_BIO(bio_st* bio, int* reason);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_get_retry_reason")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_get_retry_reason")
+		]
 		public extern static int get_retry_reason(bio_st* bio);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_set_retry_reason")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_set_retry_reason")
+		]
 		public extern static void set_retry_reason(bio_st* bio, int reason);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_dup_chain")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_dup_chain")
+		]
 		public extern static bio_st* dup_chain(bio_st* inVal);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_nread0")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_nread0")
+		]
 		public extern static int nread0(bio_st* bio, char8** buf);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_nread")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_nread")
+		]
 		public extern static int nread(bio_st* bio, char8** buf, int num);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_nwrite0")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_nwrite0")
+		]
 		public extern static int nwrite0(bio_st* bio, char8** buf);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_nwrite")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_nwrite")
+		]
 		public extern static int nwrite(bio_st* bio, char8** buf, int num);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_debug_callback")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_debug_callback")
+		]
 		public extern static int debug_callback(bio_st* bio, int cmd, char8* argp, int argi, int argl, int ret);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_s_mem")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_s_mem")
+		]
 		public extern static METHOD* s_mem();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_s_secmem")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_s_secmem")
+		]
 		public extern static METHOD* s_secmem();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_new_mem_buf")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_new_mem_buf")
+		]
 		public extern static bio_st* new_mem_buf(void* buf, int len);
 #if !OPENSSL_NO_SOCK
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_s_socket")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_s_socket")
+		]
 		public extern static METHOD* s_socket();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_s_connect")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_s_connect")
+		]
 		public extern static METHOD* s_connect();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_s_accept")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_s_accept")
+		]
 		public extern static METHOD* s_accept();
 #endif
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_s_fd")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_s_fd")
+		]
 		public extern static METHOD* s_fd();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_s_log")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_s_log")
+		]
 		public extern static METHOD* s_log();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_s_bio")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_s_bio")
+		]
 		public extern static METHOD* s_bio();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_s_null")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_s_null")
+		]
 		public extern static METHOD* s_null();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_f_null")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_f_null")
+		]
 		public extern static METHOD* f_null();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_f_buffer")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_f_buffer")
+		]
 		public extern static METHOD* f_buffer();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_f_linebuffer")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_f_linebuffer")
+		]
 		public extern static METHOD* f_linebuffer();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_f_nbio_test")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_f_nbio_test")
+		]
 		public extern static METHOD* f_nbio_test();
 #if !OPENSSL_NO_DGRAM
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_s_datagram")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_s_datagram")
+		]
 		public extern static METHOD* s_datagram();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_dgram_non_fatal_error")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_dgram_non_fatal_error")
+		]
 		public extern static int dgram_non_fatal_error(int error);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_new_dgram")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_new_dgram")
+		]
 		public extern static bio_st* new_dgram(int fd, int close_flag);
 	#if !OPENSSL_NO_SCTP
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_s_datagram_sctp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_s_datagram_sctp")
+		]
 		public extern static METHOD* s_datagram_sctp();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_new_dgram_sctp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_new_dgram_sctp")
+		]
 		public extern static bio_st* new_dgram_sctp(int fd, int close_flag);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_dgram_is_sctp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_dgram_is_sctp")
+		]
 		public extern static int dgram_is_sctp(bio_st* bio);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_dgram_sctp_notification_cb")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_dgram_sctp_notification_cb")
+		]
 		public extern static int dgram_sctp_notification_cb(bio_st* b, function void(bio_st* bio, void* context, void* buf) handle_notifications, void* context);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_dgram_sctp_wait_for_dry")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_dgram_sctp_wait_for_dry")
+		]
 		public extern static int dgram_sctp_wait_for_dry(bio_st* b);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_dgram_sctp_msg_waiting")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_dgram_sctp_msg_waiting")
+		]
 		public extern static int dgram_sctp_msg_waiting(bio_st* b);
 	#endif
 #endif
 
 #if !OPENSSL_NO_SOCK
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_sock_should_retry")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_sock_should_retry")
+		]
 		public extern static int sock_should_retry(int i);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_sock_non_fatal_error")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_sock_non_fatal_error")
+		]
 		public extern static int sock_non_fatal_error(int error);
 #endif
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_fd_should_retry")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_fd_should_retry")
+		]
 		public extern static int fd_should_retry(int i);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_fd_non_fatal_error")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_fd_non_fatal_error")
+		]
 		public extern static int fd_non_fatal_error(int error);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_dump_cb")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_dump_cb")
+		]
 		public extern static int dump_cb(function int(void* data, uint len, void* u) cb, void* u, char8* s, int len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_dump_indent_cb")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_dump_indent_cb")
+		]
 		public extern static int dump_indent_cb(function int(void* data, uint len, void* u) cb, void* u, char8* s, int len, int indent);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_dump")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_dump")
+		]
 		public extern static int dump(bio_st* b, char8* bytes, int len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_dump_indent")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_dump_indent")
+		]
 		public extern static int dump_indent(bio_st* b, char8* bytes, int len, int indent);
 #if !OPENSSL_NO_STDIO
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_dump_fp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_dump_fp")
+		]
 		public extern static int dump_fp(Platform.BfpFile* fp, char8* s, int len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_dump_indent_fp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_dump_indent_fp")
+		]
 		public extern static int dump_indent_fp(Platform.BfpFile* fp, char8* s, int len, int indent);
 #endif
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_hex_string")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_hex_string")
+		]
 		public extern static int hex_string(bio_st* outVal, int indent, int width, uint8* data, int datalen);
 
 #if !OPENSSL_NO_SOCK
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_ADDR_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_ADDR_new")
+		]
 		public extern static ADDR* ADDR_new();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_ADDR_rawmake")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_ADDR_rawmake")
+		]
 		public extern static int ADDR_rawmake(ADDR* ap, int family, void* where_, uint wherelen, uint16 port);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_ADDR_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_ADDR_free")
+		]
 		public extern static void ADDR_free(ADDR* ap);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_ADDR_clear")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_ADDR_clear")
+		]
 		public extern static void ADDR_clear(ADDR* ap);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_ADDR_family")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_ADDR_family")
+		]
 		public extern static int ADDR_family(ADDR* ap);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_ADDR_rawaddress")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_ADDR_rawaddress")
+		]
 		public extern static int ADDR_rawaddress(ADDR* ap, void* p, uint* l);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_ADDR_rawport")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_ADDR_rawport")
+		]
 		public extern static uint16 ADDR_rawport(ADDR* ap);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_ADDR_hostname_string")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_ADDR_hostname_string")
+		]
 		public extern static char8* ADDR_hostname_string(ADDR* ap, int numeric);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_ADDR_service_string")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_ADDR_service_string")
+		]
 		public extern static char8* ADDR_service_string(ADDR* ap, int numeric);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_ADDR_path_string")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_ADDR_path_string")
+		]
 		public extern static char8* ADDR_path_string(ADDR* ap);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_ADDRINFO_next")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_ADDRINFO_next")
+		]
 		public extern static ADDRINFO* ADDRINFO_next(ADDRINFO* bai);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_ADDRINFO_family")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_ADDRINFO_family")
+		]
 		public extern static int ADDRINFO_family(ADDRINFO* bai);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_ADDRINFO_socktype")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_ADDRINFO_socktype")
+		]
 		public extern static int ADDRINFO_socktype(ADDRINFO* bai);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_ADDRINFO_protocol")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_ADDRINFO_protocol")
+		]
 		public extern static int ADDRINFO_protocol(ADDRINFO* bai);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_ADDRINFO_address")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_ADDRINFO_address")
+		]
 		public extern static ADDR* ADDRINFO_address(ADDRINFO* bai);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_ADDRINFO_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_ADDRINFO_free")
+		]
 		public extern static void ADDRINFO_free(ADDRINFO* bai);
 
 		[CRepr]
@@ -957,7 +1537,12 @@ namespace Beef_Net.OpenSSL
 		    BIO_PARSE_PRIO_HOST,
 			BIO_PARSE_PRIO_SERV
 		}
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_parse_hostserv")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_parse_hostserv")
+		]
 		public extern static int parse_hostserv(char8* hostserv, char8** host, char8** service, hostserv_priorities hostserv_prio);
 		
 		[CRepr]
@@ -966,32 +1551,92 @@ namespace Beef_Net.OpenSSL
 		    BIO_LOOKUP_CLIENT,
 			BIO_LOOKUP_SERVER
 		}
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_lookup")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_lookup")
+		]
 		public extern static int lookup(char8* host, char8* service, lookup_type lookup_type, int family, int socktype, ADDRINFO** res);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_lookup_ex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_lookup_ex")
+		]
 		public extern static int lookup_ex(char8* host, char8* service, int lookup_type, int family, int socktype, int protocol, ADDRINFO** res);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_sock_error")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_sock_error")
+		]
 		public extern static int sock_error(int sock);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_socket_ioctl")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_socket_ioctl")
+		]
 		public extern static int socket_ioctl(int fd, int type, void* arg);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_socket_nbio")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_socket_nbio")
+		]
 		public extern static int socket_nbio(int fd, int mode);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_sock_init")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_sock_init")
+		]
 		public extern static int sock_init();
 		[Inline]
 		public static void sock_cleanup() { while (false) continue; }
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("set_tcp_ndelay")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("set_tcp_ndelay")
+		]
 		public extern static int set_tcp_ndelay(int sock, int turn_on);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_gethostbyname")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_gethostbyname")
+		]
 		public extern static OSSLType.hostent* gethostbyname(char8* name);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_get_port")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_get_port")
+		]
 		public extern static int get_port(char8* str, uint16* port_ptr);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_get_host_ip")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_get_host_ip")
+		]
 		public extern static int get_host_ip(char8* str, uint8* ip);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_get_accept_socket")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_get_accept_socket")
+		]
 		public extern static int get_accept_socket(char8* host_port, int mode);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_accept")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_accept")
+		]
 		public extern static int accept(int sock, char8** ip_port);
 
 		[CRepr, Union]
@@ -1004,7 +1649,12 @@ namespace Beef_Net.OpenSSL
 		{
 		    BIO_SOCK_INFO_ADDRESS
 		}
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_sock_info")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_sock_info")
+		]
 		public extern static int sock_info(int sock, sock_info_type type, sock_info_u* info);
 
 		public const int SOCK_REUSEADDR = 0x01;
@@ -1013,96 +1663,296 @@ namespace Beef_Net.OpenSSL
 		public const int SOCK_NONBLOCK  = 0x08;
 		public const int SOCK_NODELAY   = 0x10;
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_socket")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_socket")
+		]
 		public extern static int socket(int domain, int socktype, int protocol, int options);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_connect")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_connect")
+		]
 		public extern static int connect(int sock, ADDR* addr, int options);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_bind")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_bind")
+		]
 		public extern static int bind(int sock, ADDR* addr, int options);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_listen")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_listen")
+		]
 		public extern static int listen(int sock, ADDR* addr, int options);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_accept_ex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_accept_ex")
+		]
 		public extern static int accept_ex(int accept_sock, ADDR* addr, int options);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_closesocket")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_closesocket")
+		]
 		public extern static int closesocket(int sock);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_new_socket")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_new_socket")
+		]
 		public extern static bio_st* new_socket(int sock, int close_flag);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_new_connect")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_new_connect")
+		]
 		public extern static bio_st* new_connect(char8* host_port);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_new_accept")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_new_accept")
+		]
 		public extern static bio_st* new_accept(char8* host_port);
 #endif /* OPENSSL_NO_SOCK*/
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_new_fd")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_new_fd")
+		]
 		public extern static bio_st* new_fd(int fd, int close_flag);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_new_bio_pair")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_new_bio_pair")
+		]
 		public extern static int new_bio_pair(bio_st** bio1, uint writebuf1, bio_st** bio2, uint writebuf2);
 		/* If successful, returns 1 and in *bio1, *bio2 two BIO pair endpoints. Otherwise returns 0 and sets *bio1 and *bio2 to NULL. Size 0 uses default value. */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_copy_next_retry")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_copy_next_retry")
+		]
 		public extern static void copy_next_retry(bio_st* b);
 
 		/*
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_ghbn_ctrl")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_ghbn_ctrl")
+		]
 		public extern static long ghbn_ctrl(int cmd, int iarg, char8* parg);
 		*/
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_printf")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_printf")
+		]
 		public extern static int printf(bio_st* bio, char8* format, ...);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_vprintf")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_vprintf")
+		]
 		public extern static int vprintf(bio_st* bio, char8* format, void* args);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_snprintf")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_snprintf")
+		]
 		public extern static int snprintf(char8* buf, uint n, char8* format, ...);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_vsnprintf")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_vsnprintf")
+		]
 		public extern static int vsnprintf(char8* buf, uint n, char8* format, void* args);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_meth_new")
+		]
 		public extern static METHOD* meth_new(int type, char8* name);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_meth_free")
+		]
 		public extern static void meth_free(METHOD* biom);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_get_write")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_meth_get_write")
+		]
 		public extern static function int(bio_st*, char8*, int) meth_get_write(METHOD* biom);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_get_write_ex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_meth_get_write_ex")
+		]
 		public extern static function int(bio_st*, char8*, uint, uint*) meth_get_write_ex(METHOD* biom);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_set_write")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_meth_set_write")
+		]
 		public extern static int meth_set_write(METHOD* biom, function int(bio_st*, char8*, int) write);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_set_write_ex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_meth_set_write_ex")
+		]
 		public extern static int meth_set_write_ex(METHOD* biom, function int(bio_st*, char8*, uint, uint*) bwrite);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_get_read")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_meth_get_read")
+		]
 		public extern static function int(bio_st*, char8*, int) meth_get_read(METHOD* biom);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_get_read_ex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_meth_get_read_ex")
+		]
 		public extern static function int(bio_st*, char8*, uint, uint*) meth_get_read_ex(METHOD* biom);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_set_read")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_meth_set_read")
+		]
 		public extern static int meth_set_read(METHOD* biom, function int(bio_st*, char8*, int) read);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_set_read_ex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_meth_set_read_ex")
+		]
 		public extern static int meth_set_read_ex(METHOD* biom, function int(bio_st*, char8*, uint, uint*) bread);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_get_puts")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_meth_get_puts")
+		]
 		public extern static function int(bio_st*, char8*) meth_get_puts(METHOD* biom);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_set_puts")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_meth_set_puts")
+		]
 		public extern static int meth_set_puts(METHOD* biom, function int(bio_st*, char8*) puts);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_get_gets")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_meth_get_gets")
+		]
 		public extern static function int(bio_st*, char8*, int) meth_get_gets(METHOD* biom);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_set_gets")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_meth_set_gets")
+		]
 		public extern static int meth_set_gets(METHOD* biom, function int(bio_st*, char8*, int) gets);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_get_ctrl")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_meth_get_ctrl")
+		]
 		public extern static function int(bio_st* , int, int, void*) meth_get_ctrl(METHOD* biom);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_set_ctrl")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_meth_set_ctrl")
+		]
 		public extern static int meth_set_ctrl(METHOD* biom, function int(bio_st*, int, int, void*) ctrl);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("meth_get_create")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("meth_get_create")
+		]
 		public extern static function int(bio_st*) BIO_meth_get_create(METHOD* bion);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_set_create")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_meth_set_create")
+		]
 		public extern static int meth_set_create(METHOD* biom, function int(bio_st*) create);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_get_destroy")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_meth_get_destroy")
+		]
 		public extern static function int(bio_st*) meth_get_destroy(METHOD* biom);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_set_destroy")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_meth_set_destroy")
+		]
 		public extern static int meth_set_destroy(METHOD* biom, function int(bio_st*) destroy);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_get_callback_ctrl")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_meth_get_callback_ctrl")
+		]
 		public extern static function int(bio_st*, int, info_cb*) meth_get_callback_ctrl(METHOD* biom);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_meth_set_callback_ctrl")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_meth_set_callback_ctrl")
+		]
 		public extern static int meth_set_callback_ctrl(METHOD* biom, function int(bio_st*, int, info_cb*) callback_ctrl);
 
 #if CONST_STRICT
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_set_md")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_set_md")
+		]
 		public extern static void set_md(bio_st*, MD* md);
 #else
 		[Inline]
@@ -1119,31 +1969,81 @@ namespace Beef_Net.OpenSSL
 		[Inline]
 		public static int get_cipher_ctx(bio_st* b, char8* c_pp) => ctrl(b, C_GET_CIPHER_CTX, 0, c_pp);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_f_md")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_f_md")
+		]
 		public extern static METHOD* f_md();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_f_base64")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_f_base64")
+		]
 		public extern static METHOD* f_base64();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_f_cipher")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_f_cipher")
+		]
 		public extern static METHOD* f_cipher();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_f_reliable")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_f_reliable")
+		]
 		public extern static METHOD* f_reliable();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_set_cipher")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_set_cipher")
+		]
 		public extern static int set_cipher(bio_st* b, EVP.CIPHER* c, uint8* k, uint8* i, int enc);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_f_asn1")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_f_asn1")
+		]
 		public extern static METHOD* f_asn1();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_new_NDEF")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_new_NDEF")
+		]
 		public extern static bio_st* new_NDEF(bio_st* outVal, ASN1.VALUE* val, ASN1.ITEM* it);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_new_CMS")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_new_CMS")
+		]
 		public extern static bio_st* new_CMS(bio_st* outVal, CMS.ContentInfo* cms);
 
 #if ZLIB
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_f_zlib")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_f_zlib")
+		]
 		public extern static METHOD* f_zlib();
 #endif
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BIO_new_PKCS7")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BIO_new_PKCS7")
+		]
 		public extern static bio_st* new_PKCS7(bio_st* outVal, PKCS7.pkcs7_st* p7);
 
 		/*
@@ -1156,17 +2056,47 @@ namespace Beef_Net.OpenSSL
 		**     5    4 000019C9 BIO_ssl_copy_session_id
 		**     6    5 000015DC BIO_ssl_shutdown
 		*/
-		[Import(OPENSSL_LIB_SSL), LinkName("BIO_f_ssl")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("BIO_f_ssl")
+		]
 		public extern static METHOD* f_ssl();
-		[Import(OPENSSL_LIB_SSL), LinkName("BIO_new_buffer_ssl_connect")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("BIO_new_buffer_ssl_connect")
+		]
 		public extern static bio_st* new_buffer_ssl_connect(SSL.CTX* ctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("BIO_new_ssl")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("BIO_new_ssl")
+		]
 		public extern static bio_st* new_ssl(SSL.CTX* ctx, int client);
-		[Import(OPENSSL_LIB_SSL), LinkName("BIO_new_ssl_connect")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("BIO_new_ssl_connect")
+		]
 		public extern static bio_st* new_ssl_connect(SSL.CTX* ctx);
-		[Import(OPENSSL_LIB_SSL), LinkName("BIO_ssl_copy_session_id")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("BIO_ssl_copy_session_id")
+		]
 		public extern static int ssl_copy_session_id(bio_st* to, bio_st* from);
-		[Import(OPENSSL_LIB_SSL), LinkName("BIO_ssl_shutdown")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("BIO_ssl_shutdown")
+		]
 		public extern static void ssl_shutdown(bio_st* ssl_bio);
 	}
 }

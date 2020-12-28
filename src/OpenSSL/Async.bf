@@ -14,7 +14,12 @@ namespace Beef_Net.OpenSSL
 	[AlwaysInclude]
 	sealed abstract class Async
 	{
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int ERR_load_ASYNC_strings();
 
 		/*
@@ -93,41 +98,121 @@ namespace Beef_Net.OpenSSL
 		public const int PAUSE   = 2;
 		public const int FINISH  = 3;
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASYNC_init_thread")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ASYNC_init_thread")
+		]
 		public extern static int init_thread(uint max_size, uint init_size);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASYNC_cleanup_thread")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ASYNC_cleanup_thread")
+		]
 		public extern static void cleanup_thread();
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASYNC_WAIT_CTX_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ASYNC_WAIT_CTX_new")
+		]
 		public extern static WAIT_CTX* WAIT_CTX_new();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASYNC_WAIT_CTX_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ASYNC_WAIT_CTX_free")
+		]
 		public extern static void WAIT_CTX_free(WAIT_CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASYNC_WAIT_CTX_set_wait_fd")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ASYNC_WAIT_CTX_set_wait_fd")
+		]
 		public extern static int WAIT_CTX_set_wait_fd(WAIT_CTX* ctx, void* key, ASYNC_FD fd, void* custom_data, function void(WAIT_CTX*, void*, ASYNC_FD, void*) cleanup);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASYNC_WAIT_CTX_get_fd")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ASYNC_WAIT_CTX_get_fd")
+		]
 		public extern static int WAIT_CTX_get_fd(WAIT_CTX* ctx, void* key, ASYNC_FD* fd, void** custom_data);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASYNC_WAIT_CTX_get_all_fds")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ASYNC_WAIT_CTX_get_all_fds")
+		]
 		public extern static int WAIT_CTX_get_all_fds(WAIT_CTX* ctx, ASYNC_FD* fd, uint* numfds);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASYNC_WAIT_CTX_get_changed_fds")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ASYNC_WAIT_CTX_get_changed_fds")
+		]
 		public extern static int WAIT_CTX_get_changed_fds(WAIT_CTX* ctx, ASYNC_FD* addfd, uint* numaddfds, ASYNC_FD* delfd, uint* numdelfds);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASYNC_WAIT_CTX_clear_fd")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ASYNC_WAIT_CTX_clear_fd")
+		]
 		public extern static int WAIT_CTX_clear_fd(WAIT_CTX* ctx, void* key);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASYNC_is_capable")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ASYNC_is_capable")
+		]
 		public extern static int is_capable();
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASYNC_start_job")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ASYNC_start_job")
+		]
 		public extern static int start_job(JOB** job, WAIT_CTX* ctx, int* ret, function int(void*) func, void* args, uint size);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASYNC_pause_job")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ASYNC_pause_job")
+		]
 		public extern static int pause_job();
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASYNC_get_current_job")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ASYNC_get_current_job")
+		]
 		public extern static JOB* get_current_job();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASYNC_get_wait_ctx")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ASYNC_get_wait_ctx")
+		]
 		public extern static WAIT_CTX* get_wait_ctx(JOB* job);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASYNC_block_pause")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ASYNC_block_pause")
+		]
 		public extern static void block_pause();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ASYNC_unblock_pause")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ASYNC_unblock_pause")
+		]
 		public extern static void unblock_pause();
 	}
 }

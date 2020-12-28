@@ -33,24 +33,69 @@ namespace Beef_Net.OpenSSL
 		}
 		public typealias CTX = CTX_st;
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMAC_CTX_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMAC_CTX_new")
+		]
 		public extern static CTX* CTX_new();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMAC_CTX_cleanup")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMAC_CTX_cleanup")
+		]
 		public extern static void CTX_cleanup(CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMAC_CTX_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMAC_CTX_free")
+		]
 		public extern static void CTX_free(CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMAC_CTX_get0_cipher_ctx")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMAC_CTX_get0_cipher_ctx")
+		]
 		public extern static EVP.CIPHER_CTX* CTX_get0_cipher_ctx(CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMAC_CTX_copy")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMAC_CTX_copy")
+		]
 		public extern static int CTX_copy(CTX* outVal, CTX* inVal);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMAC_Init")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMAC_Init")
+		]
 		public extern static int Init(CTX* ctx, void* key, uint keylen, EVP.CIPHER* cipher, Engine.ENGINE* impl);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMAC_Update")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMAC_Update")
+		]
 		public extern static int Update(CTX* ctx, void* data, uint dlen);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMAC_Final")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMAC_Final")
+		]
 		public extern static int Final(CTX* ctx, uint8* outVal, uint* poutlen);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMAC_resume")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMAC_resume")
+		]
 		public extern static int resume(CTX* ctx);
 #endif
 	}

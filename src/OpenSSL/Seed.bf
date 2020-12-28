@@ -33,21 +33,56 @@ namespace Beef_Net.OpenSSL
 		}
 		public typealias KEY_SCHEDULE = key_st;
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("SEED_set_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("SEED_set_key")
+		]
 		public extern static void set_key(uint8[KEY_LENGTH] rawkey, KEY_SCHEDULE* ks);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("SEED_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("SEED_encrypt")
+		]
 		public extern static void encrypt(uint8[BLOCK_SIZE] s, uint8[BLOCK_SIZE] d, KEY_SCHEDULE* ks);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("SEED_decrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("SEED_decrypt")
+		]
 		public extern static void decrypt(uint8[BLOCK_SIZE] s, uint8[BLOCK_SIZE] d, KEY_SCHEDULE* ks);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("SEED_ecb_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("SEED_ecb_encrypt")
+		]
 		public extern static void ecb_encrypt(uint8* inVal, uint8* outVal, KEY_SCHEDULE* ks, int enc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("SEED_cbc_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("SEED_cbc_encrypt")
+		]
 		public extern static void cbc_encrypt(uint8* inVal, uint8* outVal, uint len, KEY_SCHEDULE* ks, uint8[BLOCK_SIZE] ivec, int enc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("SEED_cfb128_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("SEED_cfb128_encrypt")
+		]
 		public extern static void cfb128_encrypt(uint8* inVal, uint8* outVal, uint len, KEY_SCHEDULE* ks, uint8[BLOCK_SIZE] ivec, int *num, int enc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("SEED_ofb128_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("SEED_ofb128_encrypt")
+		]
 		public extern static void ofb128_encrypt(uint8* inVal, uint8* outVal, uint len, KEY_SCHEDULE* ks, uint8[BLOCK_SIZE] ivec, int *num);
 #endif
 	}

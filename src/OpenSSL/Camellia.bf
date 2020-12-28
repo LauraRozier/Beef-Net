@@ -41,27 +41,77 @@ namespace Beef_Net.OpenSSL
 		}
 		public typealias KEY = key_st;
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("Camellia_set_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("Camellia_set_key")
+		]
 		public extern static int set_key(uint8* userKey, int bits, KEY* key);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("Camellia_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("Camellia_encrypt")
+		]
 		public extern static void encrypt(uint8* inVal, uint8* outVal, KEY* key);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("Camellia_decrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("Camellia_decrypt")
+		]
 		public extern static void decrypt(uint8* inVal, uint8* outVal, KEY* key);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("Camellia_ecb_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("Camellia_ecb_encrypt")
+		]
 		public extern static void ecb_encrypt(uint8* inVal, uint8* outVal, KEY* key, int enc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("Camellia_cbc_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("Camellia_cbc_encrypt")
+		]
 		public extern static void cbc_encrypt(uint8* inVal, uint8* outVal, uint length, KEY* key, uint8* ivec, int enc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("Camellia_cfb128_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("Camellia_cfb128_encrypt")
+		]
 		public extern static void cfb128_encrypt(uint8* inVal, uint8* outVal, uint length, KEY* key, uint8* ivec, int* num, int enc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("Camellia_cfb1_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("Camellia_cfb1_encrypt")
+		]
 		public extern static void cfb1_encrypt(uint8* inVal, uint8* outVal, uint length, KEY* key, uint8* ivec, int* num, int enc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("Camellia_cfb8_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("Camellia_cfb8_encrypt")
+		]
 		public extern static void cfb8_encrypt(uint8* inVal, uint8* outVal, uint length, KEY* key, uint8* ivec, int* num, int enc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("Camellia_ofb128_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("Camellia_ofb128_encrypt")
+		]
 		public extern static void ofb128_encrypt(uint8* inVal, uint8* outVal, uint length, KEY* key, uint8* ivec, int* num);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("Camellia_ctr128_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("Camellia_ctr128_encrypt")
+		]
 		public extern static void ctr128_encrypt(uint8* inVal, uint8* outVal, uint length, KEY* key, uint8[BLOCK_SIZE] ivec, uint8[BLOCK_SIZE] ecount_buf, uint* num);
 	}
 }

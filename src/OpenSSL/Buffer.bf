@@ -14,7 +14,12 @@ namespace Beef_Net.OpenSSL
 	[AlwaysInclude]
 	sealed abstract class Buffer
 	{
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int ERR_load_BUF_strings();
 
 		/*
@@ -53,17 +58,47 @@ namespace Beef_Net.OpenSSL
 		
 		public const int MEM_FLAG_SECURE = 0x01;
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BUF_MEM_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BUF_MEM_new")
+		]
 		public extern static MEM* MEM_new();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BUF_MEM_new_ex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BUF_MEM_new_ex")
+		]
 		public extern static MEM* MEM_new_ex(uint flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BUF_MEM_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BUF_MEM_free")
+		]
 		public extern static void MEM_free(MEM* a);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BUF_MEM_grow")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BUF_MEM_grow")
+		]
 		public extern static uint MEM_grow(MEM* str, uint len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BUF_MEM_grow_clean")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BUF_MEM_grow_clean")
+		]
 		public extern static uint MEM_grow_clean(MEM* str, uint len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BUF_reverse")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BUF_reverse")
+		]
 		public extern static void reverse(uint8* outVal, uint8* inVal, uint siz);
 	}
 }

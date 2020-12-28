@@ -14,12 +14,10 @@ namespace Beef_Net.OpenSSL
 	[AlwaysInclude]
 	sealed abstract class Engine
 	{
-		/*
-		 * This is a structure for storing implementations of various crypto
-		 * algorithms and functions.
-		 */
+		/* This is a structure for storing implementations of various crypto algorithms and functions. */
 		[CRepr]
-		public struct engine_st {
+		public struct engine_st
+		{
 		    public char8* id;
 		    public char8* name;
 		    public RSA.METHOD* rsa_meth;
@@ -47,11 +45,8 @@ namespace Beef_Net.OpenSSL
 		    /* reference count on the structure itself */
 		    public Crypto.REF_COUNT struct_ref;
 		    /*
-		     * reference count on usability of the engine type. NB: This controls the
-		     * loading and initialisation of any functionality required by this
-		     * engine, whereas the previous count is simply to cope with
-		     * (de)allocation of this structure. Hence, running_ref <= struct_ref at
-		     * all times.
+		     * reference count on usability of the engine type. NB: This controls the loading and initialisation of any functionality required by this engine, whereas the previous count is simply to cope with
+		     * (de)allocation of this structure. Hence, running_ref <= struct_ref at all times.
 		     */
 		    public int funct_ref;
 		    /* A place to store per-ENGINE data */
@@ -63,7 +58,12 @@ namespace Beef_Net.OpenSSL
 		public typealias ENGINE = engine_st;
 
 #if !OPENSSL_NO_ENGINE
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int ERR_load_ENGINE_strings();
 
 		/*
@@ -274,7 +274,8 @@ namespace Beef_Net.OpenSSL
 		 * of cmd_num. "null-terminated" means that the last CMD_DEFN element has cmd_num set to zero and/or cmd_name set to NULL.
 		 */
 		[CRepr]
-		public struct CMD_DEFN_st {
+		public struct CMD_DEFN_st
+		{
 		    public uint cmd_num;    /* The command number */
 		    public char8* cmd_name; /* The command name itself */
 		    public char8* cmd_desc; /* A short description of the command */
@@ -312,23 +313,58 @@ namespace Beef_Net.OpenSSL
 		 */
 		
 		/* Get the first/last "ENGINE" type available. */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_first")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_first")
+		]
 		public extern static engine_st* get_first();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_last")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_last")
+		]
 		public extern static engine_st* get_last();
 		/* Iterate to the next/previous "ENGINE" type (NULL = end of the list). */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_next")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_next")
+		]
 		public extern static engine_st* get_next(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_prev")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_prev")
+		]
 		public extern static engine_st* get_prev(engine_st* e);
 		/* Add another "ENGINE" type into the array. */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_add")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_add")
+		]
 		public extern static int add(engine_st* e);
 		/* Remove an existing "ENGINE" type from the array. */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_remove")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_remove")
+		]
 		public extern static int remove(engine_st* e);
 		/* Retrieve an engine from the list by its unique "id" value. */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_by_id")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_by_id")
+		]
 		public extern static engine_st* by_id(char8* id);
 
 		[Inline]
@@ -348,92 +384,251 @@ namespace Beef_Net.OpenSSL
 		[Inline]
 		public static int load_rdrand() => OpenSSL.init_crypto(OpenSSL.INIT_ENGINE_RDRAND, null);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_load_builtin_engines")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_load_builtin_engines")
+		]
 		public extern static void load_builtin_engines();
 		
 		/* Get and set global flags (TABLE_FLAG_***) for the implementation "registry" handling. */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_table_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_table_flags")
+		]
 		public extern static uint get_table_flags();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_set_table_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_set_table_flags")
+		]
 		public extern static void set_table_flags(uint flags);
 		
-		/*- Manage registration of ENGINEs per "table". For each type, there are 3
-		 * functions;
+		/*- Manage registration of ENGINEs per "table". For each type, there are 3 functions;
 		 *   register_***(e) - registers the implementation from 'e' (if it has one)
 		 *   unregister_***(e) - unregister the implementation from 'e'
 		 *   register_all_***() - call register_***() for each 'e' in the list
 		 * Cleanup is automatically registered from each table when required.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_register_RSA")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_register_RSA")
+		]
 		public extern static int register_RSA(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_unregister_RSA")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_unregister_RSA")
+		]
 		public extern static void unregister_RSA(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_register_all_RSA")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_register_all_RSA")
+		]
 		public extern static void register_all_RSA();
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_register_DSA")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_register_DSA")
+		]
 		public extern static int register_DSA(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_unregister_DSA")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_unregister_DSA")
+		]
 		public extern static void unregister_DSA(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_register_all_DSA")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_register_all_DSA")
+		]
 		public extern static void register_all_DSA();
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_register_EC")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_register_EC")
+		]
 		public extern static int register_EC(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_unregister_EC")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_unregister_EC")
+		]
 		public extern static void unregister_EC(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_register_all_EC")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_register_all_EC")
+		]
 		public extern static void register_all_EC();
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_register_DH")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_register_DH")
+		]
 		public extern static int register_DH(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_unregister_DH")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_unregister_DH")
+		]
 		public extern static void unregister_DH(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_register_all_DH")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_register_all_DH")
+		]
 		public extern static void register_all_DH();
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_register_RAND")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_register_RAND")
+		]
 		public extern static int register_RAND(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_unregister_RAND")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_unregister_RAND")
+		]
 		public extern static void unregister_RAND(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_register_all_RAND")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_register_all_RAND")
+		]
 		public extern static void register_all_RAND();
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_register_ciphers")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_register_ciphers")
+		]
 		public extern static int register_ciphers(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_unregister_ciphers")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_unregister_ciphers")
+		]
 		public extern static void unregister_ciphers(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_register_all_ciphers")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_register_all_ciphers")
+		]
 		public extern static void register_all_ciphers();
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_register_digests")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_register_digests")
+		]
 		public extern static int register_digests(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_unregister_digests")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_unregister_digests")
+		]
 		public extern static void unregister_digests(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_register_all_digests")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_register_all_digests")
+		]
 		public extern static void register_all_digests();
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_register_pkey_meths")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_register_pkey_meths")
+		]
 		public extern static int register_pkey_meths(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_unregister_pkey_meths")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_unregister_pkey_meths")
+		]
 		public extern static void unregister_pkey_meths(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_register_all_pkey_meths")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_register_all_pkey_meths")
+		]
 		public extern static void register_all_pkey_meths();
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_register_pkey_asn1_meths")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_register_pkey_asn1_meths")
+		]
 		public extern static int register_pkey_asn1_meths(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_unregister_pkey_asn1_meths")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_unregister_pkey_asn1_meths")
+		]
 		public extern static void unregister_pkey_asn1_meths(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_register_all_pkey_asn1_meths")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_register_all_pkey_asn1_meths")
+		]
 		public extern static void register_all_pkey_asn1_meths();
 		
 		/*
 		 * These functions register all support from the above categories. Note, use of these functions can result in static linkage of code your application may not need.
 		 * If you only need a subset of functionality, consider using more selective initialisation.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_register_complete")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_register_complete")
+		]
 		public extern static int register_complete(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_register_all_complete")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_register_all_complete")
+		]
 		public extern static int register_all_complete();
 		
 		/*
@@ -441,21 +636,36 @@ namespace Beef_Net.OpenSSL
 		 * depending on the command number. In actuality, this function only requires a structural (rather than functional) reference to an engine, but many control commands may require the engine be functional.
 		 * The caller should be aware of trying commands that require an operational ENGINE, and only use functional references in such situations.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_ctrl")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_ctrl")
+		]
 		public extern static int ctrl(engine_st* e, int cmd, int i, void* p, function void() f);
 		
 		/*
 		 * This function tests if an ENGINE-specific command is usable as a "setting". Eg. in an application's config file that gets processed through ctrl_cmd_string(). If this returns zero, it is not available to
 		 * ctrl_cmd_string(), only ctrl().
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_cmd_is_executable")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_cmd_is_executable")
+		]
 		public extern static int cmd_is_executable(engine_st* e, int cmd);
 		
 		/*
 		 * This function works like ctrl() with the exception of taking a command name instead of a command number, and can handle optional commands. See the comment on ctrl_cmd_string() for an explanation
 		 * on how to use the cmd_name and cmd_optional.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_ctrl_cmd")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_ctrl_cmd")
+		]
 		public extern static int ctrl_cmd(engine_st* e, char8* cmd_name, int i, void* p, function void() f, int cmd_optional);
 		
 		/*
@@ -467,65 +677,195 @@ namespace Beef_Net.OpenSSL
 		 * function returns a boolean value as a result. In other words, vendors of 'ENGINE'-enabled devices should write ENGINE implementations with parameterisations that work in this scheme, so that compliant ENGINE-based
 		 * applications can work consistently with the same configuration for the same ENGINE-enabled devices, across applications.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_ctrl_cmd_string")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_ctrl_cmd_string")
+		]
 		public extern static int ctrl_cmd_string(engine_st* e, char8* cmd_name, char8* arg, int cmd_optional);
 		
 		/*
 		 * These functions are useful for manufacturing new ENGINE structures. They don't address reference counting at all - one uses them to populate an ENGINE structure with personalised implementations of things prior to
 		 * using it directly or adding it to the builtin ENGINE list in OpenSSL. These are also here so that the ENGINE structure doesn't have to be exposed and break binary compatibility!
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_new")
+		]
 		public extern static engine_st* new_();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_free")
+		]
 		public extern static int free(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_up_ref")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_up_ref")
+		]
 		public extern static int up_ref(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_set_id")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_set_id")
+		]
 		public extern static int set_id(engine_st* e, char8* id);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_set_name")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_set_name")
+		]
 		public extern static int set_name(engine_st* e, char8* name);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_set_RSA")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_set_RSA")
+		]
 		public extern static int set_RSA(engine_st* e, RSA.METHOD* rsa_meth);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_set_DSA")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_set_DSA")
+		]
 		public extern static int set_DSA(engine_st* e, DSA.METHOD* dsa_meth);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_set_EC")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_set_EC")
+		]
 		public extern static int set_EC(engine_st* e, EC.KEY_METHOD* ecdsa_meth);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_set_DH")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_set_DH")
+		]
 		public extern static int set_DH(engine_st* e, DH.METHOD* dh_meth);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_set_RAND")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_set_RAND")
+		]
 		public extern static int set_RAND(engine_st* e, Rand.METHOD* rand_meth);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_set_destroy_function")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_set_destroy_function")
+		]
 		public extern static int set_destroy_function(engine_st* e, GEN_INT_FUNC_PTR destroy_f);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_set_init_function")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_set_init_function")
+		]
 		public extern static int set_init_function(engine_st* e, GEN_INT_FUNC_PTR init_f);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_set_finish_function")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_set_finish_function")
+		]
 		public extern static int set_finish_function(engine_st* e, GEN_INT_FUNC_PTR finish_f);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_set_ctrl_function")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_set_ctrl_function")
+		]
 		public extern static int set_ctrl_function(engine_st* e, CTRL_FUNC_PTR ctrl_f);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_set_load_privkey_function")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_set_load_privkey_function")
+		]
 		public extern static int set_load_privkey_function(engine_st* e, LOAD_KEY_PTR loadpriv_f);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_set_load_pubkey_function")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_set_load_pubkey_function")
+		]
 		public extern static int set_load_pubkey_function(engine_st* e, LOAD_KEY_PTR loadpub_f);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_set_load_ssl_client_cert_function")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_set_load_ssl_client_cert_function")
+		]
 		public extern static int set_load_ssl_client_cert_function(engine_st* e, SSL.CLIENT_CERT_PTR loadssl_f);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_set_ciphers")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_set_ciphers")
+		]
 		public extern static int set_ciphers(engine_st* e, CIPHERS_PTR f);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_set_digests")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_set_digests")
+		]
 		public extern static int set_digests(engine_st* e, DIGESTS_PTR f);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_set_pkey_meths")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_set_pkey_meths")
+		]
 		public extern static int set_pkey_meths(engine_st* e, PKEY_METHS_PTR f);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_set_pkey_asn1_meths")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_set_pkey_asn1_meths")
+		]
 		public extern static int set_pkey_asn1_meths(engine_st* e, PKEY_ASN1_METHS_PTR f);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_set_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_set_flags")
+		]
 		public extern static int set_flags(engine_st* e, int flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_set_cmd_defns")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_set_cmd_defns")
+		]
 		public extern static int set_cmd_defns(engine_st* e, CMD_DEFN* defns);
 		/* These functions allow control over any per-structure ENGINE data. */
 		[Inline]
 		public static int get_ex_new_index(int l, void* p, Crypto.EX_new newf, Crypto.EX_dup dupf, Crypto.EX_free freef) => Crypto.get_ex_new_index(Crypto.EX_INDEX_ENGINE, l, p, newf, dupf, freef);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_set_ex_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_set_ex_data")
+		]
 		public extern static int set_ex_data(engine_st* e, int idx, void* arg);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_ex_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_ex_data")
+		]
 		public extern static void* get_ex_data(engine_st* e, int idx);
 		
 		/* This function previously cleaned up anything that needs it. Auto-deinit will now take care of it so it is no longer required to call this function. */
@@ -536,57 +876,187 @@ namespace Beef_Net.OpenSSL
 		 * These return values from within the ENGINE structure. These can be useful with functional references as well as structural references - it depends which you obtained. Using the result for functional purposes if you only
 		 * obtained a structural reference may be problematic!
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_id")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_id")
+		]
 		public extern static char8* get_id(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_name")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_name")
+		]
 		public extern static char8* get_name(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_RSA")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_RSA")
+		]
 		public extern static RSA.METHOD* get_RSA(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_DSA")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_DSA")
+		]
 		public extern static DSA.METHOD* get_DSA(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_EC")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_EC")
+		]
 		public extern static EC.KEY_METHOD* get_EC(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_DH")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_DH")
+		]
 		public extern static DH.METHOD* get_DH(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_RAND")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_RAND")
+		]
 		public extern static Rand.METHOD* get_RAND(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_destroy_function")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_destroy_function")
+		]
 		public extern static GEN_INT_FUNC_PTR get_destroy_function(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_init_function")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_init_function")
+		]
 		public extern static GEN_INT_FUNC_PTR get_init_function(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_finish_function")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_finish_function")
+		]
 		public extern static GEN_INT_FUNC_PTR get_finish_function(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_ctrl_function")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_ctrl_function")
+		]
 		public extern static CTRL_FUNC_PTR get_ctrl_function(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_load_privkey_function")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_load_privkey_function")
+		]
 		public extern static LOAD_KEY_PTR get_load_privkey_function(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_load_pubkey_function")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_load_pubkey_function")
+		]
 		public extern static LOAD_KEY_PTR get_load_pubkey_function(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_ssl_client_cert_function")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_ssl_client_cert_function")
+		]
 		public extern static SSL.CLIENT_CERT_PTR get_ssl_client_cert_function(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_ciphers")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_ciphers")
+		]
 		public extern static CIPHERS_PTR get_ciphers(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_digests")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_digests")
+		]
 		public extern static DIGESTS_PTR get_digests(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_pkey_meths")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_pkey_meths")
+		]
 		public extern static PKEY_METHS_PTR get_pkey_meths(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_pkey_asn1_meths")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_pkey_asn1_meths")
+		]
 		public extern static PKEY_ASN1_METHS_PTR get_pkey_asn1_meths(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_cipher")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_cipher")
+		]
 		public extern static EVP.CIPHER* get_cipher(engine_st* e, int nid);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_digest")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_digest")
+		]
 		public extern static EVP.MD* get_digest(engine_st* e, int nid);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_pkey_meth")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_pkey_meth")
+		]
 		public extern static EVP.PKEY_METHOD* get_pkey_meth(engine_st* e, int nid);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_pkey_asn1_meth")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_pkey_asn1_meth")
+		]
 		public extern static EVP.PKEY_ASN1_METHOD* get_pkey_asn1_meth(engine_st* e, int nid);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_pkey_asn1_meth_str")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_pkey_asn1_meth_str")
+		]
 		public extern static EVP.PKEY_ASN1_METHOD* get_pkey_asn1_meth_str(engine_st* e, char8* str, int len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_pkey_asn1_find_str")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_pkey_asn1_find_str")
+		]
 		public extern static EVP.PKEY_ASN1_METHOD* pkey_asn1_find_str(engine_st** pe, char8* str, int len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_cmd_defns")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_cmd_defns")
+		]
 		public extern static CMD_DEFN* get_cmd_defns(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_flags")
+		]
 		public extern static int get_flags(engine_st* e);
 		
 		/*
@@ -597,81 +1067,216 @@ namespace Beef_Net.OpenSSL
 		 */
 		
 		/* Initialise a engine type for use (or up its reference count if it's already in use). This will fail if the engine is not currently operational and cannot initialise. */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_init")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_init")
+		]
 		public extern static int init(engine_st* e);
 		/* Free a functional reference to a engine type. This does not require a  corresponding call to free as it also releases a structural reference. */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_finish")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_finish")
+		]
 		public extern static int finish(engine_st* e);
 		
 		/* The following functions handle keys that are stored in some secondary location, handled by the engine.  The storage may be on a card or whatever. */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_load_private_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_load_private_key")
+		]
 		public extern static EVP.PKEY* load_private_key(engine_st* e, char8* key_id, UI.METHOD* ui_method, void* callback_data);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_load_public_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_load_public_key")
+		]
 		public extern static EVP.PKEY* load_public_key(engine_st* e, char8* key_id, UI.METHOD* ui_method, void* callback_data);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_load_ssl_client_cert")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_load_ssl_client_cert")
+		]
 		public extern static int load_ssl_client_cert(engine_st* e, SSL.ssl_st* s, X509.stack_st_X509_NAME* ca_dn, X509.x509_st** pcert, EVP.PKEY** ppkey, X509.stack_st_X509** pother, UI.METHOD* ui_method, void* callback_data);
 		
 		/* This returns a pointer for the current ENGINE structure that is (by default) performing any RSA operations. The value returned is an incremented reference, so it should be free'd (finish) before it is discarded. */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_default_RSA")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_default_RSA")
+		]
 		public extern static engine_st* get_default_RSA();
 		/* Same for the other "methods" */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_default_DSA")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_default_DSA")
+		]
 		public extern static engine_st* get_default_DSA();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_default_EC")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_default_EC")
+		]
 		public extern static engine_st* get_default_EC();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_default_DH")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_default_DH")
+		]
 		public extern static engine_st* get_default_DH();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_default_RAND")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_default_RAND")
+		]
 		public extern static engine_st* get_default_RAND();
 		/* These functions can be used to get a functional reference to perform ciphering or digesting corresponding to "nid". */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_cipher_engine")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_cipher_engine")
+		]
 		public extern static engine_st* get_cipher_engine(int nid);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_digest_engine")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_digest_engine")
+		]
 		public extern static engine_st* get_digest_engine(int nid);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_pkey_meth_engine")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_pkey_meth_engine")
+		]
 		public extern static engine_st* get_pkey_meth_engine(int nid);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_pkey_asn1_meth_engine")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_pkey_asn1_meth_engine")
+		]
 		public extern static engine_st* get_pkey_asn1_meth_engine(int nid);
 		
 		/*
 		 * This sets a new default ENGINE structure for performing RSA operations. If the result is non-zero (success) then the ENGINE structure will have had its reference count up'd so the caller should still free their own
 		 * reference 'e'.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_set_default_RSA")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_set_default_RSA")
+		]
 		public extern static int set_default_RSA(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_set_default_string")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_set_default_string")
+		]
 		public extern static int set_default_string(engine_st* e, char8* def_list);
 		/* Same for the other "methods" */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_set_default_DSA")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_set_default_DSA")
+		]
 		public extern static int set_default_DSA(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_set_default_EC")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_set_default_EC")
+		]
 		public extern static int set_default_EC(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_set_default_DH")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_set_default_DH")
+		]
 		public extern static int set_default_DH(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_set_default_RAND")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_set_default_RAND")
+		]
 		public extern static int set_default_RAND(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_set_default_ciphers")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_set_default_ciphers")
+		]
 		public extern static int set_default_ciphers(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_set_default_digests")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_set_default_digests")
+		]
 		public extern static int set_default_digests(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_set_default_pkey_meths")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_set_default_pkey_meths")
+		]
 		public extern static int set_default_pkey_meths(engine_st* e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_set_default_pkey_asn1_meths")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_set_default_pkey_asn1_meths")
+		]
 		public extern static int set_default_pkey_asn1_meths(engine_st* e);
 		
 		/*
 		 * The combination "set" - the flags are bitwise "OR"d from the METHOD_*** defines above. As with the "register_complete()" function, this function can result in unnecessary static linkage. If your
 		 * application requires only specific functionality, consider using more selective functions.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_set_default")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_set_default")
+		]
 		public extern static int set_default(engine_st* e, uint flags);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_add_conf_module")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_add_conf_module")
+		]
 		public extern static void add_conf_module();
 		
 		/* Deprecated functions ... */
 		/*
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_clear_defaults")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_clear_defaults")
+		]
 		public extern static int clear_defaults();
 		*/
 		
@@ -752,7 +1357,12 @@ namespace Beef_Net.OpenSSL
 		 * this would fail, and for the same reason that it's unnecessary to try. If the loaded ENGINE has (or gets from through the loader) its own copy of the libcrypto static data, we will need to set the callbacks.
 		 * The easiest way to detect this is to have a function that returns a pointer to some static data and let the loading application and loaded ENGINE compare their respective values.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ENGINE_get_static_state")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ENGINE_get_static_state")
+		]
 		public extern static void* get_static_state();
 #endif
 	}

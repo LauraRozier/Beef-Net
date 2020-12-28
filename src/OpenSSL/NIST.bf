@@ -19,7 +19,7 @@ namespace Beef_Net.OpenSSL
 
 		/* The un-portables
 		[Align(1)]
-		public typealias limb_aX = uint64;
+		public typealias limb_aX = uint64; // We are unable to align a typealias
 		public typealias widelimb = uint128;
 		public typealias widefelem = widelimb[7];
 		*/
@@ -67,7 +67,7 @@ namespace Beef_Net.OpenSSL
 
 		/* The un-portables
 		[Align(1)]
-		public typealias limb_aX = limb;
+		public typealias limb_aX = limb; // We are unable to align a typealias
 		public typealias largefelem = uint128[NLIMBS];
 		*/
 
@@ -91,11 +91,7 @@ namespace Beef_Net.OpenSSL
 		{
 		    public EC.GROUP* group;             /* Parent EC_GROUP object */
 		    public uint w;                      /* Window size */
-		    /*
-		     * Constant time access to the X and Y coordinates of the pre-computed,
-		     * generator multiplies, in the Montgomery domain. Pre-calculated
-		     * multiplies are stored in affine form.
-		     */
+		    /* Constant time access to the X and Y coordinates of the pre-computed, generator multiplies, in the Montgomery domain. Pre-calculated multiplies are stored in affine form. */
 		    public void* precomp;               /* PRECOMP256_ROW */ 
 		    public void* precomp_storage;
 		    public Crypto.REF_COUNT references;

@@ -14,7 +14,12 @@ namespace Beef_Net.OpenSSL
 	[AlwaysInclude]
 	sealed abstract class RSA
 	{
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int ERR_load_RSA_strings();
 		
 		/*
@@ -292,121 +297,371 @@ namespace Beef_Net.OpenSSL
 		[Inline]
 		public static void* get_app_data(rsa_st* s) => get_ex_data(s, 0);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_new")
+		]
 		public extern static rsa_st* new_();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_new_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_new_method")
+		]
 		public extern static rsa_st* new_method(Engine.ENGINE* engine);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_bits")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_bits")
+		]
 		public extern static int bits(rsa_st* rsa);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_size")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_size")
+		]
 		public extern static int size(rsa_st* rsa);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_security_bits")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_security_bits")
+		]
 		public extern static int security_bits(rsa_st* rsa);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_set0_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_set0_key")
+		]
 		public extern static int set0_key(rsa_st* r, BN.BIGNUM* n, BN.BIGNUM* e, BN.BIGNUM* d);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_set0_factors")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_set0_factors")
+		]
 		public extern static int set0_factors(rsa_st* r, BN.BIGNUM* p, BN.BIGNUM* q);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_set0_crt_params")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_set0_crt_params")
+		]
 		public extern static int set0_crt_params(rsa_st* r,BN.BIGNUM* dmp1, BN.BIGNUM* dmq1, BN.BIGNUM* iqmp);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_set0_multi_prime_params")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_set0_multi_prime_params")
+		]
 		public extern static int set0_multi_prime_params(rsa_st* r, BN.BIGNUM*[] primes, BN.BIGNUM*[] exps, BN.BIGNUM*[] coeffs, int pnum);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get0_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_get0_key")
+		]
 		public extern static void get0_key(rsa_st* r, BN.BIGNUM** n, BN.BIGNUM** e, BN.BIGNUM** d);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get0_factors")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_get0_factors")
+		]
 		public extern static void get0_factors(rsa_st* r, BN.BIGNUM** p, BN.BIGNUM** q);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get_multi_prime_extra_count")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_get_multi_prime_extra_count")
+		]
 		public extern static int get_multi_prime_extra_count(rsa_st* r);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get0_multi_prime_factors")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_get0_multi_prime_factors")
+		]
 		public extern static int get0_multi_prime_factors(rsa_st* r, BN.BIGNUM*[] primes);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get0_crt_params")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_get0_crt_params")
+		]
 		public extern static void get0_crt_params(rsa_st* r, BN.BIGNUM** dmp1, BN.BIGNUM** dmq1, BN.BIGNUM** iqmp);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get0_multi_prime_crt_params")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_get0_multi_prime_crt_params")
+		]
 		public extern static int get0_multi_prime_crt_params(rsa_st* r, BN.BIGNUM*[] exps, BN.BIGNUM*[] coeffs);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get0_n")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_get0_n")
+		]
 		public extern static BN.BIGNUM* get0_n(rsa_st* d);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get0_e")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_get0_e")
+		]
 		public extern static BN.BIGNUM* get0_e(rsa_st* d);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get0_d")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_get0_d")
+		]
 		public extern static BN.BIGNUM* get0_d(rsa_st* d);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get0_p")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_get0_p")
+		]
 		public extern static BN.BIGNUM* get0_p(rsa_st* d);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get0_q")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_get0_q")
+		]
 		public extern static BN.BIGNUM* get0_q(rsa_st* d);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get0_dmp1")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_get0_dmp1")
+		]
 		public extern static BN.BIGNUM* get0_dmp1(rsa_st* r);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get0_dmq1")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_get0_dmq1")
+		]
 		public extern static BN.BIGNUM* get0_dmq1(rsa_st* r);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get0_iqmp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_get0_iqmp")
+		]
 		public extern static BN.BIGNUM* get0_iqmp(rsa_st* r);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get0_pss_params")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_get0_pss_params")
+		]
 		public extern static PSS_PARAMS* get0_pss_params(rsa_st* r);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_clear_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_clear_flags")
+		]
 		public extern static void clear_flags(rsa_st* r, int flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_test_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_test_flags")
+		]
 		public extern static int test_flags(rsa_st* r, int flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_set_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_set_flags")
+		]
 		public extern static void set_flags(rsa_st* r, int flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get_version")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_get_version")
+		]
 		public extern static int get_version(rsa_st* r);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get0_engine")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_get0_engine")
+		]
 		public extern static Engine.ENGINE* get0_engine(rsa_st* r);
 		
 		/* Deprecated version */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_generate_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_generate_key")
+		]
 		public extern static rsa_st* generate_key(int bits, uint e, function void(int, int, void*) callback, void* cb_arg);
 		
 		/* New version */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_generate_key_ex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_generate_key_ex")
+		]
 		public extern static int generate_key_ex(rsa_st* rsa, int bits, BN.BIGNUM* e, BN.GENCB* cb);
 		/* Multi-prime version */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_generate_multi_prime_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_generate_multi_prime_key")
+		]
 		public extern static int generate_multi_prime_key(rsa_st* rsa, int bits, int primes, BN.BIGNUM* e, BN.GENCB* cb);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_X931_derive_ex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_X931_derive_ex")
+		]
 		public extern static int X931_derive_ex(rsa_st* rsa, BN.BIGNUM* p1, BN.BIGNUM* p2, BN.BIGNUM* q1, BN.BIGNUM* q2, BN.BIGNUM* Xp1, BN.BIGNUM* Xp2, BN.BIGNUM* Xp, BN.BIGNUM* Xq1, BN.BIGNUM* Xq2, BN.BIGNUM* Xq,
 			BN.BIGNUM* e, BN.GENCB* cb);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_X931_generate_key_ex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_X931_generate_key_ex")
+		]
 		public extern static int X931_generate_key_ex(rsa_st* rsa, int bits, BN.BIGNUM* e, BN.GENCB* cb);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_check_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_check_key")
+		]
 		public extern static int check_key(rsa_st* rsa);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_check_key_ex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_check_key_ex")
+		]
 		public extern static int check_key_ex(rsa_st* rsa, BN.GENCB* cb);
 		/* next 4 return -1 on error */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_public_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_public_encrypt")
+		]
 		public extern static int public_encrypt(int flen, uint8* from, uint8* to, rsa_st* rsa, int padding);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_private_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_private_encrypt")
+		]
 		public extern static int private_encrypt(int flen, uint8* from, uint8* to, rsa_st* rsa, int padding);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_public_decrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_public_decrypt")
+		]
 		public extern static int public_decrypt(int flen, uint8* from, uint8* to, rsa_st* rsa, int padding);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_private_decrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_private_decrypt")
+		]
 		public extern static int private_decrypt(int flen, uint8* from, uint8* to, rsa_st* rsa, int padding);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_free")
+		]
 		public extern static void free(rsa_st* rsa);
 		/* "up" the RSA object's reference count */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_up_ref")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_up_ref")
+		]
 		public extern static int up_ref(rsa_st* rsa);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_flags")
+		]
 		public extern static int flags(rsa_st* rsa);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_set_default_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_set_default_method")
+		]
 		public extern static void set_default_method(METHOD* meth);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get_default_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_get_default_method")
+		]
 		public extern static METHOD* get_default_method();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_null_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_null_method")
+		]
 		public extern static METHOD* null_method();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_get_method")
+		]
 		public extern static METHOD* get_method(rsa_st* rsa);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_set_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_set_method")
+		]
 		public extern static int set_method(rsa_st* rsa, METHOD* meth);
 		
 		/* these are the actual RSA functions */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_PKCS1_OpenSSL")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_PKCS1_OpenSSL")
+		]
 		public extern static METHOD* PKCS1_OpenSSL();
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_pkey_ctx_ctrl")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_pkey_ctx_ctrl")
+		]
 		public extern static int pkey_ctx_ctrl(EVP.PKEY_CTX* ctx, int optype, int cmd, int p1, void* p2);
 		
 		// DECLARE_ASN1_ENCODE_FUNCTIONS_const(RSA, RSAPublicKey)
@@ -440,84 +695,244 @@ namespace Beef_Net.OpenSSL
 		// DECLARE_ASN1_FUNCTIONS(RSA_OAEP_PARAMS)
 		
 	#if !OPENSSL_NO_STDIO
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_print_fp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_print_fp")
+		]
 		public extern static int print_fp(Platform.BfpFile* fp, rsa_st* r, int offset);
 	#endif
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_print")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_print")
+		]
 		public extern static int print(BIO.bio_st* bp, rsa_st* r, int offset);
 		
 		/* The following 2 functions sign and verify a X509.SIG ASN1 object inside PKCS#1 padded RSA encryption */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_sign")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_sign")
+		]
 		public extern static int sign(int type, uint8* m, uint m_length, uint8* sigret, uint *siglen, rsa_st* rsa);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_verify")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_verify")
+		]
 		public extern static int verify(int type, uint8* m, uint m_length, uint8* sigbuf, uint siglen, rsa_st* rsa);
 		
 		/* The following 2 function sign and verify a ASN1.OCTET_STRING object inside PKCS#1 padded RSA encryption */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_sign_ASN1_OCTET_STRING")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_sign_ASN1_OCTET_STRING")
+		]
 		public extern static int sign_ASN1_OCTET_STRING(int type, uint8* m, uint m_length, uint8* sigret, uint* siglen, rsa_st* rsa);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_verify_ASN1_OCTET_STRING")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_verify_ASN1_OCTET_STRING")
+		]
 		public extern static int verify_ASN1_OCTET_STRING(int type, uint8* m, uint m_length, uint8* sigbuf, uint siglen, rsa_st* rsa);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_blinding_on")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_blinding_on")
+		]
 		public extern static int blinding_on(rsa_st* rsa, BN.CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_blinding_off")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_blinding_off")
+		]
 		public extern static void blinding_off(rsa_st* rsa);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_setup_blinding")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_setup_blinding")
+		]
 		public extern static BN.BLINDING* setup_blinding(rsa_st* rsa, BN.CTX* ctx);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_padding_add_PKCS1_type_1")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_padding_add_PKCS1_type_1")
+		]
 		public extern static int padding_add_PKCS1_type_1(uint8* to, int tlen, uint8* f, int fl);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_padding_check_PKCS1_type_1")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_padding_check_PKCS1_type_1")
+		]
 		public extern static int padding_check_PKCS1_type_1(uint8* to, int tlen, uint8* f, int fl, int rsa_len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_padding_add_PKCS1_type_2")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_padding_add_PKCS1_type_2")
+		]
 		public extern static int padding_add_PKCS1_type_2(uint8* to, int tlen, uint8* f, int fl);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_padding_check_PKCS1_type_2")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_padding_check_PKCS1_type_2")
+		]
 		public extern static int padding_check_PKCS1_type_2(uint8* to, int tlen, uint8* f, int fl, int rsa_len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_padding_add_PKCS1_OAEP")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_padding_add_PKCS1_OAEP")
+		]
 		public extern static int padding_add_PKCS1_OAEP(uint8* to, int tlen, uint8* f, int fl, uint8* p, int pl);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_padding_check_PKCS1_OAEP")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_padding_check_PKCS1_OAEP")
+		]
 		public extern static int padding_check_PKCS1_OAEP(uint8* to, int tlen, uint8* f, int fl, int rsa_len, uint8* p, int pl);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_padding_add_PKCS1_OAEP_mgf1")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_padding_add_PKCS1_OAEP_mgf1")
+		]
 		public extern static int padding_add_PKCS1_OAEP_mgf1(uint8* to, int tlen, uint8* from, int flen, uint8* param, int plen, EVP.MD* md, EVP.MD* mgf1md);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_padding_check_PKCS1_OAEP_mgf1")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_padding_check_PKCS1_OAEP_mgf1")
+		]
 		public extern static int padding_check_PKCS1_OAEP_mgf1(uint8* to, int tlen, uint8* from, int flen, int num, uint8* param, int plen, EVP.MD* md, EVP.MD* mgf1md);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_padding_add_SSLv23")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_padding_add_SSLv23")
+		]
 		public extern static int padding_add_SSLv23(uint8* to, int tlen, uint8* f, int fl);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_padding_check_SSLv23")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_padding_check_SSLv23")
+		]
 		public extern static int padding_check_SSLv23(uint8* to, int tlen, uint8* f, int fl, int rsa_len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_padding_add_none")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_padding_add_none")
+		]
 		public extern static int padding_add_none(uint8* to, int tlen, uint8* f, int fl);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_padding_check_none")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_padding_check_none")
+		]
 		public extern static int padding_check_none(uint8* to, int tlen, uint8* f, int fl, int rsa_len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_padding_add_X931")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_padding_add_X931")
+		]
 		public extern static int padding_add_X931(uint8* to, int tlen, uint8* f, int fl);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_padding_check_X931")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_padding_check_X931")
+		]
 		public extern static int padding_check_X931(uint8* to, int tlen, uint8* f, int fl, int rsa_len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_X931_hash_id")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_X931_hash_id")
+		]
 		public extern static int X931_hash_id(int nid);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_verify_PKCS1_PSS")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_verify_PKCS1_PSS")
+		]
 		public extern static int verify_PKCS1_PSS(rsa_st* rsa, uint8* mHash, EVP.MD* Hash, uint8* EM, int sLen);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_padding_add_PKCS1_PSS")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_padding_add_PKCS1_PSS")
+		]
 		public extern static int padding_add_PKCS1_PSS(rsa_st* rsa, uint8* EM, uint8* mHash, EVP.MD* Hash, int sLen);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_verify_PKCS1_PSS_mgf1")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_verify_PKCS1_PSS_mgf1")
+		]
 		public extern static int verify_PKCS1_PSS_mgf1(rsa_st* rsa, uint8* mHash, EVP.MD* Hash, EVP.MD* mgf1Hash, uint8* EM, int sLen);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_padding_add_PKCS1_PSS_mgf1")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_padding_add_PKCS1_PSS_mgf1")
+		]
 		public extern static int padding_add_PKCS1_PSS_mgf1(rsa_st* rsa, uint8* EM, uint8* mHash, EVP.MD* Hash, EVP.MD* mgf1Hash, int sLen);
 		
 		[Inline]
 		public static int get_ex_new_index(int l, void* p, Crypto.EX_new newf, Crypto.EX_dup dupf, Crypto.EX_free freef) => Crypto.get_ex_new_index(Crypto.EX_INDEX_RSA, l, p, newf, dupf, freef);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_set_ex_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_set_ex_data")
+		]
 		public extern static int set_ex_data(rsa_st* r, int idx, void* arg);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_get_ex_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_get_ex_data")
+		]
 		public extern static void* get_ex_data(rsa_st* r, int idx);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSAPublicKey_dup")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSAPublicKey_dup")
+		]
 		public extern static rsa_st* PublicKey_dup(rsa_st* rsa);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSAPrivateKey_dup")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSAPrivateKey_dup")
+		]
 		public extern static rsa_st* PrivateKey_dup(rsa_st* rsa);
 		
 		/*
@@ -530,71 +945,236 @@ namespace Beef_Net.OpenSSL
 		/* Application has decided PRNG is good enough to generate a key: don't check. */
 		public const int FLAG_CHECKED        = 0x0800;
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_meth_new")
+		]
 		public extern static METHOD* meth_new(char8* name, int flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_meth_free")
+		]
 		public extern static void meth_free(METHOD* meth);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_dup")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_meth_dup")
+		]
 		public extern static METHOD* meth_dup(METHOD* meth);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_get0_name")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_meth_get0_name")
+		]
 		public extern static char8* meth_get0_name(METHOD* meth);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_set1_name")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_meth_set1_name")
+		]
 		public extern static int meth_set1_name(METHOD* meth, char8* name);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_get_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_meth_get_flags")
+		]
 		public extern static int meth_get_flags(METHOD* meth);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_set_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_meth_set_flags")
+		]
 		public extern static int meth_set_flags(METHOD* meth, int flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_get0_app_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_meth_get0_app_data")
+		]
 		public extern static void* meth_get0_app_data(METHOD* meth);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_set0_app_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_meth_set0_app_data")
+		]
 		public extern static int meth_set0_app_data(METHOD* meth, void* app_data);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_get_pub_enc")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_meth_get_pub_enc")
+		]
 		public extern static function int(int flen, uint8* from, uint8* to, rsa_st* rsa, int padding) meth_get_pub_enc(METHOD* meth);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_set_pub_enc")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_meth_set_pub_enc")
+		]
 		public extern static int meth_set_pub_enc(METHOD* rsa, function int(int flen, uint8* from, uint8* to, rsa_st* rsa, int padding) pub_enc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_get_pub_dec")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_meth_get_pub_dec")
+		]
 		public extern static function int(int flen, uint8* from, uint8* to, rsa_st* rsa, int padding) meth_get_pub_dec(METHOD* meth);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_set_pub_dec")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_meth_set_pub_dec")
+		]
 		public extern static int meth_set_pub_dec(METHOD* rsa, function int(int flen, uint8* from, uint8* to, rsa_st* rsa, int padding) pub_dec);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_get_priv_enc")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_meth_get_priv_enc")
+		]
 		public extern static function int(int flen, uint8* from, uint8* to, rsa_st* rsa, int padding) meth_get_priv_enc(METHOD* meth);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_set_priv_enc")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_meth_set_priv_enc")
+		]
 		public extern static int meth_set_priv_enc(METHOD* rsa, function int(int flen, uint8* from, uint8* to, rsa_st* rsa, int padding) priv_enc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_get_priv_dec")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_meth_get_priv_dec")
+		]
 		public extern static function int(int flen, uint8* from, uint8* to, rsa_st* rsa, int padding) meth_get_priv_dec(METHOD* meth);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_set_priv_dec")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_meth_set_priv_dec")
+		]
 		public extern static int meth_set_priv_dec(METHOD* rsa, function int(int flen, uint8* from, uint8* to, rsa_st* rsa, int padding) priv_dec);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_get_mod_exp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_meth_get_mod_exp")
+		]
 		public extern static function int(BN.BIGNUM* r0, BN.BIGNUM* i, rsa_st* rsa, BN.CTX* ctx) meth_get_mod_exp(METHOD* meth);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_set_mod_exp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_meth_set_mod_exp")
+		]
 		public extern static int meth_set_mod_exp(METHOD* rsa, function int(BN.BIGNUM* r0, BN.BIGNUM* i, rsa_st* rsa, BN.CTX* ctx) mod_exp);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_get_bn_mod_exp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_meth_get_bn_mod_exp")
+		]
 		public extern static function int(BN.BIGNUM* r, BN.BIGNUM* a, BN.BIGNUM* p, BN.BIGNUM* m, BN.CTX* ctx, BN.MONT_CTX* m_ctx) meth_get_bn_mod_exp(METHOD* meth);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_set_bn_mod_exp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_meth_set_bn_mod_exp")
+		]
 		public extern static int meth_set_bn_mod_exp(METHOD* rsa, function int(BN.BIGNUM* r, BN.BIGNUM* a, BN.BIGNUM* p, BN.BIGNUM* m, BN.CTX* ctx, BN.MONT_CTX* m_ctx) bn_mod_exp);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_get_init")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_meth_get_init")
+		]
 		public extern static function int(rsa_st* rsa) meth_get_init(METHOD* meth);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_set_init")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_meth_set_init")
+		]
 		public extern static int meth_set_init(METHOD* rsa, function int(rsa_st* rsa) init);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_get_finish")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_meth_get_finish")
+		]
 		public extern static function int(rsa_st* rsa) meth_get_finish(METHOD* meth);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_set_finish")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_meth_set_finish")
+		]
 		public extern static int meth_set_finish(METHOD* rsa, function int(rsa_st* rsa) finish);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_get_sign")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_meth_get_sign")
+		]
 		public extern static function int(int type, uint8* m, uint m_length, uint8* sigret, uint *siglen, rsa_st* rsa) meth_get_sign(METHOD* meth);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_set_sign")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_meth_set_sign")
+		]
 		public extern static int meth_set_sign(METHOD* rsa, function int(int type, uint8* m, uint m_length, uint8* sigret, uint *siglen, rsa_st* rsa) sign);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_get_verify")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_meth_get_verify")
+		]
 		public extern static function int(int dtype, uint8* m, uint m_length, uint8* sigbuf, uint siglen, rsa_st* rsa) meth_get_verify(METHOD* meth);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_set_verify")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_meth_set_verify")
+		]
 		public extern static int meth_set_verify(METHOD* rsa, function int(int dtype, uint8* m, uint m_length, uint8* sigbuf, uint siglen, rsa_st* rsa) verify);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_get_keygen")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_meth_get_keygen")
+		]
 		public extern static function int(rsa_st* rsa, int bits, BN.BIGNUM* e, BN.GENCB* cb) meth_get_keygen(METHOD* meth);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_set_keygen")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_meth_set_keygen")
+		]
 		public extern static int meth_set_keygen(METHOD* rsa, function int(rsa_st* rsa, int bits, BN.BIGNUM* e, BN.GENCB* cb) keygen);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_get_multi_prime_keygen")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_meth_get_multi_prime_keygen")
+		]
 		public extern static function int(rsa_st* rsa, int bits, int primes, BN.BIGNUM* e, BN.GENCB* cb) meth_get_multi_prime_keygen(METHOD* meth);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RSA_meth_set_multi_prime_keygen")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RSA_meth_set_multi_prime_keygen")
+		]
 		public extern static int meth_set_multi_prime_keygen(METHOD* meth, function int(rsa_st* rsa, int bits, int primes, BN.BIGNUM* e, BN.GENCB* cb) keygen);
 #endif
 	}

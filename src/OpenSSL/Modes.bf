@@ -36,10 +36,7 @@ namespace Beef_Net.OpenSSL
 			public internal_struct len;
 			public internal_struct Xi;
 			public internal_struct H;
-		    /*
-		     * Relative position of Xi, H and pre-computed Htable is used in some
-		     * assembler modules, i.e. don't change the order!
-		     */
+		    /* Relative position of Xi, H and pre-computed Htable is used in some assembler modules, i.e. don't change the order! */
 		    public u128[16] Htable;
 		    public function void(uint64[2] Xi, u128[16] Htable) gmult;
 		    public function void(uint64[2] Xi, u128[16] Htable, uint8* inp, uint len) ghash;

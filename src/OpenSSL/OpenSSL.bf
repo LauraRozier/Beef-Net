@@ -120,31 +120,81 @@ namespace Beef_Net.OpenSSL
 		[Inline]
 		public static uint secure_actual_size(void* ptr) => Crypto.secure_actual_size(ptr);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_strlcpy")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_strlcpy")
+		]
 		public extern static uint strlcpy(char8* dst, char8* src, uint size);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_strlcat")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_strlcat")
+		]
 		public extern static uint strlcat(char8* dst, char8* src, uint size);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_strnlen")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_strnlen")
+		]
 		public extern static uint strnlen(char8* str, uint maxlen);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_buf2hexstr")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_buf2hexstr")
+		]
 		public extern static char8* buf2hexstr(uint8* buffer, int len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_hexstr2buf")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_hexstr2buf")
+		]
 		public extern static uint8* hexstr2buf(char8* str, int* len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_hexchar2int")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_hexchar2int")
+		]
 		public extern static int hexchar2int(uint8 c);
 
 		[Inline]
 		public static uint MALLOC_MAX_NELEMS<T>() => ((1U << (sizeof(int) * 8 - 1)) - 1) / (uint32)sizeof(T);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OpenSSL_version_num")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OpenSSL_version_num")
+		]
 		public extern static uint version_num();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OpenSSL_version")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OpenSSL_version")
+		]
 		public extern static char8* version(int type);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_issetugid")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_issetugid")
+		]
 		public extern static int issetugid();
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_cleanse")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_cleanse")
+		]
 		public extern static void cleanse(void* ptr, uint len);
 
 		/* die if we have to */
@@ -162,17 +212,42 @@ namespace Beef_Net.OpenSSL
 			}
 		}
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_isservice")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_isservice")
+		]
 		public extern static int isservice();
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_init")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_init")
+		]
 		public extern static void init();
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_gmtime")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_gmtime")
+		]
 		public extern static OSSLType.tm* gmtime(int64* timer, OSSLType.tm* result);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_gmtime_adj")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_gmtime_adj")
+		]
 		public extern static int gmtime_adj(OSSLType.tm* tm, int offset_day, int offset_sec);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_gmtime_diff")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_gmtime_diff")
+		]
 		public extern static int gmtime_diff(int* pday, int* psec, OSSLType.tm* from, OSSLType.tm* to);
 
 		/* Standard initialisation options */
@@ -212,28 +287,73 @@ namespace Beef_Net.OpenSSL
 		public typealias INIT_SETTINGS = init_settings_st;
 
 		/* Library initialisation functions */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_cleanup")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_cleanup")
+		]
 		public extern static void cleanup();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_init_crypto")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_init_crypto")
+		]
 		public extern static int init_crypto(uint64 opts, INIT_SETTINGS* settings);
 		function void atexit_handler();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_atexit")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_atexit")
+		]
 		public extern static int atexit(atexit_handler handler);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_thread_stop")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_thread_stop")
+		]
 		public extern static void thread_stop();
 
 		/* Low-level control of initialization */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_INIT_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_INIT_new")
+		]
 		public extern static INIT_SETTINGS* INIT_new();
 #if !OPENSSL_NO_STDIO
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_INIT_set_config_filename")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_INIT_set_config_filename")
+		]
 		public extern static int INIT_set_config_filename(INIT_SETTINGS* settings, char8* config_filename);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_INIT_set_config_file_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_INIT_set_config_file_flags")
+		]
 		public extern static void INIT_set_config_file_flags(INIT_SETTINGS* settings, uint flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_INIT_set_config_appname")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_INIT_set_config_appname")
+		]
 		public extern static int INIT_set_config_appname(INIT_SETTINGS* settings, char8* config_appname);
 #endif
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_INIT_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_INIT_free")
+		]
 		public extern static void INIT_free(INIT_SETTINGS* settings);
 
 		[Inline]
@@ -254,13 +374,23 @@ namespace Beef_Net.OpenSSL
 		[Inline]
 		public static int add_all_digests() => init_crypto(INIT_ADD_ALL_DIGESTS, null);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_config")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_config")
+		]
 		public extern static void config(char8* config_name);
 
 		[Inline]
 		public static int no_config() => init_crypto(INIT_NO_LOAD_CONFIG, null);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_load_builtin_modules")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_load_builtin_modules")
+		]
 		public extern static void load_builtin_modules();
 
 #if !OPENSSL_DH_MAX_MODULUS_BITS
@@ -286,53 +416,163 @@ namespace Beef_Net.OpenSSL
 		public typealias LHASH = LHash.lhash_st;
 		public typealias LH_NODE = LHash.node_st;
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_LH_error")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_LH_error")
+		]
 		public extern static int LH_error(LHash.lhash_st* lh);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_LH_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_LH_new")
+		]
 		public extern static LHash.lhash_st* LH_new(LH_HASHFUNC h, LH_COMPFUNC c);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_LH_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_LH_free")
+		]
 		public extern static void LH_free(LHash.lhash_st* lh);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_LH_insert")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_LH_insert")
+		]
 		public extern static void* LH_insert(LHash.lhash_st* lh, void* data);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_LH_delete")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_LH_delete")
+		]
 		public extern static void* LH_delete(LHash.lhash_st* lh, void* data);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_LH_retrieve")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_LH_retrieve")
+		]
 		public extern static void* LH_retrieve(LHash.lhash_st* lh, void* data);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_LH_doall")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_LH_doall")
+		]
 		public extern static void LH_doall(LHash.lhash_st* lh, LH_DOALL_FUNC func);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_LH_doall_arg")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_LH_doall_arg")
+		]
 		public extern static void LH_doall_arg(LHash.lhash_st* lh, LH_DOALL_FUNCARG func, void* arg);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_LH_strhash")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_LH_strhash")
+		]
 		public extern static uint LH_strhash(char8* c);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_LH_num_items")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_LH_num_items")
+		]
 		public extern static uint LH_num_items(LHash.lhash_st* lh);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_LH_get_down_load")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_LH_get_down_load")
+		]
 		public extern static uint LH_get_down_load(LHash.lhash_st* lh);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_LH_set_down_load")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_LH_set_down_load")
+		]
 		public extern static void LH_set_down_load(LHash.lhash_st* lh, uint down_load);
 
 #if !OPENSSL_NO_STDIO
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_LH_stats")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_LH_stats")
+		]
 		public extern static void LH_stats(LHash.lhash_st* lh, Platform.BfpFile* fp);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_LH_node_stats")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_LH_node_stats")
+		]
 		public extern static void LH_node_stats(LHash.lhash_st* lh, Platform.BfpFile* fp);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_LH_node_usage_stats")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_LH_node_usage_stats")
+		]
 		public extern static void LH_node_usage_stats(LHash.lhash_st* lh, Platform.BfpFile* fp);
 #endif
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_LH_stats_bio")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_LH_stats_bio")
+		]
 		public extern static void LH_stats_bio(LHash.lhash_st* lh, BIO.bio_st* outVal);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_LH_node_stats_bio")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_LH_node_stats_bio")
+		]
 		public extern static void LH_node_stats_bio(LHash.lhash_st* lh, BIO.bio_st* outVal);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_LH_node_usage_stats_bio")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_LH_node_usage_stats_bio")
+		]
 		public extern static void LH_node_usage_stats_bio(LHash.lhash_st* lh, BIO.bio_st* outVal);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_asc2uni")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_asc2uni")
+		]
 		public extern static uint8* asc2uni(char8* asc, int asclen, uint8** uni, int* unilen);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_uni2asc")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_uni2asc")
+		]
 		public extern static char8* uni2asc(uint8* uni, int unilen);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_utf82uni")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_utf82uni")
+		]
 		public extern static uint8* utf82uni(char8* asc, int asclen, uint8** uni, int* unilen);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_uni2utf8")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_uni2utf8")
+		]
 		public extern static char8* uni2utf8(uint8* uni, int unilen);
 		
 #if !OPENSSL_NO_RSA
@@ -348,55 +588,175 @@ namespace Beef_Net.OpenSSL
 		public function void sk_freefunc(void* a);
 		public function void* sk_copyfunc(void* a);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_num")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_sk_num")
+		]
 		public extern static int sk_num(Stack.OPENSSL_STACK* st);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_value")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_sk_value")
+		]
 		public extern static void* sk_value(Stack.OPENSSL_STACK* st, int i);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_set")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_sk_set")
+		]
 		public extern static void* sk_set(Stack.OPENSSL_STACK* st, int i, void* data);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_sk_new")
+		]
 		public extern static Stack.OPENSSL_STACK* sk_new(sk_compfunc cmp);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_new_null")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_sk_new_null")
+		]
 		public extern static Stack.OPENSSL_STACK* sk_new_null();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_new_reserve")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_sk_new_reserve")
+		]
 		public extern static Stack.OPENSSL_STACK* sk_new_reserve(sk_compfunc c, int n);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_reserve")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_sk_reserve")
+		]
 		public extern static int sk_reserve(Stack.OPENSSL_STACK* st, int n);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_sk_free")
+		]
 		public extern static void sk_free(Stack.OPENSSL_STACK* st);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_pop_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_sk_pop_free")
+		]
 		public extern static void sk_pop_free(Stack.OPENSSL_STACK* st, function void(void*) func);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_deep_copy")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_sk_deep_copy")
+		]
 		public extern static Stack.OPENSSL_STACK* sk_deep_copy(Stack.OPENSSL_STACK* st, sk_copyfunc c, sk_freefunc f);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_insert")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_sk_insert")
+		]
 		public extern static int sk_insert(Stack.OPENSSL_STACK* sk, void* data, int where_);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_delete")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_sk_delete")
+		]
 		public extern static void* sk_delete(Stack.OPENSSL_STACK* st, int loc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_delete_ptr")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_sk_delete_ptr")
+		]
 		public extern static void* sk_delete_ptr(Stack.OPENSSL_STACK* st, void* p);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_find")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_sk_find")
+		]
 		public extern static int sk_find(Stack.OPENSSL_STACK* st, void* data);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_find_ex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_sk_find_ex")
+		]
 		public extern static int sk_find_ex(Stack.OPENSSL_STACK* st, void* data);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_push")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_sk_push")
+		]
 		public extern static int sk_push(Stack.OPENSSL_STACK* st, void* data);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_unshift")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_sk_unshift")
+		]
 		public extern static int sk_unshift(Stack.OPENSSL_STACK* st, void* data);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_shift")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_sk_shift")
+		]
 		public extern static void* sk_shift(Stack.OPENSSL_STACK* st);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_pop")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_sk_pop")
+		]
 		public extern static void* sk_pop(Stack.OPENSSL_STACK* st);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_zero")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_sk_zero")
+		]
 		public extern static void sk_zero(Stack.OPENSSL_STACK* st);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_set_cmp_func")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_sk_set_cmp_func")
+		]
 		public extern static sk_compfunc sk_set_cmp_func(Stack.OPENSSL_STACK* sk, sk_compfunc cmp);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_dup")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_sk_dup")
+		]
 		public extern static Stack.OPENSSL_STACK* sk_dup(Stack.OPENSSL_STACK* st);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_sort")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_sk_sort")
+		]
 		public extern static void sk_sort(Stack.OPENSSL_STACK* st);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OPENSSL_sk_is_sorted")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OPENSSL_sk_is_sorted")
+		]
 		public extern static int sk_is_sorted(Stack.OPENSSL_STACK* st);
 
 		[CRepr]
@@ -409,9 +769,19 @@ namespace Beef_Net.OpenSSL
 		**	  20   13 0000180C OPENSSL_cipher_name
 		**	  21   14 00002059 OPENSSL_init_ssl
 		*/
-		[Import(OPENSSL_LIB_SSL), LinkName("OPENSSL_cipher_name")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("OPENSSL_cipher_name")
+		]
 		public extern static char8* cipher_name(char8* rfc_name);
-		[Import(OPENSSL_LIB_SSL), LinkName("OPENSSL_init_ssl")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("OPENSSL_init_ssl")
+		]
 		public extern static int init_ssl(uint64 opts, INIT_SETTINGS* settings);
 
 		/* OPENSSL_INIT flag 0x010000 reserved for internal use */
@@ -431,7 +801,12 @@ namespace Beef_Net.OpenSSL
 		public static void add_ssl_algorithms() => SSL.library_init();
 
 #if !OPENSSL_NO_UNIT_TEST
-		[Import(OPENSSL_LIB_SSL), LinkName("SSL_test_functions")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("SSL_test_functions")
+		]
 		public extern static ssl_test_functions* test_functions();
 #endif
 	}

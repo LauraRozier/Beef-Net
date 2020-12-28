@@ -36,15 +36,40 @@ namespace Beef_Net.OpenSSL
 		}
 		typealias CTX = ctx_st;
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("WHIRLPOOL_Init")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("WHIRLPOOL_Init")
+		]
 		public extern static int Init(CTX* c);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("WHIRLPOOL_Update")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("WHIRLPOOL_Update")
+		]
 		public extern static int Update(CTX* c, void* inp, uint bytes);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("WHIRLPOOL_BitUpdate")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("WHIRLPOOL_BitUpdate")
+		]
 		public extern static void BitUpdate(CTX* c, void* inp, uint bits);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("WHIRLPOOL_Final")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("WHIRLPOOL_Final")
+		]
 		public extern static int Final(uint8* md, CTX* c);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static uint8* WHIRLPOOL(void* inp, uint bytes, uint8* md);
 #endif
 	}

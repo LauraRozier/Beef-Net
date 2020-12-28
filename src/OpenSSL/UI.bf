@@ -18,7 +18,12 @@ namespace Beef_Net.OpenSSL
 	#define OPENSSL_NO_UI
 #endif
 
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int ERR_load_UI_strings();
 		
 		/*
@@ -69,11 +74,26 @@ namespace Beef_Net.OpenSSL
 		 */
 		
 		/* Creators and destructor.   */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_new")
+		]
 		public extern static ui_st* new_();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_new_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_new_method")
+		]
 		public extern static ui_st* new_method(METHOD* method);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_free")
+		]
 		public extern static void free(ui_st* ui);
 		
 		/*-
@@ -102,25 +122,75 @@ namespace Beef_Net.OpenSSL
 		
 		   On success, the all return an index of the added information.  That index is useful when retrieving results with get0_result().
 		*/
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_add_input_string")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_add_input_string")
+		]
 		public extern static int add_input_string(ui_st* ui, char8* prompt, int flags, char8* result_buf, int minsize, int maxsize);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_dup_input_string")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_dup_input_string")
+		]
 		public extern static int dup_input_string(ui_st* ui, char8* prompt, int flags, char8* result_buf, int minsize, int maxsize);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_add_verify_string")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_add_verify_string")
+		]
 		public extern static int add_verify_string(ui_st* ui, char8* prompt, int flags, char8* result_buf, int minsize, int maxsize, char8* test_buf);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_dup_verify_string")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_dup_verify_string")
+		]
 		public extern static int dup_verify_string(ui_st* ui, char8* prompt, int flags, char8* result_buf, int minsize, int maxsize, char8* test_buf);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_add_input_boolean")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_add_input_boolean")
+		]
 		public extern static int add_input_boolean(ui_st* ui, char8* prompt, char8* action_desc, char8* ok_chars, char8* cancel_chars, int flags, char8* result_buf);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_dup_input_boolean")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_dup_input_boolean")
+		]
 		public extern static int dup_input_boolean(ui_st* ui, char8* prompt, char8* action_desc, char8* ok_chars, char8* cancel_chars, int flags, char8* result_buf);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_add_info_string")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_add_info_string")
+		]
 		public extern static int add_info_string(ui_st* ui, char8* text);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_dup_info_string")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_dup_info_string")
+		]
 		public extern static int dup_info_string(ui_st* ui, char8* text);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_add_error_string")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_add_error_string")
+		]
 		public extern static int add_error_string(ui_st* ui, char8* text);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_dup_error_string")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_dup_error_string")
+		]
 		public extern static int dup_error_string(ui_st* ui, char8* text);
 		
 		/* These are the possible flags.  They can be or'ed together. */
@@ -153,7 +223,12 @@ namespace Beef_Net.OpenSSL
 		 *
 		 *       "Enter pass phrase for foo.key:"
 		*/
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_construct_prompt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_construct_prompt")
+		]
 		public extern static char8* construct_prompt(ui_st* ui_method, char8* object_desc, char8* object_name);
 		
 		/*
@@ -164,27 +239,62 @@ namespace Beef_Net.OpenSSL
 		 *
 		 * Note that the OpenSSL() method completely ignores the user data. Other methods may not, however.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_add_user_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_add_user_data")
+		]
 		public extern static void* add_user_data(ui_st* ui, void* user_data);
 		/* Alternatively, this function is used to duplicate the user data. This uses the duplicator method function.  The destroy function will be used to free the user data in this case. */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_dup_user_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_dup_user_data")
+		]
 		public extern static int dup_user_data(ui_st* ui, void* user_data);
 		/* We need a user data retrieving function as well.  */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_get0_user_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_get0_user_data")
+		]
 		public extern static void* get0_user_data(ui_st* ui);
 		
 		/* Return the result associated with a prompt given with the index i. */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_get0_result")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_get0_result")
+		]
 		public extern static char8* get0_result(ui_st* ui, int i);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_get_result_length")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_get_result_length")
+		]
 		public extern static int get_result_length(ui_st* ui, int i);
 		
 		/* When all strings have been added, process the whole thing. */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_process")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_process")
+		]
 		public extern static int process(ui_st* ui);
 		
 		/* Give a user interface parameterised control commands.  This can be used to send down an integer, a data pointer or a function pointer, as well as be used to get information from a UI. */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_ctrl")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_ctrl")
+		]
 		public extern static int ctrl(ui_st* ui, int cmd, int i, void* p, function void() f);
 		
 		/* The commands */
@@ -201,29 +311,69 @@ namespace Beef_Net.OpenSSL
 		
 		[Inline]
 		public static int get_ex_new_index(int l, void* p, Crypto.EX_new newf, Crypto.EX_dup dupf, Crypto.EX_free freef) => Crypto.get_ex_new_index(Crypto.EX_INDEX_UI, l, p, newf, dupf, freef);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_set_ex_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_set_ex_data")
+		]
 		public extern static int set_ex_data(ui_st* r, int idx, void* arg);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_get_ex_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_get_ex_data")
+		]
 		public extern static void* get_ex_data(ui_st* r, int idx);
 		
 		/* Use specific methods instead of the built-in one */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_set_default_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_set_default_method")
+		]
 		public extern static void set_default_method(METHOD* meth);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_get_default_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_get_default_method")
+		]
 		public extern static METHOD* get_default_method();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_get_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_get_method")
+		]
 		public extern static METHOD* get_method(ui_st* ui);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_set_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_set_method")
+		]
 		public extern static METHOD* set_method(ui_st* ui, METHOD* meth);
 		
 #if !OPENSSL_NO_UI_CONSOLE
 		/* The method with all the built-in thingies */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_OpenSSL")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_OpenSSL")
+		]
 		public extern static METHOD* OpenSSL();
 #endif
 		
 		/* NULL method.  Literally does nothing, but may serve as a placeholder to avoid internal default. */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_null")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_null")
+		]
 		public extern static METHOD* null_();
 		
 		/* ---------- For method writers ---------- */
@@ -345,85 +495,250 @@ namespace Beef_Net.OpenSSL
 		}
 		
 		/* Create and manipulate methods */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_create_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_create_method")
+		]
 		public extern static METHOD* create_method(char8* name);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_destroy_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_destroy_method")
+		]
 		public extern static void destroy_method(METHOD* ui_method);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_method_set_opener")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_method_set_opener")
+		]
 		public extern static int method_set_opener(METHOD* method, function int(ui_st* ui) opener);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_method_set_writer")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_method_set_writer")
+		]
 		public extern static int method_set_writer(METHOD* method, function int(ui_st* ui, STRING* uis) writer);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_method_set_flusher")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_method_set_flusher")
+		]
 		public extern static int method_set_flusher(METHOD* method, function int(ui_st* ui) flusher);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_method_set_reader")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_method_set_reader")
+		]
 		public extern static int method_set_reader(METHOD* method, function int(ui_st* ui, STRING* uis) reader);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_method_set_closer")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_method_set_closer")
+		]
 		public extern static int method_set_closer(METHOD* method, function int(ui_st* ui) closer);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_method_set_data_duplicator")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_method_set_data_duplicator")
+		]
 		public extern static int method_set_data_duplicator(METHOD* method, function void*(ui_st* ui, void* ui_data) duplicator, function void(ui_st* ui, void* ui_data) destructor);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_method_set_prompt_constructor")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_method_set_prompt_constructor")
+		]
 		public extern static int method_set_prompt_constructor(METHOD* method, function char8*(ui_st* ui, char8* object_desc, char8* object_name) prompt_constructor);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_method_set_ex_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_method_set_ex_data")
+		]
 		public extern static int method_set_ex_data(METHOD* method, int idx, void* data);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_method_get_opener")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_method_get_opener")
+		]
 		public extern static function int(ui_st*) method_get_opener(METHOD* method);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_method_get_writer")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_method_get_writer")
+		]
 		public extern static function int(ui_st*, STRING*) method_get_writer(METHOD* method);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_method_get_flusher")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_method_get_flusher")
+		]
 		public extern static function int(ui_st*) method_get_flusher(METHOD* method);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_method_get_reader")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_method_get_reader")
+		]
 		public extern static function int(ui_st*, STRING*) method_get_reader(METHOD* method);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_method_get_closer")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_method_get_closer")
+		]
 		public extern static function int(ui_st*) method_get_closer(METHOD* method);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_method_get_prompt_constructor")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_method_get_prompt_constructor")
+		]
 		public extern static function char8*(ui_st*, char8*, char8*) method_get_prompt_constructor(METHOD* method);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_method_get_data_duplicator")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_method_get_data_duplicator")
+		]
 		public extern static function void*(ui_st*, void* ) method_get_data_duplicator(METHOD* method);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_method_get_data_destructor")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_method_get_data_destructor")
+		]
 		public extern static function void(ui_st*, void*) method_get_data_destructor(METHOD* method);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_method_get_ex_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_method_get_ex_data")
+		]
 		public extern static void* method_get_ex_data(METHOD* method, int idx);
 		
 		/* The following functions are helpers for method writers to access relevant data from a STRING. */
 		
 		/* Return type of the STRING */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_get_string_type")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_get_string_type")
+		]
 		public extern static string_types get_string_type(STRING* uis);
 		/* Return input flags of the STRING */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_get_input_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_get_input_flags")
+		]
 		public extern static int get_input_flags(STRING* uis);
 		/* Return the actual string to output (the prompt, info or error) */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_get0_output_string")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_get0_output_string")
+		]
 		public extern static char8* get0_output_string(STRING* uis);
 		/* Return the optional action string to output (the boolean prompt instruction) */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_get0_action_string")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_get0_action_string")
+		]
 		public extern static char8* get0_action_string(STRING* uis);
 		/* Return the result of a prompt */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_get0_result_string")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_get0_result_string")
+		]
 		public extern static char8* get0_result_string(STRING* uis);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_get_result_string_length")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_get_result_string_length")
+		]
 		public extern static int get_result_string_length(STRING* uis);
 		/* Return the string to test the result against.  Only useful with verifies. */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_get0_test_string")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_get0_test_string")
+		]
 		public extern static char8* get0_test_string(STRING* uis);
 		/* Return the required minimum size of the result */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_get_result_minsize")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_get_result_minsize")
+		]
 		public extern static int get_result_minsize(STRING* uis);
 		/* Return the required maximum size of the result */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_get_result_maxsize")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_get_result_maxsize")
+		]
 		public extern static int get_result_maxsize(STRING* uis);
 		/* Set the result of a STRING. */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_set_result")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_set_result")
+		]
 		public extern static int set_result(ui_st* ui, STRING* uis, char8* result);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_set_result_ex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_set_result_ex")
+		]
 		public extern static int set_result_ex(ui_st* ui, STRING* uis, char8* result, int len);
 		
 		/* A couple of popular utility functions */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_UTIL_read_pw_string")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_UTIL_read_pw_string")
+		]
 		public extern static int UTIL_read_pw_string(char8* buf, int length, char8* prompt, int verify);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_UTIL_read_pw")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_UTIL_read_pw")
+		]
 		public extern static int UTIL_read_pw(char8* buf, char8* buff, int size, char8* prompt, int verify);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("UI_UTIL_wrap_read_pem_callback")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("UI_UTIL_wrap_read_pem_callback")
+		]
 		public extern static METHOD* UTIL_wrap_read_pem_callback(PEM.password_cb* cb, int rwflag);
 	}
 }

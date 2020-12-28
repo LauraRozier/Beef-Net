@@ -246,60 +246,190 @@ namespace Beef_Net.OpenSSL
 		}
 		public typealias STRING_DATA = string_data_st;
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ERR_put_error")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ERR_put_error")
+		]
 		public extern static void put_error(int lib, int func, int reason, char8* file, int line);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ERR_set_error_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ERR_set_error_data")
+		]
 		public extern static void set_error_data(char8* data, int flags);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ERR_get_error")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ERR_get_error")
+		]
 		public extern static uint get_error();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ERR_get_error_line")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ERR_get_error_line")
+		]
 		public extern static uint get_error_line(char8** file, int* line);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ERR_get_error_line_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ERR_get_error_line_data")
+		]
 		public extern static uint get_error_line_data(char8** file, int* line, char8** data, int* flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ERR_peek_error")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ERR_peek_error")
+		]
 		public extern static uint peek_error();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ERR_peek_error_line")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ERR_peek_error_line")
+		]
 		public extern static uint peek_error_line(char8** file, int* line);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ERR_peek_error_line_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ERR_peek_error_line_data")
+		]
 		public extern static uint peek_error_line_data(char8** file, int* line, char8** data, int* flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ERR_peek_last_error")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ERR_peek_last_error")
+		]
 		public extern static uint peek_last_error();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ERR_peek_last_error_line")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ERR_peek_last_error_line")
+		]
 		public extern static uint peek_last_error_line(char8** file, int* line);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ERR_peek_last_error_line_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ERR_peek_last_error_line_data")
+		]
 		public extern static uint peek_last_error_line_data(char8** file, int* line,  char8** data, int* flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ERR_clear_error")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ERR_clear_error")
+		]
 		public extern static void clear_error();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ERR_error_string")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ERR_error_string")
+		]
 		public extern static char8* error_string(uint e, char8* buf);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ERR_error_string_n")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ERR_error_string_n")
+		]
 		public extern static void error_string_n(uint e, char8* buf, uint len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ERR_lib_error_string")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ERR_lib_error_string")
+		]
 		public extern static char8* lib_error_string(uint e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ERR_func_error_string")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ERR_func_error_string")
+		]
 		public extern static char8* func_error_string(uint e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ERR_reason_error_string")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ERR_reason_error_string")
+		]
 		public extern static char8* reason_error_string(uint e);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ERR_print_errors_cb")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ERR_print_errors_cb")
+		]
 		public extern static void print_errors_cb(function int(char8* str, uint len, void* u) cb, void* u);
 #if !OPENSSL_NO_STDIO
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ERR_print_errors_fp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ERR_print_errors_fp")
+		]
 		public extern static void print_errors_fp(Platform.BfpFile* fp);
 #endif
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ERR_print_errors")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ERR_print_errors")
+		]
 		public extern static void print_errors(BIO *bp);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ERR_add_error_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ERR_add_error_data")
+		]
 		public extern static void add_error_data(int num, ...);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ERR_add_error_vdata")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ERR_add_error_vdata")
+		]
 		public extern static void add_error_vdata(int num, void* args);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ERR_load_strings")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ERR_load_strings")
+		]
 		public extern static int load_strings(int lib, STRING_DATA* str);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ERR_load_strings_const")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ERR_load_strings_const")
+		]
 		public extern static int load_strings_const(STRING_DATA* str);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ERR_unload_strings")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ERR_unload_strings")
+		]
 		public extern static int unload_strings(int lib, STRING_DATA* str);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ERR_load_ERR_strings")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ERR_load_ERR_strings")
+		]
 		public extern static int load_ERR_strings();
 		
 		[Inline]
@@ -307,21 +437,56 @@ namespace Beef_Net.OpenSSL
 		[Inline, Obsolete("No longer needed, so this is a no-op", true)]
 		public static void free_strings() { while(false) continue; }
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ERR_remove_thread_state")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ERR_remove_thread_state")
+		]
 		public extern static void remove_thread_state(void* p);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ERR_remove_state")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ERR_remove_state")
+		]
 		public extern static void remove_state(uint pid);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ERR_get_state")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ERR_get_state")
+		]
 		public extern static STATE* get_state();
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ERR_get_next_error_library")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ERR_get_next_error_library")
+		]
 		public extern static int get_next_error_library();
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ERR_set_mark")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ERR_set_mark")
+		]
 		public extern static int set_mark();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ERR_pop_to_mark")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ERR_pop_to_mark")
+		]
 		public extern static int pop_to_mark();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("ERR_clear_last_mark")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("ERR_clear_last_mark")
+		]
 		public extern static int clear_last_mark();
 	}
 }

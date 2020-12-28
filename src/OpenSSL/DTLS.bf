@@ -63,16 +63,41 @@ namespace Beef_Net.OpenSSL
 		**   10    9 000022C5 DTLS_server_method
 		**   11    A 00002536 DTLS_set_timer_cb
 		*/
-		[Import(OPENSSL_LIB_SSL), LinkName("DTLS_client_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("DTLS_client_method")
+		]
 		public extern static SSL.METHOD* client_method();         /* DTLS 1.0 and 1.2 */
-		[Import(OPENSSL_LIB_SSL), LinkName("DTLS_get_data_mtu")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("DTLS_get_data_mtu")
+		]
 		public extern static uint get_data_mtu(SSL.ssl_st* s);
-		[Import(OPENSSL_LIB_SSL), LinkName("DTLS_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("DTLS_method")
+		]
 		public extern static SSL.METHOD* method();                /* DTLS 1.0 and 1.2 */
-		[Import(OPENSSL_LIB_SSL), LinkName("DTLS_server_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("DTLS_server_method")
+		]
 		public extern static SSL.METHOD* server_method();         /* DTLS 1.0 and 1.2 */
 		public function uint timer_cb(SSL.ssl_st* s, uint timer_us);
-		[Import(OPENSSL_LIB_SSL), LinkName("DTLS_set_timer_cb")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("DTLS_set_timer_cb")
+		]
 		public extern static void set_timer_cb(SSL.ssl_st* s, timer_cb cb);
 	}
 
@@ -98,15 +123,35 @@ namespace Beef_Net.OpenSSL
 		**   18   11 00001B5E DTLSv1_server_method
 		*/
 #if !OPENSSL_NO_DTLS1_METHOD
-		[Import(OPENSSL_LIB_SSL), LinkName("DTLSv1_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("DTLSv1_method")
+		]
 		public extern static SSL.METHOD* method(); /* DTLSv1.0 */
-		[Import(OPENSSL_LIB_SSL), LinkName("DTLSv1_server_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("DTLSv1_server_method")
+		]
 		public extern static SSL.METHOD* server_method();
-		[Import(OPENSSL_LIB_SSL), LinkName("DTLSv1_client_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("DTLSv1_client_method")
+		]
 		public extern static SSL.METHOD* client_method();
 #endif
 #if !OPENSSL_NO_SOCK
-		[Import(OPENSSL_LIB_SSL), LinkName("DTLSv1_listen")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("DTLSv1_listen")
+		]
 		public extern static int listen(SSL.ssl_st* s, BIO.ADDR* client);
 #endif
 	}
@@ -124,11 +169,26 @@ namespace Beef_Net.OpenSSL
 		*/
 #if !OPENSSL_NO_DTLS1_2_METHOD
 		/* DTLSv1.2 */
-		[Import(OPENSSL_LIB_SSL), LinkName("DTLSv1_2_client_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("DTLSv1_2_client_method")
+		]
 		public extern static SSL.METHOD* client_method();
-		[Import(OPENSSL_LIB_SSL), LinkName("DTLSv1_2_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("DTLSv1_2_method")
+		]
 		public extern static SSL.METHOD* method();
-		[Import(OPENSSL_LIB_SSL), LinkName("DTLSv1_2_server_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("DTLSv1_2_server_method")
+		]
 		public extern static SSL.METHOD* server_method();
 #endif
 	}

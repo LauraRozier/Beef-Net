@@ -15,7 +15,12 @@ namespace Beef_Net.OpenSSL
 	sealed abstract class CMS
 	{
 #if !OPENSSL_NO_CMS
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int ERR_load_CMS_strings();
 		
 		/*
@@ -378,262 +383,802 @@ namespace Beef_Net.OpenSSL
 		public const int KEY_PARAM             = 0x40000;
 		public const int ASCIICRLF             = 0x80000;
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_get0_type")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_get0_type")
+		]
 		public extern static ASN1.OBJECT* get0_type(ContentInfo* cms);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_dataInit")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_dataInit")
+		]
 		public extern static BIO.bio_st* dataInit(ContentInfo* cms, BIO.bio_st* icont);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_dataFinal")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_dataFinal")
+		]
 		public extern static int dataFinal(ContentInfo* cms, BIO.bio_st* bio);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_get0_content")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_get0_content")
+		]
 		public extern static ASN1.OCTET_STRING** get0_content(ContentInfo* cms);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_is_detached")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_is_detached")
+		]
 		public extern static int is_detached(ContentInfo* cms);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_set_detached")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_set_detached")
+		]
 		public extern static int set_detached(ContentInfo* cms, int detached);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_stream")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_stream")
+		]
 		public extern static int stream(uint8*** boundary, ContentInfo* cms);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static ContentInfo* d2i_CMS_bio(BIO.bio_st* bp, ContentInfo* *cms);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_CMS_bio(BIO.bio_st* bp, ContentInfo* cms);
 		
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_CMS_bio_stream(BIO.bio_st* outVal, ContentInfo* cms, BIO.bio_st* inVal, int flags);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_final")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_final")
+		]
 		public extern static int final(ContentInfo* cms, BIO.bio_st* data, BIO.bio_st* dcont, uint flags);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_sign")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_sign")
+		]
 		public extern static ContentInfo* sign(X509.x509_st* signcert, EVP.PKEY* pkey, X509.stack_st_X509* certs, BIO.bio_st* data, uint flags);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_sign_receipt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_sign_receipt")
+		]
 		public extern static ContentInfo* sign_receipt(SignerInfo* si, X509.x509_st* signcert, EVP.PKEY* pkey, X509.stack_st_X509* certs, uint flags);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_data")
+		]
 		public extern static int data(ContentInfo* cms, BIO.bio_st* outVal, uint flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_data_create")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_data_create")
+		]
 		public extern static ContentInfo* data_create(BIO.bio_st* inVal, uint flags);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_digest_verify")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_digest_verify")
+		]
 		public extern static int digest_verify(ContentInfo* cms, BIO.bio_st* dcont, BIO.bio_st* outVal, uint flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_digest_create")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_digest_create")
+		]
 		public extern static ContentInfo* digest_create(BIO.bio_st* inVal, EVP.MD* md, uint flags);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_EncryptedData_decrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_EncryptedData_decrypt")
+		]
 		public extern static int EncryptedData_decrypt(ContentInfo* cms, uint8* key, uint keylen, BIO.bio_st* dcont, BIO.bio_st* outVal, uint flags);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_EncryptedData_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_EncryptedData_encrypt")
+		]
 		public extern static ContentInfo* EncryptedData_encrypt(BIO.bio_st* inVal, EVP.CIPHER* cipher, uint8* key, uint keylen, uint flags);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_EncryptedData_set1_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_EncryptedData_set1_key")
+		]
 		public extern static int EncryptedData_set1_key(ContentInfo* cms, EVP.CIPHER* ciph, uint8* key, uint keylen);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_verify")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_verify")
+		]
 		public extern static int verify(ContentInfo* cms, X509.stack_st_X509* certs, X509.STORE* store, BIO.bio_st* dcont, BIO.bio_st* outVal, uint flags);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_verify_receipt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_verify_receipt")
+		]
 		public extern static int verify_receipt(ContentInfo* rcms, ContentInfo* ocms, X509.stack_st_X509* certs, X509.STORE* store, uint flags);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_get0_signers")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_get0_signers")
+		]
 		public extern static X509.stack_st_X509* get0_signers(ContentInfo* cms);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_encrypt")
+		]
 		public extern static ContentInfo* encrypt(X509.stack_st_X509* certs, BIO.bio_st* inVal, EVP.CIPHER* cipher, uint flags);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_decrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_decrypt")
+		]
 		public extern static int decrypt(ContentInfo* cms, EVP.PKEY* pkey, X509.x509_st* cert, BIO.bio_st* dcont, BIO.bio_st* outVal, uint flags);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_decrypt_set1_pkey")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_decrypt_set1_pkey")
+		]
 		public extern static int decrypt_set1_pkey(ContentInfo* cms, EVP.PKEY* pk, X509.x509_st* cert);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_decrypt_set1_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_decrypt_set1_key")
+		]
 		public extern static int decrypt_set1_key(ContentInfo* cms, uint8* key, uint keylen, uint8* id, uint idlen);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_decrypt_set1_password")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_decrypt_set1_password")
+		]
 		public extern static int decrypt_set1_password(ContentInfo* cms, uint8* pass, int64 passlen);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_get0_RecipientInfos")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_get0_RecipientInfos")
+		]
 		public extern static stack_st_CMS_RecipientInfo* get0_RecipientInfos(ContentInfo* cms);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_RecipientInfo_type")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_RecipientInfo_type")
+		]
 		public extern static int RecipientInfo_type(RecipientInfo* ri);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_RecipientInfo_get0_pkey_ctx")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_RecipientInfo_get0_pkey_ctx")
+		]
 		public extern static EVP.PKEY_CTX* RecipientInfo_get0_pkey_ctx(RecipientInfo* ri);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_EnvelopedData_create")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_EnvelopedData_create")
+		]
 		public extern static ContentInfo* EnvelopedData_create(EVP.CIPHER* cipher);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_add1_recipient_cert")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_add1_recipient_cert")
+		]
 		public extern static RecipientInfo* add1_recipient_cert(ContentInfo* cms, X509.x509_st* recip, uint flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_RecipientInfo_set0_pkey")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_RecipientInfo_set0_pkey")
+		]
 		public extern static int RecipientInfo_set0_pkey(RecipientInfo* ri, EVP.PKEY* pkey);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_RecipientInfo_ktri_cert_cmp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_RecipientInfo_ktri_cert_cmp")
+		]
 		public extern static int RecipientInfo_ktri_cert_cmp(RecipientInfo* ri, X509.x509_st* cert);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_RecipientInfo_ktri_get0_algs")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_RecipientInfo_ktri_get0_algs")
+		]
 		public extern static int RecipientInfo_ktri_get0_algs(RecipientInfo* ri, EVP.PKEY** pk, X509.x509_st** recip, X509.ALGOR** palg);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_RecipientInfo_ktri_get0_signer_id")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_RecipientInfo_ktri_get0_signer_id")
+		]
 		public extern static int RecipientInfo_ktri_get0_signer_id(RecipientInfo* ri, ASN1.OCTET_STRING** keyid, X509.NAME** issuer, ASN1.INTEGER** sno);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_add0_recipient_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_add0_recipient_key")
+		]
 		public extern static RecipientInfo* add0_recipient_key(ContentInfo* cms, int nid, uint8* key, uint keylen, uint8* id, uint idlen, ASN1.GENERALIZEDTIME* date, ASN1.OBJECT* otherTypeId, ASN1.TYPE* otherType);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_RecipientInfo_kekri_get0_id")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_RecipientInfo_kekri_get0_id")
+		]
 		public extern static int RecipientInfo_kekri_get0_id(RecipientInfo* ri, X509.ALGOR** palg, ASN1.OCTET_STRING** pid, ASN1.GENERALIZEDTIME** pdate, ASN1.OBJECT** potherid, ASN1.TYPE** pothertype);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_RecipientInfo_set0_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_RecipientInfo_set0_key")
+		]
 		public extern static int RecipientInfo_set0_key(RecipientInfo* ri, uint8* key, uint keylen);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_RecipientInfo_kekri_id_cmp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_RecipientInfo_kekri_id_cmp")
+		]
 		public extern static int RecipientInfo_kekri_id_cmp(RecipientInfo* ri, uint8* id, uint idlen);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_RecipientInfo_set0_password")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_RecipientInfo_set0_password")
+		]
 		public extern static int RecipientInfo_set0_password(RecipientInfo* ri, uint8* pass, int64 passlen);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_add0_recipient_password")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_add0_recipient_password")
+		]
 		public extern static RecipientInfo* add0_recipient_password(ContentInfo* cms, int iter, int wrap_nid, int pbe_nid, uint8* pass, int64 passlen, EVP.CIPHER* kekciph);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_RecipientInfo_decrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_RecipientInfo_decrypt")
+		]
 		public extern static int RecipientInfo_decrypt(ContentInfo* cms, RecipientInfo* ri);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_RecipientInfo_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_RecipientInfo_encrypt")
+		]
 		public extern static int RecipientInfo_encrypt(ContentInfo* cms, RecipientInfo* ri);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_uncompress")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_uncompress")
+		]
 		public extern static int uncompress(ContentInfo* cms, BIO.bio_st* dcont, BIO.bio_st* outVal, uint flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_compress")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_compress")
+		]
 		public extern static ContentInfo* compress(BIO.bio_st* inVal, int comp_nid, uint flags);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_set1_eContentType")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_set1_eContentType")
+		]
 		public extern static int set1_eContentType(ContentInfo* cms, ASN1.OBJECT* oid);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_get0_eContentType")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_get0_eContentType")
+		]
 		public extern static ASN1.OBJECT* get0_eContentType(ContentInfo* cms);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_add0_CertificateChoices")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_add0_CertificateChoices")
+		]
 		public extern static CertificateChoices* add0_CertificateChoices(ContentInfo* cms);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_add0_cert")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_add0_cert")
+		]
 		public extern static int add0_cert(ContentInfo* cms, X509.x509_st* cert);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_add1_cert")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_add1_cert")
+		]
 		public extern static int add1_cert(ContentInfo* cms, X509.x509_st* cert);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_get1_certs")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_get1_certs")
+		]
 		public extern static X509.stack_st_X509* get1_certs(ContentInfo* cms);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_add0_RevocationInfoChoice")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_add0_RevocationInfoChoice")
+		]
 		public extern static RevocationInfoChoice* add0_RevocationInfoChoice(ContentInfo* cms);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_add0_crl")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_add0_crl")
+		]
 		public extern static int add0_crl(ContentInfo* cms, X509.CRL* crl);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_add1_crl")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_add1_crl")
+		]
 		public extern static int add1_crl(ContentInfo* cms, X509.CRL* crl);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_get1_crls")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_get1_crls")
+		]
 		public extern static X509.stack_st_X509_CRL* get1_crls(ContentInfo* cms);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_SignedData_init")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_SignedData_init")
+		]
 		public extern static int SignedData_init(ContentInfo* cms);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_add1_signer")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_add1_signer")
+		]
 		public extern static SignerInfo* add1_signer(ContentInfo* cms, X509.x509_st* signer, EVP.PKEY* pk, EVP.MD* md, uint flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_SignerInfo_get0_pkey_ctx")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_SignerInfo_get0_pkey_ctx")
+		]
 		public extern static EVP.PKEY_CTX* SignerInfo_get0_pkey_ctx(SignerInfo* si);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_SignerInfo_get0_md_ctx")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_SignerInfo_get0_md_ctx")
+		]
 		public extern static EVP.MD_CTX* SignerInfo_get0_md_ctx(SignerInfo* si);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_get0_SignerInfos")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_get0_SignerInfos")
+		]
 		public extern static stack_st_CMS_SignerInfo* get0_SignerInfos(ContentInfo* cms);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_SignerInfo_set1_signer_cert")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_SignerInfo_set1_signer_cert")
+		]
 		public extern static void SignerInfo_set1_signer_cert(SignerInfo* si, X509.x509_st* signer);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_SignerInfo_get0_signer_id")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_SignerInfo_get0_signer_id")
+		]
 		public extern static int SignerInfo_get0_signer_id(SignerInfo* si, ASN1.OCTET_STRING** keyid, X509.NAME** issuer, ASN1.INTEGER** sno);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_SignerInfo_cert_cmp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_SignerInfo_cert_cmp")
+		]
 		public extern static int SignerInfo_cert_cmp(SignerInfo* si, X509.x509_st* cert);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_set1_signers_certs")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_set1_signers_certs")
+		]
 		public extern static int set1_signers_certs(ContentInfo* cms, X509.stack_st_X509* certs, uint flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_SignerInfo_get0_algs")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_SignerInfo_get0_algs")
+		]
 		public extern static void SignerInfo_get0_algs(SignerInfo* si, EVP.PKEY** pk, X509.x509_st** signer, X509.ALGOR** pdig, X509.ALGOR** psig);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_SignerInfo_get0_signature")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_SignerInfo_get0_signature")
+		]
 		public extern static ASN1.OCTET_STRING* SignerInfo_get0_signature(SignerInfo* si);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_SignerInfo_sign")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_SignerInfo_sign")
+		]
 		public extern static int SignerInfo_sign(SignerInfo* si);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_SignerInfo_verify")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_SignerInfo_verify")
+		]
 		public extern static int SignerInfo_verify(SignerInfo* si);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_SignerInfo_verify_content")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_SignerInfo_verify_content")
+		]
 		public extern static int SignerInfo_verify_content(SignerInfo* si, BIO.bio_st* chain);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_add_smimecap")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_add_smimecap")
+		]
 		public extern static int add_smimecap(SignerInfo* si, X509.stack_st_X509_ALGOR* algs);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_add_simple_smimecap")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_add_simple_smimecap")
+		]
 		public extern static int add_simple_smimecap(X509.stack_st_X509_ALGOR** algs, int algnid, int keysize);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_add_standard_smimecap")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_add_standard_smimecap")
+		]
 		public extern static int add_standard_smimecap(X509.stack_st_X509_ALGOR** smcap);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_signed_get_attr_count")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_signed_get_attr_count")
+		]
 		public extern static int signed_get_attr_count(SignerInfo* si);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_signed_get_attr_by_NID")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_signed_get_attr_by_NID")
+		]
 		public extern static int signed_get_attr_by_NID(SignerInfo* si, int nid, int lastpos);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_signed_get_attr_by_OBJ")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_signed_get_attr_by_OBJ")
+		]
 		public extern static int signed_get_attr_by_OBJ(SignerInfo* si, ASN1.OBJECT* obj, int lastpos);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_signed_get_attr")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_signed_get_attr")
+		]
 		public extern static X509.ATTRIBUTE* signed_get_attr(SignerInfo* si, int loc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_signed_delete_attr")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_signed_delete_attr")
+		]
 		public extern static X509.ATTRIBUTE* signed_delete_attr(SignerInfo* si, int loc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_signed_add1_attr")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_signed_add1_attr")
+		]
 		public extern static int signed_add1_attr(SignerInfo* si, X509.ATTRIBUTE *attr);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_signed_add1_attr_by_OBJ")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_signed_add1_attr_by_OBJ")
+		]
 		public extern static int signed_add1_attr_by_OBJ(SignerInfo* si, ASN1.OBJECT* obj, int type, void* bytes, int len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_signed_add1_attr_by_NID")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_signed_add1_attr_by_NID")
+		]
 		public extern static int signed_add1_attr_by_NID(SignerInfo* si, int nid, int type, void* bytes, int len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_signed_add1_attr_by_txt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_signed_add1_attr_by_txt")
+		]
 		public extern static int signed_add1_attr_by_txt(SignerInfo* si, char8* attrname, int type, void* bytes, int len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_signed_get0_data_by_OBJ")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_signed_get0_data_by_OBJ")
+		]
 		public extern static void* signed_get0_data_by_OBJ(SignerInfo* si, ASN1.OBJECT* oid, int lastpos, int type);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_unsigned_get_attr_count")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_unsigned_get_attr_count")
+		]
 		public extern static int unsigned_get_attr_count(SignerInfo* si);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_unsigned_get_attr_by_NID")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_unsigned_get_attr_by_NID")
+		]
 		public extern static int unsigned_get_attr_by_NID(SignerInfo* si, int nid, int lastpos);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_unsigned_get_attr_by_OBJ")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_unsigned_get_attr_by_OBJ")
+		]
 		public extern static int unsigned_get_attr_by_OBJ(SignerInfo* si, ASN1.OBJECT* obj, int lastpos);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_unsigned_get_attr")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_unsigned_get_attr")
+		]
 		public extern static X509.ATTRIBUTE* unsigned_get_attr(SignerInfo* si, int loc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_unsigned_delete_attr")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_unsigned_delete_attr")
+		]
 		public extern static X509.ATTRIBUTE* unsigned_delete_attr(SignerInfo* si, int loc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_unsigned_add1_attr")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_unsigned_add1_attr")
+		]
 		public extern static int unsigned_add1_attr(SignerInfo* si, X509.ATTRIBUTE* attr);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_unsigned_add1_attr_by_OBJ")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_unsigned_add1_attr_by_OBJ")
+		]
 		public extern static int unsigned_add1_attr_by_OBJ(SignerInfo* si, ASN1.OBJECT* obj, int type, void* bytes, int len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_unsigned_add1_attr_by_NID")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_unsigned_add1_attr_by_NID")
+		]
 		public extern static int unsigned_add1_attr_by_NID(SignerInfo* si, int nid, int type, void* bytes, int len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_unsigned_add1_attr_by_txt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_unsigned_add1_attr_by_txt")
+		]
 		public extern static int unsigned_add1_attr_by_txt(SignerInfo* si, char8* attrname, int type, void* bytes, int len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_unsigned_get0_data_by_OBJ")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_unsigned_get0_data_by_OBJ")
+		]
 		public extern static void* unsigned_get0_data_by_OBJ(SignerInfo* si, ASN1.OBJECT* oid, int lastpos, int type);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_get1_ReceiptRequest")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_get1_ReceiptRequest")
+		]
 		public extern static int get1_ReceiptRequest(SignerInfo* si, ReceiptRequest** prr);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_ReceiptRequest_create0")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_ReceiptRequest_create0")
+		]
 		public extern static ReceiptRequest* ReceiptRequest_create0(uint8* id, int idlen, int allorfirst, X509v3.stack_st_GENERAL_NAMES* receiptList, X509v3.stack_st_GENERAL_NAMES* receiptsTo);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_add1_ReceiptRequest")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_add1_ReceiptRequest")
+		]
 		public extern static int add1_ReceiptRequest(SignerInfo* si, ReceiptRequest* rr);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_ReceiptRequest_get0_values")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_ReceiptRequest_get0_values")
+		]
 		public extern static void ReceiptRequest_get0_values(ReceiptRequest* rr, ASN1.STRING** pcid, int* pallorfirst, X509v3.stack_st_GENERAL_NAMES** plist, X509v3.stack_st_GENERAL_NAMES** prto);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_RecipientInfo_kari_get0_alg")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_RecipientInfo_kari_get0_alg")
+		]
 		public extern static int RecipientInfo_kari_get0_alg(RecipientInfo* ri, X509.ALGOR** palg, ASN1.OCTET_STRING** pukm);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_RecipientInfo_kari_get0_reks")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_RecipientInfo_kari_get0_reks")
+		]
 		public extern static stack_st_CMS_RecipientEncryptedKey* RecipientInfo_kari_get0_reks(RecipientInfo* ri);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_RecipientInfo_kari_get0_orig_id")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_RecipientInfo_kari_get0_orig_id")
+		]
 		public extern static int RecipientInfo_kari_get0_orig_id(RecipientInfo* ri, X509.ALGOR** pubalg, ASN1.BIT_STRING** pubkey, ASN1.OCTET_STRING** keyid, X509.NAME** issuer, ASN1.INTEGER* *sno);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_RecipientInfo_kari_orig_id_cmp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_RecipientInfo_kari_orig_id_cmp")
+		]
 		public extern static int RecipientInfo_kari_orig_id_cmp(RecipientInfo* ri, X509.x509_st* cert);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_RecipientEncryptedKey_get0_id")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_RecipientEncryptedKey_get0_id")
+		]
 		public extern static int RecipientEncryptedKey_get0_id(RecipientEncryptedKey* rek, ASN1.OCTET_STRING** keyid, ASN1.GENERALIZEDTIME** tm, OtherKeyAttribute** other, X509.NAME** issuer, ASN1.INTEGER** sno);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_RecipientEncryptedKey_cert_cmp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_RecipientEncryptedKey_cert_cmp")
+		]
 		public extern static int RecipientEncryptedKey_cert_cmp(RecipientEncryptedKey* rek, X509.x509_st* cert);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_RecipientInfo_kari_set0_pkey")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_RecipientInfo_kari_set0_pkey")
+		]
 		public extern static int RecipientInfo_kari_set0_pkey(RecipientInfo* ri, EVP.PKEY* pk);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_RecipientInfo_kari_get0_ctx")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_RecipientInfo_kari_get0_ctx")
+		]
 		public extern static EVP.CIPHER_CTX* RecipientInfo_kari_get0_ctx(RecipientInfo* ri);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_RecipientInfo_kari_decrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_RecipientInfo_kari_decrypt")
+		]
 		public extern static int RecipientInfo_kari_decrypt(ContentInfo* cms, RecipientInfo* ri, RecipientEncryptedKey* rek);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CMS_SharedInfo_encode")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CMS_SharedInfo_encode")
+		]
 		public extern static int SharedInfo_encode(uint8** pder, X509.ALGOR* kekalg, ASN1.OCTET_STRING* ukm, int keylen);
 		
 		/* Backward compatibility for spelling errors. */

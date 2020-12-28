@@ -15,7 +15,12 @@ namespace Beef_Net.OpenSSL
 	sealed abstract class DSA
 	{
 #if !OPENSSL_NO_DSA
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int ERR_load_DSA_strings();
 		
 		/*
@@ -129,89 +134,259 @@ namespace Beef_Net.OpenSSL
 		}
 		public typealias METHOD = method_st;
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_SIG_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_SIG_new")
+		]
 		public extern static SIG* SIG_new();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_SIG_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_SIG_free")
+		]
 		public extern static void SIG_free(SIG* sig);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_DSA_SIG(SIG* a, uint8** pp);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static SIG* d2i_DSA_SIG(SIG** v, uint8** pp, int length);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_SIG_get0")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_SIG_get0")
+		]
 		public extern static void SIG_get0(SIG* sig, BN.BIGNUM** pr, BN.BIGNUM** ps);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_SIG_set0")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_SIG_set0")
+		]
 		public extern static int SIG_set0(SIG* sig, BN.BIGNUM* r, BN.BIGNUM* s);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_do_sign")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_do_sign")
+		]
 		public extern static SIG* do_sign(uint8* dgst, int dlen, dsa_st* dsa);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_do_verify")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_do_verify")
+		]
 		public extern static int do_verify(uint8* dgst, int dgst_len, SIG* sig, dsa_st* dsa);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_OpenSSL")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_OpenSSL")
+		]
 		public extern static METHOD* OpenSSL();
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_set_default_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_set_default_method")
+		]
 		public extern static void set_default_method(METHOD* a);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_get_default_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_get_default_method")
+		]
 		public extern static METHOD* get_default_method();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_set_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_set_method")
+		]
 		public extern static int set_method(dsa_st* dsa, METHOD* a);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_get_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_get_method")
+		]
 		public extern static METHOD* get_method(dsa_st* d);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_new")
+		]
 		public extern static dsa_st* new_();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_new_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_new_method")
+		]
 		public extern static dsa_st* new_method(Engine.ENGINE* engine);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_free")
+		]
 		public extern static void free(dsa_st* r);
 		/* "up" the DSA object's reference count */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_up_ref")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_up_ref")
+		]
 		public extern static int up_ref(dsa_st* r);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_size")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_size")
+		]
 		public extern static int size(dsa_st* s);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_bits")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_bits")
+		]
 		public extern static int bits(dsa_st* d);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_security_bits")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_security_bits")
+		]
 		public extern static int security_bits(dsa_st* d);
 		/* next 4 return -1 on error */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_sign_setup")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_sign_setup")
+		]
 		public extern static int sign_setup(dsa_st* dsa, BN.CTX* ctx_in, BN.BIGNUM** kinvp, BN.BIGNUM** rp);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_sign")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_sign")
+		]
 		public extern static int sign(int type, uint8* dgst, int dlen, uint8* sig, uint* siglen, dsa_st* dsa);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_verify")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_verify")
+		]
 		public extern static int verify(int type, uint8* dgst, int dgst_len, uint8* sigbuf, int siglen, dsa_st* dsa);
 		[Inline]
 		public static int get_ex_new_index(int l, void* p, Crypto.EX_new newf, Crypto.EX_dup dupf, Crypto.EX_free freef) => Crypto.get_ex_new_index(Crypto.EX_INDEX_DSA, l, p, newf, dupf, freef);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_set_ex_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_set_ex_data")
+		]
 		public extern static int set_ex_data(dsa_st* d, int idx, void* arg);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_get_ex_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_get_ex_data")
+		]
 		public extern static void* get_ex_data(dsa_st* d, int idx);
 
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static dsa_st* d2i_DSAPublicKey(dsa_st** a, uint8** pp, int length);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static dsa_st* d2i_DSAPrivateKey(dsa_st** a, uint8** pp, int length);
 
 		/* Deprecated version */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_generate_parameters")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_generate_parameters")
+		]
 		public extern static dsa_st* generate_parameters(int bits, uint8* seed, int seed_len, int* counter_ret, uint* h_ret, function void(int, int, void*) callback, void* cb_arg);
 
 		/* New version */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_generate_parameters_ex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_generate_parameters_ex")
+		]
 		public extern static int generate_parameters_ex(dsa_st* dsa, int bits, uint8* seed, int seed_len, int* counter_ret, uint* h_ret, BN.GENCB* cb);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_generate_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_generate_key")
+		]
 		public extern static int generate_key(dsa_st* a);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_DSAPublicKey(dsa_st* a, uint8** pp);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_DSAPrivateKey(dsa_st* a, uint8** pp);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_print")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_print")
+		]
 		public extern static int print(BIO.bio_st* bp, dsa_st* x, int off);
 	#if !OPENSSL_NO_STDIO
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_print_fp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_print_fp")
+		]
 		public extern static int print_fp(Platform.BfpFile* bp, dsa_st* x, int off);
 	#endif
 
@@ -225,90 +400,295 @@ namespace Beef_Net.OpenSSL
 
 	#if !OPENSSL_NO_DH
 		/* Convert DSA structure (key or just parameters) into DH structure (be careful to avoid small subgroup attacks when using this!) */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_dup_DH")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_dup_DH")
+		]
 		public extern static DH.dh_st* dup_DH(dsa_st* r);
 	#endif
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_get0_pqg")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_get0_pqg")
+		]
 		public extern static void get0_pqg(dsa_st* d, BN.BIGNUM** p, BN.BIGNUM** q, BN.BIGNUM** g);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_set0_pqg")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_set0_pqg")
+		]
 		public extern static int set0_pqg(dsa_st* d, BN.BIGNUM* p, BN.BIGNUM* q, BN.BIGNUM* g);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_get0_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_get0_key")
+		]
 		public extern static void get0_key(dsa_st* d, BN.BIGNUM** pub_key, BN.BIGNUM** priv_key);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_set0_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_set0_key")
+		]
 		public extern static int set0_key(dsa_st* d, BN.BIGNUM* pub_key, BN.BIGNUM* priv_key);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_get0_p")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_get0_p")
+		]
 		public extern static BN.BIGNUM* get0_p(dsa_st* d);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_get0_q")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_get0_q")
+		]
 		public extern static BN.BIGNUM* get0_q(dsa_st* d);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_get0_g")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_get0_g")
+		]
 		public extern static BN.BIGNUM* get0_g(dsa_st* d);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_get0_pub_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_get0_pub_key")
+		]
 		public extern static BN.BIGNUM* get0_pub_key(dsa_st* d);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_get0_priv_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_get0_priv_key")
+		]
 		public extern static BN.BIGNUM* get0_priv_key(dsa_st* d);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_clear_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_clear_flags")
+		]
 		public extern static void clear_flags(dsa_st* d, int flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_test_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_test_flags")
+		]
 		public extern static int test_flags(dsa_st* d, int flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_set_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_set_flags")
+		]
 		public extern static void set_flags(dsa_st* d, int flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_get0_engine")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_get0_engine")
+		]
 		public extern static Engine.ENGINE* get0_engine(dsa_st* d);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_meth_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_meth_new")
+		]
 		public extern static METHOD* meth_new(char8* name, int flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_meth_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_meth_free")
+		]
 		public extern static void meth_free(METHOD* dsam);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_meth_dup")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_meth_dup")
+		]
 		public extern static METHOD* meth_dup(METHOD* dsam);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_meth_get0_name")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_meth_get0_name")
+		]
 		public extern static char8* meth_get0_name(METHOD* dsam);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_meth_set1_name")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_meth_set1_name")
+		]
 		public extern static int meth_set1_name(METHOD* dsam, char8* name);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_meth_get_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_meth_get_flags")
+		]
 		public extern static int meth_get_flags(METHOD* dsam);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_meth_set_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_meth_set_flags")
+		]
 		public extern static int meth_set_flags(METHOD* dsam, int flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_meth_get0_app_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_meth_get0_app_data")
+		]
 		public extern static void* meth_get0_app_data(METHOD* dsam);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_meth_set0_app_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_meth_set0_app_data")
+		]
 		public extern static int meth_set0_app_data(METHOD* dsam, void* app_data);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_meth_get_sign")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_meth_get_sign")
+		]
 		public extern static function SIG*(uint8*, int, dsa_st*) meth_get_sign(METHOD* dsam);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_meth_set_sign")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_meth_set_sign")
+		]
 		public extern static int meth_set_sign(METHOD* dsam, function SIG* (uint8*, int, dsa_st*) sign);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_meth_get_sign_setup")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_meth_get_sign_setup")
+		]
 		public extern static function int(dsa_st*, BN.CTX*, BN.BIGNUM**, BN.BIGNUM**) meth_get_sign_setup(METHOD* dsam);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_meth_set_sign_setup")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_meth_set_sign_setup")
+		]
 		public extern static int meth_set_sign_setup(METHOD* dsam, function int(dsa_st*, BN.CTX*, BN.BIGNUM**, BN.BIGNUM**) sign_setup);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_meth_get_verify")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_meth_get_verify")
+		]
 		public extern static function int(uint8*, int, SIG*, dsa_st*) meth_get_verify(METHOD* dsam);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_meth_set_verify")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_meth_set_verify")
+		]
 		public extern static int meth_set_verify(METHOD* dsam, function int(uint8*, int, SIG*, dsa_st*) verify);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_meth_get_mod_exp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_meth_get_mod_exp")
+		]
 		public extern static function int(dsa_st*, BN.BIGNUM*, BN.BIGNUM*, BN.BIGNUM*, BN.BIGNUM*, BN.BIGNUM*, BN.BIGNUM*, BN.CTX*, BN.MONT_CTX*) meth_get_mod_exp(METHOD* dsam);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_meth_set_mod_exp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_meth_set_mod_exp")
+		]
 		public extern static int meth_set_mod_exp(METHOD* dsam, function int(dsa_st*, BN.BIGNUM*, BN.BIGNUM*, BN.BIGNUM*, BN.BIGNUM*, BN.BIGNUM*, BN.BIGNUM*, BN.CTX*, BN.MONT_CTX*) mod_exp);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_meth_get_bn_mod_exp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_meth_get_bn_mod_exp")
+		]
 		public extern static function int(dsa_st*, BN.BIGNUM*, BN.BIGNUM*, BN.BIGNUM*, BN.BIGNUM*, BN.CTX*, BN.MONT_CTX*) meth_get_bn_mod_exp(METHOD* dsam);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_meth_set_bn_mod_exp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_meth_set_bn_mod_exp")
+		]
 		public extern static int meth_set_bn_mod_exp(METHOD* dsam, function int(dsa_st*, BN.BIGNUM*, BN.BIGNUM*, BN.BIGNUM*, BN.BIGNUM*, BN.CTX*, BN.MONT_CTX*) bn_mod_exp);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_meth_get_init")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_meth_get_init")
+		]
 		public extern static function int(dsa_st*) meth_get_init(METHOD* dsam);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_meth_set_init")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_meth_set_init")
+		]
 		public extern static int meth_set_init(METHOD* dsam, function int(dsa_st*) init);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_meth_get_finish")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_meth_get_finish")
+		]
 		public extern static function int(dsa_st*) meth_get_finish(METHOD* dsam);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_meth_set_finish")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_meth_set_finish")
+		]
 		public extern static int meth_set_finish(METHOD* dsam, function int(dsa_st*) finish);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_meth_get_paramgen")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_meth_get_paramgen")
+		]
 		public extern static function int(dsa_st*, int, uint8*, int, int*, uint*, BN.GENCB*) meth_get_paramgen(METHOD* dsam);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_meth_set_paramgen")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_meth_set_paramgen")
+		]
 		public extern static int meth_set_paramgen(METHOD* dsam, function int(dsa_st*, int, uint8*, int, int*, uint*, BN.GENCB*) paramgen);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_meth_get_keygen")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_meth_get_keygen")
+		]
 		public extern static function int(dsa_st*) meth_get_keygen(METHOD* dsam);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSA_meth_set_keygen")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSA_meth_set_keygen")
+		]
 		public extern static int meth_set_keygen(METHOD* dsam, function int(dsa_st*) keygen);
 #endif
 	}
@@ -344,17 +724,42 @@ namespace Beef_Net.OpenSSL
 			return ASN1.i2d_bio(=> innerFunc, bp, (uint8*)x);
 		}
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSAparams_dup")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSAparams_dup")
+		]
 		public extern static DSA.dsa_st* dup(DSA.dsa_st* x);
 
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static DSA.dsa_st* d2i_DSAparams(DSA.dsa_st** a, uint8** pp, int length);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int i2d_DSAparams(DSA.dsa_st* a, uint8** pp);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSAparams_print")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSAparams_print")
+		]
 		public extern static int print(BIO.bio_st* bp, DSA.dsa_st* x);
 	#if !OPENSSL_NO_STDIO
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSAparams_print_fp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSAparams_print_fp")
+		]
 		public extern static int print_fp(Platform.BfpFile* fp, DSA.dsa_st* x);
 	#endif
 #endif

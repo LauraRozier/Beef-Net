@@ -15,7 +15,12 @@ namespace Beef_Net.OpenSSL
 	sealed abstract class Comp
 	{
 #if !OPENSSL_NO_COMP
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int ERR_load_COMP_strings();
 		
 		/*
@@ -58,25 +63,70 @@ namespace Beef_Net.OpenSSL
 		}
 		public typealias METHOD = method_st;
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("COMP_CTX_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("COMP_CTX_new")
+		]
 		public extern static CTX* CTX_new(METHOD* meth);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("COMP_CTX_get_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("COMP_CTX_get_method")
+		]
 		public extern static METHOD* CTX_get_method(CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("COMP_CTX_get_type")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("COMP_CTX_get_type")
+		]
 		public extern static int CTX_get_type(CTX* comp);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("COMP_get_type")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("COMP_get_type")
+		]
 		public extern static int get_type(METHOD* meth);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("COMP_get_name")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("COMP_get_name")
+		]
 		public extern static char8* get_name(METHOD* meth);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("COMP_CTX_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("COMP_CTX_free")
+		]
 		public extern static void CTX_free(CTX* ctx);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("COMP_compress_block")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("COMP_compress_block")
+		]
 		public extern static int compress_block(CTX* ctx, uint8* outVal, int olen, uint8* inVal, int ilen);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("COMP_expand_block")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("COMP_expand_block")
+		]
 		public extern static int expand_block(CTX* ctx, uint8* outVal, int olen, uint8* inVal, int ilen);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("COMP_zlib")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("COMP_zlib")
+		]
 		public extern static METHOD* zlib();
 		
 		[Inline, Obsolete("No longer available, no-op", true)]

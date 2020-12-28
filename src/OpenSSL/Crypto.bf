@@ -17,7 +17,12 @@ namespace Beef_Net.OpenSSL
 		/*-------------------------------------------------------------------------------
 		** cryptoerr.h
 		*/
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int ERR_load_CRYPTO_strings();
 
 		public typealias REF_COUNT = int;
@@ -68,18 +73,48 @@ namespace Beef_Net.OpenSSL
 
 		public typealias RWLOCK = void;
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_THREAD_lock_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_THREAD_lock_new")
+		]
 		public extern static RWLOCK* THREAD_lock_new();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_THREAD_read_lock")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_THREAD_read_lock")
+		]
 		public extern static int THREAD_read_lock(RWLOCK* lock);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_THREAD_write_lock")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_THREAD_write_lock")
+		]
 		public extern static int THREAD_write_lock(RWLOCK* lock);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_THREAD_unlock")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_THREAD_unlock")
+		]
 		public extern static int THREAD_unlock(RWLOCK* lock);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_THREAD_lock_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_THREAD_lock_free")
+		]
 		public extern static void THREAD_lock_free(RWLOCK* lock);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_atomic_add")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_atomic_add")
+		]
 		public extern static int atomic_add(int* val, int amount, int* ret, RWLOCK* lock);
 		
 		/* The following can be used to detect memory leaks in the library. If used, it turns on malloc checking */
@@ -115,33 +150,73 @@ namespace Beef_Net.OpenSSL
 		public const int EX_INDEX_DRBG           = 15;
 		public const int EX_INDEX__COUNT         = 16;
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_mem_ctrl")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_mem_ctrl")
+		]
 		public extern static int mem_ctrl(int mode);
 		
 		public function void EX_new(void* parent, void* ptr, EX_DATA* ad, int idx, int argl, void* argp);
 		public function void EX_free(void* parent, void* ptr, EX_DATA* ad, int idx, int argl, void* argp);
 		public function int EX_dup(EX_DATA* to, EX_DATA* from, void* from_d, int idx, int argl, void* argp);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_get_ex_new_index")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_get_ex_new_index")
+		]
 		public extern static int get_ex_new_index(int class_index, int argl, void* argp, EX_new new_func, EX_dup dup_func, EX_free free_func);
 
 		/* No longer use an index. */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_free_ex_index")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_free_ex_index")
+		]
 		public extern static int free_ex_index(int class_index, int idx);
 
 		/* Initialise/duplicate/free EX_DATA variables corresponding to a given class (invokes whatever per-class callbacks are applicable) */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_new_ex_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_new_ex_data")
+		]
 		public extern static int new_ex_data(int class_index, void* obj, EX_DATA* ad);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_dup_ex_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_dup_ex_data")
+		]
 		public extern static int dup_ex_data(int class_index, EX_DATA* to, EX_DATA* from);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_free_ex_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_free_ex_data")
+		]
 		public extern static void free_ex_data(int class_index, void* obj, EX_DATA* ad);
 		
 		/* Get/set data in a EX_DATA variable corresponding to a particular index (relative to the class type involved) */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_set_ex_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_set_ex_data")
+		]
 		public extern static int set_ex_data(EX_DATA* ad, int idx, void* val);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_get_ex_data")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_get_ex_data")
+		]
 		public extern static void* get_ex_data(EX_DATA* ad, int idx);
 		
 		/* This function cleans up all "ex_data" state. It mustn't be called under potential race-conditions. */
@@ -215,56 +290,176 @@ namespace Beef_Net.OpenSSL
 		[Inline, Obsolete("No longer available, no-op", true)]
 		public static void* get_dynlock_destroy_callback() => null;
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_set_mem_functions")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_set_mem_functions")
+		]
 		public extern static int set_mem_functions(function void*(uint, char8*, int) m, function void*(void*, uint, char8*, int) r, function void(void*, char8*, int) f);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_set_mem_debug")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_set_mem_debug")
+		]
 		public extern static int set_mem_debug(int flag);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_get_mem_functions")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_get_mem_functions")
+		]
 		public extern static void get_mem_functions(function void*(uint, char8*, int)* m, function void*(void*, uint, char8*, int)* r, function void(void*, char8*, int)* f);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_malloc")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_malloc")
+		]
 		public extern static void* malloc(uint num, char8* file, int line);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_zalloc")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_zalloc")
+		]
 		public extern static void* zalloc(uint num, char8* file, int line);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_memdup")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_memdup")
+		]
 		public extern static void* memdup(void* data, uint size, char8* file, int line);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_strdup")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_strdup")
+		]
 		public extern static char8* strdup(char8* str, char8* file, int line);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_strndup")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_strndup")
+		]
 		public extern static char8* strndup(char8* str, uint size, char8* file, int line);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_free")
+		]
 		public extern static void free(void* ptr, char8* file, int line);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_clear_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_clear_free")
+		]
 		public extern static void clear_free(void* ptr, uint num, char8* file, int line);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_realloc")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_realloc")
+		]
 		public extern static void* realloc(void* addr, uint num, char8* file, int line);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_clear_realloc")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_clear_realloc")
+		]
 		public extern static void* clear_realloc(void* addr, uint old_num, uint num, char8* file, int line);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_secure_malloc_init")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_secure_malloc_init")
+		]
 		public extern static int secure_malloc_init(uint size, int minsize);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_secure_malloc_done")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_secure_malloc_done")
+		]
 		public extern static int secure_malloc_done();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_secure_malloc")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_secure_malloc")
+		]
 		public extern static void* secure_malloc(uint num, char8* file, int line);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_secure_zalloc")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_secure_zalloc")
+		]
 		public extern static void* secure_zalloc(uint num, char8* file, int line);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_secure_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_secure_free")
+		]
 		public extern static void secure_free(void* ptr, char8* file, int line);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_secure_clear_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_secure_clear_free")
+		]
 		public extern static void secure_clear_free(void* ptr, uint num, char8* file, int line);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_secure_allocated")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_secure_allocated")
+		]
 		public extern static int secure_allocated(void* ptr);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_secure_malloc_initialized")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_secure_malloc_initialized")
+		]
 		public extern static int secure_malloc_initialized();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_secure_actual_size")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_secure_actual_size")
+		]
 		public extern static uint secure_actual_size(void* ptr);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_secure_used")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_secure_used")
+		]
 		public extern static uint secure_used();
 
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int FIPS_mode();
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int FIPS_mode_set(int r);
 
 		/*
@@ -272,141 +467,431 @@ namespace Beef_Net.OpenSSL
 		 * It takes an amount of time dependent on |len|, but independent of the contents of |a| and |b|. Unlike memcmp, it cannot be used to put elements into a defined order as the return value when a != b is undefined, other
 		 * than to be non-zero.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_memcmp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_memcmp")
+		]
 		public extern static int memcmp(void* in_a, void* in_b, uint len);
 
 		public typealias ONCE = uint;
 		public typealias THREAD_LOCAL = uint;
 		public typealias THREAD_ID = uint;
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_THREAD_run_once")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_THREAD_run_once")
+		]
 		public extern static int THREAD_run_once(ONCE* once, function void() init);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_THREAD_init_local")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_THREAD_init_local")
+		]
 		public extern static int THREAD_init_local(THREAD_LOCAL* key, function void(void*) cleanup);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_THREAD_get_local")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_THREAD_get_local")
+		]
 		public extern static void*THREAD_get_local(THREAD_LOCAL* key);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_THREAD_set_local")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_THREAD_set_local")
+		]
 		public extern static int THREAD_set_local(THREAD_LOCAL* key, void* val);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_THREAD_cleanup_local")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_THREAD_cleanup_local")
+		]
 		public extern static int THREAD_cleanup_local(THREAD_LOCAL* key);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_THREAD_get_current_id")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_THREAD_get_current_id")
+		]
 		public extern static THREAD_ID THREAD_get_current_id();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_THREAD_compare_id")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_THREAD_compare_id")
+		]
 		public extern static int THREAD_compare_id(THREAD_ID a, THREAD_ID b);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_cbc128_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_cbc128_encrypt")
+		]
 		public extern static void cbc128_encrypt(uint8* inVal, uint8* outVal, uint len, void* key, uint8[16] ivec, Modes.block128_f block);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_cbc128_decrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_cbc128_decrypt")
+		]
 		public extern static void cbc128_decrypt(uint8* inVal, uint8* outVal, uint len, void* key, uint8[16] ivec, Modes.block128_f block);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_ctr128_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_ctr128_encrypt")
+		]
 		public extern static void ctr128_encrypt(uint8* inVal, uint8* outVal, uint len, void* key, uint8[16] ivec, uint8[16] ecount_buf, uint* num, Modes.block128_f block);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_ctr128_encrypt_ctr32")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_ctr128_encrypt_ctr32")
+		]
 		public extern static void ctr128_encrypt_ctr32(uint8* inVal, uint8* outVal, uint len, void* key, uint8[16] ivec, uint8[16] ecount_buf, uint* num, Modes.ctr128_f ctr);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_ofb128_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_ofb128_encrypt")
+		]
 		public extern static void ofb128_encrypt(uint8* inVal, uint8* outVal, uint len, void* key, uint8[16] ivec, int* num, Modes.block128_f block);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_cfb128_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_cfb128_encrypt")
+		]
 		public extern static void cfb128_encrypt(uint8* inVal, uint8* outVal, uint len, void* key, uint8[16] ivec, int* num, int enc, Modes.block128_f block);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_cfb128_8_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_cfb128_8_encrypt")
+		]
 		public extern static void cfb128_8_encrypt(uint8* inVal, uint8* outVal, uint length, void* key, uint8[16] ivec, int* num, int enc, Modes.block128_f block);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_cfb128_1_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_cfb128_1_encrypt")
+		]
 		public extern static void cfb128_1_encrypt(uint8* inVal, uint8* outVal, uint bits, void* key, uint8[16] ivec, int* num, int enc, Modes.block128_f block);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_cts128_encrypt_block")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_cts128_encrypt_block")
+		]
 		public extern static uint cts128_encrypt_block(uint8* inVal, uint8* outVal, uint len, void* key, uint8[16] ivec, Modes.block128_f block);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_cts128_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_cts128_encrypt")
+		]
 		public extern static uint cts128_encrypt(uint8* inVal, uint8* outVal, uint len, void* key, uint8[16] ivec, Modes.cbc128_f cbc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_cts128_decrypt_block")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_cts128_decrypt_block")
+		]
 		public extern static uint cts128_decrypt_block(uint8* inVal, uint8* outVal, uint len, void* key, uint8[16] ivec, Modes.block128_f block);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_cts128_decrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_cts128_decrypt")
+		]
 		public extern static uint cts128_decrypt(uint8* inVal, uint8* outVal, uint len, void* key, uint8[16] ivec, Modes.cbc128_f cbc);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_nistcts128_encrypt_block")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_nistcts128_encrypt_block")
+		]
 		public extern static uint nistcts128_encrypt_block(uint8* inVal, uint8* outVal, uint len, void* key, uint8[16] ivec, Modes.block128_f block);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_nistcts128_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_nistcts128_encrypt")
+		]
 		public extern static uint nistcts128_encrypt(uint8* inVal, uint8* outVal, uint len, void* key, uint8[16] ivec, Modes.cbc128_f cbc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_nistcts128_decrypt_block")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_nistcts128_decrypt_block")
+		]
 		public extern static uint nistcts128_decrypt_block(uint8* inVal, uint8* outVal, uint len, void* key, uint8[16] ivec, Modes.block128_f block);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_nistcts128_decrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_nistcts128_decrypt")
+		]
 		public extern static uint nistcts128_decrypt(uint8* inVal, uint8* outVal, uint len, void* key, uint8[16] ivec, Modes.cbc128_f cbc);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_gcm128_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_gcm128_new")
+		]
 		public extern static Modes.GCM128_CONTEXT* gcm128_new(void* key, Modes.block128_f block);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_gcm128_init")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_gcm128_init")
+		]
 		public extern static void gcm128_init(Modes.GCM128_CONTEXT* ctx, void* key, Modes.block128_f block);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_gcm128_setiv")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_gcm128_setiv")
+		]
 		public extern static void gcm128_setiv(Modes.GCM128_CONTEXT* ctx, uint8* iv, uint len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_gcm128_aad")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_gcm128_aad")
+		]
 		public extern static int gcm128_aad(Modes.GCM128_CONTEXT* ctx, uint8* aad, uint len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_gcm128_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_gcm128_encrypt")
+		]
 		public extern static int gcm128_encrypt(Modes.GCM128_CONTEXT* ctx, uint8* inVal, uint8* outVal, uint len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_gcm128_decrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_gcm128_decrypt")
+		]
 		public extern static int gcm128_decrypt(Modes.GCM128_CONTEXT* ctx, uint8* inVal, uint8* outVal, uint len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_gcm128_encrypt_ctr32")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_gcm128_encrypt_ctr32")
+		]
 		public extern static int gcm128_encrypt_ctr32(Modes.GCM128_CONTEXT* ctx, uint8* inVal, uint8* outVal, uint len, Modes.ctr128_f stream);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_gcm128_decrypt_ctr32")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_gcm128_decrypt_ctr32")
+		]
 		public extern static int gcm128_decrypt_ctr32(Modes.GCM128_CONTEXT* ctx, uint8* inVal, uint8* outVal, uint len, Modes.ctr128_f stream);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_gcm128_finish")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_gcm128_finish")
+		]
 		public extern static int gcm128_finish(Modes.GCM128_CONTEXT* ctx, uint8* tag, uint len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_gcm128_tag")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_gcm128_tag")
+		]
 		public extern static void gcm128_tag(Modes.GCM128_CONTEXT* ctx, uint8* tag, uint len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_gcm128_release")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_gcm128_release")
+		]
 		public extern static void gcm128_release(Modes.GCM128_CONTEXT* ctx);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_ccm128_init")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_ccm128_init")
+		]
 		public extern static void ccm128_init(Modes.CCM128_CONTEXT* ctx, uint M, uint L, void* key, Modes.block128_f block);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_ccm128_setiv")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_ccm128_setiv")
+		]
 		public extern static int ccm128_setiv(Modes.CCM128_CONTEXT* ctx, uint8* nonce, uint nlen, uint mlen);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_ccm128_aad")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_ccm128_aad")
+		]
 		public extern static void ccm128_aad(Modes.CCM128_CONTEXT* ctx, uint8* aad, uint alen);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_ccm128_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_ccm128_encrypt")
+		]
 		public extern static int ccm128_encrypt(Modes.CCM128_CONTEXT* ctx, uint8* inp, uint8* outVal, uint len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_ccm128_decrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_ccm128_decrypt")
+		]
 		public extern static int ccm128_decrypt(Modes.CCM128_CONTEXT* ctx, uint8* inp, uint8* outVal, uint len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_ccm128_encrypt_ccm64")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_ccm128_encrypt_ccm64")
+		]
 		public extern static int ccm128_encrypt_ccm64(Modes.CCM128_CONTEXT* ctx, uint8* inp, uint8* outVal, uint len, Modes.ccm128_f stream);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_ccm128_decrypt_ccm64")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_ccm128_decrypt_ccm64")
+		]
 		public extern static int ccm128_decrypt_ccm64(Modes.CCM128_CONTEXT* ctx, uint8* inp, uint8* outVal, uint len, Modes.ccm128_f stream);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_ccm128_tag")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_ccm128_tag")
+		]
 		public extern static uint ccm128_tag(Modes.CCM128_CONTEXT* ctx, uint8* tag, uint len);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_xts128_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_xts128_encrypt")
+		]
 		public extern static int xts128_encrypt(Modes.XTS128_CONTEXT* ctx, uint8[16] iv, uint8* inp, uint8* outVal, uint len, int enc);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_128_wrap")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_128_wrap")
+		]
 		public extern static uint _128_wrap(void* key, uint8* iv, uint8* outVal, uint8* inVal, uint inlen, Modes.block128_f block);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_128_unwrap")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_128_unwrap")
+		]
 		public extern static uint _128_unwrap(void* key, uint8* iv, uint8* outVal, uint8* inVal, uint inlen, Modes.block128_f block);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_128_wrap_pad")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_128_wrap_pad")
+		]
 		public extern static uint _128_wrap_pad(void* key, uint8* icv, uint8* outVal, uint8* inVal, uint inlen, Modes.block128_f block);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_128_unwrap_pad")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_128_unwrap_pad")
+		]
 		public extern static uint _128_unwrap_pad(void* key, uint8* icv, uint8* outVal, uint8* inVal, uint inlen, Modes.block128_f block);
 
 #if !OPENSSL_NO_OCB
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_ocb128_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_ocb128_new")
+		]
 		public extern static Modes.OCB128_CONTEXT* ocb128_new(void* keyenc, void* keydec, Modes.block128_f encrypt, Modes.block128_f decrypt, Modes.ocb128_f stream);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_ocb128_init")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_ocb128_init")
+		]
 		public extern static int ocb128_init(Modes.OCB128_CONTEXT* ctx, void* keyenc, void* keydec, Modes.block128_f encrypt, Modes.block128_f decrypt, Modes.ocb128_f stream);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_ocb128_copy_ctx")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_ocb128_copy_ctx")
+		]
 		public extern static int ocb128_copy_ctx(Modes.OCB128_CONTEXT* dest, Modes.OCB128_CONTEXT* src, void* keyenc, void* keydec);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_ocb128_setiv")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_ocb128_setiv")
+		]
 		public extern static int ocb128_setiv(Modes.OCB128_CONTEXT* ctx, uint8* iv, uint len, uint taglen);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_ocb128_aad")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_ocb128_aad")
+		]
 		public extern static int ocb128_aad(Modes.OCB128_CONTEXT* ctx, uint8* aad, uint len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_ocb128_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_ocb128_encrypt")
+		]
 		public extern static int ocb128_encrypt(Modes.OCB128_CONTEXT* ctx, uint8* inVal, uint8* outVal, uint len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_ocb128_decrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_ocb128_decrypt")
+		]
 		public extern static int ocb128_decrypt(Modes.OCB128_CONTEXT* ctx, uint8* inVal, uint8* outVal, uint len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_ocb128_finish")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_ocb128_finish")
+		]
 		public extern static int ocb128_finish(Modes.OCB128_CONTEXT* ctx, uint8* tag, uint len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_ocb128_tag")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_ocb128_tag")
+		]
 		public extern static int ocb128_tag(Modes.OCB128_CONTEXT* ctx, uint8* tag, uint len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CRYPTO_ocb128_cleanup")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CRYPTO_ocb128_cleanup")
+		]
 		public extern static void ocb128_cleanup(Modes.OCB128_CONTEXT* ctx);
 #endif
 	}

@@ -101,11 +101,26 @@ namespace Beef_Net.OpenSSL
 		**   484  1E3 00001591 TLS_server_method
 		*/
 		/* Negotiate highest available SSL/TLS version */
-		[Import(OPENSSL_LIB_SSL), LinkName("TLS_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("TLS_method")
+		]
 		public extern static SSL.METHOD* method();
-		[Import(OPENSSL_LIB_SSL), LinkName("TLS_server_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("TLS_server_method")
+		]
 		public extern static SSL.METHOD* server_method();
-		[Import(OPENSSL_LIB_SSL), LinkName("TLS_client_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("TLS_client_method")
+		]
 		public extern static SSL.METHOD* client_method();
 	}
 
@@ -1057,11 +1072,26 @@ namespace Beef_Net.OpenSSL
 		**   493  1EC 000015C3 TLSv1_server_method
 		*/
 #if !OPENSSL_NO_TLS1_METHOD
-		[Import(OPENSSL_LIB_SSL), LinkName("TLSv1_client_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("TLSv1_client_method")
+		]
 		public extern static SSL.METHOD* client_method();
-		[Import(OPENSSL_LIB_SSL), LinkName("TLSv1_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("TLSv1_method")
+		]
 		public extern static SSL.METHOD* method(); /* TLSv1.0 */
-		[Import(OPENSSL_LIB_SSL), LinkName("TLSv1_server_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("TLSv1_server_method")
+		]
 		public extern static SSL.METHOD* server_method();
 #endif
 	}
@@ -1081,11 +1111,26 @@ namespace Beef_Net.OpenSSL
 		**   487  1E6 0000112C TLSv1_1_server_method
 		*/
 #if !OPENSSL_NO_TLS1_1_METHOD
-		[Import(OPENSSL_LIB_SSL), LinkName("TLSv1_1_client_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("TLSv1_1_client_method")
+		]
 		public extern static SSL.METHOD* client_method();
-		[Import(OPENSSL_LIB_SSL), LinkName("TLSv1_1_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("TLSv1_1_method")
+		]
 		public extern static SSL.METHOD* method(); /* TLSv1.1 */
-		[Import(OPENSSL_LIB_SSL), LinkName("TLSv1_1_server_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("TLSv1_1_server_method")
+		]
 		public extern static SSL.METHOD* server_method();
 #endif
 	}
@@ -1109,11 +1154,26 @@ namespace Beef_Net.OpenSSL
 		**   490  1E9 00001122 TLSv1_2_server_method
 		*/
 #if !OPENSSL_NO_TLS1_2_METHOD
-		[Import(OPENSSL_LIB_SSL), LinkName("TLSv1_2_client_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("TLSv1_2_client_method")
+		]
 		public extern static SSL.METHOD* client_method();
-		[Import(OPENSSL_LIB_SSL), LinkName("TLSv1_2_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("TLSv1_2_method")
+		]
 		public extern static SSL.METHOD* method(); /* TLSv1.2 */
-		[Import(OPENSSL_LIB_SSL), LinkName("TLSv1_2_server_method")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_SSL),
+#endif
+			LinkName("TLSv1_2_server_method")
+		]
 		public extern static SSL.METHOD* server_method();
 #endif
 	}

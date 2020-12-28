@@ -172,9 +172,19 @@ namespace Beef_Net.OpenSSL
 		public const int FLG_EXP_CONSTTIME = FLG_CONSTTIME;
 		public const int FLG_FREE          = 0x8000; /* used for debugging */
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_set_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_set_flags")
+		]
 		public extern static void set_flags(BIGNUM* b, int n);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_get_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_get_flags")
+		]
 		public extern static int get_flags(BIGNUM* b, int n);
 
 		/* Values for |top| in BN_rand() */
@@ -190,27 +200,62 @@ namespace Beef_Net.OpenSSL
 		 * Get a clone of a BIGNUM with changed flags, for *temporary* use only (the two BIGNUMs cannot be used in parallel!). Also only for *read only* use.
 		 * The value |dest| should be a newly allocated BIGNUM obtained via new() that has not been otherwise initialised or used.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_with_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_with_flags")
+		]
 		public extern static void with_flags(BIGNUM* dest, BIGNUM* b, int flags);
 
 		/* Wrapper function to make using GENCB easier */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_GENCB_call")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_GENCB_call")
+		]
 		public extern static int GENCB_call(GENCB* cb, int a, int b);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_GENCB_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_GENCB_new")
+		]
 		public extern static GENCB* GENCB_new();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_GENCB_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_GENCB_free")
+		]
 		public extern static void GENCB_free(GENCB* cb);
 
 		/* Populate a GENCB structure with an "old"-style callback */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_GENCB_set_old")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_GENCB_set_old")
+		]
 		public extern static void GENCB_set_old(GENCB* gencb, function void(int, int, void*) callback, void* cb_arg);
 
 		/* Populate a GENCB structure with a "new"-style callback */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_GENCB_set")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_GENCB_set")
+		]
 		public extern static void GENCB_set(GENCB* gencb, function int(int, int, GENCB*) callback, void* cb_arg);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_GENCB_get_arg")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_GENCB_get_arg")
+		]
 		public extern static void* GENCB_get_arg(GENCB* cb);
 
 		public const int prime_checks = 0; /* default: select number of iterations based on the size of the number */
@@ -283,21 +328,51 @@ namespace Beef_Net.OpenSSL
 		[Inline]
 		public static int num_bytes(BIGNUM* a) => (num_bits(a) + 7) / 8;
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_abs_is_word")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_abs_is_word")
+		]
 		public extern static int abs_is_word(BIGNUM* a, ULONG w);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_is_zero")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_is_zero")
+		]
 		public extern static int is_zero(BIGNUM* a);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_is_one")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_is_one")
+		]
 		public extern static int is_one(BIGNUM* a);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_is_word")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_is_word")
+		]
 		public extern static int is_word(BIGNUM* a, ULONG w);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_is_odd")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_is_odd")
+		]
 		public extern static int is_odd(BIGNUM* a);
 
 		[Inline]
 		public static int one(BIGNUM* a) => set_word(a, 1);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_zero_ex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_zero_ex")
+		]
 		public extern static void zero_ex(BIGNUM* a);
 
 		// #if OPENSSL_API_COMPAT >= 0x00908000L
@@ -308,160 +383,510 @@ namespace Beef_Net.OpenSSL
 		public static int zero(BIGNUM* a) => set_word(a, 0);
 		// #endif
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_value_one")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_value_one")
+		]
 		public extern static BIGNUM* value_one();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_options")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_options")
+		]
 		public extern static char8* options();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_CTX_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_CTX_new")
+		]
 		public extern static CTX* CTX_new();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_CTX_secure_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_CTX_secure_new")
+		]
 		public extern static CTX* CTX_secure_new();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_CTX_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_CTX_free")
+		]
 		public extern static void CTX_free(CTX* c);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_CTX_start")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_CTX_start")
+		]
 		public extern static void CTX_start(CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_CTX_get")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_CTX_get")
+		]
 		public extern static BIGNUM* CTX_get(CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_CTX_end")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_CTX_end")
+		]
 		public extern static void CTX_end(CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_rand")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_rand")
+		]
 		public extern static int rand(BIGNUM* rnd, int bits, int top, int bottom);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_priv_rand")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_priv_rand")
+		]
 		public extern static int priv_rand(BIGNUM* rnd, int bits, int top, int bottom);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_rand_range")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_rand_range")
+		]
 		public extern static int rand_range(BIGNUM* rnd, BIGNUM* range);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_priv_rand_range")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_priv_rand_range")
+		]
 		public extern static int priv_rand_range(BIGNUM* rnd, BIGNUM* range);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_pseudo_rand")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_pseudo_rand")
+		]
 		public extern static int pseudo_rand(BIGNUM* rnd, int bits, int top, int bottom);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_pseudo_rand_range")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_pseudo_rand_range")
+		]
 		public extern static int pseudo_rand_range(BIGNUM* rnd, BIGNUM* range);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_num_bits")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_num_bits")
+		]
 		public extern static int num_bits(BIGNUM* a);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_num_bits_word")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_num_bits_word")
+		]
 		public extern static int num_bits_word(ULONG l);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_security_bits")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_security_bits")
+		]
 		public extern static int security_bits(int L, int N);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_new")
+		]
 		public extern static BIGNUM* new_();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_secure_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_secure_new")
+		]
 		public extern static BIGNUM* secure_new();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_clear_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_clear_free")
+		]
 		public extern static void clear_free(BIGNUM* a);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_copy")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_copy")
+		]
 		public extern static BIGNUM* copy(BIGNUM* a, BIGNUM* b);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_swap")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_swap")
+		]
 		public extern static void swap(BIGNUM* a, BIGNUM* b);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_bin2bn")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_bin2bn")
+		]
 		public extern static BIGNUM* bin2bn(uint8* s, int len, BIGNUM* ret);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_bn2bin")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_bn2bin")
+		]
 		public extern static int bn2bin(BIGNUM* a, uint8* to);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_bn2binpad")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_bn2binpad")
+		]
 		public extern static int bn2binpad(BIGNUM* a, uint8* to, int tolen);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_lebin2bn")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_lebin2bn")
+		]
 		public extern static BIGNUM* lebin2bn(uint8* s, int len, BIGNUM* ret);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_bn2lebinpad")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_bn2lebinpad")
+		]
 		public extern static int bn2lebinpad(BIGNUM* a, uint8* to, int tolen);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_mpi2bn")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_mpi2bn")
+		]
 		public extern static BIGNUM* mpi2bn(uint8* s, int len, BIGNUM* ret);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_bn2mpi")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_bn2mpi")
+		]
 		public extern static int bn2mpi(BIGNUM* a, uint8* to);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_sub")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_sub")
+		]
 		public extern static int sub(BIGNUM* r, BIGNUM* a, BIGNUM* b);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_usub")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_usub")
+		]
 		public extern static int usub(BIGNUM* r, BIGNUM* a, BIGNUM* b);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_uadd")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_uadd")
+		]
 		public extern static int uadd(BIGNUM* r, BIGNUM* a, BIGNUM* b);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_add")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_add")
+		]
 		public extern static int add(BIGNUM* r, BIGNUM* a, BIGNUM* b);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_mul")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_mul")
+		]
 		public extern static int mul(BIGNUM* r, BIGNUM* a, BIGNUM* b, CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_sqr")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_sqr")
+		]
 		public extern static int sqr(BIGNUM* r, BIGNUM* a, CTX* ctx);
 		/** set_negative sets sign of a BIGNUM
 		 * \param  b  pointer to the BIGNUM object
 		 * \param  n  0 if the BIGNUM b should be positive and a value != 0 otherwise
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_set_negative")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_set_negative")
+		]
 		public extern static void set_negative(BIGNUM* b, int n);
 		/** is_negative returns 1 if the BIGNUM is negative
 		 * \param  b  pointer to the BIGNUM object
 		 * \return 1 if a < 0 and 0 otherwise
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_is_negative")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_is_negative")
+		]
 		public extern static int is_negative(BIGNUM* b);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_div")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_div")
+		]
 		public extern static int div(BIGNUM* dv, BIGNUM* rem, BIGNUM* m, BIGNUM* d, CTX* ctx);
 		//# define mod(rem, m, d, ctx) div(null, rem, m, d, ctx)
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_nnmod")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_nnmod")
+		]
 		public extern static int nnmod(BIGNUM* r, BIGNUM* m, BIGNUM* d, CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_mod_add")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_mod_add")
+		]
 		public extern static int mod_add(BIGNUM* r, BIGNUM* a, BIGNUM* b, BIGNUM* m, CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_mod_add_quick")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_mod_add_quick")
+		]
 		public extern static int mod_add_quick(BIGNUM* r, BIGNUM* a, BIGNUM* b, BIGNUM* m);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_mod_sub")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_mod_sub")
+		]
 		public extern static int mod_sub(BIGNUM* r, BIGNUM* a, BIGNUM* b, BIGNUM* m, CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_mod_sub_quick")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_mod_sub_quick")
+		]
 		public extern static int mod_sub_quick(BIGNUM* r, BIGNUM* a, BIGNUM* b, BIGNUM* m);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_mod_mul")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_mod_mul")
+		]
 		public extern static int mod_mul(BIGNUM* r, BIGNUM* a, BIGNUM* b, BIGNUM* m, CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_mod_sqr")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_mod_sqr")
+		]
 		public extern static int mod_sqr(BIGNUM* r, BIGNUM* a, BIGNUM* m, CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_mod_lshift1")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_mod_lshift1")
+		]
 		public extern static int mod_lshift1(BIGNUM* r, BIGNUM* a, BIGNUM* m, CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_mod_lshift1_quick")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_mod_lshift1_quick")
+		]
 		public extern static int mod_lshift1_quick(BIGNUM* r, BIGNUM* a, BIGNUM* m);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_mod_lshift")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_mod_lshift")
+		]
 		public extern static int mod_lshift(BIGNUM* r, BIGNUM* a, int n, BIGNUM* m, CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_mod_lshift_quick")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_mod_lshift_quick")
+		]
 		public extern static int mod_lshift_quick(BIGNUM* r, BIGNUM* a, int n, BIGNUM* m);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_mod_word")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_mod_word")
+		]
 		public extern static ULONG mod_word(BIGNUM* a, ULONG w);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_div_word")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_div_word")
+		]
 		public extern static ULONG div_word(BIGNUM* a, ULONG w);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_mul_word")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_mul_word")
+		]
 		public extern static int mul_word(BIGNUM* a, ULONG w);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_add_word")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_add_word")
+		]
 		public extern static int add_word(BIGNUM* a, ULONG w);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_sub_word")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_sub_word")
+		]
 		public extern static int sub_word(BIGNUM* a, ULONG w);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_set_word")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_set_word")
+		]
 		public extern static int set_word(BIGNUM* a, ULONG w);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_get_word")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_get_word")
+		]
 		public extern static ULONG get_word(BIGNUM* a);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_cmp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_cmp")
+		]
 		public extern static int cmp(BIGNUM* a, BIGNUM* b);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_free")
+		]
 		public extern static void free(BIGNUM* a);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_is_bit_set")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_is_bit_set")
+		]
 		public extern static int is_bit_set(BIGNUM* a, int n);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_lshift")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_lshift")
+		]
 		public extern static int lshift(BIGNUM* r, BIGNUM* a, int n);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_lshift1")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_lshift1")
+		]
 		public extern static int lshift1(BIGNUM* r, BIGNUM* a);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_exp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_exp")
+		]
 		public extern static int exp(BIGNUM* r, BIGNUM* a, BIGNUM* p, CTX* ctx);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_mod_exp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_mod_exp")
+		]
 		public extern static int mod_exp(BIGNUM* r, BIGNUM* a, BIGNUM* p, BIGNUM* m, CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_mod_exp_mont")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_mod_exp_mont")
+		]
 		public extern static int mod_exp_mont(BIGNUM* r, BIGNUM* a, BIGNUM* p, BIGNUM* m, CTX* ctx, MONT_CTX* m_ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_mod_exp_mont_consttime")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_mod_exp_mont_consttime")
+		]
 		public extern static int mod_exp_mont_consttime(BIGNUM* rr, BIGNUM* a, BIGNUM* p, BIGNUM* m, CTX* ctx, MONT_CTX* in_mont);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_mod_exp_mont_word")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_mod_exp_mont_word")
+		]
 		public extern static int mod_exp_mont_word(BIGNUM* r, ULONG a, BIGNUM* p, BIGNUM* m, CTX* ctx, MONT_CTX* m_ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_mod_exp2_mont")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_mod_exp2_mont")
+		]
 		public extern static int mod_exp2_mont(BIGNUM* r, BIGNUM* a1, BIGNUM* p1, BIGNUM* a2, BIGNUM* p2, BIGNUM* m, CTX* ctx, MONT_CTX* m_ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_mod_exp_simple")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_mod_exp_simple")
+		]
 		public extern static int mod_exp_simple(BIGNUM* r, BIGNUM* a, BIGNUM* p, BIGNUM* m, CTX* ctx);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_mask_bits")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_mask_bits")
+		]
 		public extern static int mask_bits(BIGNUM* a, int n);
 #if !OPENSSL_NO_STDIO
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_print_fp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_print_fp")
+		]
 		public extern static int print_fp(Platform.BfpFile* fp, BIGNUM* a);
 		[Inline]
 		public static int print_fp(StringView filename, BIGNUM* a)
@@ -485,139 +910,429 @@ namespace Beef_Net.OpenSSL
 			return res;
 		}
 #endif
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_print")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_print")
+		]
 		public extern static int print(BIO.bio_st* bio, BIGNUM* a);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_reciprocal")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_reciprocal")
+		]
 		public extern static int reciprocal(BIGNUM* r, BIGNUM* m, int len, CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_rshift")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_rshift")
+		]
 		public extern static int rshift(BIGNUM* r, BIGNUM* a, int n);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_rshift1")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_rshift1")
+		]
 		public extern static int rshift1(BIGNUM* r, BIGNUM* a);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_clear")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_clear")
+		]
 		public extern static void clear(BIGNUM* a);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_dup")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_dup")
+		]
 		public extern static BIGNUM* dup(BIGNUM* a);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_ucmp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_ucmp")
+		]
 		public extern static int ucmp(BIGNUM* a, BIGNUM* b);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_set_bit")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_set_bit")
+		]
 		public extern static int set_bit(BIGNUM* a, int n);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_clear_bit")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_clear_bit")
+		]
 		public extern static int clear_bit(BIGNUM* a, int n);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_bn2hex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_bn2hex")
+		]
 		public extern static char8* bn2hex(BIGNUM* a);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_bn2dec")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_bn2dec")
+		]
 		public extern static char8* bn2dec(BIGNUM* a);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_hex2bn")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_hex2bn")
+		]
 		public extern static int hex2bn(BIGNUM** a, char8* str);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_dec2bn")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_dec2bn")
+		]
 		public extern static int dec2bn(BIGNUM** a, char8* str);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_asc2bn")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_asc2bn")
+		]
 		public extern static int asc2bn(BIGNUM** a, char8* str);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_gcd")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_gcd")
+		]
 		public extern static int gcd(BIGNUM* r, BIGNUM* a, BIGNUM* b, CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_kronecker")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_kronecker")
+		]
 		public extern static int kronecker(BIGNUM* a, BIGNUM* b, CTX* ctx); /* returns -2 for error */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_mod_inverse")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_mod_inverse")
+		]
 		public extern static BIGNUM* mod_inverse(BIGNUM* ret, BIGNUM* a, BIGNUM* n, CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_mod_sqrt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_mod_sqrt")
+		]
 		public extern static BIGNUM* mod_sqrt(BIGNUM* ret, BIGNUM* a, BIGNUM* n, CTX* ctx);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_consttime_swap")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_consttime_swap")
+		]
 		public extern static void consttime_swap(ULONG swap, BIGNUM* a, BIGNUM* b, int nwords);
 
 		/* Deprecated versions */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_generate_prime")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_generate_prime")
+		]
 		public extern static BIGNUM* generate_prime(BIGNUM* ret, int bits, int safe, BIGNUM* add, BIGNUM* rem, function void(int, int, void*) callback, void* cb_arg);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_is_prime")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_is_prime")
+		]
 		public extern static int is_prime(BIGNUM* p, int nchecks, function void(int, int, void*) callback, CTX* ctx, void* cb_arg);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_is_prime_fasttest")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_is_prime_fasttest")
+		]
 		public extern static int is_prime_fasttest(BIGNUM* p, int nchecks, function void(int, int, void*) callback, CTX* ctx, void* cb_arg, int do_trial_division);
 
 		/* Newer versions */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_generate_prime_ex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_generate_prime_ex")
+		]
 		public extern static int generate_prime_ex(BIGNUM* ret, int bits, int safe, BIGNUM* add, BIGNUM* rem, GENCB* cb);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_is_prime_ex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_is_prime_ex")
+		]
 		public extern static int is_prime_ex(BIGNUM* p, int nchecks, CTX* ctx, GENCB* cb);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_is_prime_fasttest_ex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_is_prime_fasttest_ex")
+		]
 		public extern static int is_prime_fasttest_ex(BIGNUM* p, int nchecks, CTX* ctx, int do_trial_division, GENCB* cb);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_X931_generate_Xpq")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_X931_generate_Xpq")
+		]
 		public extern static int X931_generate_Xpq(BIGNUM* Xp, BIGNUM* Xq, int nbits, CTX* ctx);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_X931_derive_prime_ex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_X931_derive_prime_ex")
+		]
 		public extern static int X931_derive_prime_ex(BIGNUM* p, BIGNUM* p1, BIGNUM* p2, BIGNUM* Xp, BIGNUM* Xp1, BIGNUM* Xp2, BIGNUM* e, CTX* ctx, GENCB* cb);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_X931_generate_prime_ex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_X931_generate_prime_ex")
+		]
 		public extern static int X931_generate_prime_ex(BIGNUM* p, BIGNUM* p1, BIGNUM* p2, BIGNUM* Xp1, BIGNUM* Xp2, BIGNUM* Xp, BIGNUM* e, CTX* ctx, GENCB* cb);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_MONT_CTX_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_MONT_CTX_new")
+		]
 		public extern static MONT_CTX* MONT_CTX_new();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_mod_mul_montgomery")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_mod_mul_montgomery")
+		]
 		public extern static int mod_mul_montgomery(BIGNUM* r, BIGNUM* a, BIGNUM* b, MONT_CTX* mont, CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_to_montgomery")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_to_montgomery")
+		]
 		public extern static int to_montgomery(BIGNUM* r, BIGNUM* a, MONT_CTX* mont, CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_from_montgomery")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_from_montgomery")
+		]
 		public extern static int from_montgomery(BIGNUM* r, BIGNUM* a, MONT_CTX* mont, CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_MONT_CTX_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_MONT_CTX_free")
+		]
 		public extern static void MONT_CTX_free(MONT_CTX* mont);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_MONT_CTX_set")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_MONT_CTX_set")
+		]
 		public extern static int MONT_CTX_set(MONT_CTX* mont, BIGNUM* mod, CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_MONT_CTX_copy")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_MONT_CTX_copy")
+		]
 		public extern static MONT_CTX* MONT_CTX_copy(MONT_CTX* to, MONT_CTX* from);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_MONT_CTX_set_locked")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_MONT_CTX_set_locked")
+		]
 		public extern static MONT_CTX* MONT_CTX_set_locked(MONT_CTX** pmont, Crypto.RWLOCK* lock, BIGNUM* mod, CTX* ctx);
 
 		/* BN_BLINDING flags */
 		public const int BLINDING_NO_UPDATE   = 0x00000001;
 		public const int BLINDING_NO_RECREATE = 0x00000002;
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_BLINDING_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_BLINDING_new")
+		]
 		public extern static BLINDING* BLINDING_new(BIGNUM* A, BIGNUM* Ai, BIGNUM* mod);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_BLINDING_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_BLINDING_free")
+		]
 		public extern static void BLINDING_free(BLINDING* b);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_BLINDING_update")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_BLINDING_update")
+		]
 		public extern static int BLINDING_update(BLINDING* b, CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_BLINDING_convert")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_BLINDING_convert")
+		]
 		public extern static int BLINDING_convert(BIGNUM* n, BLINDING* b, CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_BLINDING_invert")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_BLINDING_invert")
+		]
 		public extern static int BLINDING_invert(BIGNUM* n, BLINDING* b, CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_BLINDING_convert_ex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_BLINDING_convert_ex")
+		]
 		public extern static int BLINDING_convert_ex(BIGNUM* n, BIGNUM* r, BLINDING* b, CTX* c);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_BLINDING_invert_ex")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_BLINDING_invert_ex")
+		]
 		public extern static int BLINDING_invert_ex(BIGNUM* n, BIGNUM* r, BLINDING* b, CTX* c);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_BLINDING_is_current_thread")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_BLINDING_is_current_thread")
+		]
 		public extern static int BLINDING_is_current_thread(BLINDING* b);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_BLINDING_set_current_thread")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_BLINDING_set_current_thread")
+		]
 		public extern static void BLINDING_set_current_thread(BLINDING* b);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_BLINDING_lock")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_BLINDING_lock")
+		]
 		public extern static int BLINDING_lock(BLINDING* b);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_BLINDING_unlock")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_BLINDING_unlock")
+		]
 		public extern static int BLINDING_unlock(BLINDING* b);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_BLINDING_get_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_BLINDING_get_flags")
+		]
 		public extern static uint BLINDING_get_flags(BLINDING* flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_BLINDING_set_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_BLINDING_set_flags")
+		]
 		public extern static void BLINDING_set_flags(BLINDING* flag, uint val);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_BLINDING_create_param")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_BLINDING_create_param")
+		]
 		public extern static BLINDING* BLINDING_create_param(BLINDING* b, BIGNUM* e, BIGNUM* m, CTX* ctx,
 			function int(BIGNUM* r, BIGNUM* a, BIGNUM* p, BIGNUM* m, CTX* ctx, MONT_CTX* m_ctx) mod_exp, MONT_CTX* m_ctx);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_set_params")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_set_params")
+		]
 		public extern static void set_params(int mul, int high, int low, int mont);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_get_params")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_get_params")
+		]
 		public extern static int get_params(int which); /* 0, mul, 1 high, 2 low, 3 mont */
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_RECP_CTX_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_RECP_CTX_new")
+		]
 		public extern static RECP_CTX* RECP_CTX_new();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_RECP_CTX_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_RECP_CTX_free")
+		]
 		public extern static void RECP_CTX_free(RECP_CTX* recp);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_RECP_CTX_set")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_RECP_CTX_set")
+		]
 		public extern static int RECP_CTX_set(RECP_CTX* recp, BIGNUM* rdiv, CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_mod_mul_reciprocal")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_mod_mul_reciprocal")
+		]
 		public extern static int mod_mul_reciprocal(BIGNUM* r, BIGNUM* x, BIGNUM* y, RECP_CTX* recp, CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_mod_exp_recp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_mod_exp_recp")
+		]
 		public extern static int mod_exp_recp(BIGNUM* r, BIGNUM* a, BIGNUM* p, BIGNUM* m, CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_div_recp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_div_recp")
+		]
 		public extern static int div_recp(BIGNUM* dv, BIGNUM* rem, BIGNUM* m, RECP_CTX* recp, CTX* ctx);
 
 #if !OPENSSL_NO_EC2M
@@ -627,33 +1342,78 @@ namespace Beef_Net.OpenSSL
 		 */
 
 		/* r = a + b */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_GF2m_add")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_GF2m_add")
+		]
 		public extern static int GF2m_add(BIGNUM* r, BIGNUM* a, BIGNUM* b);
 		[Inline]
 		public static int GF2m_sub(BIGNUM* r, BIGNUM* a, BIGNUM* b) => GF2m_add(r, a, b);
 		/* r = a mod p */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_GF2m_mod")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_GF2m_mod")
+		]
 		public extern static int GF2m_mod(BIGNUM* r, BIGNUM* a, BIGNUM* p);
 		/* r = (a * b) mod p */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_GF2m_mod_mul")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_GF2m_mod_mul")
+		]
 		public extern static int GF2m_mod_mul(BIGNUM* r, BIGNUM* a, BIGNUM* b, BIGNUM* p, CTX* ctx);
 		/* r = (a * a) mod p */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_GF2m_mod_sqr")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_GF2m_mod_sqr")
+		]
 		public extern static int GF2m_mod_sqr(BIGNUM* r, BIGNUM* a, BIGNUM* p, CTX* ctx);
 		/* r = (1 / b) mod p */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_GF2m_mod_inv")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_GF2m_mod_inv")
+		]
 		public extern static int GF2m_mod_inv(BIGNUM* r, BIGNUM* b, BIGNUM* p, CTX* ctx);
 		/* r = (a / b) mod p */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_GF2m_mod_div")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_GF2m_mod_div")
+		]
 		public extern static int GF2m_mod_div(BIGNUM* r, BIGNUM* a, BIGNUM* b, BIGNUM* p, CTX* ctx);
 		/* r = (a ^ b) mod p */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_GF2m_mod_exp")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_GF2m_mod_exp")
+		]
 		public extern static int GF2m_mod_exp(BIGNUM* r, BIGNUM* a, BIGNUM* b, BIGNUM* p, CTX* ctx);
 		/* r = sqrt(a) mod p */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_GF2m_mod_sqrt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_GF2m_mod_sqrt")
+		]
 		public extern static int GF2m_mod_sqrt(BIGNUM* r, BIGNUM* a, BIGNUM* p, CTX* ctx);
 		/* r^2 + r = a mod p */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_GF2m_mod_solve_quad")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_GF2m_mod_solve_quad")
+		]
 		public extern static int GF2m_mod_solve_quad(BIGNUM* r, BIGNUM* a, BIGNUM* p, CTX* ctx);
 		[Inline]
 		public static int GF2m_cmp(BIGNUM* a, BIGNUM* b) => ucmp(a, b);
@@ -663,85 +1423,240 @@ namespace Beef_Net.OpenSSL
 		 * where m = p[0] > p[1] > ... > p[k] = 0.
 		 */
 		/* r = a mod p */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_GF2m_mod_arr")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_GF2m_mod_arr")
+		]
 		public extern static int GF2m_mod_arr(BIGNUM* r, BIGNUM* a, int[] p);
 		/* r = (a * b) mod p */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_GF2m_mod_mul_arr")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_GF2m_mod_mul_arr")
+		]
 		public extern static int GF2m_mod_mul_arr(BIGNUM* r, BIGNUM* a, BIGNUM* b, int[] p, CTX* ctx);
 		/* r = (a * a) mod p */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_GF2m_mod_sqr_arr")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_GF2m_mod_sqr_arr")
+		]
 		public extern static int GF2m_mod_sqr_arr(BIGNUM* r, BIGNUM* a, int[] p, CTX* ctx);
 		/* r = (1 / b) mod p */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_GF2m_mod_inv_arr")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_GF2m_mod_inv_arr")
+		]
 		public extern static int GF2m_mod_inv_arr(BIGNUM* r, BIGNUM* b, int[] p, CTX* ctx);
 		/* r = (a / b) mod p */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_GF2m_mod_div_arr")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_GF2m_mod_div_arr")
+		]
 		public extern static int GF2m_mod_div_arr(BIGNUM* r, BIGNUM* a, BIGNUM* b, int[] p, CTX* ctx);
 		/* r = (a ^ b) mod p */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_GF2m_mod_exp_arr")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_GF2m_mod_exp_arr")
+		]
 		public extern static int GF2m_mod_exp_arr(BIGNUM* r, BIGNUM* a, BIGNUM* b, int[] p, CTX* ctx);
 		/* r = sqrt(a) mod p */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_GF2m_mod_sqrt_arr")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_GF2m_mod_sqrt_arr")
+		]
 		public extern static int GF2m_mod_sqrt_arr(BIGNUM* r, BIGNUM* a, int[] p, CTX* ctx);
 		/* r^2 + r = a mod p */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_GF2m_mod_solve_quad_arr")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_GF2m_mod_solve_quad_arr")
+		]
 		public extern static int GF2m_mod_solve_quad_arr(BIGNUM* r, BIGNUM* a, int[] p, CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_GF2m_poly2arr")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_GF2m_poly2arr")
+		]
 		public extern static int GF2m_poly2arr(BIGNUM* a, int[] p, int max);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_GF2m_arr2poly")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_GF2m_arr2poly")
+		]
 		public extern static int GF2m_arr2poly(int[] p, BIGNUM* a);
 #endif
 
 		/* faster mod functions for the 'NIST primes' 0 <= a < p^2 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_nist_mod_192")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_nist_mod_192")
+		]
 		public extern static int nist_mod_192(BIGNUM* r, BIGNUM* a, BIGNUM* p, CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_nist_mod_224")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_nist_mod_224")
+		]
 		public extern static int nist_mod_224(BIGNUM* r, BIGNUM* a, BIGNUM* p, CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_nist_mod_256")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_nist_mod_256")
+		]
 		public extern static int nist_mod_256(BIGNUM* r, BIGNUM* a, BIGNUM* p, CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_nist_mod_384")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_nist_mod_384")
+		]
 		public extern static int nist_mod_384(BIGNUM* r, BIGNUM* a, BIGNUM* p, CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_nist_mod_521")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_nist_mod_521")
+		]
 		public extern static int nist_mod_521(BIGNUM* r, BIGNUM* a, BIGNUM* p, CTX* ctx);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_get0_nist_prime_192")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_get0_nist_prime_192")
+		]
 		public extern static BIGNUM* get0_nist_prime_192();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_get0_nist_prime_224")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_get0_nist_prime_224")
+		]
 		public extern static BIGNUM* get0_nist_prime_224();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_get0_nist_prime_256")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_get0_nist_prime_256")
+		]
 		public extern static BIGNUM* get0_nist_prime_256();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_get0_nist_prime_384")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_get0_nist_prime_384")
+		]
 		public extern static BIGNUM* get0_nist_prime_384();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_get0_nist_prime_521")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_get0_nist_prime_521")
+		]
 		public extern static BIGNUM* get0_nist_prime_521();
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_nist_mod_func")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_nist_mod_func")
+		]
 		public extern static function int(BIGNUM* p) nist_mod_func(BIGNUM* r, BIGNUM* a, BIGNUM* field, CTX* ctx);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_generate_dsa_nonce")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_generate_dsa_nonce")
+		]
 		public extern static int generate_dsa_nonce(BIGNUM* outVal, BIGNUM* range, BIGNUM* priv, uint8* message, uint message_len, CTX* ctx);
 
 		/* Primes from RFC 2409 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_get_rfc2409_prime_768")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_get_rfc2409_prime_768")
+		]
 		public extern static BIGNUM* get_rfc2409_prime_768(BIGNUM* bn);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_get_rfc2409_prime_1024")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_get_rfc2409_prime_1024")
+		]
 		public extern static BIGNUM* get_rfc2409_prime_1024(BIGNUM* bn);
 
 		/* Primes from RFC 3526 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_get_rfc3526_prime_1536")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_get_rfc3526_prime_1536")
+		]
 		public extern static BIGNUM* get_rfc3526_prime_1536(BIGNUM* bn);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_get_rfc3526_prime_2048")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_get_rfc3526_prime_2048")
+		]
 		public extern static BIGNUM* get_rfc3526_prime_2048(BIGNUM* bn);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_get_rfc3526_prime_3072")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_get_rfc3526_prime_3072")
+		]
 		public extern static BIGNUM* get_rfc3526_prime_3072(BIGNUM* bn);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_get_rfc3526_prime_4096")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_get_rfc3526_prime_4096")
+		]
 		public extern static BIGNUM* get_rfc3526_prime_4096(BIGNUM* bn);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_get_rfc3526_prime_6144")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_get_rfc3526_prime_6144")
+		]
 		public extern static BIGNUM* get_rfc3526_prime_6144(BIGNUM* bn);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_get_rfc3526_prime_8192")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_get_rfc3526_prime_8192")
+		]
 		public extern static BIGNUM* get_rfc3526_prime_8192(BIGNUM* bn);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("BN_bntest_rand")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("BN_bntest_rand")
+		]
 		public extern static int bntest_rand(BIGNUM* rnd, int bits, int top, int bottom);
 	}
 }

@@ -14,18 +14,48 @@ namespace Beef_Net.OpenSSL
 	[AlwaysInclude]
 	sealed abstract class SMIME
 	{
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("SMIME_write_ASN1")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("SMIME_write_ASN1")
+		]
 		public static extern int write_ASN1(BIO.bio_st* bio, ASN1.VALUE* val, BIO.bio_st* data, int flags, int ctype_nid, int econt_nid, X509.stack_st_X509_ALGOR* mdalgs, ASN1.ITEM* it);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("SMIME_read_ASN1")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("SMIME_read_ASN1")
+		]
 		public static extern ASN1.VALUE* read_ASN1(BIO.bio_st* bio, BIO.bio_st** bcont, ASN1.ITEM* it);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("SMIME_crlf_copy")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("SMIME_crlf_copy")
+		]
 		public static extern int crlf_copy(BIO.bio_st* inVal, BIO.bio_st* outVal, int flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("SMIME_text")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("SMIME_text")
+		]
 		public static extern int text(BIO.bio_st* inVal, BIO.bio_st* outVal);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("SMIME_read_CMS")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("SMIME_read_CMS")
+		]
 		public extern static CMS.ContentInfo* read_CMS(BIO.bio_st* bio, BIO.bio_st** bcont);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("SMIME_write_CMS")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("SMIME_write_CMS")
+		]
 		public extern static int write_CMS(BIO.bio_st* bio, CMS.ContentInfo* cms, BIO.bio_st* data, int flags);
 
 		/* Flags: for compatibility with older code */
@@ -42,9 +72,19 @@ namespace Beef_Net.OpenSSL
 		/* CRLF ASCII canonicalisation */
 		public const int ASCIICRLF = 0x80000;
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("SMIME_write_PKCS7")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("SMIME_write_PKCS7")
+		]
 		public extern static int write_PKCS7(BIO.bio_st* bio, PKCS7.pkcs7_st* p7, BIO.bio_st* data, int flags);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("SMIME_read_PKCS7")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("SMIME_read_PKCS7")
+		]
 		public extern static PKCS7.pkcs7_st* read_PKCS7(BIO.bio_st* bio, BIO.bio_st** bcont);
 	}
 }

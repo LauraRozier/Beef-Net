@@ -31,19 +31,54 @@ namespace Beef_Net.OpenSSL
 		}
 		public typealias KEY = key_st;
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CAST_set_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CAST_set_key")
+		]
 		public extern static void set_key(KEY* key, int len, uint8* data);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CAST_ecb_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CAST_ecb_encrypt")
+		]
 		public extern static void ecb_encrypt(uint8* inVal, uint8* outVal, KEY* key, int enc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CAST_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CAST_encrypt")
+		]
 		public extern static void encrypt(LONG* data, KEY* key);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CAST_decrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CAST_decrypt")
+		]
 		public extern static void decrypt(LONG* data, KEY* key);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CAST_cbc_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CAST_cbc_encrypt")
+		]
 		public extern static void cbc_encrypt(uint8* inVal, uint8* outVal, int length, KEY* ks, uint8* iv, int enc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CAST_cfb64_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CAST_cfb64_encrypt")
+		]
 		public extern static void cfb64_encrypt(uint8* inVal, uint8* outVal, int length, KEY* schedule, uint8* ivec, int *num, int enc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("CAST_ofb64_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("CAST_ofb64_encrypt")
+		]
 		public extern static void ofb64_encrypt(uint8* inVal, uint8* outVal, int length, KEY* schedule, uint8* ivec, int *num);
 #endif
 	}

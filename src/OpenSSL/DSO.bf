@@ -53,46 +53,106 @@ namespace Beef_Net.OpenSSL
 		 */
 		public function char8* MERGER_FUNC(dso_st* dso, char8* a, char8* b);
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSO_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSO_new")
+		]
 		public extern static dso_st* new_();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSO_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSO_free")
+		]
 		public extern static int free(dso_st* dso);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSO_flags")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSO_flags")
+		]
 		public extern static int flags(dso_st* dso);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSO_up_ref")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSO_up_ref")
+		]
 		public extern static int up_ref(dso_st* dso);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSO_ctrl")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSO_ctrl")
+		]
 		public extern static int ctrl(dso_st* dso, int cmd, int larg, void* parg);
 		
 		/* These functions can be used to get/set the platform-independent filename used for a DSO. NB: set will fail if the DSO is already loaded. */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSO_get_filename")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSO_get_filename")
+		]
 		public extern static char8* get_filename(dso_st* dso);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSO_set_filename")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSO_set_filename")
+		]
 		public extern static int set_filename(dso_st* dso, char8* filename);
 		/*
 		 * This function will invoke the DSO's name_converter callback to translate a filename, or if the callback isn't set it will instead use the METHOD's converter. If "filename" is NULL, the "filename" in the DSO itself will be
 		 * used. If the FLAG_NO_NAME_TRANSLATION flag is set, then the filename is simply duplicated. NB: This function is usually called from within a METHOD during the processing of a load() call, and is exposed so
 		 * that caller-created METHODs can do the same thing. A non-NULL return value will need to be OpenSSL.free()'d.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSO_convert_filename")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSO_convert_filename")
+		]
 		public extern static char8* convert_filename(dso_st* dso, char8* filename);
 		/* This function will invoke the DSO's merger callback to merge two file specifications, or if the callback isn't set it will instead use the METHOD's merger.  A non-NULL return value will need to be OpenSSL.free()'d. */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSO_merge")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSO_merge")
+		]
 		public extern static char8* merge(dso_st* dso, char8* filespec1, char8* filespec2);
 		
 		/*
 		 * The all-singing all-dancing load function, you normally pass NULL for the first and third parameters. Use up_ref and DSO_free for subsequent reference count handling. Any flags passed in will be set in the
 		 * constructed DSO after its init() function but before the load operation. If 'dso' is non-NULL, 'flags' is ignored.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSO_load")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSO_load")
+		]
 		public extern static dso_st* load(dso_st* dso, char8* filename, METHOD* meth, int flags);
 		
 		/* This function binds to a function inside a shared library. */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSO_bind_func")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSO_bind_func")
+		]
 		public extern static FUNC_TYPE bind_func(dso_st* dso, char8* symname);
 		
 		/* This method is the default, but will beg, borrow, or steal whatever method should be the default on any particular platform (including METH_null() if necessary). */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSO_METHOD_openssl")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSO_METHOD_openssl")
+		]
 		public extern static METHOD* METHOD_openssl();
 		
 		/*
@@ -100,11 +160,21 @@ namespace Beef_Net.OpenSSL
 		 * negative, 'path' is ignored and required amount of characters [including trailing zero] to accommodate pathname is returned. If 'addr' is NULL, then pathname of cryptolib itself is returned.
 		 * Negative or zero return value denotes error.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSO_pathbyaddr")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSO_pathbyaddr")
+		]
 		public extern static int pathbyaddr(void* addr, char8* path, int sz);
 		
 		/* Like pathbyaddr() but instead returns a handle to the DSO for the symbol or NULL on error. */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSO_dsobyaddr")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSO_dsobyaddr")
+		]
 		public extern static dso_st* dsobyaddr(void* addr, int flags);
 		
 		/*
@@ -112,10 +182,20 @@ namespace Beef_Net.OpenSSL
 		 * usage for this function is to probe *core* system functionality, e.g. check if getnameinfo(3) is available at run-time without bothering about OS-specific details such as libc.so.versioning or where does it actually
 		 * reside: in libc itself or libsocket.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("DSO_global_lookup")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("DSO_global_lookup")
+		]
 		public extern static void* global_lookup(char8* name);
 		
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static int ERR_load_DSO_strings();
 
 		/**********************************************************************/

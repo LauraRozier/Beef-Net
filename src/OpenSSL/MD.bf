@@ -30,15 +30,40 @@ namespace Beef_Net.OpenSSL
 		}
 		public typealias CTX = state_st;
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("MD2_options")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("MD2_options")
+		]
 		public extern static char8* options();
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("MD2_Init")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("MD2_Init")
+		]
 		public extern static int Init(CTX* c);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("MD2_Update")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("MD2_Update")
+		]
 		public extern static int Update(CTX* c, uint8* data, uint len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("MD2_Final")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("MD2_Final")
+		]
 		public extern static int Final(uint8* md, CTX* c);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("MD2")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("MD2")
+		]
 		public extern static uint8* MD2_(uint8* d, uint n, uint8* md);
 #endif
 	}
@@ -72,15 +97,40 @@ namespace Beef_Net.OpenSSL
 		}
 		public typealias CTX = state_st;
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("MD4_Init")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("MD4_Init")
+		]
 		public extern static int Init(CTX* c);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("MD4_Update")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("MD4_Update")
+		]
 		public extern static int Update(CTX* c, void* data, uint len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("MD4_Final")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("MD4_Final")
+		]
 		public extern static int Final(uint8* md, CTX* c);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("MD4")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("MD4")
+		]
 		public extern static uint8* MD4_(uint8* d, uint n, uint8* md);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("MD4_Transform")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("MD4_Transform")
+		]
 		public extern static void Transform(CTX* c, uint8* b);
 #endif
 	}
@@ -114,15 +164,40 @@ namespace Beef_Net.OpenSSL
 		}
 		public typealias CTX = state_st;
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("MD5_Init")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("MD5_Init")
+		]
 		public extern static int Init(CTX* c);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("MD5_Update")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("MD5_Update")
+		]
 		public extern static int Update(CTX* c, void* data, uint len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("MD5_Final")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("MD5_Final")
+		]
 		public extern static int Final(uint8* md, CTX* c);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("MD5")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("MD5")
+		]
 		public extern static uint8* MD5_(uint8* d, uint n, uint8* md);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("MD5_Transform")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("MD5_Transform")
+		]
 		public extern static void Transform(CTX* c, uint8* b);
 #endif
 	}
@@ -145,13 +220,33 @@ namespace Beef_Net.OpenSSL
 		}
 		public typealias CTX = ctx_st;
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("MDC2_Init")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("MDC2_Init")
+		]
 		public extern static int Init(CTX*c );
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("MDC2_Update")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("MDC2_Update")
+		]
 		public extern static int Update(CTX* c, uint8* data, uint len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("MDC2_Final")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("MDC2_Final")
+		]
 		public extern static int Final(uint8* md, CTX* c);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("MDC2")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("MDC2")
+		]
 		public extern static uint8* MDC2_(uint8* d, uint n, uint8* md);
 #endif
 	}

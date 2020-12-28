@@ -37,41 +37,116 @@ namespace Beef_Net.OpenSSL
 		}
 		public typealias KEY = key_st;
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("AES_options")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("AES_options")
+		]
 		public extern static char8* options();
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("AES_set_encrypt_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("AES_set_encrypt_key")
+		]
 		public extern static int set_encrypt_key(uint8* userKey, int bits, KEY* key);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("AES_set_decrypt_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("AES_set_decrypt_key")
+		]
 		public extern static int set_decrypt_key(uint8* userKey, int bits, KEY* key);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("AES_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("AES_encrypt")
+		]
 		public extern static void encrypt(uint8* inData, uint8* outData, KEY* key);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("AES_decrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("AES_decrypt")
+		]
 		public extern static void decrypt(uint8* inData, uint8* outData, KEY* key);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("AES_ecb_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("AES_ecb_encrypt")
+		]
 		public extern static void ecb_encrypt(uint8* inData, uint8* outData, KEY* key, int enc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("AES_cbc_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("AES_cbc_encrypt")
+		]
 		public extern static void cbc_encrypt(uint8* inData, uint8* outData, uint length, KEY* key, uint8* ivec, int enc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("AES_cfb128_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("AES_cfb128_encrypt")
+		]
 		public extern static void cfb128_encrypt(uint8* inData, uint8* outData, uint length, KEY* key, uint8* ivec, int* num, int enc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("AES_cfb1_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("AES_cfb1_encrypt")
+		]
 		public extern static void cfb1_encrypt(uint8* inData, uint8* outData, uint length, KEY* key, uint8* ivec, int* num, int enc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("AES_cfb8_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("AES_cfb8_encrypt")
+		]
 		public extern static void cfb8_encrypt(uint8* inData, uint8* outData, uint length, KEY* key, uint8* ivec, int* num, int enc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("AES_ofb128_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("AES_ofb128_encrypt")
+		]
 		public extern static void ofb128_encrypt(uint8* inData, uint8* outData, uint length, KEY* key, uint8* ivec, int* num);
 		/* NB: the IV is _two_ blocks long */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("AES_ige_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("AES_ige_encrypt")
+		]
 		public extern static void ige_encrypt(uint8* inData, uint8* outData, uint length, KEY* key, uint8* ivec, int enc);
 		/* NB: the IV is _four_ blocks long */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("AES_bi_ige_encrypt")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("AES_bi_ige_encrypt")
+		]
 		public extern static void bi_ige_encrypt(uint8* inData, uint8* outData, uint length, KEY* key, KEY* key2, uint8* ivec, int enc);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("AES_wrap_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("AES_wrap_key")
+		]
 		public extern static int wrap_key(KEY* key, uint8* iv, uint8* outData, uint8* inData, uint inLen);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("AES_unwrap_key")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("AES_unwrap_key")
+		]
 		public extern static int unwrap_key(KEY* key, uint8* iv, uint8* outData, uint8* inData, uint inLen);
 	}
 }

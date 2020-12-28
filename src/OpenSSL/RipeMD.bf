@@ -36,15 +36,40 @@ namespace Beef_Net.OpenSSL
 		}
 		public typealias CTX = state_st;
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RIPEMD160_Init")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RIPEMD160_Init")
+		]
 		public extern static int Init(CTX* c);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RIPEMD160_Update")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RIPEMD160_Update")
+		]
 		public extern static int Update(CTX* c, void* data, uint len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RIPEMD160_Final")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RIPEMD160_Final")
+		]
 		public extern static int Final(uint8* md, CTX* c);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RIPEMD160")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RIPEMD160")
+		]
 		public extern static uint8* RIPEMD160_(uint8* d, uint n, uint8* md);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("RIPEMD160_Transform")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("RIPEMD160_Transform")
+		]
 		public extern static void Transform(CTX* c, uint8* b);
 #endif
 	}

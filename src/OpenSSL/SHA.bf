@@ -37,15 +37,40 @@ namespace Beef_Net.OpenSSL
 		}
 		public typealias CTX = state_st;
 		
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("SHA1_Init")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("SHA1_Init")
+		]
 		public extern static int Init(CTX* c);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("SHA1_Update")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("SHA1_Update")
+		]
 		public extern static int Update(CTX* c, void* data, uint len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("SHA1_Final")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("SHA1_Final")
+		]
 		public extern static int Final(uint8* md, CTX* c);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static uint8* SHA1(uint8* d, uint n, uint8* md);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("SHA1_Transform")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("SHA1_Transform")
+		]
 		public extern static void Transform(CTX* c, uint8* data);
 	}
 	
@@ -54,13 +79,33 @@ namespace Beef_Net.OpenSSL
 	{
 		public const int DIGEST_LENGTH = 28;
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("SHA224_Init")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("SHA224_Init")
+		]
 		public extern static int Init(SHA256.CTX* c);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("SHA224_Update")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("SHA224_Update")
+		]
 		public extern static int Update(SHA256.CTX* c, void* data, uint len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("SHA224_Final")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("SHA224_Final")
+		]
 		public extern static int Final(uint8* md, SHA256.CTX* c);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static uint8* SHA224(uint8* d, uint n, uint8* md);
 	}
 	
@@ -83,15 +128,40 @@ namespace Beef_Net.OpenSSL
 		}
 		public typealias CTX = state_st;
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("SHA256_Init")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("SHA256_Init")
+		]
 		public extern static int Init(CTX* c);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("SHA256_Update")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("SHA256_Update")
+		]
 		public extern static int Update(CTX* c, void* data, uint len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("SHA256_Final")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("SHA256_Final")
+		]
 		public extern static int Final(uint8* md, CTX* c);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static uint8* SHA256(uint8* d, uint n, uint8* md);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("SHA256_Transform")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("SHA256_Transform")
+		]
 		public extern static void Transform(CTX* c, uint8* data);
 	}
 	
@@ -100,13 +170,33 @@ namespace Beef_Net.OpenSSL
 	{
 		public const int DIGEST_LENGTH = 48;
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("SHA384_Init")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("SHA384_Init")
+		]
 		public extern static int Init(SHA512.CTX* c);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("SHA384_Update")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("SHA384_Update")
+		]
 		public extern static int Update(SHA512.CTX* c, void* data, uint len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("SHA384_Final")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("SHA384_Final")
+		]
 		public extern static int Final(uint8* md, SHA512.CTX* c);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static uint8* SHA384(uint8* d, uint n, uint8* md);
 	}
 	
@@ -138,15 +228,40 @@ namespace Beef_Net.OpenSSL
 		}
 		public typealias CTX = state_st;
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("SHA512_Init")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("SHA512_Init")
+		]
 		public extern static int Init(CTX* c);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("SHA512_Update")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("SHA512_Update")
+		]
 		public extern static int Update(CTX* c, void* data, uint len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("SHA512_Final")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("SHA512_Final")
+		]
 		public extern static int Final(uint8* md, CTX* c);
-		[Import(OPENSSL_LIB_CRYPTO), CLink]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			CLink
+		]
 		public extern static uint8* SHA512(uint8* d, uint n, uint8* md);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("SHA512_Transform")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("SHA512_Transform")
+		]
 		public extern static void Transform(CTX* c, uint8* data);
 	}
 }

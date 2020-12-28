@@ -94,7 +94,12 @@ namespace Beef_Net.OpenSSL
 		 *
 		 * Returns a context reference which represents the channel to communicate through.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_open")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_open")
+		]
 		public extern static CTX* open(char8* uri, UI.METHOD* ui_method, void* ui_data, post_process_info_fn post_process, void* post_process_data);
 
 		/*
@@ -102,9 +107,19 @@ namespace Beef_Net.OpenSSL
 		 * |cmd| determines what is to be done, and depends on the underlying loader (use get0_scheme to determine which loader is used), except for common commands (see below).
 		 * Each command takes different arguments.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_ctrl")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_ctrl")
+		]
 		public extern static int ctrl(CTX* ctx, int cmd, ... /* args */);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_vctrl")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_vctrl")
+		]
 		public extern static int vctrl(CTX* ctx, int cmd, void* args);
 
 		/*
@@ -120,28 +135,48 @@ namespace Beef_Net.OpenSSL
 		 * Returns a INFO pointer, from which OpenSSL typed data can be extracted with INFO_get0_PKEY(), INFO_get0_CERT(), ...
 		 * NULL is returned on error, which may include that the data found at the URI can't be figured out for certain or is ambiguous.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_load")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_load")
+		]
 		public extern static INFO* load(CTX* ctx);
 
 		/*
 		 * Check if end of data (end of file) is reached
 		 * Returns 1 on end, 0 otherwise.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_eof")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_eof")
+		]
 		public extern static int eof(CTX* ctx);
 
 		/*
 		 * Check if an error occurred
 		 * Returns 1 if it did, 0 otherwise.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_error")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_error")
+		]
 		public extern static int error(CTX* ctx);
 
 		/*
 		 * Close the channel
 		 * Returns 1 on success, 0 on error.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_close")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_close")
+		]
 		public extern static int close(CTX* ctx);
 
 		/*-
@@ -160,52 +195,157 @@ namespace Beef_Net.OpenSSL
 		 *
 		 * In all cases, ownership of the object is transferred to the INFO and will therefore be freed when the INFO is freed.
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_INFO_new_NAME")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_INFO_new_NAME")
+		]
 		public extern static INFO* INFO_new_NAME(char8* name);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_INFO_set0_NAME_description")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_INFO_set0_NAME_description")
+		]
 		public extern static int INFO_set0_NAME_description(INFO* info, char8* desc);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_INFO_new_PARAMS")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_INFO_new_PARAMS")
+		]
 		public extern static INFO* INFO_new_PARAMS(EVP.PKEY* params_);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_INFO_new_PKEY")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_INFO_new_PKEY")
+		]
 		public extern static INFO* INFO_new_PKEY(EVP.PKEY* pkey);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_INFO_new_CERT")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_INFO_new_CERT")
+		]
 		public extern static INFO* INFO_new_CERT(X509.x509_st* x509);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_INFO_new_CRL")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_INFO_new_CRL")
+		]
 		public extern static INFO* INFO_new_CRL(X509.CRL* crl);
 
 		/* Functions to try to extract data from a INFO. */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_INFO_get_type")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_INFO_get_type")
+		]
 		public extern static int INFO_get_type(INFO* info);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_INFO_get0_NAME")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_INFO_get0_NAME")
+		]
 		public extern static char8* INFO_get0_NAME(INFO* info);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_INFO_get1_NAME")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_INFO_get1_NAME")
+		]
 		public extern static char8* INFO_get1_NAME(INFO* info);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_INFO_get0_NAME_description")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_INFO_get0_NAME_description")
+		]
 		public extern static char8* INFO_get0_NAME_description(INFO* info);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_INFO_get1_NAME_description")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_INFO_get1_NAME_description")
+		]
 		public extern static char8* INFO_get1_NAME_description(INFO* info);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_INFO_get0_PARAMS")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_INFO_get0_PARAMS")
+		]
 		public extern static EVP.PKEY* INFO_get0_PARAMS(INFO* info);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_INFO_get1_PARAMS")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_INFO_get1_PARAMS")
+		]
 		public extern static EVP.PKEY* INFO_get1_PARAMS(INFO* info);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_INFO_get0_PKEY")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_INFO_get0_PKEY")
+		]
 		public extern static EVP.PKEY* INFO_get0_PKEY(INFO* info);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_INFO_get1_PKEY")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_INFO_get1_PKEY")
+		]
 		public extern static EVP.PKEY* INFO_get1_PKEY(INFO* info);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_INFO_get0_CERT")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_INFO_get0_CERT")
+		]
 		public extern static X509.x509_st* INFO_get0_CERT(INFO* info);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_INFO_get1_CERT")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_INFO_get1_CERT")
+		]
 		public extern static X509.x509_st* INFO_get1_CERT(INFO* info);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_INFO_get0_CRL")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_INFO_get0_CRL")
+		]
 		public extern static X509.CRL* INFO_get0_CRL(INFO* info);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_INFO_get1_CRL")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_INFO_get1_CRL")
+		]
 		public extern static X509.CRL* INFO_get1_CRL(INFO* info);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_INFO_type_string")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_INFO_type_string")
+		]
 		public extern static char8* INFO_type_string(int type);
 
 		/* Free the INFO */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_INFO_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_INFO_free")
+		]
 		public extern static void INFO_free(INFO* info);
 
 		/*-
@@ -219,42 +359,112 @@ namespace Beef_Net.OpenSSL
 		public const int SEARCH_BY_ALIAS           = 4;
 
 		/* To check what search types the scheme handler supports */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_supports_search")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_supports_search")
+		]
 		public extern static int supports_search(CTX* ctx, int search_type);
 
 		/* Search term constructors */
 		/* The input is considered to be owned by the caller, and must therefore remain present throughout the lifetime of the returned SEARCH */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_SEARCH_by_name")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_SEARCH_by_name")
+		]
 		public extern static SEARCH* SEARCH_by_name(X509.NAME* name);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_SEARCH_by_issuer_serial")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_SEARCH_by_issuer_serial")
+		]
 		public extern static SEARCH* SEARCH_by_issuer_serial(X509.NAME* name, ASN1.INTEGER* serial);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_SEARCH_by_key_fingerprint")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_SEARCH_by_key_fingerprint")
+		]
 		public extern static SEARCH* SEARCH_by_key_fingerprint(EVP.MD* digest, uint8* bytes, uint len);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_SEARCH_by_alias")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_SEARCH_by_alias")
+		]
 		public extern static SEARCH* SEARCH_by_alias(char8* alias);
 
 		/* Search term destructor */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_SEARCH_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_SEARCH_free")
+		]
 		public extern static void SEARCH_free(SEARCH* search);
 
 		/* Search term accessors */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_SEARCH_get_type")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_SEARCH_get_type")
+		]
 		public extern static int SEARCH_get_type(SEARCH* criterion);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_SEARCH_get0_name")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_SEARCH_get0_name")
+		]
 		public extern static X509.NAME* SEARCH_get0_name(SEARCH* criterion);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_SEARCH_get0_serial")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_SEARCH_get0_serial")
+		]
 		public extern static ASN1.INTEGER* SEARCH_get0_serial(SEARCH* criterion);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_SEARCH_get0_bytes")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_SEARCH_get0_bytes")
+		]
 		public extern static uint8* SEARCH_get0_bytes(SEARCH* criterion, uint* length);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_SEARCH_get0_string")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_SEARCH_get0_string")
+		]
 		public extern static char8* SEARCH_get0_string(SEARCH* criterion);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_SEARCH_get0_digest")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_SEARCH_get0_digest")
+		]
 		public extern static EVP.MD* SEARCH_get0_digest(SEARCH* criterion);
 
 		/* Add search criterion and expected return type (which can be unspecified) to the loading channel.  This MUST happen before the first load(). */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_expect")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_expect")
+		]
 		public extern static int expect(CTX* ctx, int expected_type);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_find")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_find")
+		]
 		public extern static int find(CTX* ctx, SEARCH* search);
 
 		/*-
@@ -278,11 +488,26 @@ namespace Beef_Net.OpenSSL
 		    public close_fn close;
 		}
 		public typealias LOADER = loader_st;
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_LOADER_new")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_LOADER_new")
+		]
 		public extern static LOADER* LOADER_new(Engine.ENGINE* e, char8* scheme);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_LOADER_get0_engine")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_LOADER_get0_engine")
+		]
 		public extern static Engine.ENGINE* LOADER_get0_engine(LOADER* loader);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_LOADER_get0_scheme")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_LOADER_get0_scheme")
+		]
 		public extern static char8* LOADER_get0_scheme(LOADER* loader);
 		
 		/*-
@@ -371,42 +596,102 @@ namespace Beef_Net.OpenSSL
 		}
 		public typealias LOADER_CTX = loader_ctx_st;
 		public function LOADER_CTX* open_fn(LOADER* loader, char8* uri, UI.METHOD* ui_method, void* ui_data);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_LOADER_set_open")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_LOADER_set_open")
+		]
 		public extern static int LOADER_set_open(LOADER* loader, open_fn open_function);
 		public function int ctrl_fn(LOADER_CTX* ctx, int cmd, void* args);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_LOADER_set_ctrl")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_LOADER_set_ctrl")
+		]
 		public extern static int LOADER_set_ctrl(LOADER* loader, ctrl_fn ctrl_function);
 		public function int expect_fn(LOADER_CTX* ctx, int expected);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_LOADER_set_expect")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_LOADER_set_expect")
+		]
 		public extern static int LOADER_set_expect(LOADER* loader, expect_fn expect_function);
 		public function int find_fn(LOADER_CTX* ctx, SEARCH* criteria);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_LOADER_set_find")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_LOADER_set_find")
+		]
 		public extern static int LOADER_set_find(LOADER* loader, find_fn find_function);
 		public function INFO* load_fn(LOADER_CTX* ctx, UI.METHOD* ui_method, void* ui_data);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_LOADER_set_load")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_LOADER_set_load")
+		]
 		public extern static int LOADER_set_load(LOADER* loader, load_fn load_function);
 		public function int eof_fn(LOADER_CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_LOADER_set_eof")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_LOADER_set_eof")
+		]
 		public extern static int LOADER_set_eof(LOADER* loader, eof_fn eof_function);
 		public function int error_fn(LOADER_CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_LOADER_set_error")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_LOADER_set_error")
+		]
 		public extern static int LOADER_set_error(LOADER* loader, error_fn error_function);
 		public function int close_fn(LOADER_CTX* ctx);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_LOADER_set_close")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_LOADER_set_close")
+		]
 		public extern static int LOADER_set_close(LOADER* loader, close_fn close_function);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_LOADER_free")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_LOADER_free")
+		]
 		public extern static void LOADER_free(LOADER* loader);
 
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_register_loader")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_register_loader")
+		]
 		public extern static int register_loader(LOADER* loader);
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_unregister_loader")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_unregister_loader")
+		]
 		public extern static LOADER* unregister_loader(char8* scheme);
 
 		/*-
 		 *  Functions to list STORE loaders
 		 *  -------------------------------
 		 */
-		[Import(OPENSSL_LIB_CRYPTO), LinkName("OSSL_STORE_do_all_loaders")]
+		[
+#if !OPENSSL_LINK_STATIC
+			Import(OPENSSL_LIB_CRYPTO),
+#endif
+			LinkName("OSSL_STORE_do_all_loaders")
+		]
 		public extern static int do_all_loaders(function void(LOADER* loader, void* do_arg) do_function, void* do_arg);
 	}
 }
