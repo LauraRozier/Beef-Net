@@ -1,0 +1,3 @@
+[submodule "Beef-OpenSSL"]
+	path = Beef-OpenSSL
+	url = https://github.com/thibmo/Beef-OpenSSL.git
