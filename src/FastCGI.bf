@@ -1,4 +1,5 @@
 using System;
+using Beef_Net.Connection;
 
 namespace Beef_Net
 {
@@ -187,7 +188,7 @@ namespace Beef_Net
 			case FCGI_STDOUT: DoOutput();
 			case FCGI_STDERR: DoStdErr();
 			case FCGI_END_REQUEST: EndRequest();
-			case FCGI_GET_VALUES_RESULT: _client.HandleGetValuesResult();
+			case FCGI_GET_VALUES_RESULT: _client.[Friend]HandleGetValuesResult();
 			}
 		}
 
@@ -268,7 +269,7 @@ namespace Beef_Net
 			SendParam("FCGI_MAX_REQS", "", FCGI_GET_VALUES);
 
 			// if we're the first connection, ask max. # connections
-			if (_client._pool._clientsAvail == 1)
+			if (_client.[Friend]_pool.[Friend]_clientsAvail == 1)
 				SendParam("FCGI_MAX_CONNS", "", FCGI_GET_VALUES);
 
 			_id = lastRequestID;
@@ -310,18 +311,18 @@ namespace Beef_Net
 
 			if ((_client.Iterator != null) && _client.Iterator.IgnoreRead)
 			{
-				_client.HandleReceive(null);
+				_client.[Friend]HandleReceive(null);
 			}
 			else
 			{
-				_client.ParseBuffer();
+				_client.[Friend]ParseBuffer();
 			}
 		}
 
 		public int SendBuffer()
 		{
 			// already a queue and we are not first in line ? no use in trying to send then
-			if (_client._sendRequest != null && _client._sendRequest != this)
+			if (_client.[Friend]_sendRequest != null && _client.[Friend]_sendRequest != this)
 				return 0;
 
 			// header to be sent?
@@ -335,7 +336,7 @@ namespace Beef_Net
 			if (_inputBuffer == null)
 				return 0;
 
-			int written = _client.Send(*_inputBuffer, _inputSize);
+			int written = _client.Send(_inputBuffer, _inputSize);
 			_inputBuffer += written;
 			_inputSize -= written;
 
@@ -359,9 +360,9 @@ namespace Beef_Net
 			bool result = false;
 
 			// already a queue and we are not first in line ? no use in trying to send then
-			if (_client._sendRequest = null || _client._sendRequest = this)
+			if (_client.[Friend]_sendRequest == null || _client.[Friend]_sendRequest == this)
 			{
-				int written = _client.Send(_buffer.Memory[_bufferSendPos], _buffer.Pos - _buffer.Memory - _bufferSendPos);
+				int written = _client.Send(&_buffer.Memory[_bufferSendPos], _buffer.Pos - _buffer.Memory - _bufferSendPos);
 				_bufferSendPos += written;
 				result = _bufferSendPos == _buffer.Pos - _buffer.Memory;
 
@@ -480,6 +481,13 @@ namespace Beef_Net
 
 	class FastCGIPool
 	{
+		public enum SpawnState
+		{
+			None,
+			Spawning,
+			Spawned
+		}
+
 		protected FastCGIClient* _clients = null;
 		protected int _clientsCount = 0;
 		protected int _clientsAvail = 0;
@@ -493,13 +501,6 @@ namespace Beef_Net
 		protected String _host;
 		protected uint16 _port;
 		protected SpawnState _spawnState;
-
-		public enum SpawnState
-		{
-			None,
-			Spawning,
-			Spawned
-		}
 
 		public String AppEnv
 		{
@@ -550,7 +551,7 @@ namespace Beef_Net
 
 		protected void AddToFreeClients(FastCGIClient aClient)
 		{
-			if (aClient._nextFree != null)
+			if (aClient.[Friend]_nextFree != null)
 				return;
 			
 			if (_freeClient == null)
@@ -559,10 +560,10 @@ namespace Beef_Net
 			}
 			else
 			{
-				aClient._nextFree = _freeClient.FNextFree;
+				aClient.[Friend]_nextFree = _freeClient.[Friend]_nextFree;
 			}
 
-			_freeClient._nextFree = aClient;
+			_freeClient.[Friend]_nextFree = aClient;
 		}
 
 		protected FastCGIClient CreateClient()
@@ -591,7 +592,7 @@ namespace Beef_Net
 			}
 
 			FastCGIClient result = new FastCGIClient();
-			result._pool = this;
+			result.[Friend]_pool = this;
 			result.Eventer = _eventer;
 			_clients[_clientsAvail] = result;
 			_clientsAvail++;
@@ -601,7 +602,7 @@ namespace Beef_Net
 		protected void ConnectClients(Object aSender)
 		{
 			for (int i = 0; i < _clientsAvail; i++)
-				if (_clients[i]._state == .StartingServer)
+				if (_clients[i].[Friend]_state == .StartingServer)
 					_clients[i].Connect();
 		}
 
@@ -615,11 +616,11 @@ namespace Beef_Net
 				if (_timer == null)
 					_timer = new Timer();
 	
-				_timer.OneShot = true;
-				_timer.OnTimer = => ConnectClients;
+				/*_timer.OneShot = true;
+				_timer.OnTimer = => ConnectClients;*/
 			}
 
-			_timer.Interval = 2000;
+			//_timer.Interval = 2000;
 		}
 		
 		public this()
@@ -648,7 +649,7 @@ namespace Beef_Net
 
 			while (_freeClient != null)
 			{
-				FastCGIClient tempClient = _freeClient._nextFree;
+				FastCGIClient tempClient = _freeClient.[Friend]_nextFree;
 				result = tempClient.BeginRequest(aType);
 
 				if (result != null)
@@ -661,10 +662,10 @@ namespace Beef_Net
 				}
 				else
 				{
-					_freeClient._nextFree = tempClient._nextFree;
+					_freeClient.[Friend]_nextFree = tempClient.[Friend]_nextFree;
 				}
 
-				tempClient._nextFree = null;
+				tempClient.[Friend]_nextFree = null;
 			}
 			
 			// all clients busy
@@ -690,7 +691,163 @@ namespace Beef_Net
 		}
 	}
 
-	class FastCGIClient
+	class FastCGIClient : TcpConnection
 	{
+		public enum FastCGIClientState
+		{
+			Idle,
+			Connecting,
+			ConnectingAgain,
+			StartingServer,
+			Header,
+			Data,
+			Flush
+		}
+
+		protected FastCGIRequest* _requests;
+		protected int _requestsCount;
+		protected int _nextRequestID;
+		protected int _requestsSent;
+		protected FastCGIRequest _freeRequest;
+		protected FastCGIRequest _sendRequest;
+		protected FastCGIRequest _request;
+		protected FastCGIClientState _state;
+		protected FastCGIClient _nextFree;
+		protected FastCGIPool _pool;
+		protected char8* _buffer;
+		protected char8* _bufferEnd;
+		protected char8* _bufferPos;
+		protected uint32 _bufferSize;
+		protected uint8 _reqType;
+		protected int _contentLength;
+		protected int _paddingLength;
+		
+		public uint8 ReqType
+		{
+			get { return _reqType; }
+		}
+
+		public int RequestsSent
+		{
+			get { return _requestsSent; }
+		}
+
+		protected override void ConnectEvent(Handle aSocket)
+		{
+			if (_state == .StartingServer)
+			  _pool.[Friend]_spawnState = .Spawned;
+
+			_state = .Header;
+
+			if (_pool != null)
+			  _pool.[Friend]AddToFreeClients(this);
+
+			
+			base.ConnectEvent(aSocket);
+		}
+
+		protected override void DisconnectEvent(Handle aSocket)
+		{
+			base.DisconnectEvent(aSocket);
+
+			_requestsSent = 0;
+			bool needReconnect = false;
+
+			for (int i = 0; i < _nextRequestID; i++)
+			{
+				if (_requests[i].[Friend]_nextFree == null)
+				{	
+					// see if buffer contains request, then assume we can resend that
+					if (_requests[i].[Friend]_bufferSendPos > 0)
+					{
+						needReconnect = true;
+						_requests[i].[Friend]_bufferSendPos = 0;
+						_requests[i].SendPrivateBuffer();
+					}
+					else
+					{
+						if (_requests[i].[Friend]_buffer.Memory == _requests[i].[Friend]_buffer.Pos)
+						{
+							needReconnect = true;
+						}
+						else
+						{
+							_requests[i].[Friend]EndRequest();
+						}
+					}
+				}
+			}
+
+			if (needReconnect)
+				Connect();
+		}
+
+		protected override void ErrorEvent(Handle aSocket, StringView aMsg)
+		{
+
+		}
+
+		protected FastCGIRequest CreateRequester()
+		{
+			return null;
+		}
+
+		protected void HandleGetValuesResult()
+		{
+
+		}
+
+		protected void HandleReceive(Socket aSocket)
+		{
+
+		}
+
+		protected void HandleSend(Socket aSocket)
+		{
+
+		}
+
+		protected void ParseBuffer()
+		{
+
+		}
+		
+		public this(): base()
+		{
+		}
+		
+		public ~this()
+		{
+		}
+
+		public void AddToSendQueue(FastCGIRequest aRequest)
+		{
+
+		}
+
+		public FastCGIRequest BeginRequest(uint8 aType)
+		{
+			return null;
+		}
+
+		public void EndRequest(FastCGIRequest aRequest)
+		{
+
+		}
+
+		public void Flush()
+		{
+
+		}
+
+		public int GetBuffer(char8* aBuffer, int aSize)
+		{
+			return 0;
+		}
+
+		public override bool Connect()
+		{
+			return false;
+		}
 	}
 }
