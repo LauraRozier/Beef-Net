@@ -23,11 +23,11 @@ namespace Beef_Net.Connection
 		protected int _id; // internal number for server
 		protected Eventer _eventer;
 		protected Type _eventerClass;
-		protected int _timeout;
-		protected int _listenBacklog;
+		protected int64 _timeout;
+		protected int32 _listenBacklog;
 		protected bool _reuseAddress;
 		protected Session _session;
-		protected int _socketNet;
+		protected int32 _socketNet;
 		protected Eventer.EventerErrorEvent _onEventerErrorDlg = new => EventerError ~ delete _;
 		protected Socket.HandleEvent _onReadDlg = new => ReceiveAction ~ delete _;
 		protected Socket.HandleEvent _onWriteDlg = new => SendAction ~ delete _;
@@ -67,7 +67,7 @@ namespace Beef_Net.Connection
 			get { return GetConnected(); }
 		}
 
-		public int ListenBacklog
+		public int32 ListenBacklog
 		{
 			get { return _listenBacklog; }
 			set { _listenBacklog = value; }
@@ -78,7 +78,7 @@ namespace Beef_Net.Connection
 			get { return _iterator; }
 		}
 
-		public int Timeout
+		public int64 Timeout
 		{
 			get { return GetTimeout(); }
 			set { SetTimeout(value); }
@@ -108,7 +108,7 @@ namespace Beef_Net.Connection
 			set { SetReuseAddress(value); }
 		}
 
-		public int SocketNet
+		public int32 SocketNet
 		{
 			get { return _socketNet; }
 			set { SetSocketNet(value); }
@@ -138,10 +138,10 @@ namespace Beef_Net.Connection
 			return 1;
 		}
 		
-		protected int GetTimeout() =>
+		protected int64 GetTimeout() =>
 			_eventer != null ? _eventer.Timeout : _timeout;
 
-		protected void SetTimeout(int aValue)
+		protected void SetTimeout(int64 aValue)
 		{
 			if (_eventer != null)
 				_eventer.Timeout = aValue;
@@ -179,7 +179,7 @@ namespace Beef_Net.Connection
 			}
 		}
 
-		protected void SetSocketNet(int aValue)
+		protected void SetSocketNet(int32 aValue)
 		{
 			Runtime.Assert(!GetConnected(), "Cannot set socket network on a connected system");
 			_socketNet = aValue;
@@ -202,9 +202,9 @@ namespace Beef_Net.Connection
 			((Socket)aSocket).SetState(.CanSend);
 			aSocket.IgnoreWrite = true;
 
-			if (aSocket.[Friend]_session != null)
+			if (((Socket)aSocket).[Friend]_session != null)
 			{
-				aSocket.[Friend]_session.SendEvent(aSocket);
+				((Socket)aSocket).[Friend]_session.SendEvent(aSocket);
 			}
 			else
 			{
@@ -302,7 +302,7 @@ namespace Beef_Net.Connection
 		{
 			_host = "";
 			_port = 0;
-			_listenBacklog = Common.DEFAULT_BACKLOG;
+			_listenBacklog = DEFAULT_BACKLOG;
 			_timeout = 0;
 			SocketClass = typeof(Socket);
 			_onReceive = null;
@@ -357,7 +357,7 @@ namespace Beef_Net.Connection
 		public virtual bool Listen() =>
 			Listen(_port, _host);
 		
-		public abstract bool Listen(uint16 aPort, StringView aIntf = Common.ADDR_ANY);
+		public abstract bool Listen(uint16 aPort, StringView aIntf = ADDR_ANY);
 		
 		public abstract int Get(char8* aData, int aSize, Socket aSocket = null);
 		

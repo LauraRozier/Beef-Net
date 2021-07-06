@@ -79,7 +79,7 @@ namespace Beef_Net.Connection
 		{
 		}
 
-		public override bool Listen(uint16 aPort, StringView aIntf = Common.ADDR_ANY)
+		public override bool Listen(uint16 aPort, StringView aIntf = ADDR_ANY)
 		{
 		}
 

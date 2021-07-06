@@ -48,15 +48,15 @@ namespace Beef_Net
 		protected SocketState _socketState;
 		protected SocketEvent _onFree;
 		protected bool _blocking;
-		protected int _listenBacklog;
-		protected int _protocol;
-		protected int _socketType;
-		protected int _socketNet;
+		protected int32 _listenBacklog;
+		protected int32 _protocol;
+		protected int32 _socketType;
+		protected int32 _socketNet;
 		protected Component _creator;
 		protected Session _session;
 		protected BaseConnection _connection;
     
-    	protected int SocketType // inherit and publicize if you need to set this outside
+    	protected int32 SocketType // inherit and publicize if you need to set this outside
 		{
 			get { return _socketType; }
 			set { _socketType = value; }
@@ -77,19 +77,19 @@ namespace Beef_Net
 			get { return _connectionStatus; }
 		}
 
-		public int ListenBacklog
+		public int32 ListenBacklog
 		{
 			get { return _listenBacklog; }
 			set { _listenBacklog = value; }
 		}
 
-		public int Protocol
+		public int32 Protocol
 		{
 			get { return _protocol; }
 			set { _protocol = value; }
 		}
 
-		public int SocketNet
+		public int32 SocketNet
 		{
 			get { return _socketNet; }
 			set { _socketNet = value; }
@@ -98,7 +98,7 @@ namespace Beef_Net
 		public uint16 PeerPort
 		{
 			get {
-				return _socketType == Common.SOCK_STREAM
+				return _socketType == SOCK_STREAM
 					? Common.ntohs(_address.u.IPv4.sin_port)
 					: Common.ntohs(_peerAddress.u.IPv4.sin_port);
 			}
@@ -140,8 +140,8 @@ namespace Beef_Net
 		{
 			switch (_socketNet)
 			{
-			case Common.AF_INET: return (SockAddr*)&_address.u.IPv4;
-			case Common.AF_INET6: return (SockAddr*)&_address.u.IPv6;
+			case AF_INET: return (SockAddr*)&_address.u.IPv4;
+			case AF_INET6: return (SockAddr*)&_address.u.IPv6;
 			default: Runtime.FatalError("Unknown socket network type (not IPv4 or IPv6)");
 			}
 		}
@@ -150,8 +150,8 @@ namespace Beef_Net
 		{
 			switch (_socketNet)
 			{
-			case Common.AF_INET: return sizeof(sockaddr_in);
-			case Common.AF_INET6: return sizeof(sockaddr_in6);
+			case AF_INET: return sizeof(sockaddr_in);
+			case AF_INET6: return sizeof(sockaddr_in6);
 			default: Runtime.FatalError("Unknown socket network type (not IPv4 or IPv6)");
 			}
 		}
@@ -291,7 +291,7 @@ begin
 		{
 			aOutStr.Clear();
 			Common.NetAddrToStr(
-				_socketType == Common.SOCK_STREAM
+				_socketType == SOCK_STREAM
 					? _address.u.IPv4.sin_addr
 					: _peerAddress.u.IPv4.sin_addr,
 				aOutStr
@@ -304,28 +304,28 @@ begin
 			sockaddr_in a = .();
 			int32 l = sizeof(sockaddr_in);
 
-			if (Common.GetSockName(_handle, &a, &l) > 0)
+			if (Common.GetSockName(_handle, (SockAddr*)&a, &l) > 0)
 				Common.NetAddrToStr(a.sin_addr, aOutStr);
 		}
 
 		[Inline]
 		protected bool SendPossible()
 		{
-			/*
-  Result := True;
-  if FConnectionStatus <> scConnected then
-    Exit(LogError('Can''t send when not connected', -1));
+			if (_connectionStatus != .Connected)
+				return LogError("Unable to send when not connected", -1);
 
-  if not (ssCanSend in FSocketState) then begin
-    if not Assigned(FConnection)
-    or not Assigned(FConnection.FOnCanSend) then
-      LogError('Send buffer full, try again later', -1);
-    Exit(False);
-  end;
+			if (!_socketState.HasFlag(.CanSend))
+			{
+				if (_connection == null || _connection.[Friend]_onCanSend == null)
+					return LogError("Send buffer full, try again later", -1);
 
-  if ssServerSocket in FSocketState then
-    Exit(LogError('Can''t send on server socket', -1));
-			*/
+				return false;
+			}
+
+			if (_socketState.HasFlag(.ServerSocket))
+				return LogError("Unable to send on server a socket", -1);
+
+			return true;
 		}
 
 		[Inline]
@@ -340,92 +340,112 @@ begin
 
 		protected void SetBlocking(bool aValue)
 		{
-			/*
-  if FHandle >= 0 then // we already set our socket
-    if not lCommon.SetBlocking(FHandle, aValue) then
-      Bail('Error on SetBlocking', LSocketError)
-    else begin
-      FBlocking := aValue;
-      if aValue then
-        FSocketState := FSocketState + [ssBlocking]
-      else
-        FSocketState := FSocketState - [ssBlocking];
-    end;
-			*/
+			if (_handle != INVALID_SOCKET) // we already have a socket
+			{
+				if (!Common.SetBlocking(_handle, aValue))
+				{
+					Bail("Error on SetNoDelay", Common.SocketError());
+				}
+				else
+				{
+					_blocking = true;
+
+					if (aValue)
+					{
+						_socketState |= .Blocking;
+					}
+					else
+					{
+						_socketState &= ~.Blocking;
+					}
+				}
+			}
 		}
 
 		protected void SetReuseAddress(bool aValue)
 		{
-			/*
-  if FConnectionStatus = scNone then begin
-    FReuseAddress := aValue;
-    if aValue then
-      FSocketState := FSocketState + [ssReuseAddress]
-    else
-      FSocketState := FSocketState - [ssReuseAddress];
-  end;
-			*/
+			if (_connectionStatus == .None)
+			{
+				_reuseAddress = true;
+
+				if (aValue)
+				{
+					_socketState |= .ReuseAddress;
+				}
+				else
+				{
+					_socketState &= ~.ReuseAddress;
+				}
+			}
 		}
 
 		protected void SetNoDelay(bool aValue)
 		{
-			/*
-  if FHandle >= 0 then begin // we already set our socket
-    if not lCommon.SetNoDelay(FHandle, aValue) then
-      Bail('Error on SetNoDelay', LSocketError)
-    else begin
-      if aValue then
-        FSocketState := FSocketState + [ssNoDelay]
-      else
-        FSocketState := FSocketState - [ssNoDelay];
-    end;
-  end;
-			*/
+			if (_handle != INVALID_SOCKET) // we already have a socket
+			{
+				if (!Common.SetNoDelay(_handle, aValue))
+				{
+					Bail("Error on SetNoDelay", Common.SocketError());
+				}
+				else
+				{
+					if (aValue)
+					{
+						_socketState |= .NoDelay;
+					}
+					else
+					{
+						_socketState &= ~.NoDelay;
+					}
+				}
+			}
 		}
 
 		protected void HardDisconnect(bool aIndNoShutdown = false)
 		{
-			/*
-var
-  NeedsShutdown: Boolean;
-begin
-  NeedsShutdown := (FConnectionStatus = scConnected) and (FSocketType = SOCK_STREAM)
-               and (not (ssServerSocket in FSocketState));
-  if NoShutdown then
-    NeedsShutdown := False;
+			bool needShut = _connectionStatus == .Connected && _socketType == SOCK_STREAM && !_socketState.HasFlag(.ServerSocket);
 
-  FDispose := True;
-  FSocketState := FSocketState + [ssCanSend, ssCanReceive];
-  FIgnoreWrite := True;
-  if FConnectionStatus in [scConnected, scConnecting, scDisconnecting] then begin
-    FConnectionStatus := scNone;
-    if NeedsShutdown then
-      if fpShutDown(FHandle, SHUT_RDWR) <> 0 then
-        LogError('Shutdown error', LSocketError);
+			if (aIndNoShutdown)
+				needShut = false;
 
-    if Assigned(FEventer) then
-      FEventer.UnregisterHandle(Self);
+			_dispose = true;
+			_socketState |= .CanSend;
+			_socketState |= .CanReceive;
+			_ignoreWrite = true;
 
-    if CloseSocket(FHandle) <> 0 then
-      LogError('Closesocket error', LSocketError);
-    FHandle := INVALID_SOCKET;
-  end;
-			*/
+			if ((SocketConnectionStatus.Connected | SocketConnectionStatus.Connecting | SocketConnectionStatus.Disconnecting).HasFlag(_connectionStatus))
+			{
+				_connectionStatus = .None;
+
+				if (needShut && Common.Shutdown(_handle, SHUT_RDWR) != 0)
+					LogError("Shutdown error", Common.SocketError());
+
+				if (_eventer != null)
+					_eventer.UnregisterHandle(this);
+
+				if (Common.CloseSocket(_handle) != 0)
+					LogError("Closesocket error", Common.SocketError());
+
+				_handle = INVALID_SOCKET;
+			}
 		}
 
 		protected void SoftDisconnect()
 		{
-			/*
-  if FConnectionStatus in [scConnected, scConnecting] then begin
-    if  (FConnectionStatus = scConnected) and (not (ssServerSocket in FSocketState))
-    and (FSocketType = SOCK_STREAM) then begin
-      FConnectionStatus := scDisconnecting;
-      if fpShutDown(FHandle, SHUT_WR) <> 0 then
-        LogError('Shutdown error', LSocketError);
-    end else
-      HardDisconnect; // UDP or ServerSocket
-  end;
-			*/
+			if ((SocketConnectionStatus.Connected | SocketConnectionStatus.Connecting).HasFlag(_connectionStatus))
+			{
+				if (_connectionStatus == .Connected && _socketType == SOCK_STREAM && !_socketState.HasFlag(.ServerSocket))
+				{
+					_connectionStatus = .Disconnecting;
+
+					if (Common.Shutdown(_handle, SHUT_WR) != 0)
+						LogError("Shutdown error", Common.SocketError());
+				}
+				else
+				{
+					HardDisconnect(); // UDP or ServerSocket
+				}
+			}
 		}
 
 		protected bool Bail(StringView aMsg, int32 aErrNum)
@@ -458,15 +478,15 @@ begin
 
 		public this() : base()
 		{
-			_handle = Common.INVALID_SOCKET;
-			_listenBacklog = Common.DEFAULT_BACKLOG;
+			_handle = INVALID_SOCKET;
+			_listenBacklog = DEFAULT_BACKLOG;
 			_prevSock = null;
 			_nextSock = null;
 			_socketState = .CanSend;
 			_connectionStatus = .None;
-			_socketType = Common.SOCK_STREAM;
-			_socketNet = Common.AF_INET;
-			_protocol = Common.PROTO_TCP;
+			_socketType = SOCK_STREAM;
+			_socketNet = AF_INET;
+			_protocol = PROTO_TCP;
 		}
 
 		public ~this()
@@ -482,108 +502,135 @@ begin
 
 		public virtual bool SetState(SocketState aState, bool aIndTurnOn = true)
 		{
-			/*
-  Result := False;
+			switch (aState)
+			{
+			case .ServerSocket:
+				{
+					if (aIndTurnOn)
+					{
+						_socketState |= aState;
+					}
+					else
+					{
+						Runtime.FatalError("Can not turn off server socket feature");
+					}
+				}
+			case .Blocking:
+				{
+					SetBlocking(aIndTurnOn);
+					break;
+				}
+			case .ReuseAddress: 
+				{
+					SetReuseAddress(aIndTurnOn);
+					break;
+				}
+			case .CanSend:
+			case .CanReceive: 
+				{
+					if (aIndTurnOn)
+					{
+						_socketState |= aState;
+					}
+					else
+					{
+						_socketState &= ~aState;
+					}
+				}
+			case .SSLActive: 
+				{
+					Runtime.FatalError("Can not turn SSL/TLS on in TLSocket instance");
+				}
+			case .NoDelay: 
+				{
+					SetNoDelay(aIndTurnOn);
+					break;
+				}
+			}
 
-  case aState of
-    ssServerSocket      : if TurnOn then
-                            FSocketState := FSocketState + [aState]
-                          else
-                            raise Exception.Create('Can not turn off server socket feature');
-
-    ssBlocking          : SetBlocking(TurnOn);
-    ssReuseAddress      : SetReuseAddress(TurnOn);
-
-    ssCanSend,
-    ssCanReceive        : if TurnOn then
-                            FSocketState := FSocketState + [aState]
-                          else
-                            FSocketState := FSocketState - [aState];
-
-    ssSSLActive         : raise Exception.Create('Can not turn SSL/TLS on in TLSocket instance');
-    ssNoDelay           : SetNoDelay(TurnOn);
-  end;
-
-  Result := True;
-			*/
+			return true;
 		}
 
-		public bool Listen(uint16 aPort, StringView aIntf = Common.ADDR_ANY)
+		public bool Listen(uint16 aPort, StringView aIntf = ADDR_ANY)
 		{
-			/*
-  Result := False;
+			bool result = false;
 
-  if FConnectionStatus <> scNone then
-    Disconnect(True);
+			if (_connectionStatus != .None)
+				Disconnect(true);
 
-  SetupSocket(APort, AIntf);
-  if fpBind(FHandle, GetIPAddressPointer, GetIPAddressLength) = SOCKET_ERROR then
-    Bail('Error on bind', LSocketError)
-  else
-    Result := true;
-  if (FSocketType = SOCK_STREAM) and Result then
-    if fpListen(FHandle, FListenBacklog) = SOCKET_ERROR then
-      Result := Bail('Error on Listen', LSocketError)
-    else
-      Result := true;
-			*/
+			SetupSocket(aPort, aIntf);
+
+			if (Common.Bind(_handle, GetIPAddressPointer(), GetIPAddressLength()) == SOCKET_ERROR)
+			{
+				Bail("Error on bind", Common.SocketError());
+			}
+			else
+			{
+				result = true;
+			}
+
+			if (_socketType == SOCK_STREAM && result)
+				if (Common.Listen(_handle, _listenBacklog) == SOCKET_ERROR)
+					result = Bail("Error on Listen", Common.SocketError());
+
+			return result;
 		}
 
 		public bool Accept(fd_handle aSerSock)
 		{
-			/*
-var
-  AddressLength: tsocklen;
-begin
-  Result := false;
-  AddressLength := GetIPAddressLength;
+			int32 addrLen = GetIPAddressLength();
 
-  if FConnectionStatus <> scNone then
-    Disconnect(True);
+			if (_connectionStatus != .None)
+				Disconnect(true);
 
-  FHandle := fpAccept(sersock, GetIPAddressPointer, @AddressLength);
-  if FHandle <> INVALID_SOCKET then begin
-    SetOptions;
-    FIsAcceptor := True;
-    Result := true;
-  end else
-    Bail('Error on accept', LSocketError);
-			*/
+			_handle = Common.Accept(aSerSock, GetIPAddressPointer(), &addrLen);
+
+			if (_handle != INVALID_SOCKET)
+			{
+				SetOptions();
+				_isAcceptor = true;
+				return true;
+			}
+			else
+			{
+				Bail("Error on accept", Common.SocketError());
+			}
+
+			return false;
 		}
 
 		public bool Connect(StringView aAddress, uint16 aPort)
 		{
-			/*
-  Result := False;
+			if (_connectionStatus != .None)
+				Disconnect(true);
 
-  if FConnectionStatus <> scNone then
-    Disconnect(True);
+			if (SetupSocket(aPort, aAddress))
+			{
+				Common.Connect(_handle, GetIPAddressPointer(), GetIPAddressLength());
+				_connectionStatus = .Connecting;
+				return true;
+			}
 
-  if SetupSocket(APort, Address) then begin
-    fpConnect(FHandle, GetIPAddressPointer, GetIPAddressLength);
-    FConnectionStatus := scConnecting;
-    Result := True;
-  end;
-			*/
+			return false;
 		}
 
 		public virtual int Send(char8* aData, int aSize)
 		{
-			/*
-  Result := 0;
+			int result = 0;
+			Runtime.Assert(aSize != 0);
 
-  if aSize = 0 then
-    raise Exception.Create('Invalid buffersize 0 in Send');
+			if (SendPossible())
+			{
+				if (aSize <= 0)
+				{
+					LogError("Send error: Size <= 0", -1);
+					return 0;
+				}
 
-  if SendPossible then begin
-    if aSize <= 0 then begin
-      LogError('Send error: Size <= 0', -1);
-      Exit(0);
-    end;
+				return HandleResult(DoSend(aData, aSize), .Send);
+			}
 
-    Result := HandleResult(DoSend(aData, aSize), soSend);
-  end;
-			*/
+			return result;
 		}
 
 		public int SendMessage(StringView aMsg) =>
@@ -591,50 +638,55 @@ begin
 
 		public virtual int Get(char8* aData, int aSize)
 		{
-			/*
-  Result := 0;
+			int result = 0;
+			Runtime.Assert(aSize > 0);
 
-  if aSize = 0 then
-    raise Exception.Create('Invalid buffer size 0 in Get');
+			if (ReceivePossible())
+			{
+				result = DoGet(aData, aSize);
 
-  if ReceivePossible then begin
-    Result := DoGet(aData, aSize);
+				if (result == 0)
+				{
+					if (_socketType == SOCK_STREAM)
+					{
+						Disconnect();
+					}
+					else
+					{
+						Bail("Receive Error [0 on recvfrom with UDP]", 0);
+						return 0;
+					}
+				}
 
-    if Result = 0 then
-      if FSocketType = SOCK_STREAM then
-        Disconnect(True)
-      else begin
-        Bail('Receive Error [0 on recvfrom with UDP]', 0);
-        Exit(0);
-      end;
+				return HandleResult(result, .Receive);
+			}
 
-    Result := HandleResult(Result, soReceive);
-  end;
-			*/
+			return result;
 		}
 
 		public int GetMessage(String aOutStr)
 		{
 			aOutStr.Clear();
-			char8* tmpPtr = scope char8[Common.BUFFER_SIZE]*;
-			int len = Get(tmpPtr, Common.BUFFER_SIZE);
+			char8* tmpPtr = scope char8[BUFFER_SIZE]*;
+			int len = Get(tmpPtr, BUFFER_SIZE);
 			aOutStr.Append(tmpPtr, len);
 			return aOutStr.Length;
 		}
 
 		public virtual void Disconnect(bool aIndForced = false)
 		{
-			/*
-  if FDispose // don't do anything when already invalid
-  and (FHandle = INVALID_SOCKET)
-  and (FConnectionStatus = scNone) then
-    Exit;
+			// don't do anything when already invalid
+			if (_dispose && _handle == INVALID_SOCKET && _connectionStatus == .None)
+				return;
 
-  if Forced then
-    HardDisconnect
-  else
-    SoftDisconnect;
-			*/
+			if (aIndForced)
+			{
+				HardDisconnect();
+			}
+			else
+			{
+				SoftDisconnect();
+			}
 		}
 	}
 }

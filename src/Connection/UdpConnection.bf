@@ -10,8 +10,8 @@ namespace Beef_Net.Connection
 
 			if (_rootSock == null)
 			{
-				aSocket.[Friend]SocketType = Common.SOCK_DGRAM;
-				aSocket.Protocol   = Common.PROTO_UDP;
+				aSocket.[Friend]SocketType = SOCK_DGRAM;
+				aSocket.Protocol   = PROTO_UDP;
 				result = base.InitSocket(aSocket); // call last, to make sure sessions get their turn in overriding
 			}
 
@@ -76,7 +76,7 @@ namespace Beef_Net.Connection
 
 		protected void SetAddress(StringView aAddress)
 		{
-			int n = (_socketNet != Common.AF_INET6)
+			int n = (_socketNet != AF_INET6)
 				? aAddress.IndexOf(':')       // IPv4
 				: aAddress.IndexOf("]:") + 1; // IPv6
 			
@@ -99,7 +99,7 @@ namespace Beef_Net.Connection
 		{
 		}
 
-		public override bool Listen(uint16 aPort, StringView aIntf = Common.ADDR_ANY)
+		public override bool Listen(uint16 aPort, StringView aIntf = ADDR_ANY)
 		{
 		}
 

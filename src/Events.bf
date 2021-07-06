@@ -18,7 +18,7 @@ namespace Beef_Net
 		public delegate void HandleEvent(Handle aHandle);
 		public delegate void HandleErrorEvent(Handle aHandle, StringView aMsg);
 
-		protected fd_handle _handle;
+		protected fd_handle _handle = INVALID_SOCKET;
 		protected Eventer _eventer;           // "queue holder"
 		protected HandleEvent _onRead;
 		protected HandleEvent _onWrite;
@@ -179,7 +179,7 @@ namespace Beef_Net
 	    protected Handle _freeIter; // the last of "free" list if any
 	    protected bool _inLoop;
 
-	    public int Timeout
+	    public int64 Timeout
 		{
 			get { return GetTimeout(); }
 			set { SetTimeout(value); }
@@ -199,10 +199,10 @@ namespace Beef_Net
 		protected virtual int GetCount() =>
 			_count;
 
-		protected virtual int GetTimeout() =>
+		protected virtual int64 GetTimeout() =>
 			0;
 
-		protected virtual void SetTimeout(int aValue)
+		protected virtual void SetTimeout(int64 aValue)
 		{
 		}
 
@@ -417,10 +417,10 @@ namespace Beef_Net
 		protected fd_set _writeFDSet;
 		protected fd_set _errorFDSet;
 		
-		protected override int GetTimeout() =>
+		protected override int64 GetTimeout() =>
 			_timeout.tv_sec < 0 ? -1 : (_timeout.tv_sec * 1000) + (_timeout.tv_usec / 1000);
 
-		protected override void SetTimeout(int aValue)
+		protected override void SetTimeout(int64 aValue)
 		{
 			if (aValue >= 0)
 			{
@@ -436,9 +436,9 @@ namespace Beef_Net
 
 		protected void ClearSets()
 		{
-			Common.FD_ZERO(ref _readFDSet);
-			Common.FD_ZERO(ref _writeFDSet);
-			Common.FD_ZERO(ref _errorFDSet);
+			FD_ZERO(ref _readFDSet);
+			FD_ZERO(ref _writeFDSet);
+			FD_ZERO(ref _errorFDSet);
 		}
 
 	    public this() : base()
@@ -493,8 +493,8 @@ namespace Beef_Net
 			TimeVal tempTime = _timeout;
 
 			int n = _timeout.tv_sec >= 0
-				? Common.fpSelect((int)(maxHandle + 1), &_readFDSet, &_writeFDSet, &_errorFDSet, &tempTime)
-				: Common.fpSelect((int)(maxHandle + 1), &_readFDSet, &_writeFDSet, &_errorFDSet, null);
+				? Common.Select((int)(maxHandle + 1), &_readFDSet, &_writeFDSet, &_errorFDSet, &tempTime)
+				: Common.Select((int)(maxHandle + 1), &_readFDSet, &_writeFDSet, &_errorFDSet, null);
 			
 			if (n < 0)
 				Bail("Error on select", Common.SocketError());
@@ -507,15 +507,15 @@ namespace Beef_Net
 
 				while (temp != null)
 				{
-					if ((!temp.[Friend]_dispose) && Common.FD_ISSET(temp.[Friend]_handle, ref _writeFDSet))
+					if ((!temp.[Friend]_dispose) && FD_ISSET(temp.[Friend]_handle, ref _writeFDSet))
 						if (temp.[Friend]_onWrite != null && !temp.IgnoreWrite)
 							temp.[Friend]_onWrite(temp);
 
-					if ((!temp.[Friend]_dispose) && Common.FD_ISSET(temp.[Friend]_handle, ref _readFDSet))
+					if ((!temp.[Friend]_dispose) && FD_ISSET(temp.[Friend]_handle, ref _readFDSet))
 						if (temp.[Friend]_onRead != null && !temp.IgnoreRead)
 							temp.[Friend]_onRead(temp);
 
-					if ((!temp.[Friend]_dispose) && Common.FD_ISSET(temp.[Friend]_handle, ref _errorFDSet))
+					if ((!temp.[Friend]_dispose) && FD_ISSET(temp.[Friend]_handle, ref _errorFDSet))
 						if (temp.[Friend]_onError != null && !temp.IgnoreError)
 						{
 							String errStr = scope .("Handle error");
