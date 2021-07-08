@@ -117,12 +117,12 @@ namespace Beef_Net
 		protected int _id;
 		protected FastCGIClient _client = null;
 		protected StringBuffer _buffer;
-		protected int _bufferSendPos;
+		protected int32 _bufferSendPos;
 		protected FCGI_Header _header;
-		protected int _headerPos;
-		protected int _contentLength;
+		protected int32 _headerPos;
+		protected int32 _contentLength;
 		protected char8* _inputBuffer = null;
-		protected int _inputSize;
+		protected int32 _inputSize;
 		protected bool _outputPending;
 		protected bool _outputDone;
 		protected bool _stdErrDone;
@@ -245,7 +245,7 @@ namespace Beef_Net
 			_buffer.Pos = _buffer.Memory;
 		}
 
-		protected void SetContentLength(int aLength)
+		protected void SetContentLength(int32 aLength)
 		{
 			_contentLength = aLength;
 			_header.ContentLengthB0 = (uint8)(aLength & 0xFF);
@@ -302,7 +302,7 @@ namespace Beef_Net
 			SendPrivateBuffer();
 		}
 
-		public int Get(char8* aBuffer, int aSize) =>
+		public int32 Get(char8* aBuffer, int32 aSize) =>
 			_client.GetBuffer(aBuffer, aSize);
 
 		public void ParseClientBuffer()
@@ -319,7 +319,7 @@ namespace Beef_Net
 			}
 		}
 
-		public int SendBuffer()
+		public int32 SendBuffer()
 		{
 			// already a queue and we are not first in line ? no use in trying to send then
 			if (_client.[Friend]_sendRequest != null && _client.[Friend]_sendRequest != this)
@@ -336,7 +336,7 @@ namespace Beef_Net
 			if (_inputBuffer == null)
 				return 0;
 
-			int written = _client.Send(_inputBuffer, _inputSize);
+			int32 written = _client.Send(_inputBuffer, _inputSize);
 			_inputBuffer += written;
 			_inputSize -= written;
 
@@ -362,7 +362,7 @@ namespace Beef_Net
 			// already a queue and we are not first in line ? no use in trying to send then
 			if (_client.[Friend]_sendRequest == null || _client.[Friend]_sendRequest == this)
 			{
-				int written = _client.Send(&_buffer.Memory[_bufferSendPos], _buffer.Pos - _buffer.Memory - _bufferSendPos);
+				int32 written = _client.Send(&_buffer.Memory[_bufferSendPos], (int32)(_buffer.Pos - _buffer.Memory - _bufferSendPos));
 				_bufferSendPos += written;
 				result = _bufferSendPos == _buffer.Pos - _buffer.Memory;
 
@@ -415,7 +415,7 @@ namespace Beef_Net
 
 			FillFastCGIStringSize(aName, ref nameLen);
 			FillFastCGIStringSize(aValue, ref valueLen);
-			int totalLen = nameLen.Size + valueLen.Size + aName.Length + aValue.Length;
+			int32 totalLen = (int32)(nameLen.Size + valueLen.Size + aName.Length + aValue.Length);
 
 			if (_header.ReqType == aReqType && _bufferSendPos == 0 && 0 <= _headerPos && _headerPos < _buffer.Pos - _buffer.Memory)
 			{
@@ -428,7 +428,7 @@ namespace Beef_Net
 			{
 				_header.ReqType = aReqType;
 				SetContentLength(totalLen);
-				_headerPos = _buffer.Pos - _buffer.Memory;
+				_headerPos = (int32)(_buffer.Pos - _buffer.Memory);
 				StringBuffer.AppendString(ref _buffer, &_header, sizeof(FCGI_Header));
 			}
 
@@ -439,9 +439,9 @@ namespace Beef_Net
 			StringBuffer.AppendString(ref _buffer, &PaddingBuffer[0], _header.PaddingLength);
 		}
 
-		public int SendInput(char8* aBuffer, int aSize)
+		public int32 SendInput(char8* aBuffer, int32 aSize)
 		{
-			int result;
+			int32 result;
 
 			// first send current buffer if any
 			if (_inputBuffer != null)
@@ -840,7 +840,7 @@ namespace Beef_Net
 
 		}
 
-		public int GetBuffer(char8* aBuffer, int aSize)
+		public int32 GetBuffer(char8* aBuffer, int32 aSize)
 		{
 			return 0;
 		}

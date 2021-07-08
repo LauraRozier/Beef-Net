@@ -93,43 +93,107 @@ namespace Beef_Net.Connection
 
 		public this(): base()
 		{
+			_timeVal.tv_usec = 0;
+			_timeVal.tv_sec = 0;
 		}
 
 		public override bool Connect(StringView aAddress, uint16 aPort)
 		{
+			bool result = base.Connect(aAddress, aPort);
+
+			if (_rootSock != null && _rootSock.[Friend]_connectionStatus != .None)
+				Disconnect(true);
+
+			_rootSock = InitSocket((Socket)SocketClass.CreateObject().Value);
+			_iterator =  _rootSock;
+			result = _rootSock.[Friend]SetupSocket(aPort, ADDR6_ANY);
+
+			if (result)
+			{
+				Common.FillAddressInfo(ref _rootSock.[Friend]_peerAddress, (uint16)_rootSock.[Friend]_socketNet, aAddress, aPort);
+				_rootSock.[Friend]_connectionStatus = .Connected;
+				RegisterWithEventer();
+			}
+
+			return result;
 		}
 
 		public override bool Listen(uint16 aPort, StringView aIntf = ADDR_ANY)
 		{
+			if (_rootSock != null && _rootSock.[Friend]_connectionStatus != .None)
+				Disconnect(true);
+
+			_rootSock = InitSocket((Socket)SocketClass.CreateObject().Value);
+			_rootSock.[Friend]SetReuseAddress(_reuseAddress);
+			_iterator = _rootSock;
+
+			if (_rootSock.Listen(aPort, aIntf))
+			{
+				Common.FillAddressInfo(ref _rootSock.[Friend]_peerAddress, (uint16)_rootSock.[Friend]_socketNet, ADDR_BR, aPort);
+				_rootSock.[Friend]_connectionStatus = .Connected;
+				RegisterWithEventer();
+				return true;
+			}
+
+			return false;
 		}
 
-		public override int Get(char8* aData, int aSize, Socket aSocket = null)
+		public override int32 Get(char8* aData, int32 aSize, Socket aSocket = null)
 		{
+			if (_rootSock != null)
+				return _rootSock.Get(aData, aSize);
+
+			return 0;
 		}
 
-		public override int GetMessage(String aOutMsg, Socket aSocket = null)
+		public override int32 GetMessage(String aOutMsg, Socket aSocket = null)
 		{
+			if (_rootSock != null)
+				return _rootSock.GetMessage(aOutMsg);
+
+			return 0;
 		}
 
-		public override int SendMessage(StringView aMsg, Socket aSocket = null)
+		public override int32 SendMessage(StringView aMsg, Socket aSocket = null)
 		{
+			if (_rootSock != null)
+				return _rootSock.SendMessage(aMsg);
+
+			return 0;
 		}
 
-		public int SendMessage(StringView aMsg, StringView aAddress)
+		public int32 SendMessage(StringView aMsg, StringView aAddress)
 		{
+			if (_rootSock != null)
+			{
+				SetAddress(aAddress);
+				return _rootSock.SendMessage(aMsg);
+			}
+
+			return 0;
 		}
 
-		public override int Send(char8* aData, int aSize, Socket aSocket = null)
+		public override int32 Send(char8* aData, int32 aSize, Socket aSocket = null)
 		{
+			if (_rootSock != null)
+				return _rootSock.Send(aData, aSize);
+
+			return 0;
 		}
 
-		public int Send(char8* aData, int aSize, StringView aAddress)
+		public int32 Send(char8* aData, int32 aSize, StringView aAddress)
 		{
+			if (_rootSock != null)
+			{
+				SetAddress(aAddress);
+				return _rootSock.Send(aData, aSize);
+			}
+
+			return 0;
 		}
 
-		public override bool IterNext()
-		{
-		}
+		public override bool IterNext() =>
+			false;
 
 		public override void IterReset()
 		{
@@ -137,10 +201,17 @@ namespace Beef_Net.Connection
 
 		public override void Disconnect(bool aIndForced = false)
 		{
+			if (_rootSock != null)
+			{
+				_rootSock.Disconnect(true); // true on UDP it always goes there anyways 
+				_rootSock = null; // even if the old one exists, eventer takes care of deleting it
+			}
 		}
 
 		public override void CallAction()
 		{
+			if (_eventer != null)
+				_eventer.CallAction();
 		}
 	}
 }

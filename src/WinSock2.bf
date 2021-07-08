@@ -252,62 +252,62 @@ namespace Beef_Net
 		public const int32 BUFFER_SIZE     = 262144;
 
 		// Socket Types
-		public const uint8 SOCK_STREAM    = 1; // stream socket
-		public const uint8 SOCK_DGRAM     = 2; // datagram socket
-		public const uint8 SOCK_RAW       = 3; // raw-protocol interface
-		public const uint8 SOCK_RDM       = 4; // reliably-delivered message
-		public const uint8 SOCK_SEQPACKET = 5; // sequenced packet stream
+		public const int8 SOCK_STREAM    = 1; // stream socket
+		public const int8 SOCK_DGRAM     = 2; // datagram socket
+		public const int8 SOCK_RAW       = 3; // raw-protocol interface
+		public const int8 SOCK_RDM       = 4; // reliably-delivered message
+		public const int8 SOCK_SEQPACKET = 5; // sequenced packet stream
 
 		// Define socket-level options
-		public const uint32 SO_DEBUG       = 0x0001U; // turn on debugging info recording
-		public const uint32 SO_ACCEPTCONN  = 0x0002U; // socket has had listen()
-		public const uint32 SO_REUSEADDR   = 0x0004U; // allow local address reuse
-		public const uint32 SO_KEEPALIVE   = 0x0008U; // keep connections alive
-		public const uint32 SO_DONTROUTE   = 0x0010U; // just use interface addresses
-		public const uint32 SO_BROADCAST   = 0x0020U; // permit sending of broadcast msgs
-		public const uint32 SO_USELOOPBACK = 0x0040U; // bypass hardware when possible
-		public const uint32 SO_LINGER      = 0x0080U; // linger on close if data present
-		public const uint32 SO_OOBINLINE   = 0x0100U; // leave received OOB data in line
+		public const int32 SO_DEBUG       = 0x0001; // turn on debugging info recording
+		public const int32 SO_ACCEPTCONN  = 0x0002; // socket has had listen()
+		public const int32 SO_REUSEADDR   = 0x0004; // allow local address reuse
+		public const int32 SO_KEEPALIVE   = 0x0008; // keep connections alive
+		public const int32 SO_DONTROUTE   = 0x0010; // just use interface addresses
+		public const int32 SO_BROADCAST   = 0x0020; // permit sending of broadcast msgs
+		public const int32 SO_USELOOPBACK = 0x0040; // bypass hardware when possible
+		public const int32 SO_LINGER      = 0x0080; // linger on close if data present
+		public const int32 SO_OOBINLINE   = 0x0100; // leave received OOB data in line
 
-		public const uint32 SO_DONTLINGER       = ~SO_LINGER;
-		public const uint32 SO_EXCLUSIVEADDRUSE = ~SO_REUSEADDR; // disallow local address reuse
+		public const int32 SO_DONTLINGER       = ~SO_LINGER;
+		public const int32 SO_EXCLUSIVEADDRUSE = ~SO_REUSEADDR; // disallow local address reuse
 
 		// Additional options
-		public const uint32 SO_SNDBUF    = 0x1001U; // send buffer size
-		public const uint32 SO_RCVBUF    = 0x1002U; // receive buffer size
-		public const uint32 SO_SNDLOWAT  = 0x1003U; // send low-water mark
-		public const uint32 SO_RCVLOWAT  = 0x1004U; // receive low-water mark
-		public const uint32 SO_SNDTIMEO  = 0x1005U; // send timeout
-		public const uint32 SO_RCVTIMEO  = 0x1006U; // receive timeout
-		public const uint32 SO_ERROR     = 0x1007U; // get error status and clear
-		public const uint32 SO_TYPE      = 0x1008U; // get socket type
-		public const uint32 SO_BSP_STATE = 0x1009U; // get socket 5-tuple state
+		public const int32 SO_SNDBUF    = 0x1001; // send buffer size
+		public const int32 SO_RCVBUF    = 0x1002; // receive buffer size
+		public const int32 SO_SNDLOWAT  = 0x1003; // send low-water mark
+		public const int32 SO_RCVLOWAT  = 0x1004; // receive low-water mark
+		public const int32 SO_SNDTIMEO  = 0x1005; // send timeout
+		public const int32 SO_RCVTIMEO  = 0x1006; // receive timeout
+		public const int32 SO_ERROR     = 0x1007; // get error status and clear
+		public const int32 SO_TYPE      = 0x1008; // get socket type
+		public const int32 SO_BSP_STATE = 0x1009; // get socket 5-tuple state
 
 		// WinSock 2 extension -- new options
-		public const uint32 SO_GROUP_ID       = 0x2001U; // ID of a socket group
-		public const uint32 SO_GROUP_PRIORITY = 0x2002U; // the relative priority within a group
-		public const uint32 SO_MAX_MSG_SIZE   = 0x2003U; // maximum message size
-		public const uint32 SO_PROTOCOL_INFOA = 0x2004U; // WSAPROTOCOL_INFOA structure
-		public const uint32 SO_PROTOCOL_INFOW = 0x2005U; // WSAPROTOCOL_INFOW structure
+		public const int32 SO_GROUP_ID       = 0x2001; // ID of a socket group
+		public const int32 SO_GROUP_PRIORITY = 0x2002; // the relative priority within a group
+		public const int32 SO_MAX_MSG_SIZE   = 0x2003; // maximum message size
+		public const int32 SO_PROTOCOL_INFOA = 0x2004; // WSAPROTOCOL_INFOA structure
+		public const int32 SO_PROTOCOL_INFOW = 0x2005; // WSAPROTOCOL_INFOW structure
 
 	#if UNICODE
-		public const uint32 SO_PROTOCOL_INFO = SO_PROTOCOL_INFOW;
+		public const int32 SO_PROTOCOL_INFO = SO_PROTOCOL_INFOW;
 	#else
-		public const uint32 SO_PROTOCOL_INFO = SO_PROTOCOL_INFOA;
+		public const int32 SO_PROTOCOL_INFO = SO_PROTOCOL_INFOA;
 	#endif
 
-		public const uint32 PVD_CONFIG            = 0x3001U; // configuration info for service provider
-		public const uint32 SO_CONDITIONAL_ACCEPT = 0x3002U; // enable true conditional accept: connection is not ack-ed to the other side until conditional function returns CF_ACCEPT
-		public const uint32 SO_PAUSE_ACCEPT       = 0x3003U; // pause accepting new connections
-		public const uint32 SO_COMPARTMENT_ID     = 0x3004U; // get/set the compartment for a socket
-		public const uint32 SO_RANDOMIZE_PORT     = 0x3005U; // randomize assignment of wildcard ports
-		public const uint32 SO_PORT_SCALABILITY   = 0x3006U; // enable port scalability
+		public const int32 PVD_CONFIG            = 0x3001; // configuration info for service provider
+		public const int32 SO_CONDITIONAL_ACCEPT = 0x3002; // enable true conditional accept: connection is not ack-ed to the other side until conditional function returns CF_ACCEPT
+		public const int32 SO_PAUSE_ACCEPT       = 0x3003; // pause accepting new connections
+		public const int32 SO_COMPARTMENT_ID     = 0x3004; // get/set the compartment for a socket
+		public const int32 SO_RANDOMIZE_PORT     = 0x3005; // randomize assignment of wildcard ports
+		public const int32 SO_PORT_SCALABILITY   = 0x3006; // enable port scalability
 
 		// Base constant used for defining WSK-specific options.
-		public const uint32 WSK_SO_BASE = 0x4000;
+		public const uint32 WSK_SO_BASE = 0x4000U;
 
 		// Options to use with [gs]etsockopt at the PROTO_TCP level.
-		public const uint32 TCP_NODELAY = 0x0001;
+		public const uint32 TCP_NODELAY = 0x0001U;
 
 		// Supported address families.
 		public const uint16 AF_UNSPEC     = 0;
@@ -446,126 +446,126 @@ namespace Beef_Net
 		public const int32 FD_ALL_EVENTS                   = (1 << FD_MAX_EVENTS) - 1;
 
 		// All Windows Sockets error constants are biased by WSABASEERR from the "normal"
-		public const uint32 WSABASEERR = 10000;
+		public const int32 WSABASEERR = 10000;
 
 		// Windows Sockets definitions of regular Microsoft C error constants
-		public const uint32 WSAEINTR  = WSABASEERR + 4;
-		public const uint32 WSAEBADF  = WSABASEERR + 9;
-		public const uint32 WSAEACCES = WSABASEERR + 13;
-		public const uint32 WSAEFAULT = WSABASEERR + 14;
-		public const uint32 WSAEINVAL = WSABASEERR + 22;
-		public const uint32 WSAEMFILE = WSABASEERR + 24;
+		public const int32 WSAEINTR  = WSABASEERR + 4;
+		public const int32 WSAEBADF  = WSABASEERR + 9;
+		public const int32 WSAEACCES = WSABASEERR + 13;
+		public const int32 WSAEFAULT = WSABASEERR + 14;
+		public const int32 WSAEINVAL = WSABASEERR + 22;
+		public const int32 WSAEMFILE = WSABASEERR + 24;
 
 		// Windows Sockets definitions of regular Berkeley error constants
-		public const uint32 WSAEWOULDBLOCK     = WSABASEERR + 35;
-		public const uint32 WSAEINPROGRESS     = WSABASEERR + 36;
-		public const uint32 WSAEALREADY        = WSABASEERR + 37;
-		public const uint32 WSAENOTSOCK        = WSABASEERR + 38;
-		public const uint32 WSAEDESTADDRREQ    = WSABASEERR + 39;
-		public const uint32 WSAEMSGSIZE        = WSABASEERR + 40;
-		public const uint32 WSAEPROTOTYPE      = WSABASEERR + 41;
-		public const uint32 WSAENOPROTOOPT     = WSABASEERR + 42;
-		public const uint32 WSAEPROTONOSUPPORT = WSABASEERR + 43;
-		public const uint32 WSAESOCKTNOSUPPORT = WSABASEERR + 44;
-		public const uint32 WSAEOPNOTSUPP      = WSABASEERR + 45;
-		public const uint32 WSAEPFNOSUPPORT    = WSABASEERR + 46;
-		public const uint32 WSAEAFNOSUPPORT    = WSABASEERR + 47;
-		public const uint32 WSAEADDRINUSE      = WSABASEERR + 48;
-		public const uint32 WSAEADDRNOTAVAIL   = WSABASEERR + 49;
-		public const uint32 WSAENETDOWN        = WSABASEERR + 50;
-		public const uint32 WSAENETUNREACH     = WSABASEERR + 51;
-		public const uint32 WSAENETRESET       = WSABASEERR + 52;
-		public const uint32 WSAECONNABORTED    = WSABASEERR + 53;
-		public const uint32 WSAECONNRESET      = WSABASEERR + 54;
-		public const uint32 WSAENOBUFS         = WSABASEERR + 55;
-		public const uint32 WSAEISCONN         = WSABASEERR + 56;
-		public const uint32 WSAENOTCONN        = WSABASEERR + 57;
-		public const uint32 WSAESHUTDOWN       = WSABASEERR + 58;
-		public const uint32 WSAETOOMANYREFS    = WSABASEERR + 59;
-		public const uint32 WSAETIMEDOUT       = WSABASEERR + 60;
-		public const uint32 WSAECONNREFUSED    = WSABASEERR + 61;
-		public const uint32 WSAELOOP           = WSABASEERR + 62;
-		public const uint32 WSAENAMETOOLONG    = WSABASEERR + 63;
-		public const uint32 WSAEHOSTDOWN       = WSABASEERR + 64;
-		public const uint32 WSAEHOSTUNREACH    = WSABASEERR + 65;
-		public const uint32 WSAENOTEMPTY       = WSABASEERR + 66;
-		public const uint32 WSAEPROCLIM        = WSABASEERR + 67;
-		public const uint32 WSAEUSERS          = WSABASEERR + 68;
-		public const uint32 WSAEDQUOT          = WSABASEERR + 69;
-		public const uint32 WSAESTALE          = WSABASEERR + 70;
-		public const uint32 WSAEREMOTE         = WSABASEERR + 71;
+		public const int32 WSAEWOULDBLOCK     = WSABASEERR + 35;
+		public const int32 WSAEINPROGRESS     = WSABASEERR + 36;
+		public const int32 WSAEALREADY        = WSABASEERR + 37;
+		public const int32 WSAENOTSOCK        = WSABASEERR + 38;
+		public const int32 WSAEDESTADDRREQ    = WSABASEERR + 39;
+		public const int32 WSAEMSGSIZE        = WSABASEERR + 40;
+		public const int32 WSAEPROTOTYPE      = WSABASEERR + 41;
+		public const int32 WSAENOPROTOOPT     = WSABASEERR + 42;
+		public const int32 WSAEPROTONOSUPPORT = WSABASEERR + 43;
+		public const int32 WSAESOCKTNOSUPPORT = WSABASEERR + 44;
+		public const int32 WSAEOPNOTSUPP      = WSABASEERR + 45;
+		public const int32 WSAEPFNOSUPPORT    = WSABASEERR + 46;
+		public const int32 WSAEAFNOSUPPORT    = WSABASEERR + 47;
+		public const int32 WSAEADDRINUSE      = WSABASEERR + 48;
+		public const int32 WSAEADDRNOTAVAIL   = WSABASEERR + 49;
+		public const int32 WSAENETDOWN        = WSABASEERR + 50;
+		public const int32 WSAENETUNREACH     = WSABASEERR + 51;
+		public const int32 WSAENETRESET       = WSABASEERR + 52;
+		public const int32 WSAECONNABORTED    = WSABASEERR + 53;
+		public const int32 WSAECONNRESET      = WSABASEERR + 54;
+		public const int32 WSAENOBUFS         = WSABASEERR + 55;
+		public const int32 WSAEISCONN         = WSABASEERR + 56;
+		public const int32 WSAENOTCONN        = WSABASEERR + 57;
+		public const int32 WSAESHUTDOWN       = WSABASEERR + 58;
+		public const int32 WSAETOOMANYREFS    = WSABASEERR + 59;
+		public const int32 WSAETIMEDOUT       = WSABASEERR + 60;
+		public const int32 WSAECONNREFUSED    = WSABASEERR + 61;
+		public const int32 WSAELOOP           = WSABASEERR + 62;
+		public const int32 WSAENAMETOOLONG    = WSABASEERR + 63;
+		public const int32 WSAEHOSTDOWN       = WSABASEERR + 64;
+		public const int32 WSAEHOSTUNREACH    = WSABASEERR + 65;
+		public const int32 WSAENOTEMPTY       = WSABASEERR + 66;
+		public const int32 WSAEPROCLIM        = WSABASEERR + 67;
+		public const int32 WSAEUSERS          = WSABASEERR + 68;
+		public const int32 WSAEDQUOT          = WSABASEERR + 69;
+		public const int32 WSAESTALE          = WSABASEERR + 70;
+		public const int32 WSAEREMOTE         = WSABASEERR + 71;
 
 		// Extended Windows Sockets error constant definitions
-		public const uint32 WSASYSNOTREADY         = WSABASEERR + 91;
-		public const uint32 WSAVERNOTSUPPORTED     = WSABASEERR + 92;
-		public const uint32 WSANOTINITIALISED      = WSABASEERR + 93;
-		public const uint32 WSAEDISCON             = WSABASEERR + 101;
-		public const uint32 WSAENOMORE             = WSABASEERR + 102;
-		public const uint32 WSAECANCELLED          = WSABASEERR + 103;
-		public const uint32 WSAEINVALIDPROCTABLE   = WSABASEERR + 104;
-		public const uint32 WSAEINVALIDPROVIDER    = WSABASEERR + 105;
-		public const uint32 WSAEPROVIDERFAILEDINIT = WSABASEERR + 106;
-		public const uint32 WSASYSCALLFAILURE      = WSABASEERR + 107;
-		public const uint32 WSASERVICE_NOT_FOUND   = WSABASEERR + 108;
-		public const uint32 WSATYPE_NOT_FOUND      = WSABASEERR + 109;
-		public const uint32 WSA_E_NO_MORE          = WSABASEERR + 110;
-		public const uint32 WSA_E_CANCELLED        = WSABASEERR + 111;
-		public const uint32 WSAEREFUSED            = WSABASEERR + 112;
+		public const int32 WSASYSNOTREADY         = WSABASEERR + 91;
+		public const int32 WSAVERNOTSUPPORTED     = WSABASEERR + 92;
+		public const int32 WSANOTINITIALISED      = WSABASEERR + 93;
+		public const int32 WSAEDISCON             = WSABASEERR + 101;
+		public const int32 WSAENOMORE             = WSABASEERR + 102;
+		public const int32 WSAECANCELLED          = WSABASEERR + 103;
+		public const int32 WSAEINVALIDPROCTABLE   = WSABASEERR + 104;
+		public const int32 WSAEINVALIDPROVIDER    = WSABASEERR + 105;
+		public const int32 WSAEPROVIDERFAILEDINIT = WSABASEERR + 106;
+		public const int32 WSASYSCALLFAILURE      = WSABASEERR + 107;
+		public const int32 WSASERVICE_NOT_FOUND   = WSABASEERR + 108;
+		public const int32 WSATYPE_NOT_FOUND      = WSABASEERR + 109;
+		public const int32 WSA_E_NO_MORE          = WSABASEERR + 110;
+		public const int32 WSA_E_CANCELLED        = WSABASEERR + 111;
+		public const int32 WSAEREFUSED            = WSABASEERR + 112;
 
 		// Error return codes from gethostbyname() and gethostbyaddr() (when using the resolver).  Note that these errors are retrieved via WSAGetLastError() and must therefore follow
 		// the rules for avoiding clashes with error numbers from specific implementations or language run-time systems.  For this reason the codes are based at WSABASEERR+1001.
 		// Note also that [WSA]NO_ADDRESS is defined only for compatibility purposes.
 
 		// Authoritative Answer: Host not found
-		public const uint32 WSAHOST_NOT_FOUND = WSABASEERR + 1001;
+		public const int32 WSAHOST_NOT_FOUND = WSABASEERR + 1001;
 
 		// Non-Authoritative: Host not found, or SERVERFAIL
-		public const uint32 WSATRY_AGAIN      = WSABASEERR + 1002;
+		public const int32 WSATRY_AGAIN      = WSABASEERR + 1002;
 
 		// Non-recoverable errors, FORMERR, REFUSED, NOTIMP
-		public const uint32 WSANO_RECOVERY    = WSABASEERR + 1003;
+		public const int32 WSANO_RECOVERY    = WSABASEERR + 1003;
 
 		// Valid name, no data record of requested type
-		public const uint32 WSANO_DATA        = WSABASEERR + 1004;
+		public const int32 WSANO_DATA        = WSABASEERR + 1004;
 
 		// Define QOS related error return codes
-		public const uint32 WSA_QOS_RECEIVERS          = WSABASEERR + 1005; // at least one Reserve has arrived
-		public const uint32 WSA_QOS_SENDERS            = WSABASEERR + 1006; // at least one Path has arrived
-		public const uint32 WSA_QOS_NO_SENDERS         = WSABASEERR + 1007; // there are no senders
-		public const uint32 WSA_QOS_NO_RECEIVERS       = WSABASEERR + 1008; // there are no receivers
-		public const uint32 WSA_QOS_REQUEST_CONFIRMED  = WSABASEERR + 1009; // Reserve has been confirmed
-		public const uint32 WSA_QOS_ADMISSION_FAILURE  = WSABASEERR + 1010; // error due to lack of resources
-		public const uint32 WSA_QOS_POLICY_FAILURE     = WSABASEERR + 1011; // rejected for administrative reasons - bad credentials
-		public const uint32 WSA_QOS_BAD_STYLE          = WSABASEERR + 1012; // unknown or conflicting style
-		public const uint32 WSA_QOS_BAD_OBJECT         = WSABASEERR + 1013; // problem with some part of the filterspec or providerspecific buffer in general
-		public const uint32 WSA_QOS_TRAFFIC_CTRL_ERROR = WSABASEERR + 1014; // problem with some part of the flowspec
-		public const uint32 WSA_QOS_GENERIC_ERROR      = WSABASEERR + 1015; // general error
-		public const uint32 WSA_QOS_ESERVICETYPE       = WSABASEERR + 1016; // invalid service type in flowspec
-		public const uint32 WSA_QOS_EFLOWSPEC          = WSABASEERR + 1017; // invalid flowspec
-		public const uint32 WSA_QOS_EPROVSPECBUF       = WSABASEERR + 1018; // invalid provider specific buffer
-		public const uint32 WSA_QOS_EFILTERSTYLE       = WSABASEERR + 1019; // invalid filter style
-		public const uint32 WSA_QOS_EFILTERTYPE        = WSABASEERR + 1020; // invalid filter type
-		public const uint32 WSA_QOS_EFILTERCOUNT       = WSABASEERR + 1021; // incorrect number of filters
-		public const uint32 WSA_QOS_EOBJLENGTH         = WSABASEERR + 1022; // invalid object length
-		public const uint32 WSA_QOS_EFLOWCOUNT         = WSABASEERR + 1023; // incorrect number of flows
-		public const uint32 WSA_QOS_EUNKOWNPSOBJ       = WSABASEERR + 1024; // unknown object in provider specific buffer
-		public const uint32 WSA_QOS_EPOLICYOBJ         = WSABASEERR + 1025; // invalid policy object in provider specific buffer
-		public const uint32 WSA_QOS_EFLOWDESC          = WSABASEERR + 1026; // invalid flow descriptor in the list
-		public const uint32 WSA_QOS_EPSFLOWSPEC        = WSABASEERR + 1027; // inconsistent flow spec in provider specific buffer
-		public const uint32 WSA_QOS_EPSFILTERSPEC      = WSABASEERR + 1028; // invalid filter spec in provider specific buffer
-		public const uint32 WSA_QOS_ESDMODEOBJ         = WSABASEERR + 1029; // invalid shape discard mode object in provider specific buffer
-		public const uint32 WSA_QOS_ESHAPERATEOBJ      = WSABASEERR + 1030; // invalid shaping rate object in provider specific buffer
-		public const uint32 WSA_QOS_RESERVED_PETYPE    = WSABASEERR + 1031; // reserved policy element in provider specific buffer
+		public const int32 WSA_QOS_RECEIVERS          = WSABASEERR + 1005; // at least one Reserve has arrived
+		public const int32 WSA_QOS_SENDERS            = WSABASEERR + 1006; // at least one Path has arrived
+		public const int32 WSA_QOS_NO_SENDERS         = WSABASEERR + 1007; // there are no senders
+		public const int32 WSA_QOS_NO_RECEIVERS       = WSABASEERR + 1008; // there are no receivers
+		public const int32 WSA_QOS_REQUEST_CONFIRMED  = WSABASEERR + 1009; // Reserve has been confirmed
+		public const int32 WSA_QOS_ADMISSION_FAILURE  = WSABASEERR + 1010; // error due to lack of resources
+		public const int32 WSA_QOS_POLICY_FAILURE     = WSABASEERR + 1011; // rejected for administrative reasons - bad credentials
+		public const int32 WSA_QOS_BAD_STYLE          = WSABASEERR + 1012; // unknown or conflicting style
+		public const int32 WSA_QOS_BAD_OBJECT         = WSABASEERR + 1013; // problem with some part of the filterspec or providerspecific buffer in general
+		public const int32 WSA_QOS_TRAFFIC_CTRL_ERROR = WSABASEERR + 1014; // problem with some part of the flowspec
+		public const int32 WSA_QOS_GENERIC_ERROR      = WSABASEERR + 1015; // general error
+		public const int32 WSA_QOS_ESERVICETYPE       = WSABASEERR + 1016; // invalid service type in flowspec
+		public const int32 WSA_QOS_EFLOWSPEC          = WSABASEERR + 1017; // invalid flowspec
+		public const int32 WSA_QOS_EPROVSPECBUF       = WSABASEERR + 1018; // invalid provider specific buffer
+		public const int32 WSA_QOS_EFILTERSTYLE       = WSABASEERR + 1019; // invalid filter style
+		public const int32 WSA_QOS_EFILTERTYPE        = WSABASEERR + 1020; // invalid filter type
+		public const int32 WSA_QOS_EFILTERCOUNT       = WSABASEERR + 1021; // incorrect number of filters
+		public const int32 WSA_QOS_EOBJLENGTH         = WSABASEERR + 1022; // invalid object length
+		public const int32 WSA_QOS_EFLOWCOUNT         = WSABASEERR + 1023; // incorrect number of flows
+		public const int32 WSA_QOS_EUNKOWNPSOBJ       = WSABASEERR + 1024; // unknown object in provider specific buffer
+		public const int32 WSA_QOS_EPOLICYOBJ         = WSABASEERR + 1025; // invalid policy object in provider specific buffer
+		public const int32 WSA_QOS_EFLOWDESC          = WSABASEERR + 1026; // invalid flow descriptor in the list
+		public const int32 WSA_QOS_EPSFLOWSPEC        = WSABASEERR + 1027; // inconsistent flow spec in provider specific buffer
+		public const int32 WSA_QOS_EPSFILTERSPEC      = WSABASEERR + 1028; // invalid filter spec in provider specific buffer
+		public const int32 WSA_QOS_ESDMODEOBJ         = WSABASEERR + 1029; // invalid shape discard mode object in provider specific buffer
+		public const int32 WSA_QOS_ESHAPERATEOBJ      = WSABASEERR + 1030; // invalid shaping rate object in provider specific buffer
+		public const int32 WSA_QOS_RESERVED_PETYPE    = WSABASEERR + 1031; // reserved policy element in provider specific buffer
 
 		// Compatibility
-		public const uint32 HOST_NOT_FOUND = WSAHOST_NOT_FOUND;
-		public const uint32 TRY_AGAIN      = WSATRY_AGAIN;
-		public const uint32 NO_RECOVERY    = WSANO_RECOVERY;
-		public const uint32 NO_DATA        = WSANO_DATA;
+		public const int32 HOST_NOT_FOUND = WSAHOST_NOT_FOUND;
+		public const int32 TRY_AGAIN      = WSATRY_AGAIN;
+		public const int32 NO_RECOVERY    = WSANO_RECOVERY;
+		public const int32 NO_DATA        = WSANO_DATA;
 
 		// no address, look for MX record
-		public const uint32 WSANO_ADDRESS = WSANO_DATA;
-		public const uint32 NO_ADDRESS    = WSANO_ADDRESS;
+		public const int32 WSANO_ADDRESS = WSANO_DATA;
+		public const int32 NO_ADDRESS    = WSANO_ADDRESS;
 
 		// WinSock 2 extension -- new error codes and type definition
 		public const uint32 WSA_IO_PENDING        = 997; // ERROR_IO_PENDING;
@@ -713,7 +713,7 @@ namespace Beef_Net
 		public extern static int32 recv(fd_handle s, char8* buf, int32 len, int32 flags);
 		
 		[Import("ws2_32.dll"), CLink, CallingConvention(.Stdcall)]
-		public extern static int32 recvfrom(fd_handle s, char8* buf, int32 len, int32 flags, sockaddr_in* fromaddr, int32 fromlen);
+		public extern static int32 recvfrom(fd_handle s, char8* buf, int32 len, int32 flags, sockaddr_in* fromaddr, int32* fromlen);
 		
 		[Import("ws2_32.dll"), CLink, CallingConvention(.Stdcall)]
 		public extern static int32 select(int nfds, fd_set* readfds, fd_set* writefds, fd_set* exceptfds, TimeVal* timeout);

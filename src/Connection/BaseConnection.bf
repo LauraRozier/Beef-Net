@@ -174,7 +174,7 @@ namespace Beef_Net.Connection
 
 			if (_session != null)
 			{
-				_session.FreeNotification(this);
+				// _session.FreeNotification(this); // Fok this
 				_session.RegisterWithComponent(this);
 			}
 		}
@@ -359,13 +359,13 @@ namespace Beef_Net.Connection
 		
 		public abstract bool Listen(uint16 aPort, StringView aIntf = ADDR_ANY);
 		
-		public abstract int Get(char8* aData, int aSize, Socket aSocket = null);
+		public abstract int32 Get(char8* aData, int32 aSize, Socket aSocket = null);
 		
-		public abstract int GetMessage(String aOutMsg, Socket aSocket = null);
+		public abstract int32 GetMessage(String aOutMsg, Socket aSocket = null);
 		
-		public abstract int Send(char8* aData, int aSize, Socket aSocket = null);
+		public abstract int32 Send(char8* aData, int32 aSize, Socket aSocket = null);
 		
-		public abstract int SendMessage(StringView aMsg, Socket aSocket = null);
+		public abstract int32 SendMessage(StringView aMsg, Socket aSocket = null);
 		
 		public abstract bool IterNext();
 		

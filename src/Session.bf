@@ -1,4 +1,5 @@
 using System;
+using Beef_Net.Connection;
 
 namespace Beef_Net
 {
@@ -11,13 +12,8 @@ namespace Beef_Net
 			get { return _active; }
 		}
 
-		/*
-		public void RegisterWithComponent(aConnection: TLConnection);
-		{
-			if not Assigned(aConnection) then
-				raise Exception.Create('Cannot register session with nil connection');
-		}
-		*/
+		public void RegisterWithComponent(BaseConnection aConnection) =>
+			Runtime.Assert(aConnection != null, "Cannot register session with null connection");
 
 		public void InitHandle(Handle aHandle) =>
 			((Socket)aHandle).[Friend]_session = this;

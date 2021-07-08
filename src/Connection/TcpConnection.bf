@@ -83,19 +83,19 @@ namespace Beef_Net.Connection
 		{
 		}
 
-		public override int Get(char8* aData, int aSize, Socket aSocket = null)
+		public override int32 Get(char8* aData, int32 aSize, Socket aSocket = null)
 		{
 		}
 
-		public override int GetMessage(String aOutMsg, Socket aSocket = null)
+		public override int32 GetMessage(String aOutMsg, Socket aSocket = null)
 		{
 		}
 
-		public override int Send(char8* aData, int aSize, Socket aSocket = null)
+		public override int32 Send(char8* aData, int32 aSize, Socket aSocket = null)
 		{
 		}
 
-		public override int SendMessage(StringView aMsg, Socket aSocket = null)
+		public override int32 SendMessage(StringView aMsg, Socket aSocket = null)
 		{
 		}
 

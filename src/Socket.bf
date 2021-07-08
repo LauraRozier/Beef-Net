@@ -24,8 +24,20 @@ namespace Beef_Net
 
 	public enum SocketOperation
 	{
-		Send,
-		Receive
+		case Send;
+		case Receive;
+
+		public StringView StringValue
+		{
+			get
+			{
+				switch (this)
+				{
+				case .Send: return "Send";
+				case .Receive: return "Get";
+				}
+			}
+		}
 	}
 
 	// Callback Event procedure for errors
@@ -158,133 +170,156 @@ namespace Beef_Net
 		
 		protected virtual bool SetupSocket(uint16 aPort, StringView aAddress)
 		{
-			/*
-var
-  Done: Boolean;
-  Arg, Opt: Integer;
-begin
-  Result := false;
-  if FConnectionStatus = scNone then begin
-    Done := true;
-    FHandle := fpSocket(FSocketNet, FSocketType, FProtocol);
-    if FHandle = INVALID_SOCKET then
-      Exit(Bail('Socket error', LSocketError));
-    SetOptions;
+			bool done = false;
 
-    if FSocketType = SOCK_DGRAM then begin
-      Arg := 1;
-      if fpsetsockopt(FHandle, SOL_SOCKET, SO_BROADCAST, @Arg, Sizeof(Arg)) = SOCKET_ERROR then
-        Exit(Bail('SetSockOpt error', LSocketError));
-    end;
+			if (_connectionStatus == .None)
+			{
+				int32 arg;
+				done = true;
+				_handle = Common.Socket(_socketNet, _socketType, _protocol);
 
-    if FReuseAddress then begin
-      Arg := 1;
-      Opt := SO_REUSEADDR;
-      {$ifdef WIN32} // I expect 64 has it oddly, so screw them for now
-      if (Win32Platform = 2) and (Win32MajorVersion >= 5) then
-        Opt := Integer(not Opt);
-      {$endif}
-      if fpsetsockopt(FHandle, SOL_SOCKET, Opt, @Arg, Sizeof(Arg)) = SOCKET_ERROR then
-        Exit(Bail('SetSockOpt error', LSocketError));
-    end;
+				if (_handle == INVALID_SOCKET)
+					return Bail("Socket error", Common.SocketError());
 
-    {$ifdef darwin}
-    Arg := 1;
-    if fpsetsockopt(FHandle, SOL_SOCKET, SO_NOSIGPIPE, @Arg, Sizeof(Arg)) = SOCKET_ERROR then
-      Exit(Bail('SetSockOpt error', LSocketError));
-    {$endif}
+				SetOptions();
 
-    FillAddressInfo(FAddress, FSocketNet, Address, aPort);
-    FillAddressInfo(FPeerAddress, FSocketNet, LADDR_BR, aPort);
+				if (_socketType == SOCK_DGRAM)
+				{
+					arg = 1;
 
-    Result  :=  Done;
-  end;
-			*/
+					if (Common.SetSockOpt(_handle, SOL_SOCKET, SO_BROADCAST, &arg, sizeof(int32)) == SOCKET_ERROR)
+						return Bail("SetSockOpt error", Common.SocketError());
+				}
+
+				if (_reuseAddress)
+				{
+					arg = 1;
+					int32 opt = SO_REUSEADDR;
+
+#if BF_PLATFORM_WINDOWS
+					if (Environment.OSVersion.Platform == .Win32NT && Environment.OSVersion.Version.Major >= 5)
+						opt = (int32)(~opt);
+#endif
+
+					if (Common.SetSockOpt(_handle, SOL_SOCKET, opt, &arg, sizeof(int32)) == SOCKET_ERROR)
+						return Bail("SetSockOpt error", Common.SocketError());
+				}
+
+				// Darwin also needs `SO_NOSIGPIPE` to be set to 1
+
+				Common.FillAddressInfo(ref _address, (uint16)_socketNet, aAddress, aPort);
+				Common.FillAddressInfo(ref _peerAddress, (uint16)_socketNet, ADDR_BR, aPort);
+			}
+
+			return done;
 		}
 
-		protected virtual int DoSend(char8* aData, int aSize)
+		protected virtual int32 DoSend(char8* aData, int32 aSize)
 		{
-			/*
-var
-  AddressLength: Longint = SizeOf(FPeerAddress);
-begin
-  if FSocketType = SOCK_STREAM then
-    Result := Sockets.fpSend(FHandle, @aData, aSize, LMSG)
-  else begin
-    case FAddress.IPv4.sin_family of
-      LAF_INET  :
-        begin
-          AddressLength := SizeOf(FPeerAddress.IPv4);
-          Result := sockets.fpsendto(FHandle, @aData, aSize, LMSG, @FPeerAddress.IPv4, AddressLength);
-        end;
-      LAF_INET6 :
-        begin
-          AddressLength := SizeOf(FPeerAddress.IPv6);
-          Result := sockets.fpsendto(FHandle, @aData, aSize, LMSG, @FPeerAddress.IPv6, AddressLength);
-        end;
-    end;
-  end;
-			*/
+			if (_socketType == SOCK_STREAM)
+			{
+				return Common.Send(_handle, aData, aSize, LMSG);
+			}
+			else
+			{
+				int32 addrLen;
+
+				switch (_address.u.IPv4.sin_family)
+				{
+				case AF_INET:
+					{
+						addrLen = sizeof(sockaddr_in);
+						return Common.SendTo(_handle, aData, aSize, LMSG, (SockAddr*)&_peerAddress.u.IPv4, addrLen);
+					}
+				case AF_INET6:
+					{
+						addrLen = sizeof(sockaddr_in6);
+						return Common.SendTo(_handle, aData, aSize, LMSG, (SockAddr*)&_peerAddress.u.IPv6, addrLen);
+					}
+				}
+			}
+
+			return 0;
 		}
 
-		protected virtual int DoGet(char8* aData, int aSize)
+		protected virtual int32 DoGet(char8* aData, int32 aSize)
 		{
-			/*
-var
-  AddressLength: Longint = SizeOf(FPeerAddress);
-begin
-  if FSocketType = SOCK_STREAM then
-    Result := sockets.fpRecv(FHandle, @aData, aSize, LMSG)
-  else begin
-    case FAddress.IPv4.sin_family of
-      LAF_INET  :
-        begin
-          AddressLength := SizeOf(FPeerAddress.IPv4);
-          Result := sockets.fpRecvfrom(FHandle, @aData, aSize, LMSG, @FPeerAddress.IPv4, @AddressLength);
-        end;
-      LAF_INET6 :
-        begin
-          AddressLength := SizeOf(FPeerAddress.IPv6);
-          Result := sockets.fpRecvfrom(FHandle, @aData, aSize, LMSG, @FPeerAddress.IPv6, @AddressLength);
-        end;
-    end;
-  end;
-			*/
+			if (_socketType == SOCK_STREAM)
+			{
+				return Common.Recv(_handle, aData, aSize, LMSG);
+			}
+			else
+			{
+				int32 addrLen;
+
+				switch (_address.u.IPv4.sin_family)
+				{
+				case AF_INET:
+					{
+						addrLen = sizeof(sockaddr_in);
+						return Common.RecvFrom(_handle, aData, aSize, LMSG, (SockAddr*)&_peerAddress.u.IPv4, &addrLen);
+					}
+				case AF_INET6:
+					{
+						addrLen = sizeof(sockaddr_in6);
+						return Common.RecvFrom(_handle, aData, aSize, LMSG, (SockAddr*)&_peerAddress.u.IPv6, &addrLen);
+					}
+				}
+			}
+
+			return 0;
 		}
 
-		protected virtual int HandleResult(int aResult, SocketOperation aOp)
+		protected virtual int32 HandleResult(int32 aResult, SocketOperation aOp)
 		{
-			/*
-const
-  GSStr: array[TLSocketOperation] of string = ('Send', 'Get');
-var
-  LastError: Longint;
-begin
-  Result := aResult;
-  if Result = SOCKET_ERROR then begin
-    LastError := LSocketError;
-    if IsBlockError(LastError) then case aOp of
-      soSend:
-         begin
-           FSocketState := FSocketState - [ssCanSend];
-           IgnoreWrite := False;
-         end;
-      soReceive:
-         begin
-           FSocketState := FSocketState - [ssCanReceive];
-           IgnoreRead := False;
-         end;
-    end else if IsNonFatalError(LastError) then
-      LogError(GSStr[aOp] + ' error', LastError) // non fatals don't cause disconnect
-    else if (aOp = soSend) and IsPipeError(LastError) then begin
-      LogError(GSStr[aOp] + ' error', LastError);
-      HardDisconnect(True); {$warning check if we need aOp = soSend in the IF, perhaps bad recv is possible?}
-    end else
-      Bail(GSStr[aOp] + ' error', LastError);
+			int32 result = aResult;
+			int32 lastError;
 
-    Result := 0;
-  end;
-			*/
+			if (aResult == SOCKET_ERROR)
+			{
+				lastError = Common.SocketError();
+				String tmp = scope .(aOp.StringValue);
+				tmp.Append(" error");
+
+				if (Common.IsBlockError(lastError))
+				{
+					switch(aOp)
+					{
+					case .Send:
+						{
+							_socketState &= ~.CanSend;
+							IgnoreWrite = false;
+							break;
+						}
+					case .Receive:
+						{
+							_socketState &= ~.CanReceive;
+							IgnoreRead = false;
+							break;
+						}
+					}
+				}
+				else if (Common.IsNonFatalError(lastError))
+				{
+					LogError(tmp, lastError); // non-fatals don't cause disconnect
+				}
+				else if (aOp == .Send && Common.IsPipeError(lastError))
+				{
+					LogError(tmp, lastError);
+					HardDisconnect(true);
+#if DEBUG
+					System.Diagnostics.Debug.WriteLine("Warning - check if we need aOp == soSend in the IF, perhaps bad recv is possible?");
+#endif
+				}
+				else
+				{
+					Bail(tmp, lastError);
+				}
+
+				return 0;
+			}
+
+			return result;
 		}
 
 		public void GetPeerAddress(String aOutStr)
@@ -614,9 +649,9 @@ begin
 			return false;
 		}
 
-		public virtual int Send(char8* aData, int aSize)
+		public virtual int32 Send(char8* aData, int32 aSize)
 		{
-			int result = 0;
+			int32 result = 0;
 			Runtime.Assert(aSize != 0);
 
 			if (SendPossible())
@@ -633,12 +668,12 @@ begin
 			return result;
 		}
 
-		public int SendMessage(StringView aMsg) =>
-			Send(aMsg.Ptr, aMsg.Length);
+		public int32 SendMessage(StringView aMsg) =>
+			Send(aMsg.Ptr, (int32)aMsg.Length);
 
-		public virtual int Get(char8* aData, int aSize)
+		public virtual int32 Get(char8* aData, int32 aSize)
 		{
-			int result = 0;
+			int32 result = 0;
 			Runtime.Assert(aSize > 0);
 
 			if (ReceivePossible())
@@ -664,13 +699,13 @@ begin
 			return result;
 		}
 
-		public int GetMessage(String aOutStr)
+		public int32 GetMessage(String aOutStr)
 		{
 			aOutStr.Clear();
 			char8* tmpPtr = scope char8[BUFFER_SIZE]*;
-			int len = Get(tmpPtr, BUFFER_SIZE);
+			int32 len = Get(tmpPtr, BUFFER_SIZE);
 			aOutStr.Append(tmpPtr, len);
-			return aOutStr.Length;
+			return (int32)aOutStr.Length;
 		}
 
 		public virtual void Disconnect(bool aIndForced = false)

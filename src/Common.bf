@@ -415,6 +415,33 @@ namespace Beef_Net
 			return true;
 		}
 
+		[Inline]
+		public static bool IsBlockError(int32 aErrorNum) =>
+#if BF_PLATFORM_WINDOWS
+			aErrorNum == WSAEWOULDBLOCK;
+#endif
+
+		[Inline]
+		public static bool IsNonFatalError(int32 aErrorNum) =>
+#if BF_PLATFORM_WINDOWS
+			(aErrorNum == WSAEINVAL)        || (aErrorNum == WSAEFAULT)       ||
+			(aErrorNum == WSAEOPNOTSUPP)    || (aErrorNum == WSAEMSGSIZE)     ||
+			(aErrorNum == WSAEADDRNOTAVAIL) || (aErrorNum == WSAEAFNOSUPPORT) ||
+			(aErrorNum == WSAEDESTADDRREQ);
+#endif
+
+		[Inline]
+		public static bool IsPipeError(int32 aErrorNum)
+		{
+#if BF_PLATFORM_WINDOWS
+			bool result = aErrorNum == WSAECONNRESET;
+	#if DEBUG
+			System.Diagnostics.Debug.WriteLine("Warning - check these ambiguous errors");
+	#endif
+#endif
+			return result;
+		}
+
 		public static int32 SocketError() =>
 #if BF_PLATFORM_WINDOWS
 			(int32)WinSock2.WSAGetLastError();
@@ -497,7 +524,7 @@ namespace Beef_Net
 			WinSock2.recv(aHandle, aBuf, aLen, aFlags);
 #endif
 
-		public static int32 RecvFrom(fd_handle aHandle, char8* aBuf, int32 aLen, int32 aFlags, SockAddr* aFromAddr, int32 aFromLen) =>
+		public static int32 RecvFrom(fd_handle aHandle, char8* aBuf, int32 aLen, int32 aFlags, SockAddr* aFromAddr, int32* aFromLen) =>
 #if BF_PLATFORM_WINDOWS
 			WinSock2.recvfrom(aHandle, aBuf, aLen, aFlags, (sockaddr_in*)aFromAddr, aFromLen);
 #endif

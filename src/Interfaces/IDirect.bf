@@ -4,10 +4,10 @@ namespace Beef_Net.Interfaces
 {
 	interface IDirect
 	{
-		int Get(char8* aData, int aSize, Socket aSocket = null);
-		int GetMessage(String aOutMsg, Socket aSocket = null);
+		int32 Get(char8* aData, int32 aSize, Socket aSocket = null);
+		int32 GetMessage(String aOutMsg, Socket aSocket = null);
 
-		int Send(char8* aData, int aSize, Socket aSocket = null);
-		int SendMessage(StringView aMsg, Socket aSocket = null);
+		int32 Send(char8* aData, int32 aSize, Socket aSocket = null);
+		int32 SendMessage(StringView aMsg, Socket aSocket = null);
 	}
 }
