@@ -239,7 +239,6 @@ namespace Beef_Net
 		public const uint32 IMPLINK_LOWEXPER  = 156;
 		public const uint32 IMPLINK_HIGHEXPER = 158;
 
-		public const int32 LMSG               = 0;
 		public const fd_handle INVALID_SOCKET = (fd_handle)~0;
 		public const int32 SOCKET_ERROR       = -1;            // WinSock2 SOCKET_ERROR
 		public const int32 FROM_PROTOCOL_INFO = -1;
@@ -393,18 +392,20 @@ namespace Beef_Net
 
 		// Maximum queue length specifiable by listen.
 		public const uint32 SOMAXCONN   = 0x7FFFFFFFU;
+		
 
-		public const uint32 MSG_OOB       = 0x1; // process out-of-band data
-		public const uint32 MSG_PEEK      = 0x2; // peek at incoming message
-		public const uint32 MSG_DONTROUTE = 0x4; // send without using routing tables
-		public const uint32 MSG_WAITALL   = 0x8; // do not complete until packet is completely filled
+		public const int32 MSG           = 0x0;
+		public const int32 MSG_OOB       = 0x1; // process out-of-band data
+		public const int32 MSG_PEEK      = 0x2; // peek at incoming message
+		public const int32 MSG_DONTROUTE = 0x4; // send without using routing tables
+		public const int32 MSG_WAITALL   = 0x8; // do not complete until packet is completely filled
 
-		public const uint32 MSG_PARTIAL   = 0x8000; // partial send or recv for message xport
+		public const int32 MSG_PARTIAL   = 0x8000; // partial send or recv for message xport
 
 		// WinSock 2 extension -- new flags for WSASend(), WSASendTo(), WSARecv() and WSARecvFrom()
-		public const uint32 MSG_INTERRUPT = 0x10; // send/recv in the interrupt context
+		public const int32 MSG_INTERRUPT = 0x10; // send/recv in the interrupt context
 
-		public const uint32 MSG_MAXIOVLEN = 16;
+		public const int32 MSG_MAXIOVLEN = 16;
 
 		// Define constant based on rfc883, used by gethostbyxxxx() calls.
 		public const uint32 MAXGETHOSTSTRUCT = 1024;

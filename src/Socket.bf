@@ -218,7 +218,7 @@ namespace Beef_Net
 		{
 			if (_socketType == SOCK_STREAM)
 			{
-				return Common.Send(_handle, aData, aSize, LMSG);
+				return Common.Send(_handle, aData, aSize, MSG);
 			}
 			else
 			{
@@ -229,12 +229,12 @@ namespace Beef_Net
 				case AF_INET:
 					{
 						addrLen = sizeof(sockaddr_in);
-						return Common.SendTo(_handle, aData, aSize, LMSG, (SockAddr*)&_peerAddress.u.IPv4, addrLen);
+						return Common.SendTo(_handle, aData, aSize, MSG, (SockAddr*)&_peerAddress.u.IPv4, addrLen);
 					}
 				case AF_INET6:
 					{
 						addrLen = sizeof(sockaddr_in6);
-						return Common.SendTo(_handle, aData, aSize, LMSG, (SockAddr*)&_peerAddress.u.IPv6, addrLen);
+						return Common.SendTo(_handle, aData, aSize, MSG, (SockAddr*)&_peerAddress.u.IPv6, addrLen);
 					}
 				}
 			}
@@ -246,7 +246,7 @@ namespace Beef_Net
 		{
 			if (_socketType == SOCK_STREAM)
 			{
-				return Common.Recv(_handle, aData, aSize, LMSG);
+				return Common.Recv(_handle, aData, aSize, MSG);
 			}
 			else
 			{
@@ -257,12 +257,12 @@ namespace Beef_Net
 				case AF_INET:
 					{
 						addrLen = sizeof(sockaddr_in);
-						return Common.RecvFrom(_handle, aData, aSize, LMSG, (SockAddr*)&_peerAddress.u.IPv4, &addrLen);
+						return Common.RecvFrom(_handle, aData, aSize, MSG, (SockAddr*)&_peerAddress.u.IPv4, &addrLen);
 					}
 				case AF_INET6:
 					{
 						addrLen = sizeof(sockaddr_in6);
-						return Common.RecvFrom(_handle, aData, aSize, LMSG, (SockAddr*)&_peerAddress.u.IPv6, &addrLen);
+						return Common.RecvFrom(_handle, aData, aSize, MSG, (SockAddr*)&_peerAddress.u.IPv6, &addrLen);
 					}
 				}
 			}
