@@ -411,7 +411,8 @@ namespace Beef_Net
 		public const uint32 MAXGETHOSTSTRUCT = 1024;
 
 		// WinSock 2 extension -- bit values and indices for FD_XXX network events
-		public const int32 FD_SETSIZE = 64;
+		// "64 sockets ought to be enough for anybody"
+		public const int32 FD_SETSIZE =   1024; //      ...except me!
 
 		public const int32 FD_READ_BIT                     = 0;
 		public const int32 FD_READ                         = 1 << FD_READ_BIT;
@@ -632,7 +633,7 @@ namespace Beef_Net
 						i++;
 					}
 
-					aFDSet.fd_count = aFDSet.fd_count - 1;
+					aFDSet.fd_count--;
 					break;
 				}
 
@@ -661,6 +662,18 @@ namespace Beef_Net
 				}
 			}
 		}
+
+		/*
+		// lws2override.pp version... Wut?
+		public static void FD_SET(fd_handle aFd, ref fd_set aFDSet)
+		{
+			if (aFDSet.fd_count < FD_SETSIZE)
+			{
+				aFDSet.fd_array[aFDSet.fd_count] = aFd;
+				aFDSet.fd_count++;
+			}
+		}
+		*/
 
 		public static void FD_ZERO(ref fd_set aFDSet) =>
 			aFDSet.fd_count = 0;

@@ -5,3 +5,27 @@ Dependencies = {corlib = "*", Beef-OpenSSL = "*"}
 Name = "Beef-Net"
 TargetType = "BeefLib"
 StartupObject = "Beef_Net.Program"
+
+[Configs.Debug.Linux64]
+LibPaths = ["$(ProjectDir)/dist/UnixHelper/dist/lin64/UnixHelper.a"]
+
+[Configs.Debug.Linux32]
+LibPaths = ["$(ProjectDir)/dist/UnixHelper/dist/lin64/UnixHelper.a"]
+
+[Configs.Release.Linux64]
+LibPaths = ["$(ProjectDir)/dist/UnixHelper/dist/lin64/UnixHelper.a"]
+
+[Configs.Release.Linux32]
+LibPaths = ["$(ProjectDir)/dist/UnixHelper/dist/lin64/UnixHelper.a"]
+
+[Configs.Paranoid.Linux64]
+LibPaths = ["$(ProjectDir)/dist/UnixHelper/dist/lin64/UnixHelper.a"]
+
+[Configs.Paranoid.Linux32]
+LibPaths = ["$(ProjectDir)/dist/UnixHelper/dist/lin64/UnixHelper.a"]
+
+[Configs.Test.Linux64]
+LibPaths = ["$(ProjectDir)/dist/UnixHelper/dist/lin64/UnixHelper.a"]
+
+[Configs.Test.Linux32]
+LibPaths = ["$(ProjectDir)/dist/UnixHelper/dist/lin64/UnixHelper.a"]

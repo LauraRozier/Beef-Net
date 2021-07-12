@@ -11,7 +11,7 @@ namespace Beef_Net.Connection
 			if (_rootSock == null)
 			{
 				aSocket.[Friend]SocketType = SOCK_DGRAM;
-				aSocket.Protocol   = PROTO_UDP;
+				aSocket.Protocol = PROTO_UDP;
 				result = base.InitSocket(aSocket); // call last, to make sure sessions get their turn in overriding
 			}
 

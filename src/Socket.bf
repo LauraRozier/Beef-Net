@@ -38,16 +38,28 @@ namespace Beef_Net
 				}
 			}
 		}
+
+		public StringView SSLStringValue
+		{
+			get
+			{
+				switch (this)
+				{
+				case .Send: return "SSLWrite";
+				case .Receive: return "SSLRead";
+				}
+			}
+		}
 	}
 
 	// Callback Event procedure for errors
-	public function void SocketErrorEvent(StringView aMsg,  Socket aSocket);
+	public delegate void SocketErrorEvent(StringView aMsg,  Socket aSocket);
 
 	// Callback Event procedure for others
-	public function void SocketEvent(Socket aSocket);
+	public delegate void SocketEvent(Socket aSocket);
 
 	// Callback Event procedure for progress reports
-	public function void SocketProgressEvent(Socket aSocket, int aBytes);
+	public delegate void SocketProgressEvent(Socket aSocket, int aBytes);
 
 	class Socket : Handle
 	{
@@ -121,15 +133,15 @@ namespace Beef_Net
 			get { return Common.ntohs(_address.u.IPv4.sin_port); }
 		}
 
-		public Socket NextSock
+		public ref Socket NextSock
 		{
-			get { return _nextSock; }
+			get { return ref _nextSock; }
 			set { _nextSock = value; }
 		}
 
-		public Socket PrevSock
+		public ref Socket PrevSock
 		{
-			get { return _prevSock; }
+			get { return ref _prevSock; }
 			set { _prevSock = value; }
 		}
 
@@ -138,14 +150,14 @@ namespace Beef_Net
 			get { return _socketState; }
 		}
 
-		public Component Creator
+		public ref Component Creator
 		{
-			get { return _creator; }
+			get { return ref _creator; }
 		}
 
-		public Session Session
+		public ref Session Session
 		{
-			get { return _session; }
+			get { return ref _session; }
 		}
 		
 		protected SockAddr* GetIPAddressPointer()

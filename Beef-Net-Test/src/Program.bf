@@ -1,4 +1,5 @@
 using System;
+using Beef_Net;
 using Beef_OpenSSL;
 
 namespace Beef_Net_Test
@@ -7,7 +8,7 @@ namespace Beef_Net_Test
 	{
 		static int Main()
 		{
-			OpenSSL.init();
+			InitOpenSSL();
 			String tmp = scope:: .(AES.options());
 			tmp.Append("\n\nOpenSSL.VERSION     = ");
 			tmp.Append(OpenSSL.version(OpenSSL.VERSION));
@@ -25,7 +26,8 @@ namespace Beef_Net_Test
 
 			Console.Out.WriteLine("\nPress [Enter]  to exit...");
 			Console.In.Read();
-			OpenSSL.cleanup();
+			DeInitOpenSSL();
+
 			return 0;
 		}
 	}

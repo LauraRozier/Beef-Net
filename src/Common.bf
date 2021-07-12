@@ -27,7 +27,7 @@ namespace Beef_Net
 	[CRepr]
 	public struct fd_set
 	{
-		public uint fd_count;                      // how many are SET?
+		public uint fd_count;             // how many are SET?
 #if BF_PLATFORM_WINDOWS
 		public uint[FD_SETSIZE] fd_array; // an array of SOCKETs
 #endif
@@ -447,8 +447,20 @@ namespace Beef_Net
 			(int32)WinSock2.WSAGetLastError();
 #endif
 
+#if BF_PLATFORM_LINUX
+		[CLink, CallingConvention(.Cdecl)]
+		private extern static char8* strerror(int32 errnum);
+
+		[LinkName("UnixHelper_geterrno"), CallingConvention(.Cdecl)]
+		public extern static int32 geterrno();
+
+		[LinkName("UnixHelper_seterrno"), CallingConvention(.Cdecl)]
+		public extern static void seterrno(int32 errnum);
+#endif
+
 		public static void StrError(int32 aErrNum, String aOutStr, bool aIndUseUTF8 = false)
 		{
+#if BF_PLATFORM_WINDOWS
 			uint32 MAX_ERROR = 1024;
 			String tmp = scope .();
 			aOutStr.AppendF(" [{0}]: ", aErrNum);
@@ -467,6 +479,9 @@ namespace Beef_Net
 			}
 
 			aOutStr.Append(tmp);
+#elif BF_PLATFORM_LINUX
+			aOutStr.Append(strerror(aErrNum));
+#endif
 		}
 
 		public static fd_handle Accept(fd_handle aHandle, SockAddr* aAddr, int32* aAddrLen) =>

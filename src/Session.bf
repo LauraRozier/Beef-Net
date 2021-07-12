@@ -12,43 +12,43 @@ namespace Beef_Net
 			get { return _active; }
 		}
 
-		public void RegisterWithComponent(BaseConnection aConnection) =>
+		public virtual void RegisterWithComponent(BaseConnection aConnection) =>
 			Runtime.Assert(aConnection != null, "Cannot register session with null connection");
 
-		public void InitHandle(Handle aHandle) =>
+		public virtual void InitHandle(Handle aHandle) =>
 			((Socket)aHandle).[Friend]_session = this;
 
-		public void ReceiveEvent(Handle aHandle)
+		public virtual void ReceiveEvent(Handle aHandle)
 		{
 			_active = true;
 			CallReceiveEvent(aHandle);
 		}
 
-		public void SendEvent(Handle aHandle)
+		public virtual void SendEvent(Handle aHandle)
 		{
 			_active = true;
 			CallSendEvent(aHandle);
 		}
 
-		public void ErrorEvent(Handle aHandle, StringView aMsg)
+		public virtual void ErrorEvent(Handle aHandle, StringView aMsg)
 		{
 			_active = true;
 			CallErrorEvent(aHandle, aMsg);
 		}
 
-		public void ConnectEvent(Handle aHandle)
+		public virtual void ConnectEvent(Handle aHandle)
 		{
 			_active = true;
 			CallConnectEvent(aHandle);
 		}
 
-		public void AcceptEvent(Handle aHandle)
+		public virtual void AcceptEvent(Handle aHandle)
 		{
 			_active = true;
 			CallAcceptEvent(aHandle);
 		}
 
-		public void DisconnectEvent(Handle aHandle)
+		public virtual void DisconnectEvent(Handle aHandle)
 		{
 			_active = true;
 			CallDisconnectEvent(aHandle);

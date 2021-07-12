@@ -9,7 +9,25 @@ namespace Beef_Net
 
 		public static Type BestEventerClass()
 		{
-			return typeof(Eventer);
+#if BF_PLATFORM_LINUX
+	#if !FORCE_SELECT
+			int32 tmp = epoll_create(1);
+
+			if (tmp >= 0)
+			{
+				close(tmp);
+				return typeof(EpollEventer);
+			}
+			else
+			{
+				return typeof(SelectEventer);
+			}
+	#else
+			return typeof(SelectEventer);
+	#endif
+#else
+			return typeof(SelectEventer);
+#endif
 		}
 	}
 
@@ -35,21 +53,21 @@ namespace Beef_Net
 		protected void* _internalData;
 		public void* UserData;
 
-		public Handle Prev
+		public ref Handle Prev
 		{
-			get { return _prev; }
+			get { return ref _prev; }
 			set { _prev = value; }
 		}
 
-		public Handle Next
+		public ref Handle Next
 		{
-			get { return _next; }
+			get { return ref _next; }
 			set { _next = value; }
 		}
 
-		public Handle FreeNext
+		public ref Handle FreeNext
 		{
-			get { return _freeNext; }
+			get { return ref _freeNext; }
 			set { _freeNext = value; }
 		}
 
@@ -128,9 +146,9 @@ namespace Beef_Net
 			set { _handle = value; }
 		}
 
-		public Eventer Eventer
+		public ref Eventer Eventer
 		{
-			get { return _eventer; }
+			get { return ref _eventer; }
 		}
 
 		public virtual this()
