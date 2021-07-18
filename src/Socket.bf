@@ -61,6 +61,7 @@ namespace Beef_Net
 	// Callback Event procedure for progress reports
 	public delegate void SocketProgressEvent(Socket aSocket, int aBytes);
 
+	[AlwaysInclude(AssumeInstantiated = true), Reflect(.DynamicBoxing)]
 	class Socket : Handle
 	{
 		protected SocketAddress _address;
@@ -398,13 +399,9 @@ namespace Beef_Net
 					_blocking = true;
 
 					if (aValue)
-					{
 						_socketState |= .Blocking;
-					}
 					else
-					{
 						_socketState &= ~.Blocking;
-					}
 				}
 			}
 		}
@@ -416,13 +413,9 @@ namespace Beef_Net
 				_reuseAddress = true;
 
 				if (aValue)
-				{
 					_socketState |= .ReuseAddress;
-				}
 				else
-				{
 					_socketState &= ~.ReuseAddress;
-				}
 			}
 		}
 
@@ -437,13 +430,9 @@ namespace Beef_Net
 				else
 				{
 					if (aValue)
-					{
 						_socketState |= .NoDelay;
-					}
 					else
-					{
 						_socketState &= ~.NoDelay;
-					}
 				}
 			}
 		}
@@ -513,9 +502,7 @@ namespace Beef_Net
 				String tmp = scope .(aMsg);
 
 				if (aErrNum > 0)
-				{
 					Common.StrError(aErrNum, tmp);
-				}
 
 				_onError(this, tmp);
 			}
@@ -554,13 +541,9 @@ namespace Beef_Net
 			case .ServerSocket:
 				{
 					if (aIndTurnOn)
-					{
 						_socketState |= aState;
-					}
 					else
-					{
 						Runtime.FatalError("Can not turn off server socket feature");
-					}
 				}
 			case .Blocking:
 				{
@@ -576,13 +559,9 @@ namespace Beef_Net
 			case .CanReceive: 
 				{
 					if (aIndTurnOn)
-					{
 						_socketState |= aState;
-					}
 					else
-					{
 						_socketState &= ~aState;
-					}
 				}
 			case .SSLActive: 
 				{
@@ -608,13 +587,9 @@ namespace Beef_Net
 			SetupSocket(aPort, aIntf);
 
 			if (Common.Bind(_handle, GetIPAddressPointer(), GetIPAddressLength()) == SOCKET_ERROR)
-			{
 				Bail("Error on bind", Common.SocketError());
-			}
 			else
-			{
 				result = true;
-			}
 
 			if (_socketType == SOCK_STREAM && result)
 				if (Common.Listen(_handle, _listenBacklog) == SOCKET_ERROR)
@@ -654,6 +629,15 @@ namespace Beef_Net
 			if (SetupSocket(aPort, aAddress))
 			{
 				Common.Connect(_handle, GetIPAddressPointer(), GetIPAddressLength());
+				/*
+				if (res != 0)
+				{
+#if DEBUG
+  					System.Diagnostics.Debug.WriteLine("Socket connect error");
+#endif
+					return false;
+				}
+				*/
 				_connectionStatus = .Connecting;
 				return true;
 			}
@@ -727,13 +711,9 @@ namespace Beef_Net
 				return;
 
 			if (aIndForced)
-			{
 				HardDisconnect();
-			}
 			else
-			{
 				SoftDisconnect();
-			}
 		}
 	}
 }

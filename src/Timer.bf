@@ -4,7 +4,7 @@ namespace Beef_Net
 {
 	public delegate void NotifyEvent(Object aSender);
 
-	static
+	class Timer
 	{
 		// Units of time
 		public const int HoursPerDay = 24;
@@ -15,10 +15,7 @@ namespace Beef_Net
 		public const int SecsPerDay  = MinsPerDay  * SecsPerMin;
 		public const int SecsPerHour = SecsPerMin  * MinsPerHour;
 		public const int MSecsPerDay = SecsPerDay  * MSecsPerSec;
-	}
 
-	class Timer
-	{
 		protected NotifyEvent _onTimer = null;
 		protected TimeSpan _interval;
 		protected DateTime _started;
@@ -61,13 +58,9 @@ namespace Beef_Net
 				_onTimer(this);
 
 				if (_oneShot)
-				{
 					_enabled = false;
-				}
 				else
-				{
 					_started = DateTime.Now;
-				}
 			}
 		}
 	}

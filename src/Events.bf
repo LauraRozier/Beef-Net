@@ -3,34 +3,6 @@ using System.Threading;
 
 namespace Beef_Net
 {
-	static
-	{
-		public static Platform.BfpCritSect* CS = Platform.BfpCritSect_Create() ~ Platform.BfpCritSect_Release(_);
-
-		public static Type BestEventerClass()
-		{
-#if BF_PLATFORM_LINUX
-	#if !FORCE_SELECT
-			int32 tmp = epoll_create(1);
-
-			if (tmp >= 0)
-			{
-				close(tmp);
-				return typeof(EpollEventer);
-			}
-			else
-			{
-				return typeof(SelectEventer);
-			}
-	#else
-			return typeof(SelectEventer);
-	#endif
-#else
-			return typeof(SelectEventer);
-#endif
-		}
-	}
-
 	class Handle : IDisposable
 	{
 		public delegate void HandleEvent(Handle aHandle);
@@ -185,12 +157,18 @@ namespace Beef_Net
 		}
 	}
 
+	enum EventerType
+	{
+		EpollEventer,
+		SelectEventer
+	}
+
 	class Eventer
 	{
 		public delegate void EventerErrorEvent(StringView aMsg, Eventer aSender);
 
 	    protected Handle _root;
-	    protected int _count;
+	    protected int32 _count;
 	    protected EventerErrorEvent _onError;
 	    protected int _references;
 	    protected Handle _freeRoot; // the root of "free" list if any
@@ -209,12 +187,12 @@ namespace Beef_Net
 			set { _onError = value; }
 		}
 
-	    public int Count
+	    public int32 Count
 		{
 			get { return GetCount(); }
 		}
 
-		protected virtual int GetCount() =>
+		protected virtual int32 GetCount() =>
 			_count;
 
 		protected virtual int64 GetTimeout() =>
@@ -472,7 +450,7 @@ namespace Beef_Net
 			if (_inLoop)
 				return result;
 			
-			if (_root != null)
+			if (_root == null)
 			{
 				Thread.Sleep((int32)(_timeout.tv_sec * 1000 + _timeout.tv_usec / 1000));
 				return result;
@@ -545,7 +523,13 @@ namespace Beef_Net
 					temp = temp.[Friend]_next;
 
 					if (temp2.[Friend]_dispose)
+					{
+						if (temp2 == _root)
+							_root = null;
+
 						temp2.Dispose();
+						temp2.[Friend]_next = null;
+					}
 				}
 			}
 			

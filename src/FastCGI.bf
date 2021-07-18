@@ -64,44 +64,44 @@ namespace Beef_Net
 		public FCGI_UnknownTypeBody Body;
 	}
 
-	static
+	public sealed static class FCGI
 	{
 		/// Listening socket file number
-		public const uint8 FCGI_LISTENSOCK_FILENO = 0;
+		public const uint8 LISTENSOCK_FILENO = 0;
 		/// Number of bytes in a FCGI_Header.  Future versions of the protocol will not reduce this number.
-		public const uint8 FCGI_HEADER_LEN = 8;
+		public const uint8 HEADER_LEN = 8;
 		/// Value for version component of FCGI_Header
-		public const uint8 FCGI_VERSION_1 = 1;
+		public const uint8 VERSION_1 = 1;
 		/// Values for type component of FCGI_Header
-		public const uint8 FCGI_BEGIN_REQUEST = 1;
-		public const uint8 FCGI_ABORT_REQUEST = 2;
-		public const uint8 FCGI_END_REQUEST = 3;
-		public const uint8 FCGI_PARAMS = 4;
-		public const uint8 FCGI_STDIN = 5;
-		public const uint8 FCGI_STDOUT = 6;
-		public const uint8 FCGI_STDERR = 7;
-		public const uint8 FCGI_DATA = 8;
-		public const uint8 FCGI_GET_VALUES = 9;
-		public const uint8 FCGI_GET_VALUES_RESULT = 10;
-		public const uint8 FCGI_UNKNOWN_TYPE = 11;
-		public const uint8 FCGI_MAXTYPE = FCGI_UNKNOWN_TYPE;
+		public const uint8 BEGIN_REQUEST = 1;
+		public const uint8 ABORT_REQUEST = 2;
+		public const uint8 END_REQUEST = 3;
+		public const uint8 PARAMS = 4;
+		public const uint8 STDIN = 5;
+		public const uint8 STDOUT = 6;
+		public const uint8 STDERR = 7;
+		public const uint8 DATA = 8;
+		public const uint8 GET_VALUES = 9;
+		public const uint8 GET_VALUES_RESULT = 10;
+		public const uint8 UNKNOWN_TYPE = 11;
+		public const uint8 MAXTYPE = UNKNOWN_TYPE;
 		/// Value for requestId component of FCGI_Header
-		public const uint8 FCGI_NULL_REQUEST_ID = 0;
+		public const uint8 NULL_REQUEST_ID = 0;
 		/// Mask for flags component of FCGI_BeginRequestBody
-		public const uint8 FCGI_KEEP_CONN = 1;
+		public const uint8 KEEP_CONN = 1;
 		/// Values for role component of FCGI_BeginRequestBody
-		public const uint8 FCGI_RESPONDER = 1;
-		public const uint8 FCGI_AUTHORIZER = 2;
-		public const uint8 FCGI_FILTER = 3;
+		public const uint8 RESPONDER = 1;
+		public const uint8 AUTHORIZER = 2;
+		public const uint8 FILTER = 3;
 		/// Values for protocolStatus component of FCGI_EndRequestBody
-		public const uint8 FCGI_REQUEST_COMPLETE = 0;
-		public const uint8 FCGI_CANT_MPX_CONN = 1;
-		public const uint8 FCGI_OVERLOADED = 2;
-		public const uint8 FCGI_UNKNOWN_ROLE = 3;
+		public const uint8 REQUEST_COMPLETE = 0;
+		public const uint8 CANT_MPX_CONN = 1;
+		public const uint8 OVERLOADED = 2;
+		public const uint8 UNKNOWN_ROLE = 3;
 		/// Variable names for FCGI_GET_VALUES / FCGI_GET_VALUES_RESULT records
-		public const String FCGI_MAX_CONNS = "FCGI_MAX_CONNS";
-		public const String FCGI_MAX_REQS = "FCGI_MAX_REQS";
-		public const String FCGI_MPXS_CONNS = "FCGI_MPXS_CONNS";
+		public const String MAX_CONNS = "FCGI_MAX_CONNS";
+		public const String MAX_REQS = "FCGI_MAX_REQS";
+		public const String MPXS_CONNS = "FCGI_MPXS_CONNS";
 	}
 
 	class FastCGIRequest
@@ -185,10 +185,10 @@ namespace Beef_Net
 		{
 			switch(_client.ReqType)
 			{
-			case FCGI_STDOUT: DoOutput();
-			case FCGI_STDERR: DoStdErr();
-			case FCGI_END_REQUEST: EndRequest();
-			case FCGI_GET_VALUES_RESULT: _client.[Friend]HandleGetValuesResult();
+			case FCGI.STDOUT: DoOutput();
+			case FCGI.STDERR: DoStdErr();
+			case FCGI.END_REQUEST: EndRequest();
+			case FCGI.GET_VALUES_RESULT: _client.[Friend]HandleGetValuesResult();
 			}
 		}
 
@@ -196,8 +196,8 @@ namespace Beef_Net
 		{
 			switch(_client.ReqType)
 			{
-			case FCGI_STDOUT: _outputDone = true;
-			case FCGI_STDERR: _stdErrDone = true;
+			case FCGI.STDOUT: _outputDone = true;
+			case FCGI.STDERR: _stdErrDone = true;
 			}
 		}
 
@@ -266,11 +266,11 @@ namespace Beef_Net
 			// management record type has request id 0
 			int lastRequestID = _id;
 			_id = 0;
-			SendParam("FCGI_MAX_REQS", "", FCGI_GET_VALUES);
+			SendParam("FCGI_MAX_REQS", "", FCGI.GET_VALUES);
 
 			// if we're the first connection, ask max. # connections
 			if (_client.[Friend]_pool.[Friend]_clientsAvail == 1)
-				SendParam("FCGI_MAX_CONNS", "", FCGI_GET_VALUES);
+				SendParam("FCGI_MAX_CONNS", "", FCGI.GET_VALUES);
 
 			_id = lastRequestID;
 		}
@@ -285,7 +285,7 @@ namespace Beef_Net
 		public this()
 		{
 			_buffer = StringBuffer.InitStringBuffer(504);
-			_header.Version = FCGI_VERSION_1;
+			_header.Version = FCGI.VERSION_1;
 			_headerPos = -1;
 		}
 
@@ -296,7 +296,7 @@ namespace Beef_Net
 
 		public void AbortRequest()
 		{
-			_header.ReqType = FCGI_ABORT_REQUEST;
+			_header.ReqType = FCGI.ABORT_REQUEST;
 			SetContentLength(0);
 			StringBuffer.AppendString(ref _buffer, &_header, sizeof(FCGI_Header));
 			SendPrivateBuffer();
@@ -310,13 +310,9 @@ namespace Beef_Net
 			_outputPending = false;
 
 			if ((_client.Iterator != null) && _client.Iterator.IgnoreRead)
-			{
 				_client.[Friend]HandleReceive(null);
-			}
 			else
-			{
 				_client.[Friend]ParseBuffer();
-			}
 		}
 
 		public int32 SendBuffer()
@@ -346,7 +342,9 @@ namespace Beef_Net
 				StringBuffer.AppendString(ref _buffer, &PaddingBuffer[0], _header.PaddingLength);
 			}
 			else
+			{
 				_client.AddToSendQueue(this);
+			}
 
 			return written;
 		}
@@ -382,14 +380,14 @@ namespace Beef_Net
 			FCGI_BeginRequestBody body = .();
 			body.RoleB1 = (uint8)((aType >> 8) & 0xff);
 			body.RoleB0 = (uint8)(aType & 0xff);
-			body.Flags = FCGI_KEEP_CONN;
-			_header.ReqType = FCGI_BEGIN_REQUEST;
+			body.Flags = FCGI.KEEP_CONN;
+			_header.ReqType = FCGI.BEGIN_REQUEST;
 			SetContentLength(sizeof(FCGI_BeginRequestBody));
 			StringBuffer.AppendString(ref _buffer, &_header, sizeof(FCGI_Header));
 			StringBuffer.AppendString(ref _buffer, &body, sizeof(FCGI_BeginRequestBody));
 		}
 
-		public void SendParam(StringView aName, StringView aValue, uint8 aReqType = FCGI_PARAMS)
+		public void SendParam(StringView aName, StringView aValue, uint8 aReqType = FCGI.PARAMS)
 		{
 			void FillFastCGIStringSize(StringView aStr, ref FastCGIStringSize aFastCGIStr)
 			{
@@ -422,7 +420,7 @@ namespace Beef_Net
 				// undo padding
 				_buffer.Pos -= _header.PaddingLength;
 				SetContentLength(_contentLength + totalLen);
-				Internal.MemMove(&_header, &_buffer.Memory[_headerPos], sizeof(FCGI_Header));
+				Internal.MemMove(&_buffer.Memory[_headerPos], &_header, sizeof(FCGI_Header));
 			}
 			else
 			{
@@ -452,7 +450,9 @@ namespace Beef_Net
 					return result;
 			}
 			else
+			{
 				result = 0;
+			}
 
 			if (result >= aSize)
 				return result;
@@ -461,7 +461,7 @@ namespace Beef_Net
 			{
 				_inputBuffer = aBuffer + result;
 				_inputSize = aSize - result;
-				_header.ReqType = FCGI_STDIN;
+				_header.ReqType = FCGI.STDIN;
 				SetContentLength(_inputSize);
 				StringBuffer.AppendString(ref _buffer, &_header, sizeof(FCGI_Header));
 			}
@@ -470,11 +470,11 @@ namespace Beef_Net
 		}
 
 		public void DoneParams() =>
-			SendEmptyRec(FCGI_PARAMS);
+			SendEmptyRec(FCGI.PARAMS);
 
 		public void DoneInput()
 		{
-			SendEmptyRec(FCGI_STDIN);
+			SendEmptyRec(FCGI.STDIN);
 			SendPrivateBuffer();
 		}
 	}
@@ -501,6 +501,7 @@ namespace Beef_Net
 		protected String _host;
 		protected uint16 _port;
 		protected SpawnState _spawnState;
+		protected NotifyEvent _connectClients = new => ConnectClients ~ delete _;
 
 		public String AppEnv
 		{
@@ -555,13 +556,9 @@ namespace Beef_Net
 				return;
 			
 			if (_freeClient == null)
-			{
 				_freeClient = aClient;
-			}
 			else
-			{
 				aClient.[Friend]_nextFree = _freeClient.[Friend]_nextFree;
-			}
 
 			_freeClient.[Friend]_nextFree = aClient;
 		}
@@ -616,11 +613,11 @@ namespace Beef_Net
 				if (_timer == null)
 					_timer = new Timer();
 	
-				/*_timer.OneShot = true;
-				_timer.OnTimer = => ConnectClients;*/
+				_timer.OneShot = true;
+				_timer.OnTimer = _connectClients;
 			}
 
-			//_timer.Interval = 2000;
+			_timer.Interval = TimeSpan(0, 0, 2);
 		}
 		
 		public this()
@@ -657,13 +654,9 @@ namespace Beef_Net
 
 				// Result = nil -> no free requesters on next free client
 				if (tempClient == _freeClient)
-				{
 					_freeClient = null;
-				}
 				else
-				{
 					_freeClient.[Friend]_nextFree = tempClient.[Friend]_nextFree;
-				}
 
 				tempClient.[Friend]_nextFree = null;
 			}
@@ -767,13 +760,9 @@ namespace Beef_Net
 					else
 					{
 						if (_requests[i].[Friend]_buffer.Memory == _requests[i].[Friend]_buffer.Pos)
-						{
 							needReconnect = true;
-						}
 						else
-						{
 							_requests[i].[Friend]EndRequest();
-						}
 					}
 				}
 			}
@@ -784,7 +773,6 @@ namespace Beef_Net
 
 		protected override void ErrorEvent(Handle aSocket, StringView aMsg)
 		{
-
 		}
 
 		protected FastCGIRequest CreateRequester()
@@ -794,22 +782,18 @@ namespace Beef_Net
 
 		protected void HandleGetValuesResult()
 		{
-
 		}
 
 		protected void HandleReceive(Socket aSocket)
 		{
-
 		}
 
 		protected void HandleSend(Socket aSocket)
 		{
-
 		}
 
 		protected void ParseBuffer()
 		{
-
 		}
 		
 		public this(): base()
@@ -822,7 +806,6 @@ namespace Beef_Net
 
 		public void AddToSendQueue(FastCGIRequest aRequest)
 		{
-
 		}
 
 		public FastCGIRequest BeginRequest(uint8 aType)
@@ -832,12 +815,10 @@ namespace Beef_Net
 
 		public void EndRequest(FastCGIRequest aRequest)
 		{
-
 		}
 
 		public void Flush()
 		{
-
 		}
 
 		public int32 GetBuffer(char8* aBuffer, int32 aSize)

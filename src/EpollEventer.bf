@@ -4,7 +4,7 @@ using System.Collections;
 namespace Beef_Net
 {
 #if BF_PLATFORM_LINUX
-	static
+	public sealed static class EPoll
 	{
 		public const uint32 BASE_SIZE = 100;
 
@@ -23,14 +23,14 @@ namespace Beef_Net
 		[CLink, CallingConvention(.Cdecl)]
 		public extern static int32 close(int32 fd);
 
-		[CLink, CallingConvention(.Cdecl)]
-		public extern static int32 epoll_create(int32 size);
+		[LinkName("epoll_create"), CallingConvention(.Cdecl)]
+		public extern static int32 create(int32 size);
 
-		[CLink, CallingConvention(.Cdecl)]
-		public extern static int32 epoll_ctl(int32 epfd, int32 op, int32 fd, EPoll_Event* event);
+		[LinkName("epoll_ctl"), CallingConvention(.Cdecl)]
+		public extern static int32 ctl(int32 epfd, int32 op, int32 fd, EPoll_Event* event);
 
-		[CLink, CallingConvention(.Cdecl)]
-		public extern static int32 epoll_wait(int32 epfd, EPoll_Event* events, int32 maxevents, int32 timeout);
+		[LinkName("epoll_wait"), CallingConvention(.Cdecl)]
+		public extern static int32 wait(int32 epfd, EPoll_Event* events, int32 maxevents, int32 timeout);
 	}
 
 	[CRepr, Union]
@@ -74,16 +74,16 @@ namespace Beef_Net
 			var aHandle;
 			EPoll_Event event = .();
 			event.Data.ptr = &aHandle;
-			event.Events = EPOLLIN | EPOLLPRI | EPOLLHUP;
+			event.Events = EPoll.EPOLLIN | EPoll.EPOLLPRI | EPoll.EPOLLHUP;
 
 			if (!aHandle.IgnoreRead)
 			{
-			  	if (epoll_ctl(_epollReadFD, EPOLL_CTL_ADD, aHandle.[Friend]_handle, &event) < 0)
+			  	if (EPoll.ctl(_epollReadFD, EPoll.EPOLL_CTL_ADD, aHandle.[Friend]_handle, &event) < 0)
 			    	Bail("Error modifying handle for reads", Common.SocketError());
 			}
 			else
 			{
-			  	if (epoll_ctl(_epollReadFD, EPOLL_CTL_DEL, aHandle.[Friend]_handle, &event) < 0)
+			  	if (EPoll.ctl(_epollReadFD, EPoll.EPOLL_CTL_DEL, aHandle.[Friend]_handle, &event) < 0)
 			    	Bail("Error modifying handle for reads", Common.SocketError());
 			}
 		}
@@ -91,7 +91,7 @@ namespace Beef_Net
 		protected void Inflate()
 		{
 		   	int oldLen = _events.Count;
-			_events.Capacity = oldLen > 1 ? (int)Math.Sqrt((float)oldLen) : BASE_SIZE;
+			_events.Capacity = oldLen > 1 ? (int)Math.Sqrt((float)oldLen) : EPoll.BASE_SIZE;
 			_eventsRead.Capacity = _events.Capacity;
 		}
 
@@ -100,9 +100,9 @@ namespace Beef_Net
 			_freeList = new List<Object>();
 			Inflate();
 			_timeout = 0;
-			_epollFD = epoll_create(BASE_SIZE);
-			_epollReadFD = epoll_create(BASE_SIZE);
-			_epollMasterFD = epoll_create(2);
+			_epollFD = EPoll.create(EPoll.BASE_SIZE);
+			_epollReadFD = EPoll.create(EPoll.BASE_SIZE);
+			_epollMasterFD = EPoll.create(2);
 
 			if (_epollFD < 0 || _epollReadFD < 0 || _epollMasterFD < 0)
 			{
@@ -112,10 +112,10 @@ namespace Beef_Net
 			}
 
 			EPoll_Event event = .();
-			event.Events = EPOLLIN | EPOLLOUT | EPOLLPRI | EPOLLERR | EPOLLHUP | EPOLLET;
+			event.Events = EPoll.EPOLLIN | EPoll.EPOLLOUT | EPoll.EPOLLPRI | EPoll.EPOLLERR | EPoll.EPOLLHUP | EPoll.EPOLLET;
 			event.Data.fd = _epollFD;
 
-			if (epoll_ctl(_epollMasterFD, EPOLL_CTL_ADD, _epollFD, &event) < 0)
+			if (EPoll.ctl(_epollMasterFD, EPoll.EPOLL_CTL_ADD, _epollFD, &event) < 0)
 			{
 				String tmp = scope .("Unable to add FDs to master epoll FD: ");
 				Common.StrError(Common.geterrno(), tmp);
@@ -124,7 +124,7 @@ namespace Beef_Net
 
 			event.Data.fd = _epollReadFD;
 
-			if (epoll_ctl(_epollMasterFD, EPOLL_CTL_ADD, _epollReadFD, &event) < 0)
+			if (EPoll.ctl(_epollMasterFD, EPoll.EPOLL_CTL_ADD, _epollReadFD, &event) < 0)
 			{
 				String tmp = scope .("Unable to add FDs to master epoll FD: ");
 				Common.StrError(Common.geterrno(), tmp);
@@ -134,9 +134,9 @@ namespace Beef_Net
 
 		public ~this()
 		{
-			close(_epollReadFD);
-			close(_epollMasterFD);
-			close(_epollFD);
+			EPoll.close(_epollReadFD);
+			EPoll.close(_epollMasterFD);
+			EPoll.close(_epollFD);
 			DeleteContainerAndItems!(_freeList);
 			_freeList = null;
 		}
@@ -150,16 +150,16 @@ namespace Beef_Net
 			{
 				result = false;
 				EPoll_Event event = .();
-				event.Events = EPOLLET | EPOLLOUT | EPOLLERR;
+				event.Events = EPoll.EPOLLET | EPoll.EPOLLOUT | EPoll.EPOLLERR;
 				event.Data.ptr = &aHandle;
 
-				if (epoll_ctl(_epollFD, EPOLL_CTL_ADD, aHandle.[Friend]_handle, &event) < 0)
+				if (EPoll.ctl(_epollFD, EPoll.EPOLL_CTL_ADD, aHandle.[Friend]_handle, &event) < 0)
 					Bail("Error adding handle to epoll", Common.SocketError());
 
-				event.Events = EPOLLIN | EPOLLPRI | EPOLLHUP;
+				event.Events = EPoll.EPOLLIN | EPoll.EPOLLPRI | EPoll.EPOLLHUP;
 
 				if (!aHandle.IgnoreRead)
-					if (epoll_ctl(_epollReadFD, EPOLL_CTL_ADD, aHandle.[Friend]_handle, &event) < 0)
+					if (EPoll.ctl(_epollReadFD, EPoll.EPOLL_CTL_ADD, aHandle.[Friend]_handle, &event) < 0)
 						Bail("Error adding handle to epoll", Common.SocketError());
 					
 				if (_count >= _events.Count)
@@ -171,84 +171,103 @@ namespace Beef_Net
 
 		public override bool CallAction()
 		{
-			/*
-			var
-			  i, MasterChanges, Changes, ReadChanges: Integer;
-			  Temp, TempRead: TLHandle;
-			  MasterEvents: array[0..1] of TEpollEvent;
-			begin
-			  Result := False;
-			  if FInLoop then
-			    Exit;
+			if (_inLoop)
+				return false;
+	
+			bool result = false;
+			EPoll_Event[] masterEvents = scope EPoll_Event[2](?);
+			int changes = 0;
+			int readChanges = 0;
 
-			  Changes := 0;
-			  ReadChanges := 0;
+			int masterChanges = EPoll.wait(_epollMasterFD, &masterEvents[0], 2, (int32)_timeout);
 
-			  MasterChanges := epoll_wait(FEpollMasterFD, @MasterEvents[0], 2, FTimeout);
+			if (masterChanges > 0)
+			{
+				for (int i = 0; i < masterChanges; i++)
+				{
+			      	if (masterEvents[i].Data.fd == _epollFD)
+			        	changes = EPoll.wait(_epollFD, &_events[0], _count, 0);
+			      	else
+			        	readChanges = EPoll.wait(_epollReadFD, &_eventsRead[0], _count, 0);
+				}
 
-			  if MasterChanges > 0 then begin
-			    for i := 0 to MasterChanges - 1 do
-			      if MasterEvents[i].Data.fd = FEpollFD then
-			        Changes := epoll_wait(FEpollFD, @FEvents[0], FCount, 0)
-			      else
-			        ReadChanges := epoll_wait(FEpollReadFD, @FEventsRead[0], FCount, 0);
-			    if (Changes < 0) or (ReadChanges < 0) then
-			      Bail('Error on epoll', LSocketError)
+			    if (changes < 0 || readChanges < 0)
+			      	Bail("Error on epoll", Common.SocketError());
 			    else
-			      Result := Changes + ReadChanges > 0;
+			      	result = changes + readChanges > 0;
 
-			    if Result then begin
-			      FInLoop := True;
-			      for i := 0 to Max(Changes, ReadChanges) - 1 do begin
-			        Temp := nil;
-			        if i < Changes then begin
-			          Temp := TLHandle(FEvents[i].data.ptr);
+			    if (result)
+				{
+			      	_inLoop = true;
+					Handle temp, tempRead;
 
-			          if  (not Temp.FDispose)
-			          and (FEvents[i].events and EPOLLOUT = EPOLLOUT) then
-			            if Assigned(Temp.FOnWrite) and not Temp.IgnoreWrite then
-			              Temp.FOnWrite(Temp);
+			      	for (int i = 0; i < Math.Max(changes, readChanges); i++)
+					{
+						temp = null;
 
-			          if Temp.FDispose then
-			            AddForFree(Temp);
-			        end; // writes
+						if (i < changes)
+						{
+						  	temp = *(Handle*)_events[i].Data.ptr;
 
-			        if i < ReadChanges then begin
-			          TempRead := TLHandle(FEventsRead[i].data.ptr);
+						  	if  ((!temp.[Friend]_dispose) && _events[i].Events & EPoll.EPOLLOUT == EPoll.EPOLLOUT)
+						    	if (temp.[Friend]_onWrite != null && !temp.IgnoreWrite)
+						      		temp.[Friend]_onWrite(temp);
 
-			          if  (not TempRead.FDispose)
-			          and ((FEventsRead[i].events and EPOLLIN = EPOLLIN)
-			          or  (FEventsRead[i].events and EPOLLHUP = EPOLLHUP)
-			          or  (FEventsRead[i].events and EPOLLPRI = EPOLLPRI)) then
-			            if Assigned(TempRead.FOnRead) and not TempRead.IgnoreRead then
-			              TempRead.FOnRead(TempRead);
+						  	if (temp.[Friend]_dispose)
+						    	AddForFree(temp);
+						} // writes
 
-			          if TempRead.FDispose then
-			            AddForFree(TempRead);
-			        end; // reads
+						if (i < readChanges)
+						{
+						  	tempRead = *(Handle*)_eventsRead[i].Data.ptr;
 
-			        if i < Changes then begin
-			          if not Assigned(Temp) then
-			            Temp := TLHandle(FEvents[i].data.ptr);
+						  	if ((!tempRead.[Friend]_dispose) && (
+								(_eventsRead[i].Events & EPoll.EPOLLIN == EPoll.EPOLLIN) ||
+								(_eventsRead[i].Events & EPoll.EPOLLHUP == EPoll.EPOLLHUP) ||
+								(_eventsRead[i].Events & EPoll.EPOLLPRI == EPoll.EPOLLPRI)
+							))
+						    	if (tempRead.[Friend]_onRead != null && !tempRead.IgnoreRead)
+						      		tempRead.[Friend]_onRead(tempRead);
 
-			          if  (not Temp.FDispose)
-			          and (FEvents[i].events and EPOLLERR = EPOLLERR) then
-			            if Assigned(Temp.FOnError) and not Temp.IgnoreError then
-			              Temp.FOnError(Temp, 'Handle error' + LStrError(LSocketError));
+						  	if (tempRead.[Friend]_dispose)
+						    	AddForFree(tempRead);
+						} // reads
 
-			          if Temp.FDispose then
-			            AddForFree(Temp);
-			        end; // errors
-			      end;
-			      FInLoop := False;
-			      if Assigned(FFreeRoot) then
-			        FreeHandles;
-			    end;
-			  end else if MasterChanges < 0 then
-			    Bail('Error on epoll', LSocketError);
-			end;
-			*/
+						if (i < changes)
+						{
+						  	if (temp == null)
+						    	temp = *(Handle*)_events[i].Data.ptr;
+
+						  	if ((!temp.[Friend]_dispose) && (_events[i].Events & EPoll.EPOLLERR == EPoll.EPOLLERR))
+						    	if (temp.[Friend]_onError != null && !temp.IgnoreError)
+								{
+									String tmpStr = scope .("Handle error");
+									Common.StrError(Common.SocketError(), tmpStr);
+						      		temp.[Friend]_onError(temp, tmpStr);
+								}
+
+						  	if (temp.[Friend]_dispose)
+						    	AddForFree(temp);
+						} // errors
+					}
+
+			      	_inLoop = false;
+
+					if (_freeRoot != null)
+			        	FreeHandles();
+				}
+			}
+			else if (masterChanges < 0)
+			{		
+		    	Bail("Error on epoll", Common.SocketError());
+			}
+
+			return result;
 		}
+	}
+#else
+	class EpollEventer : Eventer
+	{
 	}
 #endif
 }

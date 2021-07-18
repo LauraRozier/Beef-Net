@@ -31,13 +31,9 @@ namespace Beef_Net.Connection
 			((Socket)aSocket).SetState(.CanReceive);
 	
 			if (_session != null)
-			{
 				_session.ReceiveEvent(aSocket);
-			}
 			else
-			{
 				ReceiveEvent(aSocket);
-			}
 		}
 
 		protected override void ErrorAction(Handle aSocket, StringView aMsg)
@@ -49,13 +45,9 @@ namespace Beef_Net.Connection
 			}
 
 			if (_session != null)
-			{
 				_session.ErrorEvent(aSocket, aMsg);
-			}
 			else
-			{
 				ErrorEvent(aSocket, aMsg);
-			}
 		}
 
 		protected bool Bail(StringView aMsg)
@@ -63,13 +55,9 @@ namespace Beef_Net.Connection
 			Disconnect(true);
 
 			if (_session != null)
-			{
 				_session.ErrorEvent(null, aMsg);
-			}
 			else
-			{
 				ErrorEvent(_rootSock, aMsg);
-			}
 
 			return false;
 		}
@@ -88,7 +76,9 @@ namespace Beef_Net.Connection
 				Common.FillAddressInfo(ref _rootSock.[Friend]_peerAddress, (sa_family_t)_rootSock.[Friend]_socketNet, s, p);
 			}
 			else
+			{
 				Common.FillAddressInfo(ref _rootSock.[Friend]_peerAddress, (sa_family_t)_rootSock.[Friend]_socketNet, aAddress, _rootSock.PeerPort);
+			}
 		}
 
 		public this(): base()
@@ -104,7 +94,7 @@ namespace Beef_Net.Connection
 			if (_rootSock != null && _rootSock.[Friend]_connectionStatus != .None)
 				Disconnect(true);
 
-			_rootSock = InitSocket((Socket)SocketClass.CreateObject().Value);
+			_rootSock = InitSocket(IsSSLSocket ? new SSLSocket() : new Socket());
 			_iterator =  _rootSock;
 			result = _rootSock.[Friend]SetupSocket(aPort, ADDR6_ANY);
 
@@ -123,7 +113,7 @@ namespace Beef_Net.Connection
 			if (_rootSock != null && _rootSock.[Friend]_connectionStatus != .None)
 				Disconnect(true);
 
-			_rootSock = InitSocket((Socket)SocketClass.CreateObject().Value);
+			_rootSock = InitSocket(IsSSLSocket ? new SSLSocket() : new Socket());
 			_rootSock.[Friend]SetReuseAddress(_reuseAddress);
 			_iterator = _rootSock;
 

@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Reflection;
 using Beef_Net.Connection;
 using Beef_OpenSSL;
 
@@ -23,76 +24,7 @@ namespace Beef_Net
 		Shutdown
 	}
 
-	static
-	{
-		[Inline]
-		public static bool IsSSLBlockError(int32 errNum) =>
-			(errNum == SSL.ERROR_WANT_READ || errNum == SSL.ERROR_WANT_WRITE);
-		
-		[Inline]
-		public static bool IsSSLNonFatalError(int32 errNum, int32 aRet)
-		{
-			bool result = false;
-			int32 tmp;
-
-			if (errNum == SSL.ERROR_SYSCALL)
-				repeat
-				{
-					tmp = (int32)Error.get_error();
-
-					if (tmp == 0) // we need to check the ret
-					{
-						if (aRet <= 0) // EOF or BIO crap, we skip those
-							return result;
-
-						result = Common.IsNonFatalError(aRet);
-					}
-					else  // check what exactly
-					{
-						return Common.IsNonFatalError(tmp);
-					}
-				} while(tmp > 0); // we need to empty the queue
-
-			return result;
-		}
-
-		public static void GetSSLErrorStr(int errNum, String aOutStr)
-		{
-			var errNum;
-			aOutStr.Clear();
-			char8* buf = scope .[2048]*;
-			
-			repeat
-			{
-				Error.error_string_n((uint)errNum, buf, 2048 * sizeof(char8));
-				aOutStr.Append(buf);
-				aOutStr.Append(Environment.NewLine);
-				errNum = (int)Error.get_error();
-			} while(errNum != 0);
-		}
-
-		public static void InitOpenSSL()
-		{
-			/*
-			// The old, obsolete way
-			SSL.library_init();
-			SSL.load_error_strings();
-			*/
-			OpenSSL.init();
-		}
-
-		public static void DeInitOpenSSL()
-		{
-			/*
-			// The old, obsolete way
-			EVP.cleanup();
-			Crypto.cleanup_all_ex_data();
-			Error.remove_state(0);
-			*/
-			OpenSSL.cleanup();
-		}
-	}
-
+	[AlwaysInclude(AssumeInstantiated = true), Reflect(.All)]
 	class SSLSocket : Socket
 	{
 		protected SSL.ssl_st* _SSL = null ~ { if (_ != null) SSL.free(_); };
@@ -141,10 +73,10 @@ namespace Beef_Net
 				if (_SSLSendSize == 0)
 				{
 				  	_SSLSendSize = Math.Min(aSize, _SSLSendBuffer.Count);
-				  	Internal.MemMove(aData, _SSLSendBuffer[0], _SSLSendSize);
+				  	Internal.MemMove(_SSLSendBuffer[0], aData, _SSLSendSize);
 				}
 
-				int32 result = SSL.write(_SSL, &_SSLSendBuffer[0], _SSLSendSize);
+				int32 result = SSL.write(&_SSLSendBuffer[0], _SSL, _SSLSendSize);
 
 				if (result > 0)
 				  	_SSLSendSize = 0;
@@ -218,13 +150,9 @@ namespace Beef_Net
 				return true;
 
 			if (aValue)
-			{
 				_socketState |= .SSLActive;
-			}
 			else
-			{
 				_socketState &= ~.SSLActive;
-			}
 
 			if (aValue && _connectionStatus == .Connected)
 				ActivateTLSEvent();
@@ -232,13 +160,9 @@ namespace Beef_Net
 			if (!aValue)
 			{
 				if (ConnectionStatus == .Connected)
-				{
 					ShutdownSSL();
-				}
 				else if ((SSLStatus.Connect | SSLStatus.ActivateTLS).HasFlag(_SSLStatus))
-				{
 					Runtime.FatalError("Switching SSL mode on socket during SSL handshake is not supported");
-				}
 			}
 
 			return true;
@@ -271,13 +195,9 @@ namespace Beef_Net
 			_SSLStatus = .ActivateTLS;
 
 			if (_isAcceptor)
-			{
 				AcceptSSL();
-			}
 			else
-			{
 				ConnectSSL();
-			}
 		}
 
 		protected void ConnectEvent()
@@ -319,12 +239,9 @@ namespace Beef_Net
 				default:
 					{
 						String tmp = scope .("SSL connect errors: ");
-						tmp.Append(Environment.NewLine);
-
 						String tmp2 = scope .();
 						GetSSLErrorStr(e, tmp2);
-
-						tmp.Append(tmp2);
+						tmp.Append(Environment.NewLine, tmp2);
 						Bail(tmp, -1);
 						return;
 					}
@@ -362,12 +279,9 @@ namespace Beef_Net
 				default:
 					{
 						String tmp = scope .("SSL accept errors: ");
-						tmp.Append(Environment.NewLine);
-
 						String tmp2 = scope .();
 						GetSSLErrorStr(e, tmp2);
-
-						tmp.Append(tmp2);
+						tmp.Append(Environment.NewLine, tmp2);
 						Bail(tmp, -1);
 						return;
 					}
@@ -399,12 +313,9 @@ namespace Beef_Net
 					default:
 						{
 							String tmp = scope .("SSL shutdown errors: ");
-							tmp.Append(Environment.NewLine);
-	
 							String tmp2 = scope .();
 							GetSSLErrorStr(n, tmp2);
-	
-							tmp.Append(tmp2);
+							tmp.Append(Environment.NewLine, tmp2);
 							Bail(tmp, -1);
 						}
 					}
@@ -593,7 +504,7 @@ namespace Beef_Net
 			if (num < s.Password.Length + 1)
 				return 0;
 
-			Internal.MemMove(s.Password.Ptr, &buf[0], s.Password.Length);
+			Internal.MemMove(&buf[0],s.Password.Ptr,  s.Password.Length);
 			return (int32)s.Password.Length;
 		}
 		
@@ -670,8 +581,8 @@ namespace Beef_Net
 		{
 			base.RegisterWithComponent(aConnection);
 
-			if (!aConnection.SocketClass.IsSubtypeOf(typeof(SSLSocket)))
-				aConnection.SocketClass = typeof(SSLSocket);
+			if (!aConnection.IsSSLSocket)
+				aConnection.IsSSLSocket = true;
 		}
 
 		public override void InitHandle(Handle aHandle)
@@ -685,13 +596,9 @@ namespace Beef_Net
 		public override void ConnectEvent(Handle aHandle)
 		{
 			if (!((SSLSocket)aHandle).SocketState.HasFlag(.SSLActive))
-			{
 				base.ConnectEvent(aHandle);
-			}
 			else if (HandleSSLConnection((SSLSocket)aHandle))
-			{
 				CallConnectEvent(aHandle);
-			}
 		}
 
 		public override void ReceiveEvent(Handle aHandle)
@@ -709,13 +616,9 @@ namespace Beef_Net
 						if (HandleSSLConnection((SSLSocket)aHandle))
 						{
 							if (((SSLSocket)aHandle).SocketState.HasFlag(.ServerSocket))
-							{
 								CallAcceptEvent(aHandle);
-							}
 						    else
-							{
 								CallConnectEvent(aHandle);
-							}
 						}
 
 						break;
@@ -733,13 +636,9 @@ namespace Beef_Net
 		public override void AcceptEvent(Handle aHandle)
 		{
 			if (!((SSLSocket)aHandle).SocketState.HasFlag(.SSLActive))
-			{
 				base.AcceptEvent(aHandle);
-			}
 			else if (HandleSSLConnection((SSLSocket)aHandle))
-			{
 				CallAcceptEvent(aHandle);
-			}
 		}
 
 		public bool HandleSSLConnection(SSLSocket aSocket)
@@ -752,13 +651,9 @@ namespace Beef_Net
 			case .None:
 				{
 					if (aSocket.[Friend]_isAcceptor)
-					{
 					  	aSocket.[Friend]AcceptEvent();
-					}
 					else
-					{
 					  	aSocket.[Friend]ConnectEvent();
-					}
 
 					break;
 				}
@@ -766,13 +661,9 @@ namespace Beef_Net
 			case .Connect:
 				{
 					if (aSocket.[Friend]_isAcceptor)
-					{
 					  	aSocket.[Friend]AcceptSSL();
-					}
 					else
-					{
 					  	aSocket.[Friend]ConnectSSL();
-					}
 
 					break;
 				}

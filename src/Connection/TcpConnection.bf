@@ -96,19 +96,15 @@ namespace Beef_Net.Connection
 				sock.IgnoreWrite = true;
 
 				if (sock.Session != null)
-				{
 					sock.Session.ConnectEvent(aSocket);
-				}
 				else
-				{
 					ConnectEvent(aSocket);
-				}
 			}
 		}
 
 		protected override void AcceptAction(Handle aSocket)
 		{
-			Socket tmp = InitSocket((Socket)SocketClass.CreateObject().Value);
+			Socket tmp = InitSocket(IsSSLSocket ? new SSLSocket() : new Socket());
 
 			if (tmp.Accept(_rootSock.[Friend]_handle))
 			{
@@ -132,13 +128,9 @@ namespace Beef_Net.Connection
 				tmp.IgnoreWrite = true;
 
 				if (_session != null)
-				{
 					_session.AcceptEvent(tmp);
-				}
 				else
-				{
 					AcceptEvent(tmp);
-				}
 			}
 			else
 			{
@@ -161,13 +153,9 @@ namespace Beef_Net.Connection
 					sock.SetState(.CanReceive);
 
 					if (sock.[Friend]_session != null)
-					{
 						sock.[Friend]_session.ReceiveEvent(aSocket);
-					}
 					else
-					{
 						ReceiveEvent(aSocket);
-					}
 
 					if (sock.ConnectionStatus != .Connected)
 					{
@@ -181,13 +169,9 @@ namespace Beef_Net.Connection
 		protected override void SendAction(Handle aSocket)
 		{
 			if (((Socket)aSocket).ConnectionStatus == .Connecting)
-			{
 				ConnectAction(aSocket);
-			}
 			else
-			{
 				base.SendAction(aSocket);
-			}
 		}
 
 		protected override void ErrorAction(Handle aSocket, StringView aMsg)
@@ -199,34 +183,22 @@ namespace Beef_Net.Connection
 			}
 
 			if (_session != null)
-			{
 				_session.ErrorEvent(aSocket, aMsg);
-			}
 			else
-			{
 				ErrorEvent(aSocket, aMsg);
-			}
 		}
 
 		protected bool Bail(StringView aMsg, Socket aSocket)
 		{
 			if (_session != null)
-			{
 				_session.ErrorEvent(aSocket, aMsg);
-			}
 			else
-			{
 				ErrorEvent(aSocket, aMsg);
-			}
 
 			if (aSocket != null)
-			{
 				aSocket.Disconnect(true);
-			}
 			else
-			{
 				Disconnect(true);
-			}
 
 			return false;
 		}
@@ -274,7 +246,7 @@ namespace Beef_Net.Connection
 			if (_rootSock != null)
 				Disconnect(true);
 
-			_rootSock = InitSocket((Socket)SocketClass.CreateObject().Value);
+			_rootSock = InitSocket(IsSSLSocket ? new SSLSocket() : new Socket());
 			result = _rootSock.Connect(aAddress, aPort);
 
 			if (result)
@@ -297,7 +269,7 @@ namespace Beef_Net.Connection
 			if (_rootSock != null)
 				Disconnect(true);
 
-			_rootSock = InitSocket((Socket)SocketClass.CreateObject().Value);
+			_rootSock = InitSocket(IsSSLSocket ? new SSLSocket() : new Socket());
 			_rootSock.[Friend]SetReuseAddress(_reuseAddress);
 
 			if (_rootSock.Listen(aPort, aIntf))
@@ -322,13 +294,9 @@ namespace Beef_Net.Connection
 				aSocket = GetValidSocket();
 
 			if (aSocket != null)
-			{
 				result = aSocket.Get(aData, aSize);
-			}
 			else
-			{
 				Bail("No connected socket to get through", null);
-			}
 
 			return result;
 		}
@@ -342,13 +310,9 @@ namespace Beef_Net.Connection
 				aSocket = GetValidSocket();
 
 			if (aSocket != null)
-			{
 				result = aSocket.GetMessage(aOutMsg);
-			}
 			else
-			{
 				Bail("No connected socket to get through", null);
-			}
 
 			return result;
 		}
@@ -362,13 +326,9 @@ namespace Beef_Net.Connection
 				aSocket = GetValidSocket();
 
 			if (aSocket != null)
-			{
 				result = aSocket.Send(aData, aSize);
-			}
 			else
-			{
 				Bail("No connected socket to send through", null);
-			}
 
 			return result;
 		}

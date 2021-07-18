@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using Beef_Net.Interfaces;
 
 namespace Beef_Net.Connection
@@ -22,7 +23,7 @@ namespace Beef_Net.Connection
 		protected Socket _iterator;
 		protected int _id; // internal number for server
 		protected Eventer _eventer;
-		protected Type _eventerClass;
+		protected EventerType _eventerType;
 		protected int64 _timeout;
 		protected int32 _listenBacklog;
 		protected bool _reuseAddress;
@@ -33,27 +34,27 @@ namespace Beef_Net.Connection
 		protected Socket.HandleEvent _onWriteDlg = new => SendAction ~ delete _;
 		protected Socket.HandleErrorEvent _onSockErrorDlg = new => ErrorAction ~ delete _;
 
-		public SocketErrorEvent OnError
+		public ref SocketErrorEvent OnError
 		{
-			get { return _onError; }
+			get { return ref _onError; }
 			set { _onError = value; }
 		}
 
-		public SocketEvent OnReceive
+		public ref SocketEvent OnReceive
 		{
-			get { return _onReceive; }
+			get { return ref _onReceive; }
 			set { _onReceive = value; }
 		}
 
-		public SocketEvent OnDisconnect
+		public ref SocketEvent OnDisconnect
 		{
-			get { return _onDisconnect; }
+			get { return ref _onDisconnect; }
 			set { _onDisconnect = value; }
 		}
 
-		public SocketEvent OnCanSend
+		public ref SocketEvent OnCanSend
 		{
-			get { return _onCanSend; }
+			get { return ref _onCanSend; }
 			set { _onCanSend = value; }
 		}
 
@@ -90,10 +91,10 @@ namespace Beef_Net.Connection
 			set { SetEventer(value); }
 		}
 
-		public Type EventerClass
+		public EventerType EventerType
 		{
-			get { return _eventerClass; }
-			set { _eventerClass = value; }
+			get { return _eventerType; }
+			set { _eventerType = value; }
 		}
 
 		public Session Session
@@ -133,10 +134,8 @@ namespace Beef_Net.Connection
 		
 		protected abstract bool GetConnected();
 		
-		protected virtual int GetCount()
-		{
-			return 1;
-		}
+		protected virtual int GetCount() =>
+			1;
 		
 		protected int64 GetTimeout() =>
 			_eventer != null ? _eventer.Timeout : _timeout;
@@ -203,13 +202,9 @@ namespace Beef_Net.Connection
 			aSocket.IgnoreWrite = true;
 
 			if (((Socket)aSocket).[Friend]_session != null)
-			{
 				((Socket)aSocket).[Friend]_session.SendEvent(aSocket);
-			}
 			else
-			{
 				CanSendEvent(aSocket);
-			}
 		}
 
 		protected virtual void ErrorAction(Handle aSocket, StringView aMsg)
@@ -259,7 +254,20 @@ namespace Beef_Net.Connection
 		{
 			if (_eventer == null)
 			{
-				_eventer = (Eventer)_eventerClass.CreateObject();
+				switch(_eventerType)
+				{
+				case .EpollEventer:
+					{
+						_eventer = new EpollEventer();
+						break;
+					}
+				default:
+					{
+						_eventer = new SelectEventer();
+						break;
+					}
+				}
+
 				_eventer.OnError = _onEventerErrorDlg;
 			}
 			
@@ -267,13 +275,9 @@ namespace Beef_Net.Connection
 				_eventer.AddHandle(_rootSock);
 			
 			if (_eventer.Timeout == 0 && _timeout != 0)
-			{
 				_eventer.Timeout = _timeout;
-			}
 			else
-			{
 				_timeout = _eventer.Timeout;
-			}
 		}
 
 		protected virtual void FreeSocks(bool aIndForced)
@@ -288,23 +292,17 @@ namespace Beef_Net.Connection
 
 				// forced, already closed or server socket
 				if (aIndForced || (!sockState.HasFlag(tmp2.ConnectionStatus)) || tmp2.SocketState.HasFlag(.ServerSocket))
-				{
 					delete tmp2;
-				}
 				else
-				{
 					tmp2.Disconnect(aIndForced);
-				}
 			}
 		}
 
 		public this(): base()
 		{
-			_host = "";
-			_port = 0;
 			_listenBacklog = DEFAULT_BACKLOG;
 			_timeout = 0;
-			SocketClass = typeof(Socket);
+			IsSSLSocket = false;
 			_onReceive = null;
 			_onError = null;
 			_onDisconnect = null;
@@ -315,7 +313,7 @@ namespace Beef_Net.Connection
 			_timeVal.tv_usec = 0;
 			_iterator = null;
 			_eventer = null;
-			_eventerClass = BestEventerClass();
+			_eventerType = BestEventerType();
 		}
 
 		public ~this()
@@ -349,7 +347,7 @@ namespace Beef_Net.Connection
 
 		public virtual bool Connect(StringView aAddress, uint16 aPort)
 		{
-			_host = aAddress;
+			_host.Set(aAddress);
 			_port = aPort;
 			return false;
 		}

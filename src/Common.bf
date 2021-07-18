@@ -134,8 +134,8 @@ namespace Beef_Net
 					if (j == 0)
 						return result;
 
-					dummy.Set(tmp.Substring(0, j - 1));
-					tmp.Remove(0, j);
+					dummy.Set(tmp.Substring(0, j));
+					tmp.Remove(0, j + 1);
 				}
 				else
 				{
@@ -144,7 +144,7 @@ namespace Beef_Net
 
 				pres = UInt32.Parse(dummy);
 
-				if (pres == .Err)
+				if (pres case .Err(var err))
 					return result;
 
 				result.s_bytes[i] = (uint8)pres.Value;
@@ -206,13 +206,9 @@ namespace Beef_Net
 					if (have_skipped)
 					{
 						if (aOutStr.IsEmpty)
-						{
 							aOutStr.Set("::");
-						}
 						else
-						{
 							aOutStr.Append(':');
-						}
 
 						have_skipped = false;
 					}
@@ -230,13 +226,9 @@ namespace Beef_Net
 			if (have_skipped)
 			{
 				if (aOutStr.IsEmpty)
-				{
 					aOutStr.Set("::");
-				}
 				else
-				{
 					aOutStr.Append(':');
-				}
 			}
 			
 			if (aOutStr.IsEmpty)
@@ -276,13 +268,9 @@ namespace Beef_Net
 					pres = Int32.Parse(part, .HexNumber);
 
 					if (pres == .Err)
-					{
 						failed = true;
-					}
 					else
-					{
 						w = (uint16)pres.Value;
-					}
 				}
 				else
 				{
@@ -371,13 +359,13 @@ namespace Beef_Net
 			{
 			case AF_INET:
 				{
-					aAddrInfo.u.IPv4.sin_addr.s_addr = htonl(StrToNetAddr(aAddress).s_addr);
+					aAddrInfo.u.IPv4.sin_addr.s_addr = StrToNetAddr(aAddress).s_addr;
 
 					if (aAddress != ADDR_ANY && aAddrInfo.u.IPv4.sin_addr.s_addr == 0)
 					{
 						String tmp = scope .();
 						GetHostIP(aAddress, tmp);
-						aAddrInfo.u.IPv4.sin_addr.s_addr = htonl(StrToNetAddr(tmp).s_addr);
+						aAddrInfo.u.IPv4.sin_addr.s_addr = StrToNetAddr(tmp).s_addr;
 					}
 				}
 			case AF_INET6:

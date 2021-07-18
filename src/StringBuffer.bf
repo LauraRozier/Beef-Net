@@ -18,10 +18,8 @@ namespace Beef_Net
 			return result;
 		}
 
-		public static void ClearStringBuffer(ref StringBuffer aBuffer)
-		{
+		public static void ClearStringBuffer(ref StringBuffer aBuffer) =>
 			aBuffer.Pos = aBuffer.Memory;
-		}
 
 		public static void AppendString(ref StringBuffer aBuffer, void* aSource, uint32 aLength)
 		// lPos, lSize: PtrUInt;
@@ -48,7 +46,7 @@ namespace Beef_Net
 				delete tmp;
 			}
 
-			Internal.MemMove(aSource, aBuffer.Pos, aLength);
+			Internal.MemMove(aBuffer.Pos, aSource, aLength);
 			aBuffer.Pos += aLength;
 		}
 		

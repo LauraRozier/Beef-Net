@@ -1,22 +1,28 @@
 using System;
 using System.Collections;
+using System.Reflection;
 using Beef_Net.Interfaces;
 
 namespace Beef_Net
 {
 	abstract class Component : IComponent
 	{
-		protected StringView _host;
-		protected uint16 _port;
-		protected Component _creator;
-		protected bool _active;
+		protected String _host = new .() ~ delete _;
+		protected uint16 _port = 0;
+		protected Component _creator = null;
+		protected bool _active = false;
+		protected bool _isSSLSocket = false;
 
-	    public Type SocketClass { get; set; }
+	    public bool IsSSLSocket
+		{
+			get { return _isSSLSocket; }
+			set { _isSSLSocket = value; }
+		}
 
 	    public StringView Host
 		{
 			get { return _host; }
-			set { _host = value; }
+			set { _host.Set(value); }
 		}
 
 	    public uint16 Port
@@ -38,7 +44,6 @@ namespace Beef_Net
 
 		protected virtual void SetCreator(Component aValue)
 		{
-
 		}
 
 		public this()

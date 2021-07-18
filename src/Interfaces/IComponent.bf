@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 
 namespace Beef_Net.Interfaces
 {
@@ -7,7 +8,7 @@ namespace Beef_Net.Interfaces
 	    void Disconnect(bool aIndForced = false);
 	    void CallAction();
 
-	    Type SocketClass { get; set; };
+	    bool IsSSLSocket { get; set; };
 	    StringView Host { get; set; };
 	    uint16 Port { get; set; };
 	}
