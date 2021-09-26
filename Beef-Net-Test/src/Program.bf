@@ -109,13 +109,13 @@ namespace Beef_Net_Test
 		private static void OnConnect(Socket aSocket)
 		{
 			aSocket.SetState(.NoDelay, true); // Send packets ASAP (disables Nagle's algorithm)
-			Console.WriteLine("\r\nConnected to Telnet server {}:{}", aSocket.Creator.Host, aSocket.Creator.Port);
+			Console.WriteLine("\r\nConnected to Telnet server {0}:{1}", aSocket.Creator.Host, aSocket.Creator.Port);
 		}
 
 		private static void OnDisconnect(Socket aSocket)
 		{
 			if (aSocket != null)
-				Console.WriteLine("\r\nDisconnected from Telnet server {}:{}", aSocket.Creator.Host, aSocket.Creator.Port);
+				Console.WriteLine("\r\nDisconnected from Telnet server {0}:{1}", aSocket.Creator.Host, aSocket.Creator.Port);
 
 			_needsCleanup = true;
 			Console.WriteLine("\r\nPress any key to continue...");
@@ -124,7 +124,7 @@ namespace Beef_Net_Test
 		private static void OnError(StringView aMsg,  Socket aSocket)
 		{
 			if (aSocket != null)
-				Console.WriteLine("\r\nError for Telnet server {}:{}\r\n  {}", aSocket.Creator.Host, aSocket.Creator.Port, aMsg);
+				Console.WriteLine("\r\nError for Telnet server {0}:{1}\r\n  {2}", aSocket.Creator.Host, aSocket.Creator.Port, aMsg);
 		}
 
 		private static void OnReceive(Socket aSocket)
