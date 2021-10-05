@@ -37,15 +37,15 @@ namespace Beef_Net
 			'+', '-', '.'
 		) ~ delete _;
 
-		public readonly String Protocol = new .() ~ delete _;
-		public readonly String Username = new .() ~ delete _;
-		public readonly String Password = new .() ~ delete _;
-		public readonly String Host = new .() ~ delete _;
-		public readonly uint16 Port = 0;
-		public readonly String Path = new .() ~ delete _;
-		public readonly String Document = new .() ~ delete _;
-		public readonly String Params = new .() ~ delete _;
-		public readonly String Bookmark = new .() ~ delete _;
+		public String Protocol = new .() ~ delete _;
+		public String Username = new .() ~ delete _;
+		public String Password = new .() ~ delete _;
+		public String Host = new .() ~ delete _;
+		public uint16 Port = 0;
+		public String Path = new .() ~ delete _;
+		public String Document = new .() ~ delete _;
+		public String Params = new .() ~ delete _;
+		public String Bookmark = new .() ~ delete _;
 		public bool HasAuthority = true;
 
 		private static void Escape(StringView aStr, char8[] aAllowed, String aOutStr)
@@ -62,24 +62,16 @@ namespace Beef_Net
 				return;
 			}
 
-			aOutStr.Reserve(l);
-			aOutStr.Length = l;
-			char8* outPtr = aOutStr.Ptr;
-			String tmp = scope .();
-
-			for (int i = 0; i < aStr.Length; i++)
+			for (char8 char in aStr.RawChars)
 			{
-				if (HttpUtil.Search(aAllowed, aStr[i]) < 0)
+				if (HttpUtil.Search(aAllowed, char) < 0)
 				{
-					tmp.Clear();
-					tmp.AppendF("{0:x2}", (uint8)aStr[i]);
-					*outPtr++ = '%';
-					*outPtr++ = tmp[0];
-					*outPtr++ = tmp[1];
+					aOutStr.Append('%');
+					((uint8)char).ToString(aOutStr, "X2", CultureInfo.InvariantCulture);
 				}
 				else
 				{
-					*outPtr++ = aStr[i];
+					aOutStr.Append(char);
 				}
 			}
 		}
@@ -356,132 +348,110 @@ namespace Beef_Net
 
 		public static bool ResolveRelativeUri(StringView aBaseUri, StringView aRelUri, String aOutUri)
 		{
-			/*
-			var
-			  Base, Rel: TUri;
-			begin
-			  Base := ParseUri(BaseUri);
-			  Rel := ParseUri(RelUri);
+			aOutUri.Clear();
+			URI baseUri = Parse(aBaseUri);
+			URI relUri = Parse(aRelUri);
+			bool result = (!baseUri.Protocol.IsEmpty) || (!relUri.Protocol.IsEmpty);
 
-			  Result := (Base.Protocol <> '') or (Rel.Protocol <> '');
-			  if not Result then
-			    Exit;
-			  with Rel do
-			  begin
-			    if (Path = '') and (Document = '') then
-			    begin
-			      if (Protocol = '') and (Host = '') then
-			      begin
-			        if Params <> '' then
-			          Base.Params := Params;
-			        Base.Bookmark := Bookmark;
-			        ResultUri := EncodeUri(Base);
-			        Exit;
-			      end;
-			    end;
-			    if (Protocol <> '') then  // RelURI is absolute - return it...
-			    begin
-			      ResultUri := RelUri;
-			      Exit;
-			    end;
-			    // Inherit protocol
-			    Protocol := Base.Protocol;
-			    if (Host = '') then   // TODO: or "not HasAuthority"?
-			    begin
-			      // Inherit Authority (host, port, username, password)
-			      Host := Base.Host;
-			      Port := Base.Port;
-			      Username := Base.Username;
-			      Password := Base.Password;
-			      HasAuthority := Base.HasAuthority;
-			      if (Path = '') or (Path[1] <> '/') then  // path is empty or relative
-			        Path := Base.Path + Path;
-			      RemoveDotSegments(Path);
-			    end;
-			  end; // with
-			  
-			  // EncodeUri percent-encodes the result, and that's good
-			  ResultUri := EncodeUri(Rel);
-			end;
-			*/
-			return true;
+			if (!result)
+				return result;
+
+			if (relUri.Path.IsEmpty && relUri.Document.IsEmpty)
+			{
+				if (relUri.Params.IsEmpty)
+				  	baseUri.Params.Set(relUri.Params);
+
+				baseUri.Bookmark.Set(relUri.Bookmark);
+				baseUri.Encode(aOutUri);
+				return result;
+			}
+
+		    if (!relUri.Protocol.IsEmpty) // aRelUri is absolute - return it...
+			{
+				aOutUri.Set(aRelUri);
+				return result;
+			}
+
+			// Inherit protocol
+			relUri.Protocol.Set(baseUri.Protocol);
+
+			if (relUri.Host.IsEmpty) // TODO: or "not HasAuthority"?
+			{
+				// Inherit Authority (host, port, username, password)
+				relUri.Host.Set(baseUri.Host);
+				relUri.Port = baseUri.Port;
+				relUri.Username.Set(baseUri.Username);
+				relUri.Password.Set(baseUri.Password);
+				relUri.HasAuthority = baseUri.HasAuthority;
+
+				if (relUri.Path.IsEmpty || relUri.Path[1] != '/') // path is empty or relative
+				{
+					String tmp = scope .(baseUri.Path);
+					tmp.Append(relUri.Path);
+				}
+
+				RemoveDotSegments(ref relUri.Path);
+			}
+
+			// URI.Encode percent-encodes the result, and that's good
+			relUri.Encode(aOutUri);
+			return result;
 		}
 
 		public static bool UriToFilename(StringView aUri, String aOutFilename)
 		{
-			/*
-			var
-			  U: TURI;
-			  I: Integer;
-			begin
-			  Result := False;
-			  U := ParseURI(URI);
-			  if SameText(U.Protocol, 'file') then
-			  begin
-			    if (Length(U.Path) > 2) and (U.Path[1] = '/') and (U.Path[3] = ':') then
-			      Filename := Copy(U.Path, 2, MaxInt)
-			    else
-			      Filename := U.Path;
-			    Filename := Filename + U.Document;
-			    Result := True;
-			  end
-			  else
-			    if U.Protocol = '' then  // fire and pray?
-			    begin
-			      Filename := U.Path + U.Document;
-			      Result := True;
-			    end;
-			  if PathDelim <> '/' then
-			  begin
-			    I := Pos('/', Filename);
-			    while I > 0 do
-			    begin
-			      Filename[I] := PathDelim;
-			      I := Pos('/', Filename);
-			    end;
-			  end;
-			end;
-			*/
-			return true;
+			bool result = false;
+			URI u = Parse(aUri);
+
+			if (u.Protocol.Equals("file", .OrdinalIgnoreCase))
+			{
+				if (u.Path.Length > 2 && u.Path[0] == '/' && u.Path[2] == ':')
+					aOutFilename.Set(u.Path.Substring(1)); // in case of /C:/path/file.ext we strip the / to get a valid file name
+				else
+					aOutFilename.Set(u.Path);
+
+				aOutFilename.Append(u.Document);
+				result = true;
+			}
+			else
+			{
+				if (u.Protocol.IsEmpty) // fire and pray?
+				{
+					aOutFilename.Set(u.Path);
+					aOutFilename.Append(u.Document);
+					result = true;
+				}
+			}
+
+			if (IO.Path.DirectorySeparatorChar != '/')
+				aOutFilename.Replace('/', IO.Path.DirectorySeparatorChar);
+
+			return result;
 		}
 
 		public static void FilenameToUri(StringView aFilename, String aOutStr, bool aIndEncode = true)
 		{
-			/*
-			var
-			  I: Integer;
-			  IsAbsFilename: Boolean;
-			  FilenamePart: string;
-			begin
-			  IsAbsFilename := ((Filename <> '') and (Filename[1] = PathDelim)) or
-			    ((Length(Filename) > 2) and (Filename[1] in ['A'..'Z', 'a'..'z']) and (Filename[2] = ':'));
+			bool isAbsPath = ((!aFilename.IsEmpty) && aFilename[0] == IO.Path.DirectorySeparatorChar) ||
+				(aFilename.Length > 2 && HttpUtil.Search(ALPHA, aFilename[0]) != -1 && aFilename[1] == ':');
 
-			  Result := 'file:';
-			  if IsAbsFilename then
-			  begin
-			    if Filename[1] <> PathDelim then
-			      Result := Result + '///'
-			    else
-			      Result := Result + '//';
-			  end;
+			aOutStr.Set("file:");
 
-			  FilenamePart := Filename;
-			  { unreachable code warning is ok here }
-			  if PathDelim <> '/' then
-			  begin
-			    I := Pos(PathDelim, FilenamePart);
-			    while I <> 0 do
-			    begin
-			      FilenamePart[I] := '/';
-			      I := Pos(PathDelim, FilenamePart);
-			    end;
-			  end;
-			  if Encode then
-			    FilenamePart := Escape(FilenamePart, ValidPathChars);
+			if (isAbsPath)
+				aOutStr.Append(aFilename[0] == IO.Path.DirectorySeparatorChar ? "//" : "///");
 
-			  Result := Result + FilenamePart;
-			end;
-			*/
+			String filenamePart = scope .(aFilename);
+
+			if (IO.Path.DirectorySeparatorChar != '/')
+				filenamePart.Replace('\\', '/');
+
+			if (aIndEncode)
+			{
+				String tmp = scope .();
+				Escape(filenamePart, ValidPathChars, tmp);
+				filenamePart.Set(tmp);
+			}
+
+			aOutStr.Append(filenamePart);
 		}
 
 		public static bool IsAbsoluteUri(StringView aUriReference)
@@ -498,7 +468,7 @@ namespace Beef_Net
 		}
 	}
 
-	class HttpUtil
+	public class HttpUtil
 	{
 		public readonly static char8[] AllASCIIChars = new .[256] (
 			'\x00', '\x01', '\x02', '\x03', '\x04', '\x05', '\x06', '\x07', '\x08', '\x09', '\x0a', '\x0b', '\x0c', '\x0d', '\x0e', '\x0f',
@@ -569,84 +539,67 @@ namespace Beef_Net
 
 		private static void EncodeWithCharSet(StringView aStr, char8[] aCharSet, String aOutStr, StringView aSpaceString = "%20")
 		{
-			/*
-			var
-			  src, srcend, dest: pchar;
-			  hex: string[2];
-			  i, n, len: integer;
-			begin
-			  len := Length(AStr);
-			  if len = 0 then
-			    Exit(aStr);
+			if (aStr.IsEmpty)
+			{
+				aOutStr.Set(aStr);
+				return;
+			}
 
-			  n := Length(SpaceString);
-			  SetLength(Result, len*3); // Worst case scenario
-			  if len = 0 then
-			    exit;
-			  dest := pchar(Result);
-			  src := pchar(AStr);
-			  srcend := src + len;
-			  while src < srcend do
-			  begin
-			    if src^ in aCharSet then
-			      dest^ := src^
-			    else if src^ = ' ' then begin
-			      for i := 1 to n do begin
-			        dest^ := SpaceString[i];
-			        if i < n then
-			          inc(dest);
-			      end;
-			    end else begin
-			      dest^ := '%';
-			      inc(dest);
-			      hex := HexStr(Ord(src^),2);
-			      dest^ := hex[1];
-			      inc(dest);
-			      dest^ := hex[2];
-			    end;
-			    inc(dest);
-			    inc(src);
-			  end;
-			  SetLength(Result, dest - pchar(Result));
-			end;
-			*/
+			aOutStr.Clear();
+
+			for (char8 char in aStr.RawChars)
+			{
+				if (Search(aCharSet, char) != -1)
+				{
+					aOutStr.Append(char);
+				}
+				else if (char == ' ')
+				{
+					aOutStr.Append(aSpaceString);
+				}
+				else
+				{
+					aOutStr.Append('%');
+					((uint8)char).ToString(aOutStr, "X2", CultureInfo.InvariantCulture);
+				}
+			}
 		}
 
 		private static void DecodeWithSpaceChar(StringView aStr, String aOutStr, char8 aSpaceChar = 0x0)
 		{
-			/*
-			var
-			  lStr, lPos, lNext, lDest: pchar;
-			begin
-			  if Length(aStr) = 0 then
-			    Exit(aStr);
+			if (aStr.IsEmpty)
+			{
+				aOutStr.Set(aStr);
+				return;
+			}
 
-			  Result := aStr; // this is just a re-assign of pointer, should be fast
-			  lDest := @Result[1]; // let's do it pointer-wise
-			  lStr := lDest;
-			  repeat
-			    lPos := lStr;
-			    while not (lPos^ in ['%', SpaceChar, #0]) do
-			      Inc(lPos);
-			    if (lPos[0]='%') and (lPos[1] <> #0) and (lPos[2] <> #0) then
-			    begin
-			      lPos^ := char((HexToNum(lPos[1]) shl 4) + HexToNum(lPos[2]));
-			      lNext := lPos+3;
-			    end else if ((SpaceChar <> #0) and (lPos[0] = SpaceChar)) then
-			    begin
-			      lPos^ := ' ';
-			      lNext := lPos+1;
-			    end else
-			      lNext := nil;
-			    Inc(lPos);
-			    if lDest <> lStr then
-			      Move(lStr^, lDest^, lPos-lStr);
-			    Inc(lDest, lPos-lStr);
-			    lStr := lNext;
-			  until lNext = nil;
-			  SetLength(Result, lDest - pchar(Result) - 1);
-			end;
-			*/
+			aOutStr.Clear();
+			char8[] specialChars = scope .[3]('%', aSpaceChar, 0x0);
+			String tmp = scope .(aStr);
+			char8* ptrSrc = tmp.CStr();
+			char8* ptrNext = null;
+
+			repeat
+			{
+				while (Search(specialChars, *ptrSrc) == -1)
+					aOutStr.Append(*ptrSrc++);
+
+				if (ptrSrc[0] == '%' && ptrSrc[1] != 0x0 && ptrSrc[2] != 0x0)
+				{
+					aOutStr.Append((char8)((HexToNum(ptrSrc[1]) << 4) + HexToNum(ptrSrc[2])));
+					ptrNext = ptrSrc += 3;
+				}
+				else if (aSpaceChar != 0x0 && ptrSrc[0] == aSpaceChar)
+				{
+					aOutStr.Append(' ');
+					ptrNext = ++ptrSrc; // Should be equal to `ptrNext = ptrPos += 1`
+				}
+				else
+				{
+			      	ptrNext = null;
+				}
+			}
+			while (ptrNext != null);
 		}
 
 		public static bool TryHTTPDateStrToDateTime(char8* aDateStr, ref DateTime aDest)

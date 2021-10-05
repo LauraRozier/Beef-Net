@@ -40,6 +40,19 @@ namespace Beef_Net_Test
 
 			Console.WriteLine("\r\n\r\n-----------------------------------------------\r\n\r\n");
 
+			String tmpStrOrig = "https://www.beeflang.org/docs/language-guide/operators/#assignment";
+			Console.WriteLine(tmpStrOrig);
+
+			String tmpStrEnc = scope .();
+			HttpUtil.HTTPEncode(tmpStrOrig, tmpStrEnc);
+			Console.WriteLine(tmpStrEnc);
+
+			String tmpStrDec = scope .();
+			HttpUtil.HTTPDecode(tmpStrEnc, tmpStrDec);
+			Console.WriteLine(tmpStrDec);
+
+			Console.WriteLine("\r\n\r\n-----------------------------------------------\r\n\r\n");
+
 			_telnetClient = new TelnetClient();
 			_telnetClient.OnConnect = _onConnect;
 			_telnetClient.OnDisconnect = _onDisconnect;
