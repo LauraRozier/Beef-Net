@@ -41,15 +41,23 @@ namespace Beef_Net_Test
 			Console.WriteLine("\r\n\r\n-----------------------------------------------\r\n\r\n");
 
 			String tmpStrOrig = "https://www.beeflang.org/docs/language-guide/operators/#assignment";
-			Console.WriteLine(tmpStrOrig);
+			Console.WriteLine("Original URI = {0}", tmpStrOrig);
 
 			String tmpStrEnc = scope .();
 			HttpUtil.HTTPEncode(tmpStrOrig, tmpStrEnc);
-			Console.WriteLine(tmpStrEnc);
+			Console.WriteLine("HttpUtil.HTTPEncode = {0}", tmpStrEnc);
 
 			String tmpStrDec = scope .();
 			HttpUtil.HTTPDecode(tmpStrEnc, tmpStrDec);
-			Console.WriteLine(tmpStrDec);
+			Console.WriteLine("HttpUtil.HTTPDecode = {0}\r\n", tmpStrDec);
+
+			URI tmpUri = scope .();
+			URI.Parse(tmpStrOrig, tmpUri);
+			Console.WriteLine(
+				"Protocol = {0}\r\nHasAuthority = {1}\r\nUsername = {2}\r\nPassword = {3}\r\nHost = {4}\r\nPort = {5}\r\nPath = {6}\r\nDocument = {7}\r\nParams = {8}\r\nBookmark = {9}\r\n",
+				tmpUri.Protocol, tmpUri.HasAuthority, tmpUri.Username, tmpUri.Password, tmpUri.Host, tmpUri.Port,
+				tmpUri.Path, tmpUri.Document, tmpUri.Params, tmpUri.Bookmark
+			);
 
 			Console.WriteLine("\r\n\r\n-----------------------------------------------\r\n\r\n");
 
