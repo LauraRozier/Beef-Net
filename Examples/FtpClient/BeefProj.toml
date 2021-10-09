@@ -1,0 +1,11 @@
+FileVersion = 1
+Dependencies = {corlib = "*", Beef-Net = "*"}
+
+[Project]
+Name = "FtpClient"
+StartupObject = "FtpClient.Program"
+
+[[ProjectFolder.Items]]
+Type = "Folder"
+Path = "../Common"
+AutoInclude = true

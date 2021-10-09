@@ -363,33 +363,33 @@ namespace Beef_Net
 
 			if (aOutUri.Port == 0)
 			{
-				if (aOutUri.Protocol.Equals("ftp", StringComparison.OrdinalIgnoreCase) || aOutUri.Protocol.Equals("ftps", StringComparison.OrdinalIgnoreCase))
+				if (aOutUri.Protocol.Equals("ftp", .OrdinalIgnoreCase) || aOutUri.Protocol.Equals("ftps", .OrdinalIgnoreCase))
 					aOutUri.Port = 21;
 				else if (
-					aOutUri.Protocol.Equals("ssh", StringComparison.OrdinalIgnoreCase) ||
-					aOutUri.Protocol.Equals("sftp", StringComparison.OrdinalIgnoreCase) ||
-					aOutUri.Protocol.Equals("rsync", StringComparison.OrdinalIgnoreCase)
+					aOutUri.Protocol.Equals("ssh", .OrdinalIgnoreCase) ||
+					aOutUri.Protocol.Equals("sftp", .OrdinalIgnoreCase) ||
+					aOutUri.Protocol.Equals("rsync", .OrdinalIgnoreCase)
 				)
 					aOutUri.Port = 22;
-				else if (aOutUri.Protocol.Equals("http", StringComparison.OrdinalIgnoreCase))
+				else if (aOutUri.Protocol.Equals("http", .OrdinalIgnoreCase))
 					aOutUri.Port = 80;
-				else if (aOutUri.Protocol.Equals("pop3", StringComparison.OrdinalIgnoreCase))
+				else if (aOutUri.Protocol.Equals("pop3", .OrdinalIgnoreCase))
 					aOutUri.Port = 110;
-				else if (aOutUri.Protocol.Equals("imap", StringComparison.OrdinalIgnoreCase))
+				else if (aOutUri.Protocol.Equals("imap", .OrdinalIgnoreCase))
 					aOutUri.Port = 143;
-				else if (aOutUri.Protocol.Equals("ldap", StringComparison.OrdinalIgnoreCase))
+				else if (aOutUri.Protocol.Equals("ldap", .OrdinalIgnoreCase))
 					aOutUri.Port = 389;
-				else if (aOutUri.Protocol.Equals("https", StringComparison.OrdinalIgnoreCase))
+				else if (aOutUri.Protocol.Equals("https", .OrdinalIgnoreCase))
 					aOutUri.Port = 443;
-				else if (aOutUri.Protocol.Equals("afp", StringComparison.OrdinalIgnoreCase))
+				else if (aOutUri.Protocol.Equals("afp", .OrdinalIgnoreCase))
 					aOutUri.Port = 548;
-				else if (aOutUri.Protocol.Equals("ldap", StringComparison.OrdinalIgnoreCase))
+				else if (aOutUri.Protocol.Equals("ldap", .OrdinalIgnoreCase))
 					aOutUri.Port = 636;
-				else if (aOutUri.Protocol.Equals("cvs", StringComparison.OrdinalIgnoreCase))
+				else if (aOutUri.Protocol.Equals("cvs", .OrdinalIgnoreCase))
 					aOutUri.Port = 2401;
-				else if (aOutUri.Protocol.Equals("svn", StringComparison.OrdinalIgnoreCase))
+				else if (aOutUri.Protocol.Equals("svn", .OrdinalIgnoreCase))
 					aOutUri.Port = 3690;
-				else if (aOutUri.Protocol.Equals("git", StringComparison.OrdinalIgnoreCase))
+				else if (aOutUri.Protocol.Equals("git", .OrdinalIgnoreCase))
 					aOutUri.Port = 9418;
 			}
 

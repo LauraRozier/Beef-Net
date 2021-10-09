@@ -252,20 +252,25 @@ namespace Beef_Net
 
 		protected ControlStack _stack = null;
 		protected TcpConnection _connection = null;
+
 		protected List<char8> _possible = new .() ~ delete _; //: TLTelnetControlChars;
 		protected List<char8> _activeOpts = new .() ~ delete _; //: TLTelnetControlChars;
+
 		protected DynMemStream _output = null;
 		protected char8 _operation = 0;
 		protected uint8 _commandCharIndex = 0;
-		protected SocketEvent _onReceive = null;
+
 		protected SocketEvent _onConnect = null;
 		protected SocketEvent _onDisconnect = null;
 		protected SocketErrorEvent _onError = null;
+		protected SocketEvent _onReceive = null;
+
 		protected String[3] _commandArgs = .() ~ { for (var value in _) if (value != null && value.IsDynAlloc) delete value; };
 		protected List<char8> _orders = new .() ~ delete _; //: TLTelnetControlChars;
 		protected char8[] _buffer = new .() ~ delete _;
 		protected int _bufferIndex = 0;
 		protected int _bufferEnd = 0;
+
 		protected SocketEvent _onCs = new => OnCs ~ delete _;
 		protected OnFullEvent _stackFull = new => StackFull ~ delete _;
 
@@ -421,7 +426,6 @@ namespace Beef_Net
 		}
 
 		protected abstract void React(char8 aOperation, char8 aCommand);
-
 		protected abstract void SendCommand(char8 aCommand, bool aValue);
 
 		protected void OnCs(Socket aSocket)
@@ -465,11 +469,9 @@ namespace Beef_Net
 		}
 
 		public abstract int32 Get(char8* aData, int32 aSize, Socket aSocket = null);
-
 		public abstract int32 GetMessage(String aOutMsg, Socket aSocket = null);
 
 		public abstract int32 Send(char8* aData, int32 aSize, Socket aSocket = null);
-
 		public abstract int32 SendMessage(StringView aMsg, Socket aSocket = null);
 
 		public bool OptionIsSet(char8 aOption) =>
@@ -524,15 +526,27 @@ namespace Beef_Net
 	class TelnetClient : Telnet, IClient
 	{
 		protected bool _localEcho = false;
-		protected SocketErrorEvent _onEr = new => OnEr ~ delete _;
-		protected SocketEvent _onDs = new => OnDs ~ delete _;
-		protected SocketEvent _onRe = new => OnRe ~ delete _;
 		protected SocketEvent _onCo = new => OnCo ~ delete _;
+		protected SocketEvent _onDs = new => OnDs ~ delete _;
+		protected SocketErrorEvent _onEr = new => OnEr ~ delete _;
+		protected SocketEvent _onRe = new => OnRe ~ delete _;
 
 		public bool LocalEcho
 		{
 			get { return _localEcho; }
 			set { _localEcho = value; }
+		}
+
+		protected void OnCo(Socket aSocket)
+		{
+			if (_onConnect != null)
+				_onConnect(aSocket);
+		}
+
+		protected void OnDs(Socket aSocket)
+		{
+			if (_onDisconnect != null)
+				_onDisconnect(aSocket);
 		}
 
 		protected void OnEr(StringView aMsg, Socket aSocket)
@@ -541,12 +555,6 @@ namespace Beef_Net
 				_onError(aMsg, aSocket);
 			else
 				_output.TryWrite(.((uint8*)aMsg.Ptr, aMsg.Length));
-		}
-
-		protected void OnDs(Socket aSocket)
-		{
-			if (_onDisconnect != null)
-				_onDisconnect(aSocket);
 		}
 
 		protected void OnRe(Socket aSocket)
@@ -558,12 +566,6 @@ namespace Beef_Net
 				  	_onReceive(aSocket);
 
 			delete tmp;
-		}
-
-		protected void OnCo(Socket aSocket)
-		{
-			if (_onConnect != null)
-				_onConnect(aSocket);
 		}
 
 		protected override void React(char8 aOperation, char8 aCommand)
@@ -666,10 +668,10 @@ namespace Beef_Net
 
 		public this(): base()
 		{
-			_connection.OnError = _onEr;
-			_connection.OnDisconnect = _onDs;
-			_connection.OnReceive = _onRe;
 			_connection.OnConnect = _onCo;
+			_connection.OnDisconnect = _onDs;
+			_connection.OnError = _onEr;
+			_connection.OnReceive = _onRe;
 			
 			_possible.Add(OPT_ECHO);
 			_possible.Add(OPT_HYI);
@@ -678,10 +680,10 @@ namespace Beef_Net
 			_orders.Clear();
 		}
 
-		public bool Connect(StringView aAddress, uint16 aPort) =>
+		public virtual bool Connect(StringView aAddress, uint16 aPort) =>
 			_connection.Connect(aAddress, aPort);
 
-		public bool Connect() =>
+		public virtual bool Connect() =>
 			_connection.Connect(_host, _port);
 
 		public override int32 Get(char8* aData, int32 aSize, Socket aSocket = null)

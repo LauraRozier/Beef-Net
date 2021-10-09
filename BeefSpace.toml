@@ -1,5 +1,5 @@
 FileVersion = 1
-Projects = {Beef-Net = {Path = "."}, Beef-Net-Test = {Path = "Beef-Net-Test"}, Beef-OpenSSL = {Path = "Beef-OpenSSL"}}
+Projects = {Beef-Net = {Path = "."}, Beef-OpenSSL = {Path = "Beef-OpenSSL"}, Telnet = {Path = "Examples/Telnet"}, Beef-Net-Test = {Path = "Examples/Beef-Net-Test"}, FtpClient = {Path = "Examples/FtpClient"}}
 ExtraPlatforms = ["Linux64"]
 
 [Workspace]

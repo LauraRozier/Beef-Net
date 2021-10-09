@@ -1,6 +1,0 @@
-FileVersion = 1
-Dependencies = {corlib = "*", Beef-Net = "*"}
-
-[Project]
-Name = "Beef-Net-Test"
-StartupObject = "Beef_Net_Test.Program"

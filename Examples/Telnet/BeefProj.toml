@@ -1,0 +1,11 @@
+FileVersion = 1
+Dependencies = {corlib = "*", Beef-Net = "*"}
+
+[Project]
+Name = "Telnet"
+StartupObject = "Telnet.Program"
+
+[[ProjectFolder.Items]]
+Type = "Folder"
+Path = "../Common"
+AutoInclude = true

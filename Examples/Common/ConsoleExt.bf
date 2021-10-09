@@ -1,6 +1,6 @@
 using System;
 
-namespace Beef_Net_Test
+namespace Beef_Net_Common
 {
 #if BF_PLATFORM_WINDOWS
 	[CRepr]

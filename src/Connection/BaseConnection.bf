@@ -12,23 +12,26 @@ namespace Beef_Net.Connection
 			public int64 tv_usec;
 		}
 
-		protected TimeVal _timeVal;
-		protected SocketEvent _onReceive;
-		protected SocketEvent _onAccept;
-		protected SocketEvent _onConnect;
-		protected SocketEvent _onDisconnect;
-		protected SocketEvent _onCanSend;
-		protected SocketErrorEvent _onError;
-		protected Socket _rootSock;
-		protected Socket _iterator;
-		protected int _id; // internal number for server
-		protected Eventer _eventer;
+		protected SocketEvent _onReceive = null;
+		protected SocketEvent _onAccept = null;
+		protected SocketEvent _onConnect = null;
+		protected SocketEvent _onDisconnect = null;
+		protected SocketEvent _onCanSend = null;
+		protected SocketErrorEvent _onError = null;
+
+		protected Socket _rootSock = null;
+		protected Socket _iterator = null;
+		protected Session _session = null;
+		protected Eventer _eventer = null;
 		protected EventerType _eventerType;
-		protected int64 _timeout;
-		protected int32 _listenBacklog;
-		protected bool _reuseAddress;
-		protected Session _session;
+		
+		protected int _id; // internal number for server
+		protected TimeVal _timeVal;
+		protected int64 _timeout = 0;
+		protected int32 _listenBacklog = DEFAULT_BACKLOG;
+		protected bool _reuseAddress = false;
 		protected int32 _socketNet;
+
 		protected Eventer.EventerErrorEvent _onEventerErrorDlg = new => EventerError ~ delete _;
 		protected Socket.HandleEvent _onReadDlg = new => ReceiveAction ~ delete _;
 		protected Socket.HandleEvent _onWriteDlg = new => SendAction ~ delete _;
@@ -300,19 +303,9 @@ namespace Beef_Net.Connection
 
 		public this(): base()
 		{
-			_listenBacklog = DEFAULT_BACKLOG;
-			_timeout = 0;
 			IsSSLSocket = false;
-			_onReceive = null;
-			_onError = null;
-			_onDisconnect = null;
-			_onCanSend = null;
-			_onConnect = null;
-			_onAccept = null;
 			_timeVal.tv_sec = 0;
 			_timeVal.tv_usec = 0;
-			_iterator = null;
-			_eventer = null;
 			_eventerType = BestEventerType();
 		}
 
