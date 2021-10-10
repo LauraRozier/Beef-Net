@@ -33,7 +33,7 @@ namespace Beef_Net
 			{
 				switch (this)
 				{
-				case .Send: return "Send";
+				case .Send:    return "Send";
 				case .Receive: return "Get";
 				}
 			}
@@ -45,7 +45,7 @@ namespace Beef_Net
 			{
 				switch (this)
 				{
-				case .Send: return "SSLWrite";
+				case .Send:    return "SSLWrite";
 				case .Receive: return "SSLRead";
 				}
 			}
@@ -165,9 +165,9 @@ namespace Beef_Net
 		{
 			switch (_socketNet)
 			{
-			case AF_INET: return (SockAddr*)&_address.u.IPv4;
+			case AF_INET:  return (SockAddr*)&_address.u.IPv4;
 			case AF_INET6: return (SockAddr*)&_address.u.IPv6;
-			default: Runtime.FatalError("Unknown socket network type (not IPv4 or IPv6)");
+			default:       Runtime.FatalError("Unknown socket network type (not IPv4 or IPv6)");
 			}
 		}
 
@@ -175,9 +175,9 @@ namespace Beef_Net
 		{
 			switch (_socketNet)
 			{
-			case AF_INET: return sizeof(sockaddr_in);
+			case AF_INET:  return sizeof(sockaddr_in);
 			case AF_INET6: return sizeof(sockaddr_in6);
-			default: Runtime.FatalError("Unknown socket network type (not IPv4 or IPv6)");
+			default:       Runtime.FatalError("Unknown socket network type (not IPv4 or IPv6)");
 			}
 		}
 		
@@ -302,13 +302,11 @@ namespace Beef_Net
 						{
 							_socketState &= ~.CanSend;
 							IgnoreWrite = false;
-							break;
 						}
 					case .Receive:
 						{
 							_socketState &= ~.CanReceive;
 							IgnoreRead = false;
-							break;
 						}
 					}
 				}
@@ -545,33 +543,18 @@ namespace Beef_Net
 					else
 						Runtime.FatalError("Can not turn off server socket feature");
 				}
-			case .Blocking:
-				{
-					SetBlocking(aIndTurnOn);
-					break;
-				}
-			case .ReuseAddress: 
-				{
-					SetReuseAddress(aIndTurnOn);
-					break;
-				}
-			case .CanSend:
-			case .CanReceive: 
+			case .Blocking:     SetBlocking(aIndTurnOn);
+			case .ReuseAddress: SetReuseAddress(aIndTurnOn);
+			case .CanSend,
+				 .CanReceive: 
 				{
 					if (aIndTurnOn)
 						_socketState |= aState;
 					else
 						_socketState &= ~aState;
 				}
-			case .SSLActive: 
-				{
-					Runtime.FatalError("Can not turn SSL/TLS on in TLSocket instance");
-				}
-			case .NoDelay: 
-				{
-					SetNoDelay(aIndTurnOn);
-					break;
-				}
+			case .SSLActive:    Runtime.FatalError("Can not turn SSL/TLS on in TLSocket instance");
+			case .NoDelay:      SetNoDelay(aIndTurnOn);
 			}
 
 			return true;

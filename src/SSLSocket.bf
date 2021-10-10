@@ -49,10 +49,10 @@ namespace Beef_Net
 				{
 					switch (_SSLStatus)
 					{
-					case .None: return _SSL != null ? .Connected : .None;
-					case .Connect:
-					case .ActivateTLS: return .Connecting;
-					case .Shutdown: return .Disconnecting;
+					case .None:        return _SSL != null ? .Connected : .None;
+					case .Connect,
+						 .ActivateTLS: return .Connecting;
+					case .Shutdown:    return .Disconnecting;
 					}
 				}
 
@@ -114,13 +114,11 @@ namespace Beef_Net
 					{
 						_socketState &= ~.CanSend;
 						IgnoreWrite = false;
-						break;
 					}
 				case .Receive:
 					{
 						_socketState &= ~.CanReceive;
 						IgnoreRead = false;
-						break;
 					}
 				}
 			}
@@ -228,13 +226,11 @@ namespace Beef_Net
 					{ // make sure we're watching for reads and flag status
 						_socketState &= ~.CanReceive;
 						IgnoreRead = false;
-						break;
 					}
 				case SSL.ERROR_WANT_WRITE:
 					{ // make sure we're watching for writes and flag status
 						_socketState &= ~.CanSend;
 						IgnoreWrite = false;
-						break;
 					}
 				default:
 					{
@@ -243,7 +239,6 @@ namespace Beef_Net
 						GetSSLErrorStr(e, tmp2);
 						tmp.Append(Environment.NewLine, tmp2);
 						Bail(tmp, -1);
-						return;
 					}
 				}
 			}
@@ -268,13 +263,11 @@ namespace Beef_Net
 					{ // make sure we're watching for reads and flag status
 						_socketState &= ~.CanReceive;
 						IgnoreRead = false;
-						break;
 					}
 				case SSL.ERROR_WANT_WRITE:
 					{ // make sure we're watching for writes and flag status
 						_socketState &= ~.CanSend;
 						IgnoreWrite = false;
-						break;
 					}
 				default:
 					{
@@ -283,7 +276,6 @@ namespace Beef_Net
 						GetSSLErrorStr(e, tmp2);
 						tmp.Append(Environment.NewLine, tmp2);
 						Bail(tmp, -1);
-						return;
 					}
 				}
 			}
@@ -307,9 +299,9 @@ namespace Beef_Net
 
 					switch (n)
 					{
-					case SSL.ERROR_WANT_READ:
-					case SSL.ERROR_WANT_WRITE:
-					case SSL.ERROR_SYSCALL: break; // ignore
+					case SSL.ERROR_WANT_READ,
+						 SSL.ERROR_WANT_WRITE,
+						 SSL.ERROR_SYSCALL:    break; // ignore
 					default:
 						{
 							String tmp = scope .("SSL shutdown errors: ");
@@ -536,7 +528,7 @@ namespace Beef_Net
 			case .TLSv1:   method = TLS1.method();
 			case .TLSv1_1: method = TLS1_1.method();
 			case .TLSv1_2: method = TLS1_2.method();
-			default: method = null;
+			default:       method = null;
 			}
 
 			if (method == null)
@@ -620,15 +612,9 @@ namespace Beef_Net
 						    else
 								CallConnectEvent(aHandle);
 						}
-
-						break;
 					}
-				case .ActivateTLS:
-					{
-						HandleSSLConnection((SSLSocket)aHandle);
-						break;
-					}
-				default: CallReceiveEvent(aHandle);
+				case .ActivateTLS: HandleSSLConnection((SSLSocket)aHandle);
+				default:           CallReceiveEvent(aHandle);
 				}
 			}
 		}
@@ -654,18 +640,14 @@ namespace Beef_Net
 					  	aSocket.[Friend]AcceptEvent();
 					else
 					  	aSocket.[Friend]ConnectEvent();
-
-					break;
 				}
-			case .ActivateTLS:
-			case .Connect:
+			case .ActivateTLS,
+				 .Connect:
 				{
 					if (aSocket.[Friend]_isAcceptor)
 					  	aSocket.[Friend]AcceptSSL();
 					else
 					  	aSocket.[Friend]ConnectSSL();
-
-					break;
 				}
 			case .Shutdown: Runtime.FatalError("Got ConnectEvent or AcceptEvent on socket with ssShutdown status");
 			}

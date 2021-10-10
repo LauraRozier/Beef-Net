@@ -235,6 +235,9 @@ namespace Beef_Net
 			Status = .None,
 			Args = .(new .(), new .())
 		};
+		public readonly static char8[] NumericAndComma = new char8[11] (
+			'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ','
+		) ~ delete _;
 		
 		protected FtpStatus _statusFlags = .None;
 		protected FtpStatus _statusSet = .None | .Con | .User | .Pass | .Pasv | .Port | .List | .Retr | .Stor |
@@ -610,6 +613,363 @@ namespace Beef_Net
 
 		protected void EvaluateAnswer(StringView aAnswer)
 		{
+			mixin GetNum()
+			{
+				int result = -1;
+
+				if (aAnswer.Length > 3 && HttpUtil.Search(HttpUtil.Numeric, aAnswer[0]) > -1 && HttpUtil.Search(HttpUtil.Numeric, aAnswer[1]) > -1 && HttpUtil.Search(HttpUtil.Numeric, aAnswer[2]) > -1)
+				{
+					if (int.Parse(aAnswer.Substring(0, 3)) case .Ok(let val))
+						result = val;
+				}
+
+				result
+			}
+
+			void ParsePortIP(StringView aStr)
+			{
+				if (aStr.Length < 15)
+					return;
+
+				int i = 0;
+				int l = 0;
+				uint16 port = 0;
+				StringList sl = new .();
+				String ip = scope .();
+
+				for (i = aStr.Length - 1; i > 4; i--)
+					if (aStr[i] == ',')
+						break;
+
+				while (i < aStr.Length && HttpUtil.Search(NumericAndComma, aStr[i]) > -1)
+					i++;
+
+				if (HttpUtil.Search(NumericAndComma, aStr[i]) == -1)
+					i--;
+
+				while (HttpUtil.Search(NumericAndComma, aStr[i]) > -1)
+				{
+					l++;
+					i--;
+				}
+
+				i++;
+				sl.SetCommaText(aStr.Substring(i, l));
+				ip.AppendF("{0}.{1}.{2}.{3}", sl[0], sl[1], sl[2], sl[3]);
+
+				if (uint32.Parse(sl[4]) case .Ok(let val1))
+					if (uint32.Parse(sl[5]) case .Ok(let val2))
+						port = (uint16)((val1 * 256) + val2);
+
+				Debug.WriteLine("Server PASV addr/port - {0} : {1}", ip, port);
+
+				if (port > 0 && _data.Connect(ip, port))
+					Debug.WriteLine("Connected after PASV");
+
+				ClearAndDeleteItems!(sl);
+				delete sl;
+
+				FtpStatusRec rec = _status.Remove();
+				delete rec.Args[0];
+				delete rec.Args[1];
+			}
+
+			mixin SendFile()
+			{
+				_storeFile.Position = 0;
+				_sending = true;
+				SendChunk(false);
+			}
+
+			mixin ValidResponse(StringView aLocAnswer)
+			{
+				char8[] smallNumeric = scope .[5]('1', '2', '3', '4', '5');
+				bool result = aLocAnswer.Length >= 3 &&
+					HttpUtil.Search(smallNumeric, aLocAnswer[0]) > -1 &&
+					HttpUtil.Search(HttpUtil.Numeric, aLocAnswer[1]) > -1 &&
+					HttpUtil.Search(HttpUtil.Numeric, aLocAnswer[2]) > -1;
+				
+				if (result)
+					result = aLocAnswer.Length == 3 || (aLocAnswer.Length > 3 && aLocAnswer[3] == ' ');
+
+				result
+			}
+
+			mixin Eventize(FtpStatus aStatus, bool aIndRes)
+			{
+				FtpStatusRec tmp = _status.Remove();
+				delete tmp.Args[0];
+				delete tmp.Args[1];
+
+				if (aIndRes)
+				{
+					if (_onSuccess != null && _statusSet.HasFlag(aStatus))
+						_onSuccess(_data.Iterator, aStatus);
+				}
+				else
+				{
+					if (_onFailure != null && _statusSet.HasFlag(aStatus))
+						_onFailure(_data.Iterator, aStatus);
+				}
+			}
+
+			int ansNum = GetNum!();
+			String tmp = scope .();
+			_status.First().Status.ToString(tmp);
+			Debug.WriteLine("WOULD EVAL: {0} with value: {1} from \"{2}\"", tmp, ansNum, aAnswer);
+
+			if (_status.First().Status == .Feat)
+				_featureString.AppendF("{0}\r\n", aAnswer); // We need to parse this later
+				
+			if (ValidResponse!(aAnswer))
+			{
+				if (!_status.Empty)
+				{
+					_status.First().Status.ToString(tmp);
+					Debug.WriteLine("EVAL: {0} with value: {1}", tmp, ansNum);
+		
+					switch(_status.First().Status)
+					{
+					case .Con:
+						{
+							if (ansNum == 220)
+							{
+								_statusFlags |= _status.First().Status;
+								Eventize!(_status.First().Status, true);
+							}
+							else
+							{
+								_statusFlags &= ~_status.First().Status;
+								Eventize!(_status.First().Status, false);
+							}
+						}
+					case .User:
+						{
+							if (ansNum == 230)
+							{
+								_statusFlags |= _status.First().Status;
+								Eventize!(_status.First().Status, true);
+							}
+							else if (ansNum == 331 || ansNum == 332)
+							{
+								FtpStatusRec rec = _status.Remove();
+								delete rec.Args[0];
+								delete rec.Args[1];
+								Password(_password);
+							}
+							else
+							{
+								_statusFlags &= ~_status.First().Status;
+								Eventize!(_status.First().Status, false);
+							}
+						}
+					case .Pass:
+						{
+							if (ansNum == 230)
+							{
+								_statusFlags |= _status.First().Status;
+								Eventize!(_status.First().Status, true);
+							}
+							else
+							{
+								_statusFlags &= ~_status.First().Status;
+								Eventize!(_status.First().Status, false);
+							}
+						}
+					case .Pasv:
+						{
+							if (ansNum == 230)
+							{
+								ParsePortIP(aAnswer);
+							}
+							else if (ansNum >= 300 && ansNum <= 600)
+							{
+								FtpStatusRec rec = _status.Remove();
+								delete rec.Args[0];
+								delete rec.Args[1];
+							}
+						}
+					case .Port:
+						{
+							if (ansNum == 200)
+								Eventize!(_status.First().Status, true);
+							else
+								Eventize!(_status.First().Status, false);
+						}
+					case .Type:
+						{
+							if (ansNum == 200)
+							{
+								if (_expectedBIN)
+									_statusFlags |= _status.First().Status;
+								else
+									_statusFlags &= ~_status.First().Status;
+
+								Debug.WriteLine("Binary mode: ", _expectedBIN);
+								Eventize!(_status.First().Status, true);
+							}
+							else
+							{
+								Eventize!(_status.First().Status, false);
+							}
+						}
+					case .Retr:
+						{
+							if (ansNum == 125 || ansNum == 150)
+							{
+								// Do nothing
+							}
+							else if (ansNum == 226)
+							{
+								Eventize!(_status.First().Status, true);
+							}
+							else
+							{
+								_data.Disconnect(true); // break on purpose, otherwise we get invalidated ugly
+								Debug.WriteLine("Disconnecting data connection");
+								Eventize!(_status.First().Status, false);
+							}
+						}
+					case .Stor:
+						{
+							if (ansNum == 125 || ansNum == 150)
+								SendFile!();
+							else if (ansNum == 226)
+								Eventize!(_status.First().Status, true);
+							else
+								Eventize!(_status.First().Status, false);
+						}
+					case .CWD:
+						{
+							if (ansNum == 200 || ansNum == 250)
+							{
+								_statusFlags |= _status.First().Status;
+								Eventize!(_status.First().Status, true);
+							}
+							else
+							{
+								_statusFlags &= ~_status.First().Status;
+								Eventize!(_status.First().Status, false);
+							}
+						}
+					case .PWD:
+						{
+							if (ansNum == 257)
+							{
+                       			ParsePWD(aAnswer);
+								_statusFlags |= _status.First().Status;
+								Eventize!(_status.First().Status, true);
+							}
+							else
+							{
+								_statusFlags &= ~_status.First().Status;
+								Eventize!(_status.First().Status, false);
+							}
+						}
+					case .Help:
+						{
+							if (ansNum == 211 || ansNum == 214)
+							{
+								_statusFlags |= _status.First().Status;
+								Eventize!(_status.First().Status, true);
+							}
+							else
+							{
+								_statusFlags &= ~_status.First().Status;
+								Eventize!(_status.First().Status, false);
+							}
+						}
+					case .List:
+						{
+							if (ansNum == 125 || ansNum == 150) { } // Do nothing
+							else if (ansNum == 226)
+								Eventize!(_status.First().Status, true);
+							else
+								Eventize!(_status.First().Status, false);
+						}
+					case .MKD:
+						{
+							if (ansNum == 250 || ansNum == 257)
+							{
+								_statusFlags |= _status.First().Status;
+								Eventize!(_status.First().Status, true);
+							}
+							else
+							{
+								_statusFlags &= ~_status.First().Status;
+								Eventize!(_status.First().Status, false);
+							}
+						}
+					case .RMD, .DEL:
+						{
+							if (ansNum == 250)
+							{
+								_statusFlags |= _status.First().Status;
+								Eventize!(_status.First().Status, true);
+							}
+							else
+							{
+								_statusFlags &= ~_status.First().Status;
+								Eventize!(_status.First().Status, false);
+							}
+						}
+					case .RNFR:
+						{
+							if (ansNum == 350)
+							{
+								_statusFlags |= _status.First().Status;
+								Eventize!(_status.First().Status, true);
+							}
+							else
+							{
+								Eventize!(_status.First().Status, false);
+							}
+						}
+					case .RNTO:
+						{
+							if (ansNum == 250)
+							{
+								_statusFlags |= _status.First().Status;
+								Eventize!(_status.First().Status, true);
+							}
+							else
+							{
+								Eventize!(_status.First().Status, false);
+							}
+						}
+					case .Feat:
+						{
+							if (ansNum >= 200 && ansNum <= 299)
+							{
+								_statusFlags |= _status.First().Status;
+                       			EvaluateFeatures();
+								Eventize!(_status.First().Status, true);
+							}
+							else
+							{
+								_featureString.Clear();
+								Eventize!(_status.First().Status, false);
+							}
+						}
+					case .Quit:
+						{
+							if (ansNum == 221)
+							{
+								_statusFlags |= _status.First().Status;
+								Eventize!(_status.First().Status, true);
+							}
+							else
+							{
+								Eventize!(_status.First().Status, false);
+							}
+						}
+					default: break;
+					}
+				}
+			}
+
+			if (_status.Empty && !_commandFront.Empty)
+				ExecuteFrontCommand();
 		}
 
 		protected bool User(StringView aUserName)
@@ -685,22 +1045,22 @@ namespace Beef_Net
 			switch (rec.Status)
 			{
 			case .None: return;
-			case .User: User(rec.Args[0]); break;
-			case .Pass: Password(rec.Args[0]); break;
-			case .List: List(rec.Args[0]); break;
-			case .Retr: Retrieve(rec.Args[0]); break;
-			case .Stor: Put(rec.Args[0]); break;
-			case .CWD:  ChangeDirectory(rec.Args[0]); break;
-			case .MKD:  MakeDirectory(rec.Args[0]); break;
-			case .RMD:  RemoveDirectory(rec.Args[0]); break;
-			case .DEL:  DeleteFile(rec.Args[0]); break;
-			case .RNFR: Rename(rec.Args[0], rec.Args[1]); break;
-			case .SYS:  SystemInfo(); break;
-			case .PWD:  PresentWorkingDirectory(); break;
-			case .Help: Help(rec.Args[0]); break;
-			case .Type: Binary = rec.Args[0].Equals("TRUE", .OrdinalIgnoreCase); break;
-			case .Feat: ListFeatures(); break;
-			default: break;
+			case .User: User(rec.Args[0]);
+			case .Pass: Password(rec.Args[0]);
+			case .List: List(rec.Args[0]);
+			case .Retr: Retrieve(rec.Args[0]);
+			case .Stor: Put(rec.Args[0]);
+			case .CWD:  ChangeDirectory(rec.Args[0]);
+			case .MKD:  MakeDirectory(rec.Args[0]);
+			case .RMD:  RemoveDirectory(rec.Args[0]);
+			case .DEL:  DeleteFile(rec.Args[0]);
+			case .RNFR: Rename(rec.Args[0], rec.Args[1]);
+			case .SYS:  SystemInfo();
+			case .PWD:  PresentWorkingDirectory();
+			case .Help: Help(rec.Args[0]);
+			case .Type: Binary = rec.Args[0].Equals("TRUE", .OrdinalIgnoreCase);
+			case .Feat: ListFeatures();
+			default:    break;
 			}
 
 			delete rec.Args[0];

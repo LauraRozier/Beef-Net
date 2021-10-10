@@ -123,7 +123,6 @@ namespace Beef_Net
 			String tmp = scope .(aIP);
 			String dummy = scope .();
 			int j;
-			Result<uint32, UInt32.ParseError> pres;
 
 			for (int i = 0; i < 4; i++)
 			{
@@ -142,12 +141,10 @@ namespace Beef_Net
 					dummy.Set(tmp);
 				}
 
-				pres = UInt32.Parse(dummy);
-
-				if (pres case .Err(var err))
+				if (UInt32.Parse(dummy) case .Ok(let val))
+					result.s_bytes[i] = (uint8)val;
+				else
 					return result;
-
-				result.s_bytes[i] = (uint8)pres.Value;
 			}
 
 			result.s_addr = ntohl(result.s_addr);
@@ -255,7 +252,6 @@ namespace Beef_Net
 			uint16 w = 0;
 			bool failed = false;
 			String part = scope .();
-			Result<int32, Int32.ParseError> pres;
 
 			while (p > 0 && tmpIp.Length > 0 && index < 8)
 			{
@@ -265,12 +261,10 @@ namespace Beef_Net
 
 				if (part.Length > 0) // is there a digit?
 				{
-					pres = Int32.Parse(part, .HexNumber);
-
-					if (pres == .Err)
-						failed = true;
+					if (Int32.Parse(part, .HexNumber) case .Ok(let val))
+						w = (uint16)val;
 					else
-						w = (uint16)pres.Value;
+						failed = true;
 				}
 				else
 				{

@@ -615,15 +615,11 @@ namespace Beef_Net
 						Accept!(OP_WILL, aCommand);
 					else
 						Refuse!(OP_WONT, aCommand);
-
-					break;
 				}
     		case OP_DONT:
 				{
 					if (_possible.Contains(aCommand))
 						Refuse!(OP_WONT, aCommand);
-
-					break;
 				}
     		case OP_WILL:
 				{
@@ -631,15 +627,11 @@ namespace Beef_Net
 						_activeOpts.Add(aCommand);
 					else
 						Refuse!(OP_DONT, aCommand);
-
-					break;
 				}
     		case OP_WONT:
 				{
 					if (_possible.Contains(aCommand))
 						_activeOpts.Remove(aCommand);
-
-					break;
 				}
 			}
 		}

@@ -259,16 +259,8 @@ namespace Beef_Net.Connection
 			{
 				switch(_eventerType)
 				{
-				case .EpollEventer:
-					{
-						_eventer = new EpollEventer();
-						break;
-					}
-				default:
-					{
-						_eventer = new SelectEventer();
-						break;
-					}
+				case .EpollEventer: _eventer = new EpollEventer();
+				default:            _eventer = new SelectEventer();
 				}
 
 				_eventer.OnError = _onEventerErrorDlg;

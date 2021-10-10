@@ -352,9 +352,7 @@ namespace Beef_Net
 
 				if (validPort)
 				{
-					Result<uint32, UInt32.ParseError> parseRes = UInt32.Parse(authority.Substring(i + 1));
-
-					if (parseRes case .Ok(let val))
+					if (UInt32.Parse(authority.Substring(i + 1)) case .Ok(let val))
 						aOutUri.Port = (uint16)val;
 
 					authority.RemoveToEnd(i);

@@ -185,9 +185,9 @@ namespace Beef_Net
 		{
 			switch(_client.ReqType)
 			{
-			case FCGI.STDOUT: DoOutput();
-			case FCGI.STDERR: DoStdErr();
-			case FCGI.END_REQUEST: EndRequest();
+			case FCGI.STDOUT:            DoOutput();
+			case FCGI.STDERR:            DoStdErr();
+			case FCGI.END_REQUEST:       EndRequest();
 			case FCGI.GET_VALUES_RESULT: _client.[Friend]HandleGetValuesResult();
 			}
 		}

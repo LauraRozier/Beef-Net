@@ -142,7 +142,6 @@ namespace Beef_Net
 		{
 			int year, month, day;
 			int[3] timeArr = .(0, 0, 0);
-			Result<int, Int.ParseError> parseRes;
 			String tmpStr = scope .();
 			String tmpCmpStr = scope .();
 			String tmpDateStr = scope .(aDateStr);
@@ -156,12 +155,11 @@ namespace Beef_Net
 			// day
 			if (tmpDateStr[2] == ' ')
 			{
-				parseRes = Int.Parse(tmpDateStr.Substring(0, 2));
-
-				if (parseRes case .Err)
+				if (Int.Parse(tmpDateStr.Substring(0, 2)) case .Ok(let val))
+					day = val;
+				else
 					return false;
 
-				day = parseRes.Value;
 				tmpDateStr.Remove(0, 3);
 			}
 			else
@@ -192,12 +190,11 @@ namespace Beef_Net
 			// year
 			if (tmpCmpStr[4] == ' ')
 			{
-				parseRes = Int.Parse(tmpDateStr.Substring(0, 4));
-
-				if (parseRes case .Err)
+				if (Int.Parse(tmpDateStr.Substring(0, 4)) case .Ok(let val))
+					year = val;
+				else
 					return false;
 
-				year = parseRes.Value;
 				tmpDateStr.Remove(0, 5);
 			}
 			else
@@ -208,12 +205,11 @@ namespace Beef_Net
 			// hour, minute, second
 			for (int i = 0; i <= timeArr.Count; i++)
 			{
-				parseRes = Int.Parse(tmpDateStr.Substring(0, 2));
-
-				if (parseRes case .Err)
+				if (Int.Parse(tmpDateStr.Substring(0, 2)) case .Ok(let val))
+					timeArr[i] = val;
+				else
 					return false;
 
-				timeArr[i] = parseRes.Value;
 				tmpDateStr.Remove(0, 3);
 			}
 			
