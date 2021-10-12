@@ -71,16 +71,7 @@ namespace Beef_Net
 	public struct FtpStatusRec
 	{
 		public FtpStatus Status;
-		public String[2] Args;
-
-		public static Self Make(FtpStatus aStatus) =>
-			.{ Status = aStatus, Args = .(new .(), new .()) };
-
-		public static Self Make(FtpStatus aStatus, StringView aArg1) =>
-			.{ Status = aStatus, Args = .(new .(aArg1), new .()) };
-
-		public static Self Make(FtpStatus aStatus, StringView aArg1, StringView aArg2) =>
-			.{ Status = aStatus, Args = .(new .(aArg1), new .(aArg2)) };
+		public String[] Args = new .[2](new .(), new .());
 	}
 
 	public delegate void FtpClientStatusEvent(Socket aSocket, FtpStatus aStatus);
@@ -90,7 +81,7 @@ namespace Beef_Net
 		public const int MAX_FRONT_ITEMS = 10;
 
 		protected FtpStatusRec _emptyItem;
-		protected FtpStatusRec[MAX_FRONT_ITEMS] _items = .() ~ for (FtpStatusRec item in _) { delete item.Args[0]; delete item.Args[1]; };
+		protected FtpStatusRec[] _items = new .[MAX_FRONT_ITEMS] ~ { for (FtpStatusRec item in _) { DeleteContainerAndItems!(item.Args); } delete _; };
 		protected int _top = 0;
 		protected int _bottom = 0;
 		protected int _count = 0;
@@ -144,12 +135,38 @@ namespace Beef_Net
 			return false;
 		}
 
+		public bool Insert(FtpStatus aStatus, StringView aArg1 = "", StringView aArg2 = "")
+		{
+			if (_count < MAX_FRONT_ITEMS)
+			{
+				if (_top >= MAX_FRONT_ITEMS)
+					_top = 0;
+
+				_items[_top].Status = aStatus;
+				_items[_top].Args[0].Set(aArg1);
+				_items[_top].Args[1].Set(aArg2);
+				_count++;
+				_top++;
+				return true;
+			}
+
+			return false;
+		}
+
 		public void Clear()
 		{
 			for (int i = 0; i < _items.Count; i++)
 			{
-				delete _items[i].Args[0];
-				delete _items[i].Args[1];
+				if (_items[i].Args == null)
+				{
+					_items[i] = .();
+				}
+				else
+				{
+					_items[i].Status = .None;
+					_items[i].Args[0].Clear();
+					_items[i].Args[1].Clear();
+				}
 			}
 
 			_count = 0;
@@ -215,10 +232,10 @@ namespace Beef_Net
 		protected virtual bool GetConnected() =>
 			_control.Connected;
 
-		public abstract int32 Get(char8* aData, int32 aSize, Socket aSocket = null);
+		public abstract int32 Get(uint8* aData, int32 aSize, Socket aSocket = null);
 		public abstract int32 GetMessage(String aOutMsg, Socket aSocket = null);
 
-		public abstract int32 Send(char8* aData, int32 aSize, Socket aSocket = null);
+		public abstract int32 Send(uint8* aData, int32 aSize, Socket aSocket = null);
 		public abstract int32 SendMessage(StringView aMsg, Socket aSocket = null);
 	}
 
@@ -231,10 +248,7 @@ namespace Beef_Net
 	public class FtpClient : Ftp, IClient
 	{
 		private const uint16 DEFAULT_CHUNK = 8192;
-		private readonly static FtpStatusRec EMPTY_REC = .{
-			Status = .None,
-			Args = .(new .(), new .())
-		};
+		private readonly static FtpStatusRec EMPTY_REC = .() ~ DeleteContainerAndItems!(_.Args);
 		public readonly static char8[] NumericAndComma = new char8[11] (
 			'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ','
 		) ~ delete _;
@@ -299,7 +313,7 @@ namespace Beef_Net
 				if (CanContinue(.Type, value ? "TRUE" : "FALSE"))
 				{
 					_expectedBIN = value;
-					_status.Insert(.Make(.Type));
+					_status.Insert(.Type);
 					String tmp = scope .();
 					tmp.AppendF("TYPE {0}\r\n", value ? "I" : "A");
 					_control.SendMessage(tmp);
@@ -450,8 +464,6 @@ namespace Beef_Net
 				{
 					rec = _status.Remove();
 					_onFailure(aSocket, rec.Status);
-					delete rec.Args[0];
-					delete rec.Args[1];
 				}
 			}
 			else
@@ -503,7 +515,7 @@ namespace Beef_Net
 				Debug.WriteLine("Send PORT");
 				_data.Disconnect(true);
 				_data.Listen(_lastPort);
-				_status.Insert(.Make(.Port));
+				_status.Insert(.Port);
 
 				String command = scope .();
 				command.AppendF("PORT {0}{1}\r\n", IPStr!(), StringPair!(_lastPort));
@@ -517,7 +529,7 @@ namespace Beef_Net
 			else
 			{
 				Debug.WriteLine("Send PASV");
-				_status.Insert(.Make(.Pasv));
+				_status.Insert(.Pasv);
 				_control.SendMessage("PASV\r\n");
 			}
 		}
@@ -527,7 +539,7 @@ namespace Beef_Net
 			bool result = _pipeline || _status.Empty;
 
 			if (!result)
-				_commandFront.Insert(.Make(aStatus, aArg1, aArg2));
+				_commandFront.Insert(aStatus, aArg1, aArg2);
 
 			return result;
 		}
@@ -547,7 +559,7 @@ namespace Beef_Net
 		{
 			_fsl.SetText(aStr);
 
-			for (int i = 0; i < _fsl.Count - 1; i++)
+			for (int i = 0; i < _fsl.Count; i++)
 				if (_fsl[i].Length > 0)
 					EvaluateAnswer(_fsl[i]);
 
@@ -613,15 +625,16 @@ namespace Beef_Net
 
 		protected void EvaluateAnswer(StringView aAnswer)
 		{
-			mixin GetNum()
+			mixin GetNum(StringView str)
 			{
 				int result = -1;
 
-				if (aAnswer.Length > 3 && HttpUtil.Search(HttpUtil.Numeric, aAnswer[0]) > -1 && HttpUtil.Search(HttpUtil.Numeric, aAnswer[1]) > -1 && HttpUtil.Search(HttpUtil.Numeric, aAnswer[2]) > -1)
-				{
-					if (int.Parse(aAnswer.Substring(0, 3)) case .Ok(let val))
+				if (str.Length > 3 &&
+					HttpUtil.Search(HttpUtil.Numeric, str[0]) > -1 &&
+					HttpUtil.Search(HttpUtil.Numeric, str[1]) > -1 &&
+					HttpUtil.Search(HttpUtil.Numeric, str[2]) > -1)
+					if (int.Parse(str.Substring(0, 3)) case .Ok(let val))
 						result = val;
-				}
 
 				result
 			}
@@ -668,10 +681,7 @@ namespace Beef_Net
 
 				ClearAndDeleteItems!(sl);
 				delete sl;
-
-				FtpStatusRec rec = _status.Remove();
-				delete rec.Args[0];
-				delete rec.Args[1];
+				_status.Remove();
 			}
 
 			mixin SendFile()
@@ -697,9 +707,7 @@ namespace Beef_Net
 
 			mixin Eventize(FtpStatus aStatus, bool aIndRes)
 			{
-				FtpStatusRec tmp = _status.Remove();
-				delete tmp.Args[0];
-				delete tmp.Args[1];
+				_status.Remove();
 
 				if (aIndRes)
 				{
@@ -713,15 +721,19 @@ namespace Beef_Net
 				}
 			}
 
-			int ansNum = GetNum!();
+			String cleanAnswer = scope .(aAnswer);
+			cleanAnswer.Replace("\0", "");
+			cleanAnswer.Trim();
+
+			int ansNum = GetNum!(cleanAnswer);
 			String tmp = scope .();
 			_status.First().Status.ToString(tmp);
-			Debug.WriteLine("WOULD EVAL: {0} with value: {1} from \"{2}\"", tmp, ansNum, aAnswer);
+			Debug.WriteLine("WOULD EVAL: {0} with value: {1} from \"{2}\"", tmp, ansNum, cleanAnswer);
 
 			if (_status.First().Status == .Feat)
-				_featureString.AppendF("{0}\r\n", aAnswer); // We need to parse this later
+				_featureString.AppendF("{0}\r\n", cleanAnswer); // We need to parse this later
 				
-			if (ValidResponse!(aAnswer))
+			if (ValidResponse!(cleanAnswer))
 			{
 				if (!_status.Empty)
 				{
@@ -752,9 +764,7 @@ namespace Beef_Net
 							}
 							else if (ansNum == 331 || ansNum == 332)
 							{
-								FtpStatusRec rec = _status.Remove();
-								delete rec.Args[0];
-								delete rec.Args[1];
+								_status.Remove();
 								Password(_password);
 							}
 							else
@@ -778,16 +788,10 @@ namespace Beef_Net
 						}
 					case .Pasv:
 						{
-							if (ansNum == 230)
-							{
-								ParsePortIP(aAnswer);
-							}
+							if (ansNum == 227)
+								ParsePortIP(cleanAnswer);
 							else if (ansNum >= 300 && ansNum <= 600)
-							{
-								FtpStatusRec rec = _status.Remove();
-								delete rec.Args[0];
-								delete rec.Args[1];
-							}
+								_status.Remove();
 						}
 					case .Port:
 						{
@@ -856,7 +860,7 @@ namespace Beef_Net
 						{
 							if (ansNum == 257)
 							{
-                       			ParsePWD(aAnswer);
+                       			ParsePWD(cleanAnswer);
 								_statusFlags |= _status.First().Status;
 								Eventize!(_status.First().Status, true);
 							}
@@ -978,7 +982,7 @@ namespace Beef_Net
 
 			if (CanContinue(.User, aUserName))
 			{
-				_status.Insert(.Make(.User));
+				_status.Insert(.User);
 				String command = scope .();
 				command.AppendF("USER {0}\r\n", aUserName);
 				_control.SendMessage(command);
@@ -994,7 +998,7 @@ namespace Beef_Net
 
 			if (CanContinue(.Pass, aPassword))
 			{
-				_status.Insert(.Make(.Pass));
+				_status.Insert(.Pass);
 				String command = scope .();
 				command.AppendF("PASS {0}\r\n", aPassword);
 				_control.SendMessage(command);
@@ -1006,7 +1010,7 @@ namespace Beef_Net
 
 		protected void SendChunk(bool aIndEvent)
 		{
-			char8* buf = new .[65536]*();
+			uint8* buf = new .[65536]*;
 			int32 readLen = 0;
 			int32 sentLen = 0;
 
@@ -1062,22 +1066,19 @@ namespace Beef_Net
 			case .Feat: ListFeatures();
 			default:    break;
 			}
-
-			delete rec.Args[0];
-			delete rec.Args[1];
 		}
 
 		protected override bool GetConnected() =>
 			_statusFlags.HasFlag(.Con) && base.GetConnected();
 
-		public override int32 Get(char8* aData, int32 aSize, Socket aSocket = null)
+		public override int32 Get(uint8* aData, int32 aSize, Socket aSocket = null)
 		{
 			int32 result = _control.Get(aData, aSize, aSocket);
 
 			if (result > 0)
 			{
 				String tmp = scope .(result);
-				tmp.Append(aData, result);
+				tmp.Append((char8*)aData, result);
 				result = CleanInput(tmp);
 				Internal.MemMove(aData, tmp.Ptr, Math.Min(tmp.Length, aSize));
 			}
@@ -1095,7 +1096,7 @@ namespace Beef_Net
 			return result;
 		}
 
-		public override int32 Send(char8* aData, int32 aSize, Socket aSocket = null) =>
+		public override int32 Send(uint8* aData, int32 aSize, Socket aSocket = null) =>
 			_control.Send(aData, aSize);
 
 		public override int32 SendMessage(StringView aMsg, Socket aSocket = null) =>
@@ -1110,7 +1111,7 @@ namespace Beef_Net
 			{
 				_host.Set(aHost);
 				_port = aPort;
-				_status.Insert(.Make(.Con));
+				_status.Insert(.Con);
 				result = true;
 			}
 
@@ -1129,7 +1130,7 @@ namespace Beef_Net
 			return User(aUserName);
 		}
 
-		public int32 GetData(char8* aData, int32 aSize) =>
+		public int32 GetData(uint8* aData, int32 aSize) =>
 			_data.Iterator.Get(aData, aSize);
 
 		public void GetDataMessage(String aOutMsg)
@@ -1147,7 +1148,7 @@ namespace Beef_Net
 			if (CanContinue(.Retr, aFileName))
 			{
 				PasvPort();
-				_status.Insert(.Make(.Retr));
+				_status.Insert(.Retr);
 				String command = scope .();
 				command.AppendF("RETR {0}\r\n", aFileName);
 				_control.SendMessage(command);
@@ -1167,7 +1168,7 @@ namespace Beef_Net
 				_storeFile.Open(aFileName, .Read, .Read);
 
 				PasvPort();
-				_status.Insert(.Make(.Stor));
+				_status.Insert(.Stor);
 
 				String command = scope .("STOR ");
 				Path.GetFileName(aFileName, command);
@@ -1186,7 +1187,7 @@ namespace Beef_Net
 
 			if (CanContinue(.CWD, aDestPath))
 			{
-				_status.Insert(.Make(.CWD));
+				_status.Insert(.CWD);
 				_statusFlags &= ~.CWD;
 				String command = scope .();
 				command.AppendF("CWD {0}\r\n", aDestPath);
@@ -1203,7 +1204,7 @@ namespace Beef_Net
 
 			if (CanContinue(.MKD, aDirName))
 			{
-				_status.Insert(.Make(.MKD));
+				_status.Insert(.MKD);
 				_statusFlags &= ~.MKD;
 				String command = scope .();
 				command.AppendF("MKD {0}\r\n", aDirName);
@@ -1220,7 +1221,7 @@ namespace Beef_Net
 
 			if (CanContinue(.RMD, aDirName))
 			{
-				_status.Insert(.Make(.RMD));
+				_status.Insert(.RMD);
 				_statusFlags &= ~.RMD;
 				String command = scope .();
 				command.AppendF("RMD {0}\r\n", aDirName);
@@ -1237,7 +1238,7 @@ namespace Beef_Net
 
 			if (CanContinue(.DEL, aFileName))
 			{
-				_status.Insert(.Make(.DEL));
+				_status.Insert(.DEL);
 				_statusFlags &= ~.DEL;
 				String command = scope .();
 				command.AppendF("DELE {0}\r\n", aFileName);
@@ -1256,12 +1257,12 @@ namespace Beef_Net
 			{
 				String command = scope .();
 
-				_status.Insert(.Make(.RNFR));
+				_status.Insert(.RNFR);
 				_statusFlags &= ~.RNFR;
 				command.AppendF("RNFR {0}\r\n", aOldName);
 				_control.SendMessage(command);
 
-				_status.Insert(.Make(.RNTO));
+				_status.Insert(.RNTO);
 				_statusFlags &= ~.RNTO;
 				command.Clear();
 				command.AppendF("RNTO {0}\r\n", aNewName);
@@ -1278,7 +1279,7 @@ namespace Beef_Net
 			if (CanContinue(.List, aFileName))
 			{
 				PasvPort();
-				_status.Insert(.Make(.List));
+				_status.Insert(.List);
 
 				if (aFileName.Length > 0)
 				{
@@ -1298,7 +1299,7 @@ namespace Beef_Net
 			if (CanContinue(.List, aFileName))
 			{
 				PasvPort();
-				_status.Insert(.Make(.List));
+				_status.Insert(.List);
 
 				if (aFileName.Length > 0)
 				{
@@ -1323,7 +1324,7 @@ namespace Beef_Net
 		{
 			if (CanContinue(.Feat))
 			{
-				_status.Insert(.Make(.Feat));
+				_status.Insert(.Feat);
 				_control.SendMessage("FEAT\r\n");
 			}
 		}
@@ -1332,7 +1333,7 @@ namespace Beef_Net
 		{
 			if (CanContinue(.PWD))
 			{
-				_status.Insert(.Make(.PWD));
+				_status.Insert(.PWD);
 				_control.SendMessage("PWD\r\n");
 			}
 		}
@@ -1341,7 +1342,7 @@ namespace Beef_Net
 		{
 			if (CanContinue(.Help, aArg))
 			{
-				_status.Insert(.Make(.Help));
+				_status.Insert(.Help);
 				String command = scope .();
 				command.AppendF("HELP {0}\r\n", aArg);
 				_control.SendMessage(command);
@@ -1352,7 +1353,7 @@ namespace Beef_Net
 		{
 			if (CanContinue(.Quit))
 			{
-				_status.Insert(.Make(.Quit));
+				_status.Insert(.Quit);
 				_control.SendMessage("QUIT\r\n");
 			}
 		}
