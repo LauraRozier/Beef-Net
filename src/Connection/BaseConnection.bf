@@ -342,11 +342,11 @@ namespace Beef_Net.Connection
 		
 		public abstract bool Listen(uint16 aPort, StringView aIntf = ADDR_ANY);
 		
-		public abstract int32 Get(char8* aData, int32 aSize, Socket aSocket = null);
+		public abstract int32 Get(uint8* aData, int32 aSize, Socket aSocket = null);
 		
 		public abstract int32 GetMessage(String aOutMsg, Socket aSocket = null);
 		
-		public abstract int32 Send(char8* aData, int32 aSize, Socket aSocket = null);
+		public abstract int32 Send(uint8* aData, int32 aSize, Socket aSocket = null);
 		
 		public abstract int32 SendMessage(StringView aMsg, Socket aSocket = null);
 		

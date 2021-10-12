@@ -285,7 +285,7 @@ namespace Beef_Net.Connection
 			return false;
 		}
 
-		public override int32 Get(char8* aData, int32 aSize, Socket aSocket = null)
+		public override int32 Get(uint8* aData, int32 aSize, Socket aSocket = null)
 		{
 			var aSocket;
 			int32 result = 0;
@@ -317,7 +317,7 @@ namespace Beef_Net.Connection
 			return result;
 		}
 
-		public override int32 Send(char8* aData, int32 aSize, Socket aSocket = null)
+		public override int32 Send(uint8* aData, int32 aSize, Socket aSocket = null)
 		{
 			var aSocket;
 			int32 result = 0;
@@ -334,7 +334,7 @@ namespace Beef_Net.Connection
 		}
 
 		public override int32 SendMessage(StringView aMsg, Socket aSocket = null) =>
-			Send(aMsg.Ptr, (int32)aMsg.Length, aSocket);
+			Send((uint8*)aMsg.Ptr, (int32)aMsg.Length, aSocket);
 
 		public override bool IterNext()
 		{

@@ -65,7 +65,7 @@ namespace Beef_Net
 			get { return _SSLStatus; }
 		}
 		
-		protected override int32 DoSend(char8* aData, int32 aSize)
+		protected override int32 DoSend(uint8* aData, int32 aSize)
 		{
 			if (_socketState.HasFlag(.SSLActive))
 			{
@@ -90,7 +90,7 @@ namespace Beef_Net
 			return base.DoSend(aData, aSize);
 		}
 
-		protected override int32 DoGet(char8* aData, int32 aSize) =>
+		protected override int32 DoGet(uint8* aData, int32 aSize) =>
 			_socketState.HasFlag(.SSLActive)
 				? (int32)SSL.read(_SSL, aData, aSize)
 				: base.DoGet(aData, aSize);

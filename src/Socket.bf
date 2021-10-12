@@ -227,7 +227,7 @@ namespace Beef_Net
 			return done;
 		}
 
-		protected virtual int32 DoSend(char8* aData, int32 aSize)
+		protected virtual int32 DoSend(uint8* aData, int32 aSize)
 		{
 			if (_socketType == SOCK_STREAM)
 			{
@@ -255,7 +255,7 @@ namespace Beef_Net
 			return 0;
 		}
 
-		protected virtual int32 DoGet(char8* aData, int32 aSize)
+		protected virtual int32 DoGet(uint8* aData, int32 aSize)
 		{
 			if (_socketType == SOCK_STREAM)
 			{
@@ -628,7 +628,7 @@ namespace Beef_Net
 			return false;
 		}
 
-		public virtual int32 Send(char8* aData, int32 aSize)
+		public virtual int32 Send(uint8* aData, int32 aSize)
 		{
 			int32 result = 0;
 			Runtime.Assert(aSize != 0);
@@ -648,9 +648,9 @@ namespace Beef_Net
 		}
 
 		public int32 SendMessage(StringView aMsg) =>
-			Send(aMsg.Ptr, (int32)aMsg.Length);
+			Send((uint8*)aMsg.Ptr, (int32)aMsg.Length);
 
-		public virtual int32 Get(char8* aData, int32 aSize)
+		public virtual int32 Get(uint8* aData, int32 aSize)
 		{
 			int32 result = 0;
 			Runtime.Assert(aSize > 0);
@@ -681,9 +681,9 @@ namespace Beef_Net
 		public int32 GetMessage(String aOutStr)
 		{
 			aOutStr.Clear();
-			char8* tmpPtr = scope char8[BUFFER_SIZE]*;
+			uint8* tmpPtr = scope .[BUFFER_SIZE]*;
 			int32 len = Get(tmpPtr, BUFFER_SIZE);
-			aOutStr.Append(tmpPtr, len);
+			aOutStr.Append((char8*)tmpPtr, len);
 			return (int32)aOutStr.Length;
 		}
 

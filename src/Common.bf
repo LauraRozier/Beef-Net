@@ -516,12 +516,12 @@ namespace Beef_Net
 			WinSock2.listen(aHandle, aBacklog);
 #endif
 
-		public static int32 Recv(fd_handle aHandle, char8* aBuf, int32 aLen, int32 aFlags) =>
+		public static int32 Recv(fd_handle aHandle, uint8* aBuf, int32 aLen, int32 aFlags) =>
 #if BF_PLATFORM_WINDOWS
 			WinSock2.recv(aHandle, aBuf, aLen, aFlags);
 #endif
 
-		public static int32 RecvFrom(fd_handle aHandle, char8* aBuf, int32 aLen, int32 aFlags, SockAddr* aFromAddr, int32* aFromLen) =>
+		public static int32 RecvFrom(fd_handle aHandle, uint8* aBuf, int32 aLen, int32 aFlags, SockAddr* aFromAddr, int32* aFromLen) =>
 #if BF_PLATFORM_WINDOWS
 			WinSock2.recvfrom(aHandle, aBuf, aLen, aFlags, (sockaddr_in*)aFromAddr, aFromLen);
 #endif
@@ -531,12 +531,12 @@ namespace Beef_Net
 			WinSock2.select(nfds, aReadFds, aWriteFds, aExceptFds, timeout);
 #endif
 
-		public static int32 Send(fd_handle aHandle, char8* aBuf, int32 aLen, int32 aFlags) =>
+		public static int32 Send(fd_handle aHandle, uint8* aBuf, int32 aLen, int32 aFlags) =>
 #if BF_PLATFORM_WINDOWS
 			WinSock2.send(aHandle, aBuf, aLen, aFlags);
 #endif
 
-		public static int32 SendTo(fd_handle aHandle, char8* aBuf, int32 aLen, int32 aFlags, SockAddr* aToAddr, int32 aToLen) =>
+		public static int32 SendTo(fd_handle aHandle, uint8* aBuf, int32 aLen, int32 aFlags, SockAddr* aToAddr, int32 aToLen) =>
 #if BF_PLATFORM_WINDOWS
 			WinSock2.sendto(aHandle, aBuf, aLen, aFlags, (sockaddr_in*)aToAddr, aToLen);
 #endif

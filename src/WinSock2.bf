@@ -167,19 +167,19 @@ namespace Beef_Net
 		public extern static int32 listen(fd_handle s, int32 backlog);
 		
 		[Import("ws2_32.dll"), CLink, CallingConvention(.Stdcall)]
-		public extern static int32 recv(fd_handle s, char8* buf, int32 len, int32 flags);
+		public extern static int32 recv(fd_handle s, uint8* buf, int32 len, int32 flags);
 		
 		[Import("ws2_32.dll"), CLink, CallingConvention(.Stdcall)]
-		public extern static int32 recvfrom(fd_handle s, char8* buf, int32 len, int32 flags, sockaddr_in* fromaddr, int32* fromlen);
+		public extern static int32 recvfrom(fd_handle s, uint8* buf, int32 len, int32 flags, sockaddr_in* fromaddr, int32* fromlen);
 		
 		[Import("ws2_32.dll"), CLink, CallingConvention(.Stdcall)]
 		public extern static int32 select(int nfds, fd_set* readfds, fd_set* writefds, fd_set* exceptfds, TimeVal* timeout);
 		
 		[Import("ws2_32.dll"), CLink, CallingConvention(.Stdcall)]
-		public extern static int32 send(fd_handle s, char8* buf, int32 len, int32 flags);
+		public extern static int32 send(fd_handle s, uint8* buf, int32 len, int32 flags);
 		
 		[Import("ws2_32.dll"), CLink, CallingConvention(.Stdcall)]
-		public extern static int32 sendto(fd_handle s, char8* buf, int32 len, int32 flags, sockaddr_in* toaddr, int32 tolen);
+		public extern static int32 sendto(fd_handle s, uint8* buf, int32 len, int32 flags, sockaddr_in* toaddr, int32 tolen);
 		
 		[Import("ws2_32.dll"), CLink, CallingConvention(.Stdcall)]
 		public extern static int32 shutdown(fd_handle s, int32 how);

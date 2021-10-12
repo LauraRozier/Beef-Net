@@ -121,7 +121,7 @@ namespace Beef_Net
 		protected FCGI_Header _header;
 		protected int32 _headerPos;
 		protected int32 _contentLength;
-		protected char8* _inputBuffer = null;
+		protected uint8* _inputBuffer = null;
 		protected int32 _inputSize;
 		protected bool _outputPending;
 		protected bool _outputDone;
@@ -360,7 +360,7 @@ namespace Beef_Net
 			// already a queue and we are not first in line ? no use in trying to send then
 			if (_client.[Friend]_sendRequest == null || _client.[Friend]_sendRequest == this)
 			{
-				int32 written = _client.Send(&_buffer.Memory[_bufferSendPos], (int32)(_buffer.Pos - _buffer.Memory - _bufferSendPos));
+				int32 written = _client.Send((uint8*)&_buffer.Memory[_bufferSendPos], (int32)(_buffer.Pos - _buffer.Memory - _bufferSendPos));
 				_bufferSendPos += written;
 				result = _bufferSendPos == _buffer.Pos - _buffer.Memory;
 
@@ -459,7 +459,7 @@ namespace Beef_Net
 
 			if (_inputBuffer == null)
 			{
-				_inputBuffer = aBuffer + result;
+				_inputBuffer = (uint8*)(aBuffer + result);
 				_inputSize = aSize - result;
 				_header.ReqType = FCGI.STDIN;
 				SetContentLength(_inputSize);

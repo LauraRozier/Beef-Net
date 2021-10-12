@@ -128,7 +128,7 @@ namespace Beef_Net.Connection
 			return false;
 		}
 
-		public override int32 Get(char8* aData, int32 aSize, Socket aSocket = null)
+		public override int32 Get(uint8* aData, int32 aSize, Socket aSocket = null)
 		{
 			if (_rootSock != null)
 				return _rootSock.Get(aData, aSize);
@@ -163,7 +163,7 @@ namespace Beef_Net.Connection
 			return 0;
 		}
 
-		public override int32 Send(char8* aData, int32 aSize, Socket aSocket = null)
+		public override int32 Send(uint8* aData, int32 aSize, Socket aSocket = null)
 		{
 			if (_rootSock != null)
 				return _rootSock.Send(aData, aSize);
@@ -171,7 +171,7 @@ namespace Beef_Net.Connection
 			return 0;
 		}
 
-		public int32 Send(char8* aData, int32 aSize, StringView aAddress)
+		public int32 Send(uint8* aData, int32 aSize, StringView aAddress)
 		{
 			if (_rootSock != null)
 			{

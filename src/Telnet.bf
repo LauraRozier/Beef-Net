@@ -434,7 +434,7 @@ namespace Beef_Net
 			
 			while (n > 0 && _bufferIndex < _bufferEnd)
 			{
-				n = _connection.Send(&_buffer[_bufferIndex], (int32)(_bufferEnd - _bufferIndex));
+				n = _connection.Send((uint8*)&_buffer[_bufferIndex], (int32)(_bufferEnd - _bufferIndex));
 
 				if (n > 0)
 				  	_bufferIndex += n;
@@ -468,10 +468,10 @@ namespace Beef_Net
 			delete _stack;
 		}
 
-		public abstract int32 Get(char8* aData, int32 aSize, Socket aSocket = null);
+		public abstract int32 Get(uint8* aData, int32 aSize, Socket aSocket = null);
 		public abstract int32 GetMessage(String aOutMsg, Socket aSocket = null);
 
-		public abstract int32 Send(char8* aData, int32 aSize, Socket aSocket = null);
+		public abstract int32 Send(uint8* aData, int32 aSize, Socket aSocket = null);
 		public abstract int32 SendMessage(StringView aMsg, Socket aSocket = null);
 
 		public bool OptionIsSet(char8 aOption) =>
@@ -678,7 +678,7 @@ namespace Beef_Net
 		public virtual bool Connect() =>
 			_connection.Connect(_host, _port);
 
-		public override int32 Get(char8* aData, int32 aSize, Socket aSocket = null)
+		public override int32 Get(uint8* aData, int32 aSize, Socket aSocket = null)
 		{
 			int result = TrySilent!(_output.TryRead(.((uint8*)aData, aSize)));
 
@@ -715,7 +715,7 @@ namespace Beef_Net
 			return (int32)result;
 		}
 
-		public override int32 Send(char8* aData, int32 aSize, Socket aSocket = null)
+		public override int32 Send(uint8* aData, int32 aSize, Socket aSocket = null)
 		{
 #if DEBUG
   			System.Diagnostics.Debug.WriteLine("**SEND START** ");
@@ -747,8 +747,8 @@ namespace Beef_Net
 		public override int32 SendMessage(StringView aMsg, Socket aSocket = null)
 		{
 			int32 len = (int32)aMsg.Length;
-			char8* buff = scope char8[len]*;
-			System.Text.Encoding.ASCII.Encode(aMsg, .((uint8*)buff, len));
+			uint8* buff = scope .[len]*;
+			System.Text.Encoding.ASCII.Encode(aMsg, .(buff, len));
 			return Send(buff, len);
 		}
 
