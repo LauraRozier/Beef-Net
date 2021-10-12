@@ -5,6 +5,10 @@ using Beef_Net;
 using Beef_Net_Common;
 using Beef_OpenSSL;
 
+/*
+	This is a full TeleHack Telnet client.
+	See file Beef-Net/Telnet.bf if you want to know how it works.
+*/
 namespace Telnet
 {
 	class Program
@@ -66,7 +70,7 @@ namespace Telnet
 								continue;
 	
 							charBuff = cki.KeyChar;
-							_client.Send(&charBuff, 1);
+							_client.Send((uint8*)&charBuff, 1);
 						}
 					}
 				} while ((_client.Connected || _client.Connection.Connecting) && !_needsCleanup);
@@ -128,10 +132,7 @@ namespace Telnet
 		private static void ThreadStart()
 		{
 			while ((!_needsCleanup) && _client != null)
-			{
-				Thread.Sleep(10);
 				_client.CallAction();
-			}
 		}
 	}
 }

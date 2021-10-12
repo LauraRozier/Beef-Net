@@ -149,6 +149,7 @@ namespace Beef_Net
 		public void Dispose()
 		{
 			Platform.BfpCritSect_Enter(CS);
+			_dispose = true;
 
 			if (_eventer != null && _eventer.[Friend]_inLoop)
 				_eventer.[Friend]AddForFree(this);
@@ -241,7 +242,7 @@ namespace Beef_Net
 			while (temp != null)
 			{
 				temp2 = temp.FreeNext;
-				temp.Dispose();
+				delete temp;
 				temp = temp2;
 			}
 
