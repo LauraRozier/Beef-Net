@@ -1,0 +1,6 @@
+FileVersion = 1
+Projects = {FtpClient = {Path = "."}, Beef-OpenSSL = {Path = "../../Beef-OpenSSL"}, Beef-Net = {Path = "../.."}}
+Locked = ["Beef-OpenSSL", "Beef-Net"]
+
+[Workspace]
+StartupProject = "FtpClient"
