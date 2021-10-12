@@ -382,10 +382,22 @@ namespace Beef_Net_Common
 		public static extern void* GetStdHandle(Handles nStdHandle);
 	
 		[Import("kernel32.dll"), CLink, CallingConvention(.Stdcall)]
+		private static extern bool GetNumberOfConsoleInputEvents(void* hConsoleInput, out uint32 numEvents);
+	
+		[Import("kernel32.dll"), CLink, CallingConvention(.Stdcall)]
 		public static extern bool GetConsoleMode(void* hConsoleHandle, out uint32 dwMode);
 	
 		[Import("kernel32.dll"), CLink, CallingConvention(.Stdcall)]
 		public static extern bool SetConsoleMode(void* hConsoleHandle, uint32 dwMode);
+	
+		[Import("kernel32.dll"), CLink, CallingConvention(.Stdcall)]
+		private static extern bool PeekConsoleInputA(void* hConsoleInput, out InputRecord buffer, uint32 numInputRecords_UseOne, out uint32 numEventsRead);
+	
+		[Import("kernel32.dll"), CLink, CallingConvention(.Stdcall)]
+		private static extern bool PeekConsoleInputW(void* hConsoleInput, out InputRecord buffer, uint32 numInputRecords_UseOne, out uint32 numEventsRead);
+
+		private static bool PeekConsoleInput(void* hConsoleInput, out InputRecord buffer, uint32 numInputRecords_UseOne, out uint32 numEventsRead) =>
+			PeekConsoleInputA(hConsoleInput, out buffer, numInputRecords_UseOne, out numEventsRead);
 	
 		[Import("kernel32.dll"), CLink, CallingConvention(.Stdcall)]
 		private static extern bool ReadConsoleInputA(void* hConsoleInput, out InputRecord buffer, uint32 numInputRecords_UseOne, out uint32 numEventsRead);
@@ -421,23 +433,65 @@ namespace Beef_Net_Common
 			ConsoleExt.SetConsoleMode(_stdOutFile, dwMode);
 			ConsoleExt.SetConsoleMode(_stdInFile, ENABLE_ECHO_INPUT | ENABLE_INSERT_MODE | ENABLE_MOUSE_INPUT | ENABLE_QUICK_EDIT_MODE | ENABLE_WINDOW_INPUT);
 		}
+
+		public static bool IsKeyPressed()
+		{
+			InputRecord ir = ?;
+			uint32 dump = ?;
+			uint32 numEvents = ?;
+
+			mixin ReadAndReturnFalse()
+			{
+				ReadConsoleInput(_stdInFile, out ir, 1, out dump);
+				return false;
+			}
+
+			GetNumberOfConsoleInputEvents(_stdInFile, out numEvents);
+
+			if (numEvents == 0)
+				return false;
+
+			bool r = PeekConsoleInput(_stdInFile, out ir, 1, out dump);
+
+			if (!r)
+				return false;
+
+	        uint16 keyCode = ir.Event.keyEvent.wVirtualKeyCode.Underlying;
+
+			if ((!IsKeyDownEvent(ir)) && keyCode != AltVKCode)
+				ReadAndReturnFalse!();
+
+	    	char8 ch = ir.Event.keyEvent.UChar.AsciiChar;
+
+            if (ch == 0x0 && IsModKey(ir)) // Skip mod keys.
+				ReadAndReturnFalse!();
+
+			ConsoleKey key = ir.Event.keyEvent.wVirtualKeyCode;
+
+			if (IsAltKeyDown(ir) && ((key >= ConsoleKey.NumPad0 && key <= ConsoleKey.NumPad9) ||
+				(key == ConsoleKey.Clear) || (key == ConsoleKey.Insert) ||
+				(key >= ConsoleKey.PageUp && key <= ConsoleKey.DownArrow)))
+				ReadAndReturnFalse!();
+
+	        return true;
+		}
 	
 		public static ConsoleKeyInfo ReadKey(bool intercept)
 		{
 		    InputRecord ir = ?;
 		    uint32 numEventsRead = 0;
-		    bool r = ?;
+		    bool r = false;
 
 		    if (_cachedInputRecord.eventType == KEY_EVENT)
 			{
 		        // We had a previous keystroke with repeated characters.
 		        ir = _cachedInputRecord;
-	
+
 		        if (_cachedInputRecord.Event.keyEvent.wRepeatCount == 0)
 		            _cachedInputRecord.eventType = -1;
 		        else
 		            _cachedInputRecord.Event.keyEvent.wRepeatCount--;
-	
+
 		        // We will return one key from this method, so we decrement the
 		        // repeatCount here, leaving the cachedInputRecord in the "queue".
 		    }
@@ -446,7 +500,7 @@ namespace Beef_Net_Common
 		        while (true)
 				{
 		            r = ReadConsoleInput(_stdInFile, out ir, 1, out numEventsRead);
-	
+
 		            if (!r || numEventsRead == 0)
 					{
 		                // This will fail when stdin is redirected from a file or pipe. 
@@ -454,58 +508,56 @@ namespace Beef_Net_Common
 		                // think we might do some things incorrectly then.
 						Runtime.FatalError("Invalid Operation : Console Read Key On File");
 		            }
-	
+
 		            uint16 keyCode = ir.Event.keyEvent.wVirtualKeyCode.Underlying;
-	
+
 		            // First check for non-keyboard events & discard them. Generally we tap into only KeyDown events and ignore the KeyUp events
-		            // but it is possible that we are dealing with a Alt+NumPad unicode key sequence, the final unicode char is revealed only when 
-		            // the Alt key is released (i.e when the sequence is complete). To avoid noise, when the Alt key is down, we should eat up 
-		            // any intermediate key strokes (from NumPad) that collectively forms the Unicode character.  
-	
-		            if (!IsKeyDownEvent(ir))
-		                if (keyCode != AltVKCode)
-		                    continue;
-	
+		            // but it is possible that we are dealing with a Alt+NumPad unicode key sequence, the final unicode char is revealed only when
+		            // the Alt key is released (i.e when the sequence is complete). To avoid noise, when the Alt key is down, we should eat up
+		            // any intermediate key strokes (from NumPad) that collectively forms the Unicode character.
+
+		            if ((!IsKeyDownEvent(ir)) && keyCode != AltVKCode)
+		                continue;
+
 		            char8 ch = ir.Event.keyEvent.UChar.AsciiChar;
-	
-		            // In a Alt+NumPad unicode sequence, when the alt key is released uChar will represent the final unicode character, we need to 
-		            // surface this. VirtualKeyCode for this event will be Alt from the Alt-Up key event. This is probably not the right code, 
-		            // especially when we don't expose ConsoleKey.Alt, so this will end up being the hex value (0x12). VK_PACKET comes very 
-		            // close to being useful and something that we could look into using for this purpose... 
-	
-		            if (ch == 0x0)
-		                // Skip mod keys.
-		                if (IsModKey(ir))
-		                    continue;
-	
+
+		            // In a Alt+NumPad unicode sequence, when the alt key is released uChar will represent the final unicode character, we need to
+		            // surface this. VirtualKeyCode for this event will be Alt from the Alt-Up key event. This is probably not the right code,
+		            // especially when we don't expose ConsoleKey.Alt, so this will end up being the hex value (0x12). VK_PACKET comes very
+		            // close to being useful and something that we could look into using for this purpose...
+
+		            if (ch == 0x0 && IsModKey(ir)) // Skip mod keys.
+		                continue;
+
 		            // When Alt is down, it is possible that we are in the middle of a Alt+NumPad unicode sequence.
 		            // Escape any intermediate NumPad keys whether NumLock is on or not (notepad behavior)
 		            ConsoleKey key = ir.Event.keyEvent.wVirtualKeyCode;
-		            if (IsAltKeyDown(ir) && ((key >= ConsoleKey.NumPad0 && key <= ConsoleKey.NumPad9)
-		                                 || (key == ConsoleKey.Clear) || (key == ConsoleKey.Insert)
-		                                 || (key >= ConsoleKey.PageUp && key <= ConsoleKey.DownArrow)))
+
+		            if (IsAltKeyDown(ir) && ((key >= ConsoleKey.NumPad0 && key <= ConsoleKey.NumPad9) ||
+						(key == ConsoleKey.Clear) || (key == ConsoleKey.Insert) ||
+						(key >= ConsoleKey.PageUp && key <= ConsoleKey.DownArrow)))
 		                continue;
-	
+
 		            if (ir.Event.keyEvent.wRepeatCount > 1)
 					{
 		                ir.Event.keyEvent.wRepeatCount--;
 		                _cachedInputRecord = ir;
 		            }
-	
+
 		            break;
 		        }
 		    }
-	
+
 		    ControlKeyState state = ir.Event.keyEvent.dwControlKeyState;
 		    bool shift = state.HasFlag(.ShiftPressed);
 		    bool alt = state.HasFlag(.LeftAltPressed) || state.HasFlag(.RightAltPressed);
 		    bool control = state.HasFlag(.LeftCtrlPressed) || state.HasFlag(.RightCtrlPressed);
-	
+
 		    ConsoleKeyInfo info = .(ir.Event.keyEvent.UChar.AsciiChar, ir.Event.keyEvent.wVirtualKeyCode, shift, alt, control);
-		    
+
 		    if (!intercept)
 		        Console.Write(ir.Event.keyEvent.UChar.AsciiChar);
-	
+
 		    return info;
 		}
 	}
