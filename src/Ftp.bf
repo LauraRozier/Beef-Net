@@ -1,9 +1,9 @@
+using Beef_Net.Connection;
+using Beef_Net.Interfaces;
 using System;
 using System.Collections;
 using System.Diagnostics;
 using System.IO;
-using Beef_Net.Connection;
-using Beef_Net.Interfaces;
 
 namespace Beef_Net
 {
@@ -36,28 +36,28 @@ namespace Beef_Net
 		{
 			switch (this)
 			{
-			case .None: { aOutStr.Set("None"); break; }
-			case .Con:  { aOutStr.Set("Connect"); break; }
-			case .User: { aOutStr.Set("Authenticate"); break; }
-			case .Pass: { aOutStr.Set("Password"); break; }
-			case .Pasv: { aOutStr.Set("Passive"); break; }
-			case .Port: { aOutStr.Set("Active"); break; }
-			case .List: { aOutStr.Set("List"); break; }
-			case .Retr: { aOutStr.Set("Retrieve"); break; }
-			case .Stor: { aOutStr.Set("Store"); break; }
-			case .Type: { aOutStr.Set("Type"); break; }
-			case .CWD:  { aOutStr.Set("CWD"); break; }
-			case .MKD:  { aOutStr.Set("MKDIR"); break; }
-			case .RMD:  { aOutStr.Set("RMDIR"); break; }
-			case .DEL:  { aOutStr.Set("Delete"); break; }
-			case .RNFR: { aOutStr.Set("RenameFrom"); break; }
-			case .RNTO: { aOutStr.Set("RenameTo"); break; }
-			case .SYS:  { aOutStr.Set("System"); break; }
-			case .Feat: { aOutStr.Set("Features"); break; }
-			case .PWD:  { aOutStr.Set("PWD"); break; }
-			case .Help: { aOutStr.Set("HELP"); break; }
-			case .Quit: { aOutStr.Set("QUIT"); break; }
-			case .Last: { aOutStr.Set("LAST"); break; }
+			case .None: aOutStr.Set("None");
+			case .Con:  aOutStr.Set("Connect");
+			case .User: aOutStr.Set("Authenticate");
+			case .Pass: aOutStr.Set("Password");
+			case .Pasv: aOutStr.Set("Passive");
+			case .Port: aOutStr.Set("Active");
+			case .List: aOutStr.Set("List");
+			case .Retr: aOutStr.Set("Retrieve");
+			case .Stor: aOutStr.Set("Store");
+			case .Type: aOutStr.Set("Type");
+			case .CWD:  aOutStr.Set("CWD");
+			case .MKD:  aOutStr.Set("MKDIR");
+			case .RMD:  aOutStr.Set("RMDIR");
+			case .DEL:  aOutStr.Set("Delete");
+			case .RNFR: aOutStr.Set("RenameFrom");
+			case .RNTO: aOutStr.Set("RenameTo");
+			case .SYS:  aOutStr.Set("System");
+			case .Feat: aOutStr.Set("Features");
+			case .PWD:  aOutStr.Set("PWD");
+			case .Help: aOutStr.Set("HELP");
+			case .Quit: aOutStr.Set("QUIT");
+			case .Last: aOutStr.Set("LAST");
 			}
 		}
 	}
@@ -249,10 +249,11 @@ namespace Beef_Net
 	{
 		private const uint16 DEFAULT_CHUNK = 8192;
 		private readonly static FtpStatusRec EMPTY_REC = .() ~ DeleteContainerAndItems!(_.Args);
-		public readonly static char8[] NumericAndComma = new char8[11] (
+		private readonly static char8[] NumericAndComma = new char8[11] (
 			'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ','
 		) ~ delete _;
-		
+		private readonly static char8[] SmallNumeric = new .[5]('1', '2', '3', '4', '5') ~ delete _;
+
 		protected FtpStatus _statusFlags = .None;
 		protected FtpStatus _statusSet = .None | .Con | .User | .Pass | .Pasv | .Port | .List | .Retr | .Stor |
 			.Type | .CWD | .MKD | .RMD | .DEL | .RNFR | .RNTO | .SYS | .Feat | .PWD | .Help | .Quit | .Last;
@@ -344,49 +345,41 @@ namespace Beef_Net
 		public bool Transfer { get { return _data.Connected; } }
 		public FtpStatus CurrentStatus { get { return _status.First().Status; } }
 		public StringView PresentWorkingDirectoryString { get { return _pwd; }  }
-
 		public ref SocketEvent OnConnect
 		{
 			get { return ref _onConnect; }
 			set { _onConnect = value; }
 		}
-
 		public ref SocketEvent OnDisconnect
 		{
 			get { return ref _onDisconnect; }
 			set { _onDisconnect = value; }
 		}
-
 		public ref SocketErrorEvent OnError
 		{
 			get { return ref _onError; }
 			set { _onError = value; }
 		}
-
 		public ref SocketProgressEvent OnSent
 		{
 			get { return ref _onSent; }
 			set { _onSent = value; }
 		}
-
 		public ref SocketEvent OnReceive
 		{
 			get { return ref _onReceive; }
 			set { _onReceive = value; }
 		}
-
 		public ref SocketEvent OnControl
 		{
 			get { return ref _onControl; }
 			set { _onControl = value; }
 		}
-
 		public ref FtpClientStatusEvent OnSuccess
 		{
 			get { return ref _onSuccess; }
 			set { _onSuccess = value; }
 		}
-
 		public ref FtpClientStatusEvent OnFailure
 		{
 			get { return ref _onFailure; }
@@ -625,15 +618,15 @@ namespace Beef_Net
 
 		protected void EvaluateAnswer(StringView aAnswer)
 		{
-			mixin GetNum(StringView str)
+			mixin GetNum(StringView aStr)
 			{
 				int result = -1;
 
-				if (str.Length > 3 &&
-					HttpUtil.Search(HttpUtil.Numeric, str[0]) > -1 &&
-					HttpUtil.Search(HttpUtil.Numeric, str[1]) > -1 &&
-					HttpUtil.Search(HttpUtil.Numeric, str[2]) > -1)
-					if (int.Parse(str.Substring(0, 3)) case .Ok(let val))
+				if (aStr.Length > 3 &&
+					HttpUtil.Search(HttpUtil.Numeric, aStr[0]) > -1 &&
+					HttpUtil.Search(HttpUtil.Numeric, aStr[1]) > -1 &&
+					HttpUtil.Search(HttpUtil.Numeric, aStr[2]) > -1)
+					if (int.Parse(aStr.Substring(0, 3)) case .Ok(let val))
 						result = val;
 
 				result
@@ -693,9 +686,8 @@ namespace Beef_Net
 
 			mixin ValidResponse(StringView aLocAnswer)
 			{
-				char8[] smallNumeric = scope .[5]('1', '2', '3', '4', '5');
 				bool result = aLocAnswer.Length >= 3 &&
-					HttpUtil.Search(smallNumeric, aLocAnswer[0]) > -1 &&
+					HttpUtil.Search(SmallNumeric, aLocAnswer[0]) > -1 &&
 					HttpUtil.Search(HttpUtil.Numeric, aLocAnswer[1]) > -1 &&
 					HttpUtil.Search(HttpUtil.Numeric, aLocAnswer[2]) > -1;
 				

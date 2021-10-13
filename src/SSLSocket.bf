@@ -1,8 +1,8 @@
+using Beef_Net.Connection;
+using Beef_OpenSSL;
 using System;
 using System.IO;
 using System.Reflection;
-using Beef_Net.Connection;
-using Beef_OpenSSL;
 
 namespace Beef_Net
 {

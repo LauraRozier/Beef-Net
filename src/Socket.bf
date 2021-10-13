@@ -1,5 +1,5 @@
-using System;
 using Beef_Net.Connection;
+using System;
 
 namespace Beef_Net
 {

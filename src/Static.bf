@@ -1,6 +1,6 @@
+using Beef_OpenSSL;
 using System;
 using System.IO;
-using Beef_OpenSSL;
 
 namespace Beef_Net
 {
