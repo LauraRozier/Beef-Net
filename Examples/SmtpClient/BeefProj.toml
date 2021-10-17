@@ -1,0 +1,14 @@
+FileVersion = 1
+Dependencies = {corlib = "*", Beef-Net = "*"}
+
+[Project]
+Name = "SmtpClient"
+StartupObject = "SmtpClient.Program"
+
+[Configs.Debug.Win64]
+DebugCommandArguments = "127.0.0.1"
+
+[[ProjectFolder.Items]]
+Type = "Folder"
+Path = "../Common"
+AutoInclude = true

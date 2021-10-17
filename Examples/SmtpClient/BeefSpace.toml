@@ -1,0 +1,6 @@
+FileVersion = 1
+Projects = {SmtpClient = {Path = "."}, Beef-Net = {Path = "../.."}, Beef-OpenSSL = {Path = "../../Beef-OpenSSL"}}
+Locked = ["Beef-Net", "Beef-OpenSSL"]
+
+[Workspace]
+StartupProject = "SmtpClient"
