@@ -18,10 +18,10 @@ namespace Beef_Net
 
 	public enum SSLStatus
 	{
-		None,
-		Connect,
-		ActivateTLS,
-		Shutdown
+		None        = 0x0,
+		Connect     = 0x1,
+		ActivateTLS = 0x2,
+		Shutdown    = 0x4
 	}
 
 	[AlwaysInclude(AssumeInstantiated = true), Reflect(.All)]

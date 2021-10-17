@@ -44,6 +44,7 @@ namespace Beef_Net
 
 		protected virtual void SetCreator(Component aValue)
 		{
+			_creator = aValue;
 		}
 
 		public this()

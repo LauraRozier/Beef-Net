@@ -182,7 +182,7 @@ namespace Beef_Net
 				);
 
 			// Check for break characters and quote if required.
-			for (int i = 0; i < Count - 1; i++)
+			for (int i = 0; i < Count; i++)
 			{
 				str = this[i];
 				doQuote = _alwaysQuote;
@@ -192,7 +192,7 @@ namespace Beef_Net
 					j = 0;
 
 					// Quote strings that include BreakChars
-					while (HttpUtil.Search(breakChars, str[j]) == -1)
+					while (j < str.Length && HttpUtil.Search(breakChars, str[j]) == -1)
 						j++;
 
 					doQuote = j < str.Length - 1;

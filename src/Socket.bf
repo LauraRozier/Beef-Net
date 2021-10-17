@@ -53,7 +53,7 @@ namespace Beef_Net
 	}
 
 	// Callback Event procedure for errors
-	public delegate void SocketErrorEvent(StringView aMsg,  Socket aSocket);
+	public delegate void SocketErrorEvent(StringView aMsg, Socket aSocket);
 
 	// Callback Event procedure for others
 	public delegate void SocketEvent(Socket aSocket);

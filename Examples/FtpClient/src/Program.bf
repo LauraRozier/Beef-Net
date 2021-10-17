@@ -25,7 +25,7 @@ namespace FtpClient
 		protected SocketEvent _onReceive = new => OnReceive ~ delete _;
 		protected SocketEvent _onControl = new => OnControl ~ delete _;
 		protected SocketProgressEvent _onSent = new => OnSent ~ delete _;
-		
+
 		protected static readonly String _appExe = new .() ~ delete _;
 		protected static readonly String _appExeDir = new .() ~ delete _;
 		protected FtpClient _client;       // The FTP connection itself
@@ -143,12 +143,13 @@ namespace FtpClient
 				_client.Binary = true; // Set binary mode, others are useless anyhow
 				Console.WriteLine("Press \"?\" for help"); // Just info
 				String tmp = scope .();
+				ConsoleKeyInfo cki = ?;
 
 				while (!_quit) // Main loop is here, for events and user interaction
 				{
 					if (ConsoleExt.IsKeyPressed()) // This is all user interaction stuff
 					{
-						ConsoleKeyInfo cki = ConsoleExt.ReadKey(true);
+						cki = ConsoleExt.ReadKey(true);
 
 						switch (cki.KeyChar)
 						{

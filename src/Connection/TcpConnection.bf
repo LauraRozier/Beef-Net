@@ -104,7 +104,7 @@ namespace Beef_Net.Connection
 
 		protected override void AcceptAction(Handle aSocket)
 		{
-			Socket tmp = InitSocket(IsSSLSocket ? new SSLSocket() : new Socket());
+			Socket tmp = InitSocket(_isSSLSocket ? new SSLSocket() : new Socket());
 
 			if (tmp.Accept(_rootSock.[Friend]_handle))
 			{
@@ -246,7 +246,7 @@ namespace Beef_Net.Connection
 			if (_rootSock != null)
 				Disconnect(true);
 
-			_rootSock = InitSocket(IsSSLSocket ? new SSLSocket() : new Socket());
+			_rootSock = InitSocket(_isSSLSocket ? new SSLSocket() : new Socket());
 			result = _rootSock.Connect(aAddress, aPort);
 
 			if (result)
@@ -269,7 +269,7 @@ namespace Beef_Net.Connection
 			if (_rootSock != null)
 				Disconnect(true);
 
-			_rootSock = InitSocket(IsSSLSocket ? new SSLSocket() : new Socket());
+			_rootSock = InitSocket(_isSSLSocket ? new SSLSocket() : new Socket());
 			_rootSock.[Friend]SetReuseAddress(_reuseAddress);
 
 			if (_rootSock.Listen(aPort, aIntf))

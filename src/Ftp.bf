@@ -595,6 +595,7 @@ namespace Beef_Net
 
 			_featureList.SetText(_featureString);
 			_featureString.Clear();
+			delete _featureList[0];
 			_featureList.RemoveAt(0);
 
 			int i = 0;
@@ -607,6 +608,7 @@ namespace Beef_Net
 
 				if (tmp.Length == 0 || _featureList[i][0] != ' ')
 				{
+					delete _featureList[i];
 					_featureList.RemoveAt(i);
 					continue;
 				}

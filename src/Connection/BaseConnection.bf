@@ -295,7 +295,7 @@ namespace Beef_Net.Connection
 
 		public this(): base()
 		{
-			IsSSLSocket = false;
+			_isSSLSocket = false;
 			_timeVal.tv_sec = 0;
 			_timeVal.tv_usec = 0;
 			_eventerType = BestEventerType();
