@@ -174,8 +174,8 @@ namespace Beef_Net
 		}
 		public int SectionCount { get { return _mailStream.Count; } }
 
-		public ref MimeSection GetSection(int aIdx) =>
-			ref _mailStream.GetSection(aIdx);
+		public MimeSection GetSection(int aIdx) =>
+			_mailStream.GetSection(aIdx);
 
 		public void SetSection(int aIdx, MimeSection aValue) =>
 			_mailStream.SetSection(aIdx, aValue);
@@ -232,8 +232,7 @@ namespace Beef_Net
 		public this() : base()
 		{
 			_connection.Creator = this;
-			_connection.IsSSLSocket = false; // FConnection.SocketClass := TLSocket;
-			// _connection.IsSSLSocket = true; // Needed for StartTLS... Right?
+			_connection.IsSSLSocket = false;
 		}
 
 		public bool HasFeature(StringView aFeature)

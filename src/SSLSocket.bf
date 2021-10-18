@@ -496,8 +496,8 @@ namespace Beef_Net
 			if (num < s.Password.Length + 1)
 				return 0;
 
-			Internal.MemMove(&buf[0],s.Password.Ptr,  s.Password.Length);
-			return (int32)s.Password.Length;
+			Internal.MemMove(&buf[0], s.Password.Ptr, s.Password.Length);
+			return s.Password.Length;
 		}
 		
 		protected void CallOnSSLConnect(Socket aSocket)

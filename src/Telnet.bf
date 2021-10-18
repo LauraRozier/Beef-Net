@@ -333,7 +333,7 @@ namespace Beef_Net
 
 		protected void InflateBuffer()
 		{
-			char8[] newArr = new char8[Math.Max(_buffer.Count, 25) * 10];
+			char8[] newArr = new .[Math.Max(_buffer.Count, 25) * 10];
 
 			if (_buffer.Count > 0)
 				Internal.MemCpy(&newArr[0], &_buffer[0], _buffer.Count);
