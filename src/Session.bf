@@ -7,10 +7,7 @@ namespace Beef_Net
 	{
 		protected bool _active;
 
-		public bool Active
-		{
-			get { return _active; }
-		}
+		public bool Active { get { return _active; } }
 
 		public virtual void RegisterWithComponent(BaseConnection aConnection) =>
 			Runtime.Assert(aConnection != null, "Cannot register session with null connection");

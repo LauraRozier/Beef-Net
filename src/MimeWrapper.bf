@@ -8,12 +8,16 @@ namespace Beef_Net
 		case _8Bit;
 		case Base64;
 
-		public void ToString(String aOutStr)
+		public StringView StrVal
 		{
-			switch (this)
+			[NoDiscard]
+			get
 			{
-			case ._8Bit:  aOutStr.Set("8bit");
-			case .Base64: aOutStr.Set("base64");
+				switch (this)
+				{
+				case ._8Bit:  return "8bit";
+				case .Base64: return "base64";
+				}
 			}
 		}
 	}
@@ -23,12 +27,16 @@ namespace Beef_Net
 		case Inline;
 		case Attachment;
 
-		public void ToString(String aOutStr)
+		public StringView StrVal
 		{
-			switch (this)
+			[NoDiscard]
+			get
 			{
-			case .Inline:     aOutStr.Set("inline");
-			case .Attachment: aOutStr.Set("attachment");
+				switch (this)
+				{
+				case .Inline:     return "inline";
+				case .Attachment: return "attachment";
+				}
 			}
 		}
 	}
@@ -38,18 +46,24 @@ namespace Beef_Net
 		case Mixed;
 		case Alternative;
 
-		public void ToString(String aOutStr)
+		public StringView StrVal
 		{
-			switch (this)
+			[NoDiscard]
+			get
 			{
-			case .Mixed:       aOutStr.Set("mixed");
-			case .Alternative: aOutStr.Set("alternative");
+				switch (this)
+				{
+				case .Mixed:       return "mixed";
+				case .Alternative: return "alternative";
+				}
 			}
 		}
 	}
 
 	public abstract class MimeSection
 	{
+		protected const StringView CRLF = "\r\n";
+
 		protected MimeEncoding _encoding = ._8Bit;
 		protected MimeDisposition _disposition = .Inline;
 		protected bool _activated = false;
@@ -91,21 +105,20 @@ namespace Beef_Net
 
 		protected int RecalculateSize(int aOriginalSize)
 		{
-			/*
-  Result := 0;
+			if (aOriginalSize == 0)
+				return 0;
 
-  if OriginalSize = 0 then
-    Exit;
-    
-  case FEncoding of
-    me8bit   : Result := OriginalSize;
-    meBase64 : if OriginalSize mod 3 = 0 then
-                 Result := (OriginalSize div 3) * 4 // this is simple, 4 bytes per 3 bytes
-               else
-                 Result := ((OriginalSize + 3) div 3) * 4; // add "padding" trupplet
-  end;
-			*/
-			return 0;
+			switch (_encoding)
+			{
+			case ._8Bit:  return aOriginalSize;
+			case .Base64:
+				{
+					if (aOriginalSize % 3 == 0)
+						return (aOriginalSize / 3) * 4;       // This is simple, 4 bytes per 3 bytes
+					else
+						return ((aOriginalSize + 3) / 3) * 4; // Add "padding" trupplet
+				}
+			}
 		}
 
 		protected void SetEncoding(MimeEncoding aValue)
@@ -148,44 +161,45 @@ namespace Beef_Net
 
 		public virtual void GetHeader(String aOutStr)
 		{
-			/*
-  Result := 'Content-Type: ' + FContentType + CRLF;
-  Result := Result + 'Content-Transfer-Encoding: ' + EncodingToStr(FEncoding) + CRLF;
-  Result := Result + 'Content-Disposition: ' + DispositionToStr(FDisposition) + CRLF;
+			aOutStr.Clear();
+			aOutStr.AppendF("Content-Type: {0}\r\nContent-Transfer-Encoding: {1}\r\nContent-Disposition: {2}\r\n", _contentType, _encoding.StrVal, _disposition.StrVal);
 
-  if Length(FDescription) > 0 then
-    Result := Result + 'Content-Description: ' + FDescription + CRLF;
-    
-  Result := Result + CRLF;
-			*/
+			if (_description.Length > 0)
+				aOutStr.AppendF("Content-Description: {0}\r\n", _description);
+
+			aOutStr.Append(CRLF);
 		}
 
 		public Result<int> TryRead(int aSize)
 		{
-			/*
-  Result := 0;
+			if (aSize <= 0)
+				return .Ok(0);
 
-  if aSize <= 0 then
-    Exit;
+			if (!_activated)
+			{
+				_activated = true;
+				GetHeader(_buffer);
+			}
 
-  if not FActivated then begin
-    FActivated := True;
-    FBuffer := GetHeader;
-  end;
-  
-  if Length(FBuffer) < aSize then
-    FillBuffer(aSize);
-    
-  s := ReadBuffer(aSize);
-  if Length(s) >= aSize then begin
-    Result := FOutputStream.Write(s[1], aSize);
-    Delete(FBuffer, 1, Result);
-  end else if Length(s) > 0 then begin
-    Result := FOutputStream.Write(s[1], Length(s));
-    Delete(FBuffer, 1, Result);
-  end;
-			*/
-			return .Ok(0);
+			if (_buffer.Length < aSize)
+				FillBuffer(aSize);
+
+			String tmp = scope .();
+			int result = 0;
+			ReadBuffer(aSize, tmp);
+
+			if (tmp.Length >= aSize)
+			{
+				result = TrySilent!(_outputStream.TryWrite(.((uint8*)tmp.Ptr, aSize)));
+				_buffer.Remove(0, result);
+			}
+			else if (tmp.Length > 0)
+			{
+				result = TrySilent!(_outputStream.TryWrite(.((uint8*)tmp.Ptr, tmp.Length)));
+				_buffer.Remove(0, result);
+			}
+
+			return .Ok(result);
 		}
 
 		public void ReadBuffer(int aSize, String aOutStr)
@@ -228,19 +242,20 @@ namespace Beef_Net
 
 		protected override int GetSize()
 		{
-			/*
-  if FActivated then
-    Result := Length(FBuffer) + RecalculateSize(Length(FData))
-  else
-    Result := Length(FBuffer) + Length(GetHeader) + RecalculateSize(Length(FData));
+			int result = _buffer.Length + RecalculateSize(_data.Length);
 
-  if not FActivated
-  or (Length(FBuffer) > 0)
-  or (Length(FData) > 0) then
-    if Length(FOriginalData) > 0 then
-      Result := Result + Length(CRLF); // CRLF after each msg body
-			*/
-			return 0;
+			if (!_activated) // Include header size only when not yet activated
+			{
+				String tmp = scope .();
+				GetHeader(tmp);
+				result += tmp.Length;
+			}
+
+			if ((!_activated) || _buffer.Length > 0 || _data.Length > 0)
+				if (_originalData.Length > 0)
+					result += CRLF.Length; // CRLF after each msg body
+
+			return result;
 		}
 
     	protected void SetData(StringView aValue)
@@ -254,34 +269,37 @@ namespace Beef_Net
 
 		protected override void FillBuffer(int aSize)
 		{
-			/*
-  s := Copy(FData, 1, aSize);
-  
-  if Length(s) = 0 then
-    Exit;
-  
-  n := aSize;
+			String tmp = scope .(_data.Substring(0, aSize));
 
-  if Assigned(FEncodingStream) then begin
-    n := FEncodingStream.Write(s[1], Length(s));
-    Delete(FData, 1, n);
+			if (tmp.Length == 0)
+				return;
 
-    if Length(FData) = 0 then begin
-      FEncodingStream.Free; // to fill in the last bit
-      CreateEncodingStream;
-      FLocalStream.Write(CRLF[1], Length(CRLF));
-    end;
-    
-    SetLength(s, FLocalStream.Size);
-    SetLength(s, FLocalStream.Read(s[1], Length(s)));
-  end else begin
-    Delete(FData, 1, n);
-    if Length(FData) = 0 then
-      s := s + CRLF;
-  end;
+			int len = aSize;
 
-  FBuffer := FBuffer + s;
-			*/
+			if (_encodingStream != null)
+			{
+				len = TrySilent!(_encodingStream.TryWrite(.((uint8*)tmp.Ptr, tmp.Length)));
+				_data.Remove(0, len);
+
+				if (_data.Length == 0)
+				{
+					delete _encodingStream; // To fill in the last bit
+					CreateEncodingStream();
+					_localStream.TryWrite(.((uint8*)CRLF.Ptr, CRLF.Length));
+				}
+
+				tmp.PrepareBuffer(_localStream.Length - tmp.Length);
+				tmp.Length = TrySilent!(_localStream.TryRead(.((uint8*)tmp.Ptr, tmp.Length)));
+			}
+			else
+			{
+				_data.Remove(0, len);
+
+				if (_data.Length == 0)
+					tmp.Append(CRLF);
+			}
+
+			_buffer.Append(tmp);
 		}
 		
 		public void GetCharset(String aOutStr)
@@ -344,63 +362,63 @@ namespace Beef_Net
 
 		protected override int GetSize()
 		{
-			/*
-  if FActivated then
-    Result := Length(FBuffer) + RecalculateSize(FStream.Size - FStream.Position)
-  else
-    Result := Length(FBuffer) + Length(GetHeader) + RecalculateSize(FStream.Size - FStream.Position);
-    
-  if not FActivated
-  or (Length(FBuffer) > 0)
-  or (FStream.Size - FStream.Position > 0) then
-    if FStream.Size - FOriginalPosition > 0 then
-      Result := Result + Length(CRLF); // CRLF after each msg body
-			*/
-			return 0;
+			int result = _buffer.Length + RecalculateSize(_stream.Length - _stream.Position);
+
+			if (!_activated) // Include header size only when not yet activated
+			{
+				String tmp = scope .();
+				GetHeader(tmp);
+				result += tmp.Length;
+			}
+
+			if ((!_activated) || _buffer.Length > 0 || _stream.Length - _stream.Position > 0)
+				if (_stream.Length - _originalPosition > 0)
+					result += CRLF.Length; // CRLF after each msg body
+
+			return result;
 		}
 
 		protected void SetStream(Stream aValue)
 		{
-			/*
-  if Assigned(FStream)
-  and FOwnsStreams then begin
-    FStream.Free;
-    FStream := nil;
-  end;
-  
-  FStream := aValue;
-  FOriginalPosition := FStream.Position;
-			*/
+			if (_stream == null && _ownsStreams)
+				DeleteAndNullify!(_stream);
+
+			_stream = aValue;
+			_originalPosition = _stream.Position;
 		}
 
 		protected override void FillBuffer(int aSize)
 		{
-			/*
-  SetLength(s, aSize);
-  SetLength(s, FStream.Read(s[1], aSize));
-  
-  if Length(s) <= 0 then
-    Exit;
-  
-  if Assigned(FEncodingStream) then begin
-    n := FEncodingStream.Write(s[1], Length(s));
-    
-    if n < Length(s) then
-      FStream.Position := FStream.Position - (n - Length(s));
-      
-    if FStream.Size - FStream.Position = 0 then begin
-      FEncodingStream.Free; // to fill in the last bit
-      CreateEncodingStream;
-      FLocalStream.Write(CRLF[1], Length(CRLF));
-    end;
-      
-    SetLength(s, FLocalStream.Size);
-    SetLength(s, FLocalStream.Read(s[1], FLocalStream.Size));
-  end else if FStream.Size - FStream.Position = 0 then
-    s := s + CRLF;
+			String tmp = scope .();
+			tmp.PrepareBuffer(aSize);
+			tmp.Length = TrySilent!(_stream.TryRead(.((uint8*)tmp.Ptr, aSize)));
 
-  FBuffer := FBuffer + s;
-			*/
+			if (tmp.Length <= 0)
+				return;
+
+			if (_encodingStream != null)
+			{
+				int len = TrySilent!(_encodingStream.TryWrite(.((uint8*)tmp.Ptr, tmp.Length)));
+
+				if (len < tmp.Length)
+					_stream.Position -= len - tmp.Length;
+
+				if (_stream.Length - _stream.Position == 0)
+				{
+					delete _encodingStream; // To fill in the last bit
+					CreateEncodingStream();
+					_localStream.TryWrite(.((uint8*)CRLF.Ptr, CRLF.Length));
+				}
+
+				tmp.PrepareBuffer(_localStream.Length - tmp.Length);
+				tmp.Length = TrySilent!(_localStream.TryRead(.((uint8*)tmp.Ptr, _localStream.Length)));
+			}
+			else if (_stream.Length - _stream.Position == 0)
+			{
+				tmp.Append(CRLF);
+			}
+
+			_buffer.Append(tmp);
 		}
 
 		public override void Reset()
@@ -443,77 +461,98 @@ namespace Beef_Net
 
 		protected void SetContentType(StringView aFileName)
 		{
-			/*
-  s := StringReplace(ExtractFileExt(aFileName), '.', '', [rfReplaceAll]);
+			String tmp = scope .();
+			Path.GetExtension(aFileName, tmp);
+			tmp.Replace(".", "");
 
-  if (s = 'txt')
-  or (s = 'pas')
-  or (s = 'pp')
-  or (s = 'pl')
-  or (s = 'cpp')
-  or (s = 'cc')
-  or (s = 'h')
-  or (s = 'hh')
-  or (s = 'rb')
-  or (s = 'pod')
-  or (s = 'php')
-  or (s = 'php3')
-  or (s = 'php4')
-  or (s = 'php5')
-  or (s = 'c++') then FContentType := 'text/plain';
-  
-  if (s = 'html')
-  or (s = 'shtml') then FContentType := 'text/html';
-  if s = 'css' then FContentType := 'text/css';
-  
-  if s = 'png' then FContentType := 'image/x-png';
-  if s = 'xpm' then FContentType := 'image/x-pixmap';
-  if s = 'xbm' then FContentType := 'image/x-bitmap';
-  if (s = 'tif')
-  or (s = 'tiff') then FContentType := 'image/tiff';
-  if s = 'mng' then FContentType := 'image/x-mng';
-  if s = 'gif' then FContentType := 'image/gif';
-  if s = 'rgb' then FContentType := 'image/rgb';
-  if (s = 'jpg')
-  or (s = 'jpeg') then FContentType := 'image/jpeg';
-  if s = 'bmp' then FContentType := 'image/x-ms-bmp';
-    
-  if s = 'wav' then FContentType := 'audio/x-wav';
-  if s = 'mp3' then FContentType := 'audio/x-mp3';
-  if s = 'ogg' then FContentType := 'audio/x-ogg';
-  if s = 'avi' then FContentType := 'video/x-msvideo';
-  if (s = 'qt')
-  or (s = 'mov') then FContentType := 'video/quicktime';
-  if (s = 'mpg')
-  or (s = 'mpeg') then FContentType := 'video/mpeg';
-  
-  if s = 'pdf' then FContentType := 'application/pdf';
-  if s = 'rtf' then FContentType := 'application/rtf';
-  if s = 'tex' then FContentType := 'application/x-tex';
-  if s = 'latex' then FContentType := 'application/x-latex';
-  if s = 'doc' then FContentType := 'application/msword';
-  if s = 'gz' then FContentType := 'application/x-gzip';
-  if s = 'zip' then FContentType := 'application/zip';
-  if s = '7z' then FContentType := 'application/x-7zip';
-  if s = 'rar' then FContentType := 'application/rar';
-  if s = 'tar' then FContentType := 'application/x-tar';
-  if s = 'arj' then FContentType := 'application/arj';
-			*/
+			if (
+				tmp.Equals("bf", .OrdinalIgnoreCase)   ||
+				tmp.Equals("c++", .OrdinalIgnoreCase)  ||
+				tmp.Equals("cpp", .OrdinalIgnoreCase)  || tmp.Equals("cc", .OrdinalIgnoreCase) ||
+				tmp.Equals("h", .OrdinalIgnoreCase)    || tmp.Equals("hh", .OrdinalIgnoreCase) ||
+				tmp.Equals("pas", .OrdinalIgnoreCase)  || tmp.Equals("pp", .OrdinalIgnoreCase) ||
+				tmp.Equals("pod", .OrdinalIgnoreCase)  ||
+				tmp.Equals("php", .OrdinalIgnoreCase)  || tmp.Equals("php3", .OrdinalIgnoreCase) ||
+				tmp.Equals("php4", .OrdinalIgnoreCase) || tmp.Equals("php5", .OrdinalIgnoreCase) ||
+				tmp.Equals("pl", .OrdinalIgnoreCase)   ||
+				tmp.Equals("rb", .OrdinalIgnoreCase)   ||
+				tmp.Equals("txt", .OrdinalIgnoreCase)
+			)
+				_contentType.Set("text/plain");
+			if (tmp.Equals("html", .OrdinalIgnoreCase) || tmp.Equals("shtml", .OrdinalIgnoreCase))
+				_contentType.Set("text/html");
+			if (tmp.Equals("css", .OrdinalIgnoreCase))
+				_contentType.Set("text/css");
+
+			if (tmp.Equals("png", .OrdinalIgnoreCase))
+				_contentType.Set("image/x-png");
+			if (tmp.Equals("xpm", .OrdinalIgnoreCase))
+				_contentType.Set("image/x-pixmap");
+			if (tmp.Equals("xbm", .OrdinalIgnoreCase))
+				_contentType.Set("image/x-bitmap");
+			if (tmp.Equals("tif", .OrdinalIgnoreCase) || tmp.Equals("tiff", .OrdinalIgnoreCase))
+				_contentType.Set("image/tiff");
+			if (tmp.Equals("mng", .OrdinalIgnoreCase))
+				_contentType.Set("image/x-mng");
+			if (tmp.Equals("gif", .OrdinalIgnoreCase))
+				_contentType.Set("image/gif");
+			if (tmp.Equals("rgb", .OrdinalIgnoreCase))
+				_contentType.Set("image/rgb");
+			if (tmp.Equals("jpg", .OrdinalIgnoreCase) || tmp.Equals("jpeg", .OrdinalIgnoreCase))
+				_contentType.Set("image/jpeg");
+			if (tmp.Equals("bmp", .OrdinalIgnoreCase))
+				_contentType.Set("image/x-ms-bmp");
+
+			if (tmp.Equals("wav", .OrdinalIgnoreCase))
+				_contentType.Set("audio/x-wav");
+			if (tmp.Equals("mp3", .OrdinalIgnoreCase))
+				_contentType.Set("audio/x-mp3");
+			if (tmp.Equals("ogg", .OrdinalIgnoreCase))
+				_contentType.Set("audio/x-ogg");
+
+			if (tmp.Equals("avi", .OrdinalIgnoreCase))
+				_contentType.Set("video/x-msvideo");
+			if (tmp.Equals("qt", .OrdinalIgnoreCase) || tmp.Equals("mov", .OrdinalIgnoreCase))
+				_contentType.Set("video/quicktime");
+			if (tmp.Equals("mpg", .OrdinalIgnoreCase) || tmp.Equals("mpeg", .OrdinalIgnoreCase))
+				_contentType.Set("video/mpeg");
+
+			if (tmp.Equals("pdf", .OrdinalIgnoreCase))
+				_contentType.Set("application/pdf");
+			if (tmp.Equals("rtf", .OrdinalIgnoreCase))
+				_contentType.Set("application/rtf");
+			if (tmp.Equals("tex", .OrdinalIgnoreCase))
+				_contentType.Set("application/x-tex");
+			if (tmp.Equals("latex", .OrdinalIgnoreCase))
+				_contentType.Set("application/x-latex");
+			if (tmp.Equals("doc", .OrdinalIgnoreCase))
+				_contentType.Set("application/msword");
+			if (tmp.Equals("gz", .OrdinalIgnoreCase))
+				_contentType.Set("application/x-gzip");
+			if (tmp.Equals("zip", .OrdinalIgnoreCase))
+				_contentType.Set("application/zip");
+			if (tmp.Equals("7z", .OrdinalIgnoreCase))
+				_contentType.Set("application/x-7zip");
+			if (tmp.Equals("rar", .OrdinalIgnoreCase))
+				_contentType.Set("application/rar");
+			if (tmp.Equals("tar", .OrdinalIgnoreCase))
+				_contentType.Set("application/x-tar");
+			if (tmp.Equals("arj", .OrdinalIgnoreCase))
+				_contentType.Set("application/arj");
 		}
 
 		public override void GetHeader(String aOutStr)
 		{
-			/*
-  Result := 'Content-Type: ' + FContentType + CRLF;
-  Result := Result + 'Content-Transfer-Encoding: ' + EncodingToStr(FEncoding) + CRLF;
-  Result := Result + 'Content-Disposition: ' + DispositionToStr(FDisposition) +
-            '; filename="' + FFileName + '"' + CRLF;
+			aOutStr.Clear();
+			aOutStr.AppendF(
+				"Content-Type: {0}\r\nContent-Transfer-Encoding: {1}\r\nContent-Disposition: {2}\r\n; filename=\"{3}\"\r\n",
+				_contentType, _encoding.StrVal, _disposition.StrVal, _fileName
+			);
 
-  if Length(FDescription) > 0 then
-    Result := Result + 'Content-Description: ' + FDescription + CRLF;
-    
-  Result := Result + CRLF; 
-			*/
+			if (_description.Length > 0)
+				aOutStr.AppendF("Content-Description: {0}\r\n", _description);
+
+			aOutStr.Append(CRLF);
 		}
 	}
 }

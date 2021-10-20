@@ -21,23 +21,27 @@ namespace Beef_Net
 		case Quit      = 0x000400;
 		case Last      = 0x000800;
 
-		public void ToString(String aOutStr)
+		public StringView StrVal
 		{
-			switch (this)
+			[NoDiscard]
+			get
 			{
-			case .None:      aOutStr.Set("None");
-			case .Con:       aOutStr.Set("Connect");
-			case .Helo:      aOutStr.Set("HELO");
-			case .Ehlo:      aOutStr.Set("EHLO");
-			case .AuthLogin: aOutStr.Set("AuthLogin");
-			case .AuthPlain: aOutStr.Set("AuthPlain");
-			case .StartTLS:  aOutStr.Set("STARTTLS");
-			case .Mail:      aOutStr.Set("MAIL");
-			case .Rcpt:      aOutStr.Set("RCPT");
-			case .Data:      aOutStr.Set("DATA");
-			case .Rset:      aOutStr.Set("RSET");
-			case .Quit:      aOutStr.Set("QUIT");
-			case .Last:      aOutStr.Set("LAST");
+				switch (this)
+				{
+				case .None:      return "None";
+				case .Con:       return "Connect";
+				case .Helo:      return "HELO";
+				case .Ehlo:      return "EHLO";
+				case .AuthLogin: return "AuthLogin";
+				case .AuthPlain: return "AuthPlain";
+				case .StartTLS:  return "STARTTLS";
+				case .Mail:      return "MAIL";
+				case .Rcpt:      return "RCPT";
+				case .Data:      return "DATA";
+				case .Rset:      return "RSET";
+				case .Quit:      return "QUIT";
+				case .Last:      return "LAST";
+				}
 			}
 		}
 	}
@@ -798,10 +802,8 @@ namespace Beef_Net
 			dummy.TryRead(.((uint8*)aOutStr.PrepareBuffer(dummy.Length), dummy.Length));
 		}
 
-		protected virtual void EncodeMimeHeaderText(StringView aStr, String aOutStr)
-		{
+		protected virtual void EncodeMimeHeaderText(StringView aStr, String aOutStr) =>
 			aOutStr.Set(aStr);
-		}
 
     	public this() : base()
 		{

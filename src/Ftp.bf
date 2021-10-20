@@ -32,32 +32,36 @@ namespace Beef_Net
 		case Quit = 0x080000;
 		case Last = 0x100000;
 
-		public void ToString(String aOutStr)
+		public StringView StrVal
 		{
-			switch (this)
+			[NoDiscard]
+			get
 			{
-			case .None: aOutStr.Set("None");
-			case .Con:  aOutStr.Set("Connect");
-			case .User: aOutStr.Set("Authenticate");
-			case .Pass: aOutStr.Set("Password");
-			case .Pasv: aOutStr.Set("Passive");
-			case .Port: aOutStr.Set("Active");
-			case .List: aOutStr.Set("List");
-			case .Retr: aOutStr.Set("Retrieve");
-			case .Stor: aOutStr.Set("Store");
-			case .Type: aOutStr.Set("Type");
-			case .CWD:  aOutStr.Set("CWD");
-			case .MKD:  aOutStr.Set("MKDIR");
-			case .RMD:  aOutStr.Set("RMDIR");
-			case .DEL:  aOutStr.Set("Delete");
-			case .RNFR: aOutStr.Set("RenameFrom");
-			case .RNTO: aOutStr.Set("RenameTo");
-			case .SYS:  aOutStr.Set("System");
-			case .Feat: aOutStr.Set("Features");
-			case .PWD:  aOutStr.Set("PWD");
-			case .Help: aOutStr.Set("HELP");
-			case .Quit: aOutStr.Set("QUIT");
-			case .Last: aOutStr.Set("LAST");
+				switch (this)
+				{
+				case .None: return "None";
+				case .Con:  return "Connect";
+				case .User: return "Authenticate";
+				case .Pass: return "Password";
+				case .Pasv: return "Passive";
+				case .Port: return "Active";
+				case .List: return "List";
+				case .Retr: return "Retrieve";
+				case .Stor: return "Store";
+				case .Type: return "Type";
+				case .CWD:  return "CWD";
+				case .MKD:  return "MKDIR";
+				case .RMD:  return "RMDIR";
+				case .DEL:  return "Delete";
+				case .RNFR: return "RenameFrom";
+				case .RNTO: return "RenameTo";
+				case .SYS:  return "System";
+				case .Feat: return "Features";
+				case .PWD:  return "PWD";
+				case .Help: return "HELP";
+				case .Quit: return "QUIT";
+				case .Last: return "LAST";
+				}
 			}
 		}
 	}
@@ -720,9 +724,7 @@ namespace Beef_Net
 			cleanAnswer.Trim();
 
 			int ansNum = GetNum!(cleanAnswer);
-			String tmp = scope .();
-			_status.First().Status.ToString(tmp);
-			Debug.WriteLine("WOULD EVAL: {0} with value: {1} from \"{2}\"", tmp, ansNum, cleanAnswer);
+			Debug.WriteLine("WOULD EVAL: {0} with value: {1} from \"{2}\"", _status.First().Status.StrVal, ansNum, cleanAnswer);
 
 			if (_status.First().Status == .Feat)
 				_featureString.AppendF("{0}\r\n", cleanAnswer); // We need to parse this later
@@ -731,8 +733,7 @@ namespace Beef_Net
 			{
 				if (!_status.Empty)
 				{
-					_status.First().Status.ToString(tmp);
-					Debug.WriteLine("EVAL: {0} with value: {1}", tmp, ansNum);
+					Debug.WriteLine("EVAL: {0} with value: {1}", _status.First().Status.StrVal, ansNum);
 		
 					switch(_status.First().Status)
 					{
