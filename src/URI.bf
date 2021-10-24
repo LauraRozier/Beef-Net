@@ -5,26 +5,26 @@ namespace Beef_Net
 {
 	public class URI
 	{
-		public readonly static char8[] GenDelims = new char8[7] (
+		public readonly static char8[] GenDelims = new .[7](
 			':', '/', '?', '#', '[', ']', '@'
 		) ~ delete _;
-		public readonly static char8[] SubDelims = new char8[11] (
+		public readonly static char8[] SubDelims = new .[11](
 			'!', '$', '&', '\'', '(', ')', '*', '+', ',', ';', '='
 		) ~ delete _;
-		public readonly static char8[] Alpha = new char8[52] (
+		public readonly static char8[] Alpha = new .[52](
 			'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
 			'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
 		) ~ delete _;
-		public readonly static char8[] Numeric = new char8[10] (
+		public readonly static char8[] Numeric = new .[10](
 			'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
 		) ~ delete _;
-		public readonly static char8[] Unreserved = new char8[66] ( // ALPHA + DIGIT + ['-', '.', '_', '~']
+		public readonly static char8[] Unreserved = new .[66]( // ALPHA + DIGIT + ['-', '.', '_', '~']
 			'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
 			'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
 			'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
 			'-', '.', '_', '~'
 		) ~ delete _;
-		public readonly static char8[] ValidPathChars = new char8[80] ( // Unreserved + SubDelims + ['@', ':', '/']
+		public readonly static char8[] ValidPathChars = new .[80]( // Unreserved + SubDelims + ['@', ':', '/']
 			'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
 			'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
 			'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
@@ -32,7 +32,7 @@ namespace Beef_Net
 			'!', '$', '&', '\'', '(', ')', '*', '+', ',', ';', '=',
 			'@', ':', '/'
 		) ~ delete _;
-		public readonly static char8[] AbsoluteUriChars = new char8[65] (
+		public readonly static char8[] AbsoluteUriChars = new .[65](
 			'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
 			'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
 			'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',

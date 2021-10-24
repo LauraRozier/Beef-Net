@@ -2,13 +2,13 @@ using System;
 
 namespace Beef_Net
 {
-	struct StringBuffer
+	public struct StringBuffer
 	{
 	    public char8* Memory;
 	    public char8* Pos;
 		public int Length { get; private set mut; }
 
-		public static StringBuffer InitStringBuffer(int aInitialSize)
+		public static StringBuffer Init(int aInitialSize)
 		{
 			StringBuffer result = .() {
 				Memory = (char8*)Internal.Malloc(aInitialSize),
@@ -18,53 +18,56 @@ namespace Beef_Net
 			return result;
 		}
 
+		public void Clear() mut =>
+			Pos = Memory;
+
 		public static void ClearStringBuffer(ref StringBuffer aBuffer) =>
 			aBuffer.Pos = aBuffer.Memory;
 
-		public static void AppendString(ref StringBuffer aBuffer, void* aSource, uint32 aLength)
+		public void AppendString(void* aSource, uint32 aLength) mut
 		// lPos, lSize: PtrUInt;
 		{
 			if (aLength == 0)
 				return;
 
-			uint32 pos = (uint32)(aBuffer.Pos - aBuffer.Memory);
-			uint32 size = (uint32)(Internal.CStrLen(aBuffer.Memory));
+			uint32 pos = (uint32)(Pos - Memory);
+			uint32 size = (uint32)(Internal.CStrLen(Memory));
 
 			// reserve 2 extra spaces
 			if (pos + aLength + 2 >= size)
 			{
 				// ReallocMem(aBuffer.Memory, pos + aLength + size);
-				char8* tmp = new char8[aBuffer.Length]*;
-				Internal.MemCpy(tmp, aBuffer.Memory, aBuffer.Length);
+				char8* tmp = new char8[Length]*;
+				Internal.MemCpy(tmp, Memory, Length);
 
-				Internal.Free(aBuffer.Memory);
+				Internal.Free(Memory);
 
-				aBuffer.Length = pos + aLength + size;
-				aBuffer.Memory = (char8*)Internal.Malloc(aBuffer.Length);
-				Internal.MemCpy(aBuffer.Memory, tmp, aBuffer.Length);
-				aBuffer.Pos = aBuffer.Memory + pos;
+				Length = pos + aLength + size;
+				Memory = (char8*)Internal.Malloc(Length);
+				Internal.MemCpy(Memory, tmp, Length);
+				Pos = Memory + pos;
 				delete tmp;
 			}
 
-			Internal.MemMove(aBuffer.Pos, aSource, aLength);
-			aBuffer.Pos += aLength;
+			Internal.MemMove(Pos, aSource, aLength);
+			Pos += aLength;
 		}
 		
-		public static void AppendString(ref StringBuffer aBuffer, char8* aSource)
+		public void AppendString(char8* aSource) mut
 		{
 			if (aSource == null)
 				return;
 
-			AppendString(ref aBuffer, aSource, (uint32)Internal.CStrLen(aSource));
+			AppendString(aSource, (uint32)Internal.CStrLen(aSource));
 		}
 		
-		public static void AppendString(ref StringBuffer aBuffer, StringView aSource) =>
-			AppendString(ref aBuffer, aSource.Ptr, (uint32)aSource.Length);
+		public void AppendString(StringView aSource) mut =>
+			AppendString(aSource.Ptr, (uint32)aSource.Length);
 		
-		public static void AppendChar(ref StringBuffer aBuffer, char8 aChar)
+		public void AppendChar(char8 aChar) mut
 		{
-			*aBuffer.Pos = aChar;
-			aBuffer.Pos++;
+			*Pos = aChar;
+			Pos++;
 		}
 	}
 }

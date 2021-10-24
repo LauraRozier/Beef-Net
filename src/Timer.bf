@@ -4,7 +4,7 @@ namespace Beef_Net
 {
 	public delegate void NotifyEvent(Object aSender);
 
-	class Timer
+	public class Timer
 	{
 		// Units of time
 		public const int HoursPerDay = 24;
@@ -27,7 +27,6 @@ namespace Beef_Net
 			get { return _enabled; }
 			set { _enabled = value; }
 		}
-
 		public TimeSpan Interval
 		{
 			get { return _interval; }
@@ -38,13 +37,11 @@ namespace Beef_Net
 				_enabled = true;
 			}
 		}
-
 		public bool OneShot
 		{
 			get { return _oneShot; }
 			set { _oneShot = value; }
 		}
-
 		public NotifyEvent OnTimer
 		{
 			get { return _onTimer; }

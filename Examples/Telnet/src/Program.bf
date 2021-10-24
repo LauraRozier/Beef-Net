@@ -25,7 +25,7 @@ namespace Telnet
 		{
 			Beef_Net_Init();
 
-			_client = new TelnetClient();
+			_client = new .();
 			_client.OnConnect = _onConnect;
 			_client.OnDisconnect = _onDisconnect;
 			_client.OnError = _onError;
@@ -36,11 +36,11 @@ namespace Telnet
 			{
 				_client.CallAction();
 
-				_bgWorker = new Thread(new => ThreadStart);
+				_bgWorker = new .(new => ThreadStart);
 				_bgWorker.IsBackground = true;
 				_bgWorker.SetName("Networking_Thread");
 				_bgWorker.Start(false);
-				String strBuff = new String();
+				String strBuff = new .();
 				ConsoleKeyInfo cki = ?;
 				char8 charBuff = ?;
 				_client.SetOption(Telnet.OPT_LINEMODE);
@@ -82,8 +82,13 @@ namespace Telnet
 				_client.Disconnect();
 
 			_needsCleanup = true; // Better safe then sorry
-			_bgWorker.Join();
-			delete _bgWorker;
+
+			if (_bgWorker != null)
+			{
+				_bgWorker.Join();
+				delete _bgWorker;
+			}
+
 			delete _client;
 			Console.WriteLine("\r\n\r\n-----------------------------------------------\r\n\r\n");
 

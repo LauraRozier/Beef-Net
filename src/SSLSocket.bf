@@ -24,8 +24,8 @@ namespace Beef_Net
 		Shutdown    = 0x4
 	}
 
-	[AlwaysInclude(AssumeInstantiated = true), Reflect(.All)]
-	class SSLSocket : Socket
+	[AlwaysInclude(IncludeAllMethods=true), Reflect(.All)]
+	public class SSLSocket : Socket
 	{
 		protected SSL.ssl_st* _SSL = null ~ { if (_ != null) SSL.free(_); };
 		protected SSL.CTX* _SSLContext = null;
@@ -40,7 +40,6 @@ namespace Beef_Net
 					: _connectionStatus == .Connected;
 			}
 		}
-
 		public new SocketConnectionStatus ConnectionStatus
 		{
 			get
@@ -59,11 +58,7 @@ namespace Beef_Net
 				return base.ConnectionStatus;
 			}
 		}
-
-		public SSLStatus SSLState
-		{
-			get { return _SSLStatus; }
-		}
+		public SSLStatus SSLState { get { return _SSLStatus; } }
 		
 		protected override int32 DoSend(uint8* aData, int32 aSize)
 		{
@@ -370,7 +365,7 @@ namespace Beef_Net
 		}
 	}
 
-	class SSLSession : Session
+	public class SSLSession : Session
 	{
 		protected SocketEvent _onSSLConnect;
 		protected SocketEvent _onSSLAccept;
@@ -394,7 +389,6 @@ namespace Beef_Net
 				CreateSSLContext();
 			}
 		}
-
 		public StringView CAFile
 		{
 			get { return _CAFile; }
@@ -412,7 +406,6 @@ namespace Beef_Net
 				CreateSSLContext();
 			}
 		}
-
 		public StringView KeyFile
 		{
 			get { return _keyFile; }
@@ -430,7 +423,6 @@ namespace Beef_Net
 				CreateSSLContext();
 			}
 		}
-
 		public SSLMethod Method
 		{
 			get { return _method; }
@@ -443,7 +435,6 @@ namespace Beef_Net
 				CreateSSLContext();
 			}
 		}
-
 		public ref PEM.password_cb PasswordCallback
 		{
 			get { return ref _passwordCallback; }
@@ -456,12 +447,7 @@ namespace Beef_Net
 				CreateSSLContext();
 			}
 		}
-
-		public void* SSLContext
-		{
-			get { return _SSLContext; }
-		}
-
+		public void* SSLContext { get { return _SSLContext; } }
 		public bool SSLActive
 		{
 			get { return _SSLActive; }
@@ -476,13 +462,11 @@ namespace Beef_Net
 				  CreateSSLContext();
 			}
 		}
-
 		public ref SocketEvent OnSSLConnect
 		{
 			get { return ref _onSSLConnect; }
 			set { _onSSLConnect = value; }
 		}
-
 		public ref SocketEvent OnSSLAccept
 		{
 			get { return ref _onSSLAccept; }
@@ -573,8 +557,8 @@ namespace Beef_Net
 		{
 			base.RegisterWithComponent(aConnection);
 
-			if (!aConnection.IsSSLSocket)
-				aConnection.IsSSLSocket = true;
+			if (aConnection.SocketClass != typeof(SSLSocket))
+				aConnection.SocketClass = typeof(SSLSocket);
 		}
 
 		public override void InitHandle(Handle aHandle)

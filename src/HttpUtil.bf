@@ -6,7 +6,7 @@ namespace Beef_Net
 {
 	public class HttpUtil
 	{
-		public readonly static char8[] AllASCIIChars = new .[256] (
+		public readonly static char8[] AllASCIIChars = new .[256](
 			'\x00', '\x01', '\x02', '\x03', '\x04', '\x05', '\x06', '\x07', '\x08', '\x09', '\x0a', '\x0b', '\x0c', '\x0d', '\x0e', '\x0f',
 			'\x10', '\x11', '\x12', '\x13', '\x14', '\x15', '\x16', '\x17', '\x18', '\x19', '\x1a', '\x1b', '\x1c', '\x1d', '\x1e', '\x1f',
 			'\x20', '\x21', '\x22', '\x23', '\x24', '\x25', '\x26', '\x27', '\x28', '\x29', '\x2a', '\x2b', '\x2c', '\x2d', '\x2e', '\x2f',
@@ -32,27 +32,27 @@ namespace Beef_Net
 			(char8)'\xf0', (char8)'\xf1', (char8)'\xf2', (char8)'\xf3', (char8)'\xf4', (char8)'\xf5', (char8)'\xf6', (char8)'\xf7',
 			(char8)'\xf8', (char8)'\xf9', (char8)'\xfa', (char8)'\xfb', (char8)'\xfc', (char8)'\xfd', (char8)'\xfe', (char8)'\xff'
 		) ~ delete _;
-		public readonly static char8[] HEX_LETTERS = new char8[6] (
+		public readonly static char8[] HEX_LETTERS = new .[6](
 			'A', 'B', 'C', 'D', 'E', 'F'
 		) ~ delete _;
-		public readonly static char8[] Numeric = new char8[10] (
+		public readonly static char8[] Numeric = new .[10](
 			'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
 		) ~ delete _;
-		public readonly static char8[] HTTPAllowedChars  = new .[72] (
+		public readonly static char8[] HTTPAllowedChars  = new .[72](
 			'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
 			'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
 			'*', '@', '.', '_', '-',
 			'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
 			'$', '!', '\'', '(', ')'
 		) ~ delete _;
-		public readonly static char8[] URLAllowedChars = new .[74] (
+		public readonly static char8[] URLAllowedChars = new .[74](
 			'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
 			'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
 			'*', '@', '.', '_', '-',
 			'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
 			'$', '!', '\'', '(', ')', '=', '&'
 		) ~ delete _;
-		public readonly static String HTTPDateFormat = "ddd, dd mmm yyyy hh:nn:ss";
+		public const String HTTPDateFormat = "ddd, dd mmm yyyy hh:nn:ss";
 
 		public static int Search(char8[] aArr, char8 aVal)
 		{

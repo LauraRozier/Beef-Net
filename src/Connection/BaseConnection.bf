@@ -32,86 +32,64 @@ namespace Beef_Net.Connection
 		protected bool _reuseAddress = false;
 		protected int32 _socketNet;
 
-		protected Eventer.EventerErrorEvent _onEventerErrorDlg = new => EventerError ~ delete _;
-		protected Socket.HandleEvent _onReadDlg = new => ReceiveAction ~ delete _;
-		protected Socket.HandleEvent _onWriteDlg = new => SendAction ~ delete _;
-		protected Socket.HandleErrorEvent _onSockErrorDlg = new => ErrorAction ~ delete _;
+		protected EventerErrorEvent _onEventerErrorDlg = new => EventerError ~ delete _;
+		protected HandleEvent _onReadDlg = new => ReceiveAction ~ delete _;
+		protected HandleEvent _onWriteDlg = new => SendAction ~ delete _;
+		protected HandleErrorEvent _onSockErrorDlg = new => ErrorAction ~ delete _;
 
 		public ref SocketErrorEvent OnError
 		{
 			get { return ref _onError; }
 			set { _onError = value; }
 		}
-
 		public ref SocketEvent OnReceive
 		{
 			get { return ref _onReceive; }
 			set { _onReceive = value; }
 		}
-
 		public ref SocketEvent OnDisconnect
 		{
 			get { return ref _onDisconnect; }
 			set { _onDisconnect = value; }
 		}
-
 		public ref SocketEvent OnCanSend
 		{
 			get { return ref _onCanSend; }
 			set { _onCanSend = value; }
 		}
-
-		public int Count
-		{
-			get { return GetCount(); }
-		}
-
-		public bool Connected
-		{
-			get { return GetConnected(); }
-		}
-
+		public int Count { get { return GetCount(); } }
+		public bool Connected { get { return GetConnected(); } }
 		public int32 ListenBacklog
 		{
 			get { return _listenBacklog; }
 			set { _listenBacklog = value; }
 		}
-
-		public Socket Iterator
-		{
-			get { return _iterator; }
-		}
-
+		public Socket Iterator { get { return _iterator; } }
 		public int64 Timeout
 		{
 			get { return GetTimeout(); }
 			set { SetTimeout(value); }
 		}
-
 		public Eventer Eventer
 		{
 			get { return _eventer; }
 			set { SetEventer(value); }
 		}
-
 		public EventerType EventerType
 		{
 			get { return _eventerType; }
 			set { _eventerType = value; }
 		}
-
 		public Session Session
 		{
 			get { return _session; }
 			set { SetSession(value); }
 		}
-
 		public bool ReuseAddress
 		{
 			get { return _reuseAddress; }
 			set { SetReuseAddress(value); }
 		}
-
 		public int32 SocketNet
 		{
 			get { return _socketNet; }
@@ -268,7 +246,7 @@ namespace Beef_Net.Connection
 			
 			if (_rootSock != null)
 				_eventer.AddHandle(_rootSock);
-			
+
 			if (_eventer.Timeout == 0 && _timeout != 0)
 				_eventer.Timeout = _timeout;
 			else
@@ -295,7 +273,7 @@ namespace Beef_Net.Connection
 
 		public this(): base()
 		{
-			_isSSLSocket = false;
+			SocketClass = typeof(Socket);
 			_timeVal.tv_sec = 0;
 			_timeVal.tv_usec = 0;
 			_eventerType = BestEventerType();
@@ -326,7 +304,7 @@ namespace Beef_Net.Connection
 
 			return ref result;
 		}
-		
+
 		public virtual bool Connect() =>
 			Connect(_host, _port);
 
@@ -336,22 +314,16 @@ namespace Beef_Net.Connection
 			_port = aPort;
 			return false;
 		}
-		
+
 		public virtual bool Listen() =>
 			Listen(_port, _host);
-		
+
 		public abstract bool Listen(uint16 aPort, StringView aIntf = ADDR_ANY);
-		
 		public abstract int32 Get(uint8* aData, int32 aSize, Socket aSocket = null);
-		
 		public abstract int32 GetMessage(String aOutMsg, Socket aSocket = null);
-		
 		public abstract int32 Send(uint8* aData, int32 aSize, Socket aSocket = null);
-		
 		public abstract int32 SendMessage(StringView aMsg, Socket aSocket = null);
-		
 		public abstract bool IterNext();
-		
 		public abstract void IterReset();
 	}
 }

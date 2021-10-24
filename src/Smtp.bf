@@ -236,7 +236,7 @@ namespace Beef_Net
 		public this() : base()
 		{
 			_connection.Creator = this;
-			_connection.IsSSLSocket = false;
+			_connection.SocketClass = typeof(Socket);
 		}
 
 		public bool HasFeature(StringView aFeature)

@@ -29,6 +29,7 @@ namespace Beef_Net
 
 		public StringView StringValue
 		{
+			[NoDiscard]
 			get
 			{
 				switch (this)
@@ -38,9 +39,9 @@ namespace Beef_Net
 				}
 			}
 		}
-
 		public StringView SSLStringValue
 		{
+			[NoDiscard]
 			get
 			{
 				switch (this)
@@ -52,17 +53,15 @@ namespace Beef_Net
 		}
 	}
 
-	// Callback Event procedure for errors
+	/// Callback Event procedure for errors
 	public delegate void SocketErrorEvent(StringView aMsg, Socket aSocket);
-
-	// Callback Event procedure for others
+	/// Callback Event procedure for others
 	public delegate void SocketEvent(Socket aSocket);
-
-	// Callback Event procedure for progress reports
+	/// Callback Event procedure for progress reports
 	public delegate void SocketProgressEvent(Socket aSocket, int aBytes);
 
-	[AlwaysInclude(AssumeInstantiated = true), Reflect(.DynamicBoxing)]
-	class Socket : Handle
+	[AlwaysInclude(IncludeAllMethods=true), Reflect(.All)]
+	public class Socket : Handle
 	{
 		protected SocketAddress _address;
 		protected SocketAddress _peerAddress;
@@ -86,40 +85,24 @@ namespace Beef_Net
 			get { return _socketType; }
 			set { _socketType = value; }
 		}
-
-		public bool Connected
-		{
-			get { return _connectionStatus == .Connected; }
-		}
-
-		public bool Connecting
-		{
-			get { return _connectionStatus == .Connecting; }
-		}
-
-		public SocketConnectionStatus ConnectionStatus
-		{
-			get { return _connectionStatus; }
-		}
-
+		public bool Connected { get { return _connectionStatus == .Connected; } }
+		public bool Connecting { get { return _connectionStatus == .Connecting; } }
+		public SocketConnectionStatus ConnectionStatus { get { return _connectionStatus; } }
 		public int32 ListenBacklog
 		{
 			get { return _listenBacklog; }
 			set { _listenBacklog = value; }
 		}
-
 		public int32 Protocol
 		{
 			get { return _protocol; }
 			set { _protocol = value; }
 		}
-
 		public int32 SocketNet
 		{
 			get { return _socketNet; }
 			set { _socketNet = value; }
 		}
-
 		public uint16 PeerPort
 		{
 			get {
@@ -128,38 +111,20 @@ namespace Beef_Net
 					: Common.ntohs(_peerAddress.u.IPv4.sin_port);
 			}
 		}
-
-		public uint16 LocalPort
-		{
-			get { return Common.ntohs(_address.u.IPv4.sin_port); }
-		}
-
+		public uint16 LocalPort { get { return Common.ntohs(_address.u.IPv4.sin_port); } }
 		public ref Socket NextSock
 		{
 			get { return ref _nextSock; }
 			set { _nextSock = value; }
 		}
-
 		public ref Socket PrevSock
 		{
 			get { return ref _prevSock; }
 			set { _prevSock = value; }
 		}
-
-		public SocketState SocketState
-		{
-			get { return _socketState; }
-		}
-
-		public ref Component Creator
-		{
-			get { return ref _creator; }
-		}
-
-		public ref Session Session
-		{
-			get { return ref _session; }
-		}
+		public SocketState SocketState { get { return _socketState; } }
+		public ref Component Creator { get { return ref _creator; } }
+		public ref Session Session { get { return ref _session; } }
 		
 		protected SockAddr* GetIPAddressPointer()
 		{

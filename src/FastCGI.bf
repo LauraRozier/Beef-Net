@@ -64,6 +64,26 @@ namespace Beef_Net
 		public FCGI_UnknownTypeBody Body;
 	}
 
+	public enum SpawnState
+	{
+		None,
+		Spawning,
+		Spawned
+	}
+
+	public enum FastCGIClientState
+	{
+		Idle,
+		Connecting,
+		ConnectingAgain,
+		StartingServer,
+		Header,
+		Data,
+		Flush
+	}
+
+	public function void FastCGIRequestEvent(FastCGIRequest aRequest);
+
 	public sealed static class FCGI
 	{
 		/// Listening socket file number
@@ -106,8 +126,6 @@ namespace Beef_Net
 
 	class FastCGIRequest
 	{
-		public function void FastCGIRequestEvent(FastCGIRequest aRequest);
-
 		private struct FastCGIStringSize
 		{
 			public uint32 Size;
@@ -140,47 +158,30 @@ namespace Beef_Net
 			get { return _id; }
 			set { SetId(value); }
 		}
-
-		public bool OutputPending
-		{
-			get { return _outputPending; }
-		}
-
-		public bool OutputDone
-		{
-			get { return _outputDone; }
-		}
-
-		public bool StdErrDone
-		{
-			get { return _stdErrDone; }
-		}
-
+		public bool OutputPending { get { return _outputPending; } }
+		public bool OutputDone { get { return _outputDone; } }
+		public bool StdErrDone { get { return _stdErrDone; } }
 		public FastCGIRequestEvent OnEndRequest
 		{
 			get { return _onEndRequest; }
 			set { _onEndRequest = value; }
 		}
-
 		public FastCGIRequestEvent OnInput
 		{
 			get { return _onInput; }
 			set { _onInput = value; }
 		}
-
 		public FastCGIRequestEvent OnOutput
 		{
 			get { return _onOutput; }
 			set { _onOutput = value; }
 		}
-
 		public FastCGIRequestEvent OnStdErr
 		{
 			get { return _onStdErr; }
 			set { _onStdErr = value; }
 		}
 
-		
 		protected void HandleReceive()
 		{
 			switch(_client.ReqType)
@@ -257,7 +258,7 @@ namespace Beef_Net
 		{
 			_header.ReqType = aType;
 			SetContentLength(0);
-			StringBuffer.AppendString(ref _buffer, &_header, sizeof(FCGI_Header));
+			_buffer.AppendString(&_header, sizeof(FCGI_Header));
 			// no padding needed for empty string
 		}
 
@@ -284,7 +285,7 @@ namespace Beef_Net
 
 		public this()
 		{
-			_buffer = StringBuffer.InitStringBuffer(504);
+			_buffer = .Init(504);
 			_header.Version = FCGI.VERSION_1;
 			_headerPos = -1;
 		}
@@ -298,7 +299,7 @@ namespace Beef_Net
 		{
 			_header.ReqType = FCGI.ABORT_REQUEST;
 			SetContentLength(0);
-			StringBuffer.AppendString(ref _buffer, &_header, sizeof(FCGI_Header));
+			_buffer.AppendString(&_header, sizeof(FCGI_Header));
 			SendPrivateBuffer();
 		}
 
@@ -339,7 +340,7 @@ namespace Beef_Net
 			if (_inputSize == 0)
 			{
 				_inputBuffer = null;
-				StringBuffer.AppendString(ref _buffer, &PaddingBuffer[0], _header.PaddingLength);
+				_buffer.AppendString(&PaddingBuffer[0], _header.PaddingLength);
 			}
 			else
 			{
@@ -383,8 +384,8 @@ namespace Beef_Net
 			body.Flags = FCGI.KEEP_CONN;
 			_header.ReqType = FCGI.BEGIN_REQUEST;
 			SetContentLength(sizeof(FCGI_BeginRequestBody));
-			StringBuffer.AppendString(ref _buffer, &_header, sizeof(FCGI_Header));
-			StringBuffer.AppendString(ref _buffer, &body, sizeof(FCGI_BeginRequestBody));
+			_buffer.AppendString(&_header, sizeof(FCGI_Header));
+			_buffer.AppendString(&body, sizeof(FCGI_BeginRequestBody));
 		}
 
 		public void SendParam(StringView aName, StringView aValue, uint8 aReqType = FCGI.PARAMS)
@@ -427,14 +428,14 @@ namespace Beef_Net
 				_header.ReqType = aReqType;
 				SetContentLength(totalLen);
 				_headerPos = (int32)(_buffer.Pos - _buffer.Memory);
-				StringBuffer.AppendString(ref _buffer, &_header, sizeof(FCGI_Header));
+				_buffer.AppendString(&_header, sizeof(FCGI_Header));
 			}
 
-			StringBuffer.AppendString(ref _buffer, &nameLen.SizeBuf[0], nameLen.Size);
-			StringBuffer.AppendString(ref _buffer, &valueLen.SizeBuf[0], valueLen.Size);
-			StringBuffer.AppendString(ref _buffer, aName);
-			StringBuffer.AppendString(ref _buffer, aValue);
-			StringBuffer.AppendString(ref _buffer, &PaddingBuffer[0], _header.PaddingLength);
+			_buffer.AppendString(&nameLen.SizeBuf[0], nameLen.Size);
+			_buffer.AppendString(&valueLen.SizeBuf[0], valueLen.Size);
+			_buffer.AppendString(aName);
+			_buffer.AppendString(aValue);
+			_buffer.AppendString(&PaddingBuffer[0], _header.PaddingLength);
 		}
 
 		public int32 SendInput(char8* aBuffer, int32 aSize)
@@ -463,7 +464,7 @@ namespace Beef_Net
 				_inputSize = aSize - result;
 				_header.ReqType = FCGI.STDIN;
 				SetContentLength(_inputSize);
-				StringBuffer.AppendString(ref _buffer, &_header, sizeof(FCGI_Header));
+				_buffer.AppendString(&_header, sizeof(FCGI_Header));
 			}
 
 			return result + SendBuffer();
@@ -479,15 +480,8 @@ namespace Beef_Net
 		}
 	}
 
-	class FastCGIPool
+	public class FastCGIPool
 	{
-		public enum SpawnState
-		{
-			None,
-			Spawning,
-			Spawned
-		}
-
 		protected FastCGIClient* _clients = null;
 		protected int _clientsCount = 0;
 		protected int _clientsAvail = 0;
@@ -508,47 +502,37 @@ namespace Beef_Net
 			get { return _appEnv; }
 			set { _appEnv = value; }
 		}
-
 		public String AppName
 		{
 			get { return _appName; }
 			set { _appName = value; }
 		}
-
 		public int ClientsMax
 		{
 			get { return _clientsMax; }
 			set { _clientsMax = value; }
 		}
-
 		public Eventer Eventer
 		{
 			get { return _eventer; }
 			set { _eventer = value; }
 		}
-
 		public int MaxRequestsConn
 		{
 			get { return _maxRequestsConn; }
 			set { _maxRequestsConn = value; }
 		}
-
 		public String Host
 		{
 			get { return _host; }
 			set { _host = value; }
 		}
-
 		public uint16 Port
 		{
 			get { return _port; }
 			set { _port = value; }
 		}
-
-		public Timer Timer
-		{
-			get { return _timer; }
-		}
+		public Timer Timer { get { return _timer; } }
 
 		protected void AddToFreeClients(FastCGIClient aClient)
 		{
@@ -684,19 +668,8 @@ namespace Beef_Net
 		}
 	}
 
-	class FastCGIClient : TcpConnection
+	public class FastCGIClient : TcpConnection
 	{
-		public enum FastCGIClientState
-		{
-			Idle,
-			Connecting,
-			ConnectingAgain,
-			StartingServer,
-			Header,
-			Data,
-			Flush
-		}
-
 		protected FastCGIRequest* _requests;
 		protected int _requestsCount;
 		protected int _nextRequestID;
@@ -715,15 +688,8 @@ namespace Beef_Net
 		protected int _contentLength;
 		protected int _paddingLength;
 		
-		public uint8 ReqType
-		{
-			get { return _reqType; }
-		}
-
-		public int RequestsSent
-		{
-			get { return _requestsSent; }
-		}
+		public uint8 ReqType { get { return _reqType; } }
+		public int RequestsSent { get { return _requestsSent; } }
 
 		protected override void ConnectEvent(Handle aSocket)
 		{

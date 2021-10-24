@@ -21,25 +21,21 @@ namespace Beef_Net
 			get { return _skipLastLineBreak; }
 			set { _skipLastLineBreak = value; }
 		}
-
 		public bool StrictDelimiter
 		{
 			get { return _strictDelimiter; }
 			set { _strictDelimiter = value; }
 		}
-
 		public bool AlwaysQuote
 		{
 			get { return _alwaysQuote; }
 			set { _alwaysQuote = value; }
 		}
-
 		public char8 Delimiter
 		{
 			get { return _delimiter; }
 			set { _delimiter = value; }
 		}
-
 		public char8 QuoteChar
 		{
 			get { return _quoteChar; }

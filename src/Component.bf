@@ -11,35 +11,31 @@ namespace Beef_Net
 		protected uint16 _port = 0;
 		protected Component _creator = null;
 		protected bool _active = false;
-		protected bool _isSSLSocket = false;
-
-	    public bool IsSSLSocket
-		{
-			get { return _isSSLSocket; }
-			set { _isSSLSocket = value; }
-		}
+		protected TypeInstance _socketClass = null;
 
 	    public StringView Host
 		{
 			get { return _host; }
 			set { _host.Set(value); }
 		}
-
 	    public uint16 Port
 		{
 			get { return _port; }
 			set { _port = value; }
 		}
-
 	    public Component Creator
 		{
 			get { return _creator; }
 			set { SetCreator(value); }
 		}
-
 	    public bool Active
 		{
 			get { return _active; }
+		}
+	    public Type SocketClass
+		{
+			get { return _socketClass; }
+			set { _socketClass = (TypeInstance)value; }
 		}
 
 		protected virtual void SetCreator(Component aValue)

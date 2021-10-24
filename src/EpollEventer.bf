@@ -4,6 +4,26 @@ using System.Collections;
 namespace Beef_Net
 {
 #if BF_PLATFORM_LINUX
+	[CRepr, Union]
+	public struct EPoll_Data
+	{
+		public void* ptr;
+		public int32 fd;
+		public uint32 u32;
+		public uint64 u64;
+	}
+
+	#if BF_64_BIT
+	[CRepr, Packed]
+	#else // BF_32_BIT
+	[CRepr]
+	#endif // BF_.._BIT
+	public struct EPoll_Event
+	{
+		public uint32 Events;
+		public EPoll_Data Data;
+	}
+
 	public sealed static class EPoll
 	{
 		public const uint32 BASE_SIZE = 100;
@@ -33,27 +53,7 @@ namespace Beef_Net
 		public extern static int32 wait(int32 epfd, EPoll_Event* events, int32 maxevents, int32 timeout);
 	}
 
-	[CRepr, Union]
-	public struct EPoll_Data
-	{
-		public void* ptr;
-		public int32 fd;
-		public uint32 u32;
-		public uint64 u64;
-	}
-
-	#if BF_64_BIT
-	[CRepr, Packed]
-	#else // BF_32_BIT
-	[CRepr]
-	#endif // BF_.._BIT
-	public struct EPoll_Event
-	{
-		public uint32 Events;
-		public EPoll_Data Data;
-	}
-
-	class EpollEventer : Eventer
+	public class EpollEventer : Eventer
 	{
 		protected int64 _timeout;
 		protected List<EPoll_Event> _events = new .() ~ delete _;
@@ -266,7 +266,7 @@ namespace Beef_Net
 		}
 	}
 #else
-	class EpollEventer : Eventer
+	public class EpollEventer : Eventer
 	{
 	}
 #endif

@@ -7,17 +7,12 @@ namespace Beef_Net.Connection
 		protected int _count;
 		protected SocketEvent _onFreeDelegate = new => SocketDisconnect ~ delete _;
 
-		public bool Connecting
-		{
-			get { return GetConnecting(); }
-		}
-
+		public bool Connecting { get { return GetConnecting(); } }
 		public SocketEvent OnAccept
 		{
 			get { return _onAccept; }
 			set { _onAccept = value; }
 		}
-
 		public SocketEvent OnConnect
 		{
 			get { return _onConnect; }
@@ -104,7 +99,7 @@ namespace Beef_Net.Connection
 
 		protected override void AcceptAction(Handle aSocket)
 		{
-			Socket tmp = InitSocket(_isSSLSocket ? new SSLSocket() : new Socket());
+			Socket tmp = InitSocket((Socket)TrySilent!(_socketClass.CreateObject()));
 
 			if (tmp.Accept(_rootSock.[Friend]_handle))
 			{
@@ -246,7 +241,7 @@ namespace Beef_Net.Connection
 			if (_rootSock != null)
 				Disconnect(true);
 
-			_rootSock = InitSocket(_isSSLSocket ? new SSLSocket() : new Socket());
+			_rootSock = InitSocket((Socket)TrySilent!(_socketClass.CreateObject()));
 			result = _rootSock.Connect(aAddress, aPort);
 
 			if (result)
@@ -269,7 +264,7 @@ namespace Beef_Net.Connection
 			if (_rootSock != null)
 				Disconnect(true);
 
-			_rootSock = InitSocket(_isSSLSocket ? new SSLSocket() : new Socket());
+			_rootSock = InitSocket((Socket)TrySilent!(_socketClass.CreateObject()));
 			_rootSock.[Friend]SetReuseAddress(_reuseAddress);
 
 			if (_rootSock.Listen(aPort, aIntf))

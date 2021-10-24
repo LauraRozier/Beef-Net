@@ -25,22 +25,13 @@ namespace Beef_Net
 		protected uint8 _index = 0;
 		protected OnFullEvent _onFull = null;
 
-		public uint8 ItemIndex
-		{
-			get { return _index; }
-		}
-
-		public bool Full
-		{
-			get { return _index >= TL_CSLENGTH ? true : false; }
-		}
-
+		public uint8 ItemIndex { get { return _index; } }
+		public bool Full { get { return _index >= TL_CSLENGTH ? true : false; } }
 		public ref OnFullEvent OnFull
 		{
 			get { return ref _onFull; }
 			set { _onFull = value; }
 		}
-
 		public char8 this[uint8 aIndex]
 		{
 			get
@@ -73,7 +64,7 @@ namespace Beef_Net
 		}
 	}
 
-	abstract class Telnet : Component, IDirect
+	public abstract class Telnet : Component, IDirect
 	{
 		/*
 		 * Control bytes
@@ -274,57 +265,39 @@ namespace Beef_Net
 		protected SocketEvent _onCs = new => OnCs ~ delete _;
 		protected OnFullEvent _stackFull = new => StackFull ~ delete _;
 
-		public DynMemStream Output
-		{
-			get { return _output; }
-		}
-
-		public bool Connected
-		{
-			get { return _connection.Connected; }
-		}
-
+		public DynMemStream Output { get { return _output; } }
+		public bool Connected { get { return _connection.Connected; } }
 		public int64 Timeout
 		{
 			get { return _connection.Timeout; }
 			set { _connection.Timeout = value; }
 		}
-
 		public ref SocketEvent OnReceive
 		{
 			get { return ref _onReceive; }
 			set { _onReceive = value; }
 		}
-
 		public ref SocketEvent OnDisconnect
 		{
 			get { return ref _onDisconnect; }
 			set { _onDisconnect = value; }
 		}
-
 		public ref SocketEvent OnConnect
 		{
 			get { return ref _onConnect; }
 			set { _onConnect = value; }
 		}
-
 		public ref SocketErrorEvent OnError
 		{
 			get { return ref _onError; }
 			set { _onError = value; }
 		}
-
-		public ref TcpConnection Connection
+		public ref TcpConnection Connection { get { return ref _connection; } }
+		public bool IsSSLSocket
 		{
-			get { return ref _connection; }
+			get { return _connection.SocketClass == typeof(SSLSocket); }
+			set { _connection.SocketClass = typeof(SSLSocket); }
 		}
-
-		public new bool IsSSLSocket
-		{
-			get { return _connection.IsSSLSocket; }
-			set { _connection.IsSSLSocket = value; }
-		}
-
 		public Session Session
 		{
 			get { return _connection.Session; }
@@ -523,7 +496,7 @@ namespace Beef_Net
 		}
 	}
 
-	class TelnetClient : Telnet, IClient
+	public class TelnetClient : Telnet, IClient
 	{
 		protected bool _localEcho = false;
 		protected SocketEvent _onCo = new => OnCo ~ delete _;

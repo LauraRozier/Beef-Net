@@ -91,6 +91,26 @@ namespace Beef_Net_Test
 
 			Console.WriteLine("\r\n\r\n-----------------------------------------------\r\n\r\n");
 
+			TimeSpan ts = TimeZoneInfo.Local.GetUtcOffset(DateTime.UtcNow);
+			TimeZoneInfo tzi = TrySilent!(TimeZoneInfo.FindSystemTimeZoneById("Newfoundland Standard Time"));
+			TimeSpan ts2 = tzi.GetUtcOffset(DateTime.UtcNow);
+			int32 utcOffset = (ts.Hours * 100) + ts.Minutes;
+			int32 utcOffset2 = (ts2.Hours * 100) + ts2.Minutes;
+
+			if (utcOffset > 0)
+				Console.WriteLine("Format Test = +{0:D4}", utcOffset);
+			else
+				Console.WriteLine("Format Test = {0:D4}", utcOffset);
+
+			if (utcOffset2 > 0)
+				Console.WriteLine("Format Test NST = +{0:D4}", utcOffset2);
+			else
+				Console.WriteLine("Format Test NST = {0:D4}", utcOffset2);
+
+			delete tzi;
+
+			Console.WriteLine("\r\n\r\n-----------------------------------------------\r\n\r\n");
+
 			Console.WriteLine("Press any key to continue...");
 			ConsoleExt.ReadKey(true);
 

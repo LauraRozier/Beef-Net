@@ -3,7 +3,25 @@ using System.IO;
 
 namespace Beef_Net
 {
-	abstract class Base64OwnerStream : MemoryStream
+	/* The Base64DecodingStream supports two modes:
+	 * - 'strict mode':
+	 *    - follows RFC3548
+	 *    - rejects any characters outside of base64 alphabet,
+	 *    - only accepts up to two '=' characters at the end and
+	 *    - requires the input to have a Size being a multiple of 4; otherwise raises an EBase64DecodingException
+	 * - 'MIME mode':
+	 *    - follows RFC2045
+	 *    - ignores any characters outside of base64 alphabet
+	 *    - takes any '=' as end of string
+	 *    - handles apparently truncated input streams gracefully
+	 */ 
+	public enum Base64DecodingMode
+	{
+		Strict,
+		MIME
+	}
+
+	public abstract class Base64OwnerStream : MemoryStream
 	{
 		protected readonly static char8[] AlphabetNoPad = new .[64](
 			'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
@@ -136,26 +154,10 @@ namespace Beef_Net
 		}
 	}
 
-	/* The Base64DecodingStream supports two modes:
-	 * - 'strict mode':
-	 *    - follows RFC3548
-	 *    - rejects any characters outside of base64 alphabet,
-	 *    - only accepts up to two '=' characters at the end and
-	 *    - requires the input to have a Size being a multiple of 4; otherwise raises an EBase64DecodingException
-	 * - 'MIME mode':
-	 *    - follows RFC2045
-	 *    - ignores any characters outside of base64 alphabet
-	 *    - takes any '=' as end of string
-	 *    - handles apparently truncated input streams gracefully
-	 */ 
-	public enum Base64DecodingMode
-	{
-		Strict,
-		MIME
-	}
-
 	public class Base64DecodingStream : Base64OwnerStream
 	{
+		private Base64DecodingMode _mode = .MIME;
+
 		protected const uint8 NA = 85;  // Not in base64 alphabet at all; binary: 01010101
 		protected const uint8 PC = 255; // Padding character                      11111111
 		protected readonly static uint8[] DecodingTable = new .[256](
@@ -182,8 +184,6 @@ namespace Beef_Net
 			'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
 			'+', '/', '='
 		) ~ delete _; // All 65 chars that are in the base64 encoding alphabet
-
-		private Base64DecodingMode _mode = .MIME;
 
 		protected int64 _curPos = 0;                  // 0-based (decoded) position of this stream (nr. of decoded & Read bytes since last reset)
 		protected int64 _decodedSize = 0;             // Length of decoded stream ((expected) decoded bytes since last Reset until Mode-dependent end of stream)

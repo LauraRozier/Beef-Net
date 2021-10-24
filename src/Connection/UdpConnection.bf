@@ -94,7 +94,7 @@ namespace Beef_Net.Connection
 			if (_rootSock != null && _rootSock.[Friend]_connectionStatus != .None)
 				Disconnect(true);
 
-			_rootSock = InitSocket(_isSSLSocket ? new SSLSocket() : new Socket());
+			_rootSock = InitSocket((Socket)TrySilent!(_socketClass.CreateObject()));
 			_iterator =  _rootSock;
 			result = _rootSock.[Friend]SetupSocket(aPort, ADDR6_ANY);
 
@@ -113,7 +113,7 @@ namespace Beef_Net.Connection
 			if (_rootSock != null && _rootSock.[Friend]_connectionStatus != .None)
 				Disconnect(true);
 
-			_rootSock = InitSocket(_isSSLSocket ? new SSLSocket() : new Socket());
+			_rootSock = InitSocket((Socket)TrySilent!(_socketClass.CreateObject()));
 			_rootSock.[Friend]SetReuseAddress(_reuseAddress);
 			_iterator = _rootSock;
 

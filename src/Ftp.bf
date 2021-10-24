@@ -223,7 +223,7 @@ namespace Beef_Net
 			_port = 21;
 			_control.Creator = this;
 			_data.Creator = this;
-			_data.IsSSLSocket = false;
+			_data.SocketClass = typeof(Socket);
 		}
 
 		protected override void SetCreator(Component aValue)

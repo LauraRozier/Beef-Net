@@ -3,7 +3,7 @@ using System;
 namespace Beef_Net
 {
 	[CRepr]
-	struct SearchRec
+	public struct SearchRec
 	{
 		public int64 Time;
 		public int64 Size;
@@ -13,22 +13,17 @@ namespace Beef_Net
 		public Windows.FindHandle FindHandle;
 		public Windows.NativeFindData FindData;
 
-		public DateTime TimeStamp
-		{
-			get { return DateTime.FromFileTime(Time); }
-		}
+		public DateTime TimeStamp { get { return DateTime.FromFileTime(Time); } }
 	}
 
-	class FileUtils
+	public class FileUtils
 	{
 		public static int32 FindMatch(ref SearchRec aF, ref char16* aName)
 		{
 			// Find file with correct attribute
 			while (aF.FindData.mFileAttributes & aF.ExcludeAttr != 0)
-			{
 				if (!Windows.FindNextFileW(aF.FindHandle, ref aF.FindData))
 					return Windows.GetLastError();
-			}
 
 			// Convert some attributes back
 			aF.Time = (int64)aF.FindData.mLastWriteTime;
@@ -69,13 +64,10 @@ namespace Beef_Net
 			return result;
 		}
 
-		public static int32 InternalFindNext(ref SearchRec aRslt, ref char16* aName)
-		{
-		  	if (Windows.FindNextFileW(aRslt.FindHandle, ref aRslt.FindData))
-				return FindMatch(ref aRslt, ref aName);
-		  	else
-		    	return Windows.GetLastError();
-		}
+		public static int32 InternalFindNext(ref SearchRec aRslt, ref char16* aName) =>
+		  	Windows.FindNextFileW(aRslt.FindHandle, ref aRslt.FindData)
+				? FindMatch(ref aRslt, ref aName)
+		    	: Windows.GetLastError();
 
 		public static int FindFirst(StringView aPath, int32 aAttr, ref SearchRec aRslt)
 		{
@@ -98,9 +90,7 @@ namespace Beef_Net
 			return result;
 		}
 
-		public static void FindClose(ref SearchRec aF)
-		{
+		public static void FindClose(ref SearchRec aF) =>
 			InternalFindClose(ref aF.FindHandle, ref aF.FindData);
-		}
 	}
 }

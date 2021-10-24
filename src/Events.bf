@@ -3,11 +3,18 @@ using System.Threading;
 
 namespace Beef_Net
 {
-	class Handle : IDisposable
+	public enum EventerType
 	{
-		public delegate void HandleEvent(Handle aHandle);
-		public delegate void HandleErrorEvent(Handle aHandle, StringView aMsg);
+		EpollEventer,
+		SelectEventer
+	}
 
+	public delegate void EventerErrorEvent(StringView aMsg, Eventer aSender);
+	public delegate void HandleEvent(Handle aHandle);
+	public delegate void HandleErrorEvent(Handle aHandle, StringView aMsg);
+
+	public class Handle : IDisposable
+	{
 		protected fd_handle _handle = INVALID_SOCKET;
 		protected Eventer _eventer;           // "queue holder"
 		protected HandleEvent _onRead;
@@ -30,19 +37,16 @@ namespace Beef_Net
 			get { return ref _prev; }
 			set { _prev = value; }
 		}
-
 		public ref Handle Next
 		{
 			get { return ref _next; }
 			set { _next = value; }
 		}
-
 		public ref Handle FreeNext
 		{
 			get { return ref _freeNext; }
 			set { _freeNext = value; }
 		}
-
 		public bool IgnoreWrite
 		{
 			get { return _ignoreWrite; }
@@ -57,7 +61,6 @@ namespace Beef_Net
 				}
 			}
 		}
-
 		public bool IgnoreRead
 		{
 			get { return _ignoreRead; }
@@ -72,7 +75,6 @@ namespace Beef_Net
 				}
 			}
 		}
-
 		public bool IgnoreError
 		{
 			get { return _ignoreError; }
@@ -87,41 +89,32 @@ namespace Beef_Net
 				}
 			}
 		}
-
 		public HandleEvent OnRead
 		{
 			get { return _onRead; }
 			set { _onRead = value; }
 		}
-
 		public HandleEvent OnWrite
 		{
 			get { return _onWrite; }
 			set { _onWrite = value; }
 		}
-
 		public HandleErrorEvent OnError
 		{
 			get { return _onError; }
 			set { _onError = value; }
 		}
-
 		public bool Dispose
 		{
 			get { return _dispose; }
 			set { _dispose = value; }
 		}
-
 		public fd_handle Handle
 		{
 			get { return _handle; }
 			set { _handle = value; }
 		}
-
-		public ref Eventer Eventer
-		{
-			get { return ref _eventer; }
-		}
+		public ref Eventer Eventer { get { return ref _eventer; } }
 
 		public virtual this()
 		{
@@ -158,16 +151,8 @@ namespace Beef_Net
 		}
 	}
 
-	enum EventerType
+	public class Eventer
 	{
-		EpollEventer,
-		SelectEventer
-	}
-
-	class Eventer
-	{
-		public delegate void EventerErrorEvent(StringView aMsg, Eventer aSender);
-
 	    protected Handle _root;
 	    protected int32 _count;
 	    protected EventerErrorEvent _onError;
@@ -181,17 +166,12 @@ namespace Beef_Net
 			get { return GetTimeout(); }
 			set { SetTimeout(value); }
 		}
-
 	    public EventerErrorEvent OnError
 		{
 			get { return _onError; }
 			set { _onError = value; }
 		}
-
-	    public int32 Count
-		{
-			get { return GetCount(); }
-		}
+	    public int32 Count { get { return GetCount(); } }
 
 		protected virtual int32 GetCount() =>
 			_count;
@@ -407,7 +387,7 @@ namespace Beef_Net
 		}
 	}
 
-	class SelectEventer : Eventer
+	public class SelectEventer : Eventer
 	{
 		protected TimeVal _timeout;
 		protected fd_set _readFDSet;
