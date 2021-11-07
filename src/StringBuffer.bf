@@ -21,17 +21,24 @@ namespace Beef_Net
 		public void Clear() mut =>
 			Pos = Memory;
 
+		public void Free() mut
+		{
+			Pos = null;
+			Internal.Free(Memory);
+			Memory = null;
+		}
+
 		public static void ClearStringBuffer(ref StringBuffer aBuffer) =>
 			aBuffer.Pos = aBuffer.Memory;
 
-		public void AppendString(void* aSource, uint32 aLength) mut
+		public void AppendString(void* aSource, int32 aLength) mut
 		// lPos, lSize: PtrUInt;
 		{
 			if (aLength == 0)
 				return;
 
-			uint32 pos = (uint32)(Pos - Memory);
-			uint32 size = (uint32)(Internal.CStrLen(Memory));
+			int32 pos = (int32)(Pos - Memory);
+			int32 size = (int32)(Internal.CStrLen(Memory));
 
 			// reserve 2 extra spaces
 			if (pos + aLength + 2 >= size)
@@ -58,11 +65,14 @@ namespace Beef_Net
 			if (aSource == null)
 				return;
 
-			AppendString(aSource, (uint32)Internal.CStrLen(aSource));
+			AppendString(aSource, Internal.CStrLen(aSource));
 		}
 		
+		public void AppendString(String aSource) mut =>
+			AppendString(aSource.Ptr, (int32)aSource.Length);
+		
 		public void AppendString(StringView aSource) mut =>
-			AppendString(aSource.Ptr, (uint32)aSource.Length);
+			AppendString(aSource.Ptr, (int32)aSource.Length);
 		
 		public void AppendChar(char8 aChar) mut
 		{

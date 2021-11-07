@@ -128,7 +128,7 @@ namespace Beef_Net
 	{
 		private struct FastCGIStringSize
 		{
-			public uint32 Size;
+			public int32 Size;
 			public char8[4] SizeBuf;
 		}
 

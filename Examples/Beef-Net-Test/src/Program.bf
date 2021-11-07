@@ -47,10 +47,10 @@ namespace Beef_Net_Test
 
 			Console.WriteLine("Original URI        = {0}", UrlOrig);
 
-			HttpUtil.HTTPEncode(UrlOrig, tmpStrEnc);
+			HttpUtil.HttpEncode(UrlOrig, tmpStrEnc);
 			Console.WriteLine("HttpUtil.HTTPEncode = {0}", tmpStrEnc);
 
-			HttpUtil.HTTPDecode(tmpStrEnc, tmpStrDec);
+			HttpUtil.HttpDecode(tmpStrEnc, tmpStrDec);
 			Console.WriteLine("HttpUtil.HTTPDecode = {0}\r\n", tmpStrDec);
 
 			URI.Parse(UrlOrig, tmpUri);

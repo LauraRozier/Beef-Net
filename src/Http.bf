@@ -170,7 +170,7 @@ namespace Beef_Net
 			.InternalError | .NotImplemented | .BadGateway | .ServiceUnavailable | .GatewayTimeout | .HttpVersionNotSupported | .VariantAlsoNegotiates | .InsufficientStorage |
 			.LoopDetected | .NotExtended | .NetworkAuthRequired;
 
-		public Self FromCode(uint32 aCode)
+		public static Self FromCode(uint32 aCode)
 		{
 			TypeInstance typeInst = (TypeInstance)typeof(Self);
 
@@ -284,7 +284,7 @@ namespace Beef_Net
 				case .UnsupportedMediaType:    return "<html><head><title>415 Unsupported Media Type</title></head><body>\n<h1>Unsupported Media Type</h1>\n<p>The request entity has a media type which the server or resource does not support.</p>\n</body></html>\n";
 				case .RangeNotSatisfiable:     return "<html><head><title>416 Range Not Satisfiable</title></head><body>\n<h1>Range Not Satisfiable</h1>\n<p>The client has asked for a portion of the file, but the server cannot supply that portion.</p>\n</body></html>\n";
 				case .ExpectationsFailed:      return "<html><head><title>417 Expectations Failed</title></head><body>\n<h1>Expectations Failed</h1>\n<p>The server cannot meet the requirements of the Expect request-header field.</p>\n</body></html>\n";
-				case .ImATeapot:               return "<html><head><title>418 I'm A Teapot</title></head><body>\n<h1>I'm A Teapot</h1>\n<br><img src=\"data:image/png;base64,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\" alt=\"Teapot\" />\n</body></html>\n";
+				case .ImATeapot:               return "<html><head><title>418 I'm A Teapot</title></head><body>\n<h1>I'm A Teapot</h1><br>\n<img src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJAAAACQCAYAAADnRuK4AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAABm/SURBVHja7V0JeFRVlg6b7IgiAqklC1nYSQhJpaKtuLY4DqNju7UbArUkEDZBNoGwhFQVisqoUEvCpiwBbFEERRBIVUXHoUe7tcfutrUdd9txQ20XkDvnv+9VUlWpqtSeSrjn+85HSF7deu/e/539npuWJkiQIEGCBAkSJEiQIEGCBAkSJEiQIEGCBAkSJEiQIEGCBAkSJEiQIEGCBAkSJEiQIEGCBAkSJEiQIEGCBAkSJEiQIEGCBAlKWSrSW7spjRsUimn2UoXeepNKb5+u1FsX+vEMlcF+S7rOVkbXKfEZMXNnOanLHz8PoFDqbNsJIH9W6m3fEJ8iZkH4NPFJ4r8SyOoVOtud6XrrBWImz0JS6WzFBIQXiH8KAZjW+GfiY6pp9l+JGT2LSGHYOJYW/s0YgOPPb0P9iZk9G+im+i6kshxxBA9nsp125lSu7y4muINTZsVjgxV62//EH0C2vw+Z6sgQM9zBKWOaPYsW/L0EAOhTGnu4mOEOToOMGy6kBf9jvAEEOyi9ok4lZrijU1VVZ6XB9nACAFRLY3cVE3w2uPB661By411xVF8n1DrbSDGzZ5Mrr7PlqY21e1RGx2kJCNYIQGPlrDI4flEbavfTGKPEjJ4FNKHqaA/tmsZhWpPrt6Vm94Mac0NjYdULPw+/by8bOvMJllGxiREYCBj2FqDB7/C3jIo6lj1zGxs2fw+jz54uNTW8qrW4H9aYnXcWm1wjtesae4qZ7kBUZD3RDQursThnac2u/aUm14elZtcpYiaxm/+rqWlg41e/xApXHGJjlx1kY+5/zofxO/wN15TQtd6flfk0jf8x/XuQwHSvZm3DmInrD4i4UHslzfpX+mktzutoQZ+QQfOL12KHYAKFxc20fozf+QEmFJ8h/oR4l3at84aLa5zniRVpL2rqoaP9ZRV1mBbw+zAXPJH8g8bsOk4AnFyy5j8HiBVKYfuGFmuSDJwfUwA4/vwTgKQxu39TVHWil1ixFIjnDL6nbmC63npx/rw9MzVrju+lRTqZgsDx5+9Kao4/M3z+U3OUOtulCGziWcSCJoVYJ+SyyCP6N4Vh42Nqg+M18oa+IcP2TDsAjg8XVx89M/y+p77NMNb+Qam3WglMN6qm1KbjGcU6J0DaIFCnNNhWkEv9OvGPmdM3c+9IY3Ky9gaeJqZ7H7v0AMuasYXJdUlvKvX2GpSboGpALHwcKENvHaLQ21fS5P4v8RnEZIbOepKNW3m4/QLHj4tWHWE5s7d7x50+JDaTelYLBMQWLS4g0X7UAxwE8/LvrSfxfywSl7pdcMma42zYvN3eQcwzJHFfJvWmEUiIgniRu97m9I4GQ/KUrDkmxWU6EHjAeCYyrlmurySS8mzlddkCERGSSmebTBP4i/dkqo0Oljd3JytY/jyfbD757RlM8r3jWQqrXmB59+6iZ6xtmXsz2CoFIiKVQHrrzGCJTJXBwbIrtzHyYghMB3l6QWNqaF6UVASV133B8CcvjL8IIxY8xXNryLMFS+iSDbhYICJCUk+zF9GEvh86Iy7ZRZkVm7h6Q4Jz9JJn+dsMwxTqrglY3osYeWqi1dSH77guGSgN/B7Grz7C7wn3hnuEwQwvstneCVUJYP1M7PqIgor0J7rlz613ZJTXhVdqobNKLIMKn4N7DGBB7Q27by8buehpvohjlx3gCzpuxYusiLy58QQ2SDFIhWJacG8u8fs/rsG1AEXRqsN8DIyFMUcv2c+/A9n9vLm7+HfjHnAvkJr+99layYi6vBZqbVdm1dEeHW+BrSe6lT3gztCYXZdpTO47NBanHqw1u6YigUi/Ly2qbhgyoepoVFV6GovrWmS3IeZRahF5zY4/sKy+pRlyeQYWCSUaKOWAVMCCh2JcA4mHz+CznvIP3xIQawRACSxZoaJRAUCS7HOkPzpOzumho/1LTa6bS83OHbTA78gJS/9I8Cn6+9elFtdbxE9qLc7bih44GvYOzrK17lE0xhveLi4kB7cVsFBRLUyKs87Knw3AGbX4GS7tvObz7RKza3x7T1Z21Zoafy0nK3+INJFIgHKTpLp1QiviWLuu8XytxfV0wFgJeSsF9Fbmz9vNpUHTW98eAeWlbiHV8ufVc4mDlyXIHB7SVL8yKNHrfFN9fZfSmpcztZbGa+hFvqPU5C4n8M4oMTfMKDU16MpIGmofbCwrtrw6OK2KdQ4XPH0IOEvoIb6I0egkaeW0QfUFTlmwzgSeZSjOas31RTDR48VIRummKOyMJIKlCTAOri5zyD4avkDyImFXhRGSOENmgSVakyAcKn7wuArfQd/1N5KAPyBVBKMfNmTunJ3criP77vTopQe+IdvwTdIui4GNkINeZHb1pUEfkqRIvNxap5ukWVkLu8fsuor+/o9I4ygetxjGLMS/x9PxMWC9pZU362MBmjXAePi9XQKKbMjjXhBlxr3hHluEHcKft6+15obrEwGekjXOPFm78O+CI8BDCPRM/gypiWfhmsjkmhjSUCY7ZyVd+HNIN5YWEOoF4ldT0xDuhPyd+HZ8h2z3XEj/fymesRbuQpOHxctUlx7gD423HioQbxSkAOyqrMqtJMEkA1kyqIMzN6JhbNNn8Fl4WrlzdnAVhLFHLdrHxix9joByyCuU4IxfjMrkekVjfkUZT/BANdLYB3zyc+Sd4kUcOuuJJufB49XiOfES0HVfBhIEzfYIGb+hamwwCBYFiwHjL2sGJvUJ/rZhAumNaW0yviEAmvAANMkLwy87jSFW0/w284UF4AF8Xxc9OHNXv/oY/wxqoyVwOAPHmhITlDxD81Ydtv0Rjs1D4wVwhJpqxaW5OeYfVzuFtfMIgJbgqWnM8faEfAalSRtFXhFQ2WwQWn3EOlxcIHj86qOtTchp0qWvygXpTHBY/EnpWmdckqxlJvclNN5nkRbFlVqcZtSdpwUzZmVjKgB4Grh+9Ip7YF/Vl2guQOB5h37+mPg7TwYdUgnqo13X7aQmPzEhxgAjSmu1ZufuSKQfvehvIu4XcscJ6bXRJJY/CDQIIq0wElHUpTTYnifQTEPaAU0L0J0ivbw2X2m0T1DobIuQSUZCFME2SKMmb0NwPByRrzUW99WxAEiqIXd9G+73kcp6oLjG2XplgOxKtxhk3MoXmZRasH2GnoEXTKntGzKjPqU2HRV2dP3XPLpKRie8ELH4cbPt6qOVQlz6BIm3BTBZTiIeFFYIARFj2CSBBoL3QsD5mlziO8Kt3UUzSlJ3txGA3gWIAEAY3kKlxUcKkS10ZXSpIvfVkhMT+jsKlj//y7D5e6uDGsst4gE17ssDiTWoH2406zaujaYLRYbOVuZpaAD7CZ5aU01PkpjvPl3xAhu//AArXvViJCGHNh07tHRwbQl7cb3CM/hc6+A5iDU/FFEjUTKSFgWKryDMrtLb30ZTgmh1LvrnqA0OG4Hon0hIjk+iTVS4aC8bWHwd69bnfJbWqRPn7gMULP2yO9m4+/el7NjheGTkMRdGFDQ0u8bT5z4NNS5CFtmVWz9XTN14RUT5LhJrewLFUSTj2fpIrNtOlHPqeyr01rvJk3u/NAlqDJIgc9Js1qlzF0ZfH5A7d+vBcn+7IqXGjtAWWh72AjDWCcZwa2PC08bWqYi0Dewfct9fCzLgT+lTrXEJo2OvODpjJBw8a44x5ZVTgi6uP+dEsNCJHDsKAP0ekfyw8l0m10j6zHut7RIhDfEhNjVEaFgdz6UBPgo06LAFe2nAR/PiAaDSGueEcAy4WCXP8GkPSSolzEXu3K17WConkWNHyf9EI4lwpE+w+J43j1jwO2ibRyPeMYvopuTvBxh00TMn+k1dd348AETuY02ipc/4qudZ38wxYS+whxWX392mY0e/q8P1aOv2bWNJMAHR5CyRZCXb54v0qRsuilwykEsINAe0yJcdOJQ5uapHPNQXjfdywjfrLdvPuvTsG/Ei9xyU1aZjx8B/CFUvJJXkuHa1loxGaa7K4Phd5uRNPaKQDM5rgnW2KK45vi8e221R6kr8VcI36q0+EvECcyaDuC3HjqnWKkRMiMBRGU7Xkvx59afg5ESpWoIDCFFLZG5jtn8srjnJiY84o1tk4rYcO0Y1tizgnJtcE8NJViPWlzVjy9uDptmzoisqkoKIwZoyHYo1ecfDBGbnjmTFfs7pPyhhaiaRY0cNILNrv0+Sk4xmqQzZ9bdwaqm4+jI6Nketacpq3MVB1YvF9WqsrdqKLUcHI5ubLAANvvjmiBd5yCW3tfnYMQDoHdQzNxWJQdpL7f3C+vyw+XtOKXUbbo/eO5JqgIJZ6e9eZHKqY7V/gnl5iWC4zZ3P6Rm+q03XhutqJ3LsGBjmx2biDcSvh64k9W/uwL2v95WTN+ZGX1wklZW+ESxxR3/Xxua+O+9KXNVhYM6+aXHYi4xrU2XsJGf1eZWEylh7ICrvy8tGQZ/BQ8F3Bbjvia3+xLm6LSYIixdKWuBv0S5wIsdOJo9YyIOHVbFHic3ux4IbWq7Hox64inWmMXa21QRBfcAGgSHrbdTid7GqlkSOnawqhZxZT/6Urnt8UuwAMrnLQwDo1Whb1WJ7EI3hFDU8KdghbeVh1Gl9mD7l8fzYt3iYnBeHyFOdxF74qCrgqhuG0Of/IhYs9drOoMAPtVo5lev7xb47kVzt4IY0N7geiFIC5beWhxHcBurL5OT72hQ668b4dIjltoqzLoQae8sTa4jIAzM3liQjhSE4wqTz6iN8q7VCbzXEbaei7G4H25/+C9lJc6OIAV2WIkcPCPZSX+h6gk0PCkOtNm4AKrO4h8qtW4J9+RuRSiE5z/ZzIiYCQbCx87azsfN38EKv9tGV9RgruG9Xm96vR32R+/7fEdU9h7Xd1exytBJ8MkWSXEVCL1EAGjNnKxsw9gp2/qhL2bCp6/jipKzNQfc2Zu42pvq1ntdRD9evJzf6eJt5X2qpA5w17h3yZYnxXYgb+D90EQu/2tF1re85XfHj3DtWs+7nDeY1OufmFrP8yRZWUv1SSkqd4bpHWL+h41iXHn1Y19792QXjrmGFC/e0YfDQdkpldNwa93YfiNtoTa4XQr5NZtdrqLFtawk0qtLBeivyWaeu57Au3XuxvlljWc5tVXyLTbK214RTQzT0lqWsV3oe69SlG3FXXuaKykbcf9LP6iAwy0cs/CVreoLOu5e7c4TuRmZxHUVvmTCM6KsSdQwTpI3yah1/q1G0BUmEhVFcfhcbYXyML15b2Rgofx09ezNXWZCSafIODuzk6NKjN8/qYx9ZsnNfsvHMFAbHYwk74KXIdOJc/74xQSTRcTK8C1pJ1GoTmYkvWLCbnZun4VIIjBwUgNRbNZyprjGwkeWPs+KVhxK+Ixb2DCQf9oqh8B7AgUQEWNK8tv/g/qBuR8/alPRdulLd8zYA6Cv0MUhLJMkFSV+GcWOIMt8drOVZogOJWLi8u2r4hj6fherWgy9er/RcXtQOI7tw0VNxM1wh3eABAgh5d1bzxKniisls4PhruboCiHEP/klW/D7rhnkkPZPfcELa42djKqO9Hvv0EgogVBGOXX7wQamzRqtNk/7JD7a1uG7RrmtUeG/G53vupRqVhNoZUFuwLQJt8ONAGjyUXVgyiWX/ZiH3gLDwMGLHVx0Mai/xFnroCb3kae56j6zYSMbwwyz39pVMNdHIDeE+6pFcheI7YIfhZ0jCYFt8YEgXzN+ZdNU1bsUh3mmNAPR5wqWPhxTT7Mrc2Tuc+PKwC5ssrrek3jNuk8bkmidvmX470ZOERYFqCPTWc9uDDFi8/WB4QX2zCtig0huY8qqpHFQ5ty5rwUNvXsLU11bw7DokSx/VCNa117nNgOFSpntEe8TUE8vjGm7AZsDQnU/cfLuyp+e22mC3RNPjIGpK19nKMis2vcs7a/A3NTUPOYFqgoTol13IJQEAE2oxISV8wBCU+0igo2uDSZbwwNOD9VYOi7vnhf5LaH4hgcjdAjz8TLJZT8qHt9gP4xy2tGRTut56vcpg/wTRywikkY8q8Dm7IoHBOtg6MF4jKTtNNAN4qBPKuW15HKWPmx++x/s26ay8iz7a86Lziad7LV562WVnKoPt9QyjozCtbYh1UuhsNyv11g8QwcQGfHRBbWpkGca2ERhwyQARFijvbhOPDwVTZ0kDTpeusiGfx1ViPMMKAAmOifJuP8w73s/cxiVOUx9L6ff/pTQ6StLallgnUmdX0g29hpsC4gEkdC/j7miQU3BwoBr6zeA8LIAoKcE7AixcaSny2zsiOyVejO/scYGKDSi4io0w/EfcvS4c8OJ7TodfD2vp/z9kGGu3Kw2bctNShZSGjbkKg22T3FCT51Sg2ngzbVJvMNhK1kjtcNEHCL2TJTFq5QfH4cGTlnuas5UNKruRL2QypRG+C1IHniFc/fjmvDwe1aZQzdB/UBkcTlqbO0ZU1PdJSzVSzlnXkwyyf6cbfQk329TO3yi18+cn3FRu5T/7vyWQRKPv35+0iHDR0meZ+l+mc5UWLDYTLzsHxjtsL8SkMq6r5Hvp4xsslIzibJpbrzk9w9fAaP8HzfXviTeoymsnKec4zk9LdcqcvKm/Ume7gR5gq9zq98dwjgoAiHjL/GQ0muKxnBe5SkPnsD4Zo/gic44STNyD692fe2YYg6urgWp2QeHV3O3Pv2ctj37HO5YDuxMd5Jvn0v69ylC3SmlwXJNVvmWMYvqWARG3ZkkJqqrqmmnckEmG9nVo80ugcqj01mfoAQ8rDbYj9LD76c3YQmJ1ldpQu99z+Aha5yerXyJCEEXLnmNjZm9h2Tcu4LkogKlrr35SfEiO64Rk2aXvNSSHnTfyEjawaCJLv/R2lnn9XDnSvTdhEWbYmnIawutFtO8aM29r77SOR6wTurTmVK7vDsbPnjcjc8b2YSSB/uSZBNhPRauOJDlm1MDzVojJQFrk3r6Kt6xD/gqBxUCMv2X86yxeQoJELYAI+wYNNhOb+Xfyhu3eXpX8Ar6TU7mlMO1spOwZ224kifSFZzIwOcgSt1Wgkh/QQi420hoAVkCmv+Ga5CVA3Tz8wU8HMDp8JY/BfjKrYvNdaWcroaIxs2LzHALR994xDEgjflgLX6SOd0Z8uMDBiwTv1c9Y9kSTf8wor7ufS/WzmXIqD3TPqKhbovQCkefAWTQ2x6G2zfGls6PQHcDByYw4ZyxgjIeDp7Y6Xf9srzRBMoiMtfeq9PavWnhqOLl47i4ehGw2tN0dTtp46nSQhpCAE+wceftJmqulAjwBykbIqL4ZzcwDRVUxoQjPj1z4tBT1ronmxL/UkjSeA4WRAIWN03wObLBTFO3vqcsdd4+oqj9HICZY6UiFrYAmcC9N2E/BjsSGVMLJeSgKx7mpMDJ9TgVMRQnTdJJiA4/So/M/Muhwyf2N4wB8Smmw7ZfyWAkqP+1YKm19P4XBZqSJe8tz7lgwMEEywXuD4Q1AoU1b0arDgY+aDJKnS9SpiAALwA07DqoJUgYJzubIfKvnteLZ/6rW22ery588TyAj0lTJVEeOUmcz0SS+h3PHwj1GGxKq6bDb+bt58hYLWECqAqUP/OhK5OlqpDNesdAcbK255iavYzLlM2IBEMSvkJeCVEEYAo26kSFHtBjgVjdJmLBPk/6FPzOe3YCOYULqxBSMpImcSBP6YSzHbTeBy1jLJYDn4FxU6OXMlg7O5Udb08IHZH709Q4OSqhP6YzYLfy4cX4yNIGk2WOK7URohd72qUpnmyTWPg40yLjhQgLQ08FVWazse2y3Igi3PCo8sefSK3S2QyglFgiIuWzEPrVV9dVBWaG3zhEIiNUro0kMOskelaFLvESIO8vSzGOzBZGOVQIBsUqgafYx2H4baIJhjyCTj0Ajwv3cFomTHRJ39SjFcbhBDfsLdhS8spHkOSK+FeDz5DhYNQIB8ZBCho1XeEpofcsYHGTg1vO8GbwqeFeIC8ETwuLA6MXicE+I3nKftIC/XdPCvrG2sI8CX9sU5OMhBXyPp5gOBjruAfEe7gkuPcCDoPDccK+4TxyLHgA8f0JJjFj5OJK6vC4bJ0BL59N7G9RWOd2xk5c7FFcfa6rB9pRscFeb3HdEfJGcHLV4H5dccPEhvXJokSERsODwriDNmph+J3lq2zkY4JEhRweAwl0ftWgfr6yEC1/oFSbgcSg5Wo57ASMEgL8jmp7VMkGKZ/pApbetw9HpYsUTQVVVnTG55OLOo8k+RvxlM5gkewLSBqDw1GYDUBo5q+9ZSA/7bjeSthyVeGI8Mksxooama/zTEdog3FRvBKlI4BpBgAVI/eydM7w7mN7mVOjti9U628h4nIgkKAzCmfWwEVQG21xy83fLUeuTfFG8arMBqOaA4j4upaDyEPyDZEIw0BNMDLe01gdsnmCiR8KRNEJEHKoV0gvbiL3sMgDmW27TGWxP0f/vw4bNbL31XLGibUj8bPoptelqvfViApMOakAqpbW9TvwRAeo74lO+tkod35IEW8Wzh4oHE+eGCCYS58oBRR5MnCkFE2Hz+NlYp+Xv/Jh+/iNKeel7H0EjS5Vh4yVK4wbFiJtEQjTV82ndFdMfHZCutw5TTbP/im+I1NlmEbCq6e3H0eN7CGgvkhRopIUmA936Z1rgdxQ660ehmK59V4FrddbXlbqNL9PnDkvJX7udpOEaUkWzCUi3ACgZ0+zDB99TNxD3Ilakg6VHYGvgYBEkbtFgEhKMn2tPxnooxjX8WvoMVA8/nITbLSJfJUiQIEGCBAkSJEiQIEGCBAkSJEiQIEGCBAkSJEiQIEGCBAkSJEiQIEGCBAkSJEiQIEHtlf4fXPnJqwRPvY4AAAAASUVORK5CYII=\" alt=\"Teapot\" />\n</body></html>\n";
 				case .MisdirectedRequest:      return "<html><head><title>421 Misdirected Request</title></head><body>\n<h1>Misdirected Request</h1>\n<p>The request was directed at a server that is not able to produce a response.</p>\n</body></html>\n";
 				case .UnprocessableEntity:     return "<html><head><title>422 Unprocessable Entity</title></head><body>\n<h1>Unprocessable Entity</h1>\n<p>The request was well-formed but was unable to be followed due to semantic errors.</p>\n</body></html>\n";
 				case .Locked:                  return "<html><head><title>423 Locked</title></head><body>\n<h1>Locked</h1>\n<p>The resource that is being accessed is locked.</p>\n</body></html>\n";
@@ -898,27 +898,32 @@ namespace Beef_Net
 	    protected HttpParameterArray _parameters = .();
 
 		protected ParseBufferMethod _pr = new => ParseRequest ~ delete _;
+		protected ParseBufferMethod _pep = new => ParseEntityPlain ~ delete _;
+		protected ParseBufferMethod _pec = new => ParseEntityChunked ~ delete _;
     
     	public HttpParameterArray Parameters { get { return _parameters; } }
 
-		protected bool TrySingleDigit(char8 aDigit, out uint8 aOutDigit)
+		protected bool TrySingleDigit(char8 aDigit, out uint8 aOutDigit) =>
+			TrySingleDigit((uint8)aDigit, out aOutDigit);
+
+		protected bool TrySingleDigit(uint8 aDigit, out uint8 aOutDigit)
 		{
-			bool result = (aDigit >= '0') && (aDigit <= '9');
+			bool result = (aDigit >= (uint8)'0') && (aDigit <= (uint8)'9');
 
 			if (result)
-				aOutDigit = (uint8)aDigit - (uint8)'0';
+				aOutDigit = aDigit - (uint8)'0';
 			else
 				aOutDigit = 0;
 
 			return result;
 		}
 
-		protected bool HttpVersionCheck(char8* aStr, char8* aStrEnd, out uint32 aVersion)
+		protected bool HttpVersionCheck(uint8* aStr, uint8* aStrEnd, out uint32 aVersion)
 		{
 			uint8 majorVersion = 0;
 			uint8 minorVersion = 0;
 			bool result = (aStrEnd - aStr) == 8 &&
-				CompareMem(aStr, "HTTP/", 5) &&
+				CompareMem(aStr, (uint8*)"HTTP/", 5) &&
 				TrySingleDigit(aStr[5], out majorVersion) &&
 				aStr[6] == '.' &&
 				TrySingleDigit(aStr[7], out minorVersion);
@@ -1139,61 +1144,71 @@ namespace Beef_Net
 
 	    protected bool ParseEntityChunked()
 		{
-			/*
-var
-  lLineEnd, lNextLine: pchar;
-  lCode: integer;
-begin
-  repeat
-    if FChunkState = csFinished then
-      exit(false);
-    if FChunkState = csData then
-      if ParseEntityPlain then 
-        exit(true)
-      else
-        FChunkState := csDataEnd;
-    
-    lLineEnd := StrScan(FBufferPos, #10);
-    if lLineEnd = nil then
-      exit(true);
-    
-    lNextLine := lLineEnd+1;
-    if (lLineEnd > FBufferPos) and ((lLineEnd-1)^ = #13) then
-      dec(lLineEnd);
-    case FChunkState of 
-      csInitial:
-      begin
-        lLineEnd^ := #0;
-        HexToInt(FBufferPos, dword(FInputRemaining), lCode);
-        if lCode = 1 then
-        begin
-          FChunkState := csFinished;
-          Disconnect;
-          exit(false);
-        end;
-        if FInputRemaining = 0 then
-          FChunkState := csTrailer
-        else
-          FChunkState := csData;
-      end;
-      csDataEnd:
-      begin
-        { skip empty line }
-        FChunkState := csInitial;
-      end;
-      csTrailer:
-      begin
-        { trailer is optional, empty line indicates end }
-        if lLineEnd = FBufferPos then
-          FChunkState := csFinished
-        else
-          ParseParameterLine(lLineEnd);
-      end;
-    end;
-    FBufferPos := lNextLine;
-  until false;
-			*/
-			return false;
+			uint8* lineEnd, nextLine;
+			int code;
+
+			while (true)
+			{
+				if (_chunkState == .Finished)
+					return false;
+
+				if (_chunkState == .Data)
+				{
+					if (ParseEntityPlain())
+						return true;
+					else
+						_chunkState = .DataEnd;
+				}
+
+				lineEnd = StrScan(_bufferPos, (uint8)'\n');
+
+				if (lineEnd == null)
+					return true;
+
+				nextLine = lineEnd + 1;
+
+				if (lineEnd > _bufferPos && *(lineEnd - 1) == (uint8)'\r')
+					lineEnd--;
+
+				switch (_chunkState)
+				{
+				case .Initial:
+					{
+						*lineEnd = 0x0;
+						uint32 intRemain;
+						HexToInt((char8*)_bufferPos, out intRemain, out code);
+						_inputRemaining = (int32)intRemain;
+
+						if (code == 1)
+						{
+							_chunkState = .Finished;
+							Disconnect();
+							return false;
+						}
+
+						if (_inputRemaining == 0)
+							_chunkState = .Trailer;
+						else
+							_chunkState = .Data;
+					}
+				case .DataEnd:
+					{
+						/* Skip empty line */
+						_chunkState = .Initial;
+					}
+				case .Trailer:
+					{
+						/* Trailer is optional, empty line indicates end */
+						if (lineEnd == _bufferPos)
+							_chunkState = .Finished;
+						else
+							ParseParameterLine(lineEnd);
+					}
+				default: break;
+				}
+
+				_bufferPos = nextLine;
+			}
 		}
 
 	    protected virtual void ParseLine(uint8* aLineEnd)
@@ -1262,45 +1277,62 @@ begin
 
 	    protected bool ProcessEncoding()
 		{
-			/*
-var
-  lCode: integer;
-  lParam: pchar;
-begin
-  Result := true;
-  lParam := FParameters[hpContentLength];
-  if lParam <> nil then
-  begin
-    FParseBuffer := @ParseEntityPlain;
-    Val(lParam, FInputRemaining, lCode);
-    if lCode <> 0 then
-      WriteError(hsBadRequest);
-    exit;
-  end;
+			bool result = true;
+			String tmp = scope .();
+			uint8* param = _parameters[(uint8)HttpParameter.ContentLength];
 
-  lParam := FParameters[hpTransferEncoding];
-  if lParam <> nil then
-  begin
-    if StrIComp(lParam, 'chunked') = 0 then
-    begin
-      FParseBuffer := @ParseEntityChunked;
-      FChunkState := csInitial;
-    end else
-      Result := false;
-    exit;
-  end;
+			if (param != null)
+			{
+				tmp.Append((char8*)param);
+				_parseBuffer = _pep;
 
-  { only if keep-alive, then user must specify either of above headers to 
-    indicate next header's start }
-  lParam := FParameters[hpConnection];
-  FRequestInputDone := (lParam <> nil) and (StrIComp(lParam, 'keep-alive') = 0);
-  if not FRequestInputDone then
-  begin
-    FParseBuffer := @ParseEntityPlain;
-    FInputRemaining := high(FInputRemaining);
-  end;
-			*/
-			return false;
+				if (Int32.Parse(tmp) case .Ok(let val))
+					_inputRemaining = val;
+				else
+					WriteError(.BadRequest);
+
+				return result;
+			}
+			
+			param = _parameters[(uint8)HttpParameter.TransferEncoding];
+
+			if (param != null)
+			{
+				tmp.Clear();
+				tmp.Append((char8*)param);
+
+				if (tmp.Equals("chunked", .OrdinalIgnoreCase))
+				{
+					_parseBuffer = _pec;
+					_chunkState = .Initial;
+				}
+				else
+				{
+					result = false;
+				}
+			}
+
+			/* Only if keep-alive, then user must specify either of above headers to indicate next header's start */
+			param = _parameters[(uint8)HttpParameter.Connection];
+
+			if (param != null)
+			{
+				tmp.Clear();
+				tmp.Append((char8*)param);
+				_requestInputDone = tmp.Equals("keep-alive", .OrdinalIgnoreCase);
+
+				if (!_requestInputDone)
+				{
+					_parseBuffer = _pep;
+					_inputRemaining = int32.MaxValue;
+				}
+			}
+			else
+			{
+				_requestInputDone = false;
+			}
+
+			return result;
 		}
 
 	    protected abstract void ProcessHeaders();
@@ -1491,58 +1523,57 @@ begin
 
 	    public void WriteBlock()
 		{
-			/*
-  while true do
-  begin
-    if FCurrentOutput = nil then
-    begin
-      if not FOutputDone or (not FRequestInputDone and FKeepAlive) then
-        break;
+			while (true)
+			{
+				if (_currentOutput == null)
+				{
+					if (!_outputDone || (!_requestInputDone && _keepAlive))
+						break;
 
-      if not FKeepAlive then
-      begin
-        Disconnect;
-        exit;
-      end;
+					if (!_keepAlive)
+					{
+						Disconnect();
+						return;
+					}
 
-      PrepareNextRequest;
-      if ParseBuffer and IgnoreRead then 
-      begin
-        { end of input buffer reached, try reading more }
-        HandleReceive;
-      end;
+					PrepareNextRequest();
 
-      if FCurrentOutput = nil then 
-        break;
-    end;
+					if (ParseBuffer() && IgnoreRead)
+						HandleReceive(); // End of input buffer reached, try reading more
 
-    { if we cannot send, then the send buffer is full }
-    if (FConnectionStatus <> scConnected) or not (ssCanSend in FSocketState) then
-      break;
+					if (_currentOutput == null)
+						break;
+				}
 
-    case FCurrentOutput.WriteBlock of
-      wsDone:
-      begin
-        if FCurrentOutput = FLastOutput then
-          FLastOutput := nil;
-        { some output items may trigger this parse/write loop }
-        DelayFree(FCurrentOutput);
-        FCurrentOutput := FCurrentOutput.FNext;
-      end;
-      wsWaitingData:
-      begin
-        { wait for more data from external source }
-        break;
-      end;
-    end;
-    { nothing left to write, request was busy and now completed }
-    if FCurrentOutput = nil then
-    begin
-      LogMessage;
-      FOutputDone := true;
-    end;
-  end;
-			*/
+				/* If we cannot send, then the send buffer is full */
+				if (_connectionStatus != .Connected || !_socketState.HasFlag(.CanSend))
+					break;
+
+				switch (_currentOutput.[Friend]WriteBlock())
+				{
+				case .Done:
+					{
+						if (_currentOutput == _lastOutput)
+						  	_lastOutput = null;
+
+						/* Some output items may trigger this parse/write loop */
+						DelayFree(_currentOutput);
+						_currentOutput = _currentOutput.[Friend]_next;
+					}
+				default:
+					{
+						/* Wait for more data from external source */
+						break;
+					}
+				}
+
+				/* Nothing left to write, request was busy and now completed */
+				if (_currentOutput == null)
+				{
+				  	LogMessage();
+				  	_outputDone = true;
+				}
+			}
 		}
 	}
 }

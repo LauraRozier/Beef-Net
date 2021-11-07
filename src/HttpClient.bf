@@ -75,9 +75,9 @@ namespace Beef_Net
 	public class HttpClientSocket : HttpSocket
 	{
 	    protected HttpClientError _error = .None;
-	    protected ClientRequest* _request = null;
-	    protected ClientResponse* _response = null;
-	    protected HeaderOutInfo* _headerOut = null;
+	    protected ClientRequest* _request = null ~ if (_ != null) { delete _.QueryParams; delete _.Uri; };
+	    protected ClientResponse* _response = null ~ if (_ != null) { delete _.Reason; };
+	    protected HeaderOutInfo* _headerOut = null; // ~ if (_ != null) { _.ExtraHeaders.Free(); };
 
 	    public HttpClientError Error
 		{
@@ -112,52 +112,55 @@ namespace Beef_Net
 
 	    protected void ParseStatusLine(uint8* aLineEnd)
 		{
-			/*
-var
-  lPos: pchar;
-begin
-  lPos := FBufferPos;
-  repeat
-    if lPos >= pLineEnd then
-    begin
-      Cancel(ceMalformedStatusLine);
-      exit;
-    end;
-    if lPos^ = ' ' then
-      break;
-    Inc(lPos);
-  until false;
-  if not HTTPVersionCheck(FBufferPos, lPos, FResponse^.Version) then
-  begin
-    Cancel(ceMalformedStatusLine);
-    exit;
-  end;
+			uint8* pos = _bufferPos;
 
-  if (FResponse^.Version > 11) then
-  begin
-    Cancel(ceVersionNotSupported);
-    exit;
-  end;
+			while (true)
+			{
+				if (pos >= aLineEnd)
+				{
+					Cancel(.MalformedStatusLine);
+					return;
+				}
 
-  { status code }
-  Inc(lPos);
-  if (lPos+3 >= pLineEnd) or (lPos[3] <> ' ') then
-  begin
-    Cancel(ceMalformedStatusLine);
-    exit;
-  end;
-  FResponse^.Status := CodeToHTTPStatus((ord(lPos[0])-ord('0'))*100
-    + (ord(lPos[1])-ord('0'))*10 + (ord(lPos[2])-ord('0')));
-  if FResponse^.Status = hsUnknown then
-  begin
-    Cancel(ceMalformedStatusLine);
-    exit;
-  end;
+				if (*pos == (uint8)' ')
+					break;
 
-  Inc(lPos, 4);
-  if lPos < pLineEnd then
-    FResponse^.Reason := lPos;
-			*/
+				pos++;
+			}
+
+			if (!HttpVersionCheck(_bufferPos, pos, out _response.Version))
+			{
+				Cancel(.MalformedStatusLine);
+				return;
+			}
+
+			if (_response.Version > 11)
+			{
+				Cancel(.VersionNotSupported);
+				return;
+			}
+
+			/* Status code */
+			pos++;
+
+			if (pos + 3 >= aLineEnd || pos[3] != (uint8)' ')
+			{
+				Cancel(.MalformedStatusLine);
+				return;
+			}
+
+			_response.Status = HttpStatus.FromCode(((pos[0] - (uint8)'0') * 100) + ((pos[1] - (uint8)'0') * 10) + (pos[2] - (uint8)'0'));
+
+			if (_response.Status == .Unknown)
+			{
+				Cancel(.MalformedStatusLine);
+				return;
+			}
+
+			pos += 4;
+
+			if (pos < aLineEnd)
+				_response.Reason = new .((char8*)pos);
 		}
 
 	    protected override void ProcessHeaders()
@@ -194,61 +197,66 @@ begin
 
     	public void SendRequest()
 		{
-			/*
-var
-  lMessage: TStringBuffer;
-  lTemp: string[23];
-  hasRangeStart, hasRangeEnd: boolean;
-begin
-  lMessage := InitStringBuffer(504);
+			String tmp = scope .(23);
+			StringBuffer msg = .Init(504);
+			msg.AppendString(_request.Method.StrVal);
+			msg.AppendChar(' ');
+			msg.AppendString(_request.Uri);
+			msg.AppendChar(' ');
+			msg.AppendString("HTTP/1.1\r\nHost: ");
+			msg.AppendString(((HttpClient)_creator).Host);
 
-  AppendString(lMessage, HTTPMethodStrings[FRequest^.Method]);
-  AppendChar(lMessage, ' ');
-  AppendString(lMessage, FRequest^.URI);
-  AppendChar(lMessage, ' ');
-  AppendString(lMessage, 'HTTP/1.1'+#13#10+'Host: ');
-  AppendString(lMessage, TLHTTPClient(FCreator).Host);
-  if TLHTTPClient(FCreator).Port <> 80 then
-  begin
-    AppendChar(lMessage, ':');
-    Str(TLHTTPClient(FCreator).Port, lTemp);
-    AppendString(lMessage, lTemp);
-  end;
-  AppendString(lMessage, #13#10);
-  if FHeaderOut^.ContentLength > 0 then
-  begin
-    AppendString(lMessage, 'Content-Length: ');
-    Str(FHeaderOut^.ContentLength, lTemp);
-    AppendString(lMessage, lTemp+#13#10);
-  end;
-  hasRangeStart := TLHTTPClient(FCreator).RangeStart <> high(qword);
-  hasRangeEnd := TLHTTPClient(FCreator).RangeEnd <> high(qword);
-  if hasRangeStart or hasRangeEnd then
-  begin
-    AppendString(lMessage, 'Range: bytes=');
-    if hasRangeStart then
-    begin
-      Str(TLHTTPClient(FCreator).RangeStart, lTemp);
-      AppendString(lMessage, lTemp);
-    end;
-    AppendChar(lMessage, '-');
-    if hasRangeEnd then
-    begin
-      Str(TLHTTPClient(FCreator).RangeEnd, lTemp);
-      AppendString(lMessage, lTemp);
-    end;
-    AppendString(lMessage, #13#10);
-  end;
-  with FHeaderOut^.ExtraHeaders do
-    AppendString(lMessage, Memory, Pos-Memory);
-  AppendString(lMessage, #13#10);
-  AddToOutput(TMemoryOutput.Create(Self, lMessage.Memory, 0,
-    lMessage.Pos-lMessage.Memory, true));
-  AddToOutput(FCurrentInput);
+			if (((HttpClient)_creator).Port != 80)
+			{
+				msg.AppendChar(':');
+				((HttpClient)_creator).Port.ToString(tmp);
+				msg.AppendString(tmp);
+			}
 
-  PrepareNextRequest;
-  WriteBlock;
-			*/
+			msg.AppendString("\r\n");
+
+			if (_headerOut.ContentLength > 0)
+			{
+				tmp.Clear();
+				msg.AppendString("Content-Length: ");
+				_headerOut.ContentLength.ToString(tmp);
+				tmp.Append("\r\n");
+				msg.AppendString(tmp);
+			}
+
+			bool hasRangeStart = ((HttpClient)_creator).RangeStart != uint64.MaxValue;
+			bool hasRangeEnd = ((HttpClient)_creator).RangeEnd != uint64.MaxValue;
+
+			if (hasRangeStart || hasRangeEnd)
+			{
+				msg.AppendString("Range: bytes=");
+
+				if (hasRangeStart)
+				{
+					tmp.Clear();
+					((HttpClient)_creator).RangeStart.ToString(tmp);
+					msg.AppendString(tmp);
+				}
+
+				msg.AppendChar('-');
+
+				if (hasRangeEnd)
+				{
+					tmp.Clear();
+					((HttpClient)_creator).RangeEnd.ToString(tmp);
+					msg.AppendString(tmp);
+				}
+
+				msg.AppendString("\r\n");
+			}
+
+			msg.AppendString(_headerOut.ExtraHeaders.Memory, (int32)(_headerOut.ExtraHeaders.Pos - _headerOut.ExtraHeaders.Memory));
+			msg.AppendString("\r\n");
+			AddToOutput(new MemoryOutput(this, msg.Memory, 0, (int32)(msg.Pos - msg.Memory), true));
+			AddToOutput(_currentInput);
+
+			PrepareNextRequest();
+			WriteBlock();
 		}
 	}
 
@@ -402,14 +410,14 @@ begin
 	    public void AddExtraHeader(StringView aHeader)
 		{
 			_headerOut.ExtraHeaders.AppendString(aHeader);
-			_headerOut.ExtraHeaders.AppendString((StringView)"\r\n");
+			_headerOut.ExtraHeaders.AppendString("\r\n");
 		}
 
 	    public void AddCookie(StringView aName, StringView aValue, StringView aPath = "", StringView aDomain = "", StringView aVersion = "0")
 		{
 			String tmp = scope .();
 			EscapeCookie(aValue, tmp);
-			String header = scope .()..AppendF("Cookie: $Version={0}; {1}={2}", aVersion, aName, tmp);
+			String header = scope $"Cookie: $Version={aVersion}; {aName}={tmp}";
 
 			if (aPath.Length > 0)
 				header.AppendF(";$Path={0}", aPath);

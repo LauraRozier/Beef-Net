@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 
 namespace Beef_Net
 {
@@ -61,7 +62,7 @@ namespace Beef_Net
 			base.FlushRequest();
 		}
 
-	    protected virtual OutputItem HandleURI() =>
+	    protected virtual OutputItem HandleUri() =>
 			((HttpServer)_creator).[Friend]HandleUri(this);
 		
 	    protected override void LogAccess(StringView aMsg) =>
@@ -72,16 +73,16 @@ namespace Beef_Net
 			/* log a message about this request, '<StatusCode> <Length> "<Referer>" "<User-Agent>"' */
 			String tmp = scope .();
 			_responseInfo.Status.Underlying.ToString(tmp);
-			_logMessage.AppendString(tmp.Ptr, (uint32)tmp.Length);
+			_logMessage.AppendString(tmp.Ptr, (int32)tmp.Length);
 			_logMessage.AppendChar(' ');
 
 			tmp.Clear();
 			_headerOut.ContentLength.ToString(tmp);
-			_logMessage.AppendString(tmp.Ptr, (uint32)tmp.Length);
-			_logMessage.AppendString((StringView)" \"");
+			_logMessage.AppendString(tmp.Ptr, (int32)tmp.Length);
+			_logMessage.AppendString(" \"");
 
 			_logMessage.AppendString((char8*)_parameters[(uint8)HttpParameter.Referer]);
-			_logMessage.AppendString((StringView)"\" \"");
+			_logMessage.AppendString("\" \"");
 
 			_logMessage.AppendString((char8*)_parameters[(uint8)HttpParameter.UserAgent]);
 			_logMessage.AppendChar('"');
@@ -123,207 +124,232 @@ namespace Beef_Net
 
 	    protected void ParseRequestLine(uint8* aLineEnd)
 		{
-			/*
-var
-  lPos: pchar;
-  I: TLHTTPMethod;
-  NowLocal: TDateTime;
-begin
-  { make a timestamp for this request }
-  NowLocal := Now;
-  FRequestInfo.DateTime := LocalTimeToGMT(NowLocal);
-  { begin log message }
-  FLogMessage.Pos := FLogMessage.Memory;
-  AppendString(FLogMessage, PeerAddress);
-  AppendString(FLogMessage, ' - [');
-  AppendString(FLogMessage, FormatDateTime('dd/mmm/yyyy:hh:nn:ss', NowLocal));
-  AppendString(FLogMessage, TLHTTPServer(FCreator).FLogMessageTZString);
-  AppendString(FLogMessage, FBufferPos, pLineEnd-FBufferPos);
-  AppendString(FLogMessage, '" ');
+  			/* Make a timestamp for this request */
+			DateTime nowLocal = DateTime.Now;
+			_requestInfo.DateTime = nowLocal.ToUniversalTime(); // UTC == GMT
+  			/* Begin log message */
+			String tmp = scope .();
+			_logMessage.Pos = _logMessage.Memory;
+			GetPeerAddress(tmp);
+			_logMessage.AppendString(tmp);
+			_logMessage.AppendString(" - [");
+			tmp.Clear();
+			nowLocal.ToString(tmp, "dd/mmm/yyyy:hh:nn:ss");
+			_logMessage.AppendString(tmp);
+			_logMessage.AppendString(((HttpServer)_creator).[Friend]_logMessageTZString);
+			_logMessage.AppendString(_bufferPos, (int32)(aLineEnd - _bufferPos));
+			_logMessage.AppendString("\" ");
 
-  { decode version }
-  lPos := pLineEnd;
-  repeat
-    if lPos^ = ' ' then break;
-    dec(lPos);
-    if lPos < FBufferPos then
-    begin
-      WriteError(hsBadRequest);
-      exit;
-    end;
-  until false;
+			/* Decode version */
+			uint8* pos = aLineEnd;
 
-  lPos^ := #0;
-  inc(lPos);
-  { lPos = version string }
-  if not HTTPVersionCheck(lPos, pLineEnd, FRequestInfo.Version) then
-  begin
-    WriteError(hsBadRequest);
-    exit;
-  end;
-  FRequestInfo.VersionStr := lPos;
-  FHeaderOut.Version := FRequestInfo.Version;
-  
-  { trim spaces at end of URI }
-  dec(lPos);
-  repeat
-    if lPos = FBufferPos then break;
-    dec(lPos);
-    if lPos^ <> ' ' then break;
-    lPos^ := #0;
-  until false;
+			while (true)
+			{
+				if (*pos == (uint8)' ')
+					break;
 
-  { decode method }
-  FRequestInfo.Method := FBufferPos;
-  lPos := StrScan(FBufferPos, ' ');
-  if lPos = nil then
-  begin
-    WriteError(hsBadRequest);
-    exit;
-  end;
+				pos--;
 
-  lPos^ := #0;
-  for I := Low(TLHTTPMethod) to High(TLHTTPMethod) do
-  begin
-    if (I = hmUnknown) or (((lPos-FBufferPos) = Length(HTTPMethodStrings[I]))
-      and CompareMem(FBufferPos, PChar(HTTPMethodStrings[I]), lPos-FBufferPos)) then
-    begin
-      repeat
-        inc(lPos);
-      until lPos^ <> ' ';
-      FRequestInfo.Argument := lPos;
-      FRequestInfo.RequestType := I;
-      break;
-    end;
-  end;
+				if (pos < _bufferPos)
+				{
+					WriteError(.BadRequest);
+					return;
+				}
+			}
 
-  if ((pLineEnd-FRequestInfo.Argument) > 7) and (StrIComp(FRequestInfo.Argument, 'http://') = 0) then
-  begin
-    { absolute URI }
-    lPos := FRequestInfo.Argument+7;
-    while (lPos^ = '/') do 
-      Inc(lPos);
-    FParameters[hpHost] := lPos;
-    lPos := StrScan(lPos, '/');
-    FRequestInfo.Argument := lPos;
-  end;
-  { FRequestInfo.Argument now points to an "abs_path" }
-  if FRequestInfo.Argument[0] <> '/' then
-  begin
-    WriteError(hsBadRequest);
-    exit;
-  end;
-  repeat
-    Inc(FRequestInfo.Argument);
-  until FRequestInfo.Argument[0] <> '/';
-			*/
+			*pos = 0x0;
+			pos++;
+
+  			/* pos = version string */
+			if (!HttpVersionCheck(pos, aLineEnd, out _requestInfo.Version))
+			{
+				WriteError(.BadRequest);
+				return;
+			}
+
+			_requestInfo.VersionStr = (char8*)pos;
+			_headerOut.Version = _requestInfo.Version;
+  			/* Trim spaces at end of URI */
+			pos--;
+
+			while (true)
+			{
+				if (pos == _bufferPos)
+					break;
+
+				pos--;
+
+				if (*pos != (uint8)' ')
+					break;
+
+				*pos = 0x0;
+			}
+
+  			/* Decode method */
+			_requestInfo.Method = (char8*)_bufferPos;
+			pos = StrScan(_bufferPos, (uint8)' ');
+
+			if (pos == null)
+			{
+				WriteError(.BadRequest);
+				return;
+			}
+
+			*pos = 0x0;
+			TypeInstance typeInst = (TypeInstance)typeof(HttpMethod);
+			HttpMethod method;
+
+			for (let field in typeInst.GetFields())
+			{
+				method = *((HttpMethod*)(&field.[Friend]mFieldData.mData));
+
+				if (method == .Unknown || (pos - _bufferPos == method.StrVal.Length && CompareMem(_bufferPos, (uint8*)method.StrVal.Ptr, (int32)(pos - _bufferPos))))
+				{
+					repeat
+					{
+						pos++;
+					}
+					while (*pos == ' ');
+
+					_requestInfo.Argument = (char8*)pos;
+					_requestInfo.RequestType = method;
+					break;
+				}
+			}
+
+			tmp.Clear();
+			tmp.Append(_requestInfo.Argument);
+
+			if ((aLineEnd - (uint8*)_requestInfo.Argument) > 7 && tmp.Equals("http://", .OrdinalIgnoreCase))
+			{
+    			/* Absolute URI */
+				pos = (uint8*)_requestInfo.Argument + 7;
+
+				while (*pos == (uint8)'/')
+					pos++;
+
+				_parameters[(uint8)HttpParameter.Host] = pos;
+				pos = StrScan(pos, (uint8)'/');
+				_requestInfo.Argument = (char8*)pos;
+			}
+
+			/* _requestInfo.Argument now points to an "abs_path" */
+			if (_requestInfo.Argument[0] != '/')
+			{
+				WriteError(.BadRequest);
+				return;
+			}
+
+			repeat
+			{
+				_requestInfo.Argument++;
+			}
+			while (_requestInfo.Argument[0] == '/');
 		}
 
-	    protected bool PrepareResponse(OutputItem aOutputItem, bool aCustomErrorMessage)
+	    protected bool PrepareResponse(OutputItem aOutputItem, bool aIndCustomErrorMessage)
 		{
-			/*
-var
-  lDateTime: TDateTime;
-begin
-  { check modification date }
-  if FResponseInfo.Status < hsBadRequest then
-  begin
-    if (FParameters[hpIfModifiedSince] <> nil) 
-      and (FResponseInfo.LastModified <> 0.0) then
-    begin
-      if TryHTTPDateStrToDateTime(FParameters[hpIfModifiedSince], lDateTime) then
-      begin
-        if lDateTime > FRequestInfo.DateTime then
-          FResponseInfo.Status := hsBadRequest
-        else
-        if FResponseInfo.LastModified <= lDateTime then
-          FResponseInfo.Status := hsNotModified;
-      end;
-    end else
-    if (FParameters[hpIfUnmodifiedSince] <> nil) then
-    begin
-      if TryHTTPDateStrToDateTime(FParameters[hpIfUnmodifiedSince], lDateTime) then
-      begin
-        if (FResponseInfo.LastModified = 0.0) 
-          or (lDateTime < FResponseInfo.LastModified) then
-          FResponseInfo.Status := hsPreconditionFailed;
-      end;
-    end;
-  end;
+			var aIndCustomErrorMessage;
 
-  if (FResponseInfo.Status < hsOK) or (FResponseInfo.Status in [hsNoContent, hsNotModified]) then
-  begin
-    { RFC says we MUST not include a response for these statuses }
-    ACustomErrorMessage := false;
-    FHeaderOut.ContentLength := 0;
-  end;
-  
-  Result := (FResponseInfo.Status = hsOK) or ACustomErrorMessage;
-  if not Result then
-  begin
-    WriteError(FResponseInfo.Status);
-    DelayFree(AOutputItem);
-  end;
-			*/
-			return false;
+			/* Check modification date */
+			if (_responseInfo.Status < .BadRequest)
+			{
+				DateTime dt = .(0);
+
+				if (_parameters[(uint8)HttpParameter.IfModifiedSince] != null && _responseInfo.LastModified.Ticks != 0)
+				{
+					if (HttpUtil.TryHttpDateStrToDateTime((char8*)_parameters[(uint8)HttpParameter.IfModifiedSince], ref dt))
+					{
+						if (dt > _requestInfo.DateTime)
+							_responseInfo.Status = .BadRequest;
+						else if (_responseInfo.LastModified <= dt)
+							_responseInfo.Status = .NotModified;
+					}
+				}
+				else if (_parameters[(uint8)HttpParameter.IfUnmodifiedSince] != null)
+				{
+					if (HttpUtil.TryHttpDateStrToDateTime((char8*)_parameters[(uint8)HttpParameter.IfUnmodifiedSince], ref dt))
+					{
+						if (_responseInfo.LastModified.Ticks == 0 || dt < _responseInfo.LastModified)
+							_responseInfo.Status = .PreconditionFailed;
+					}
+				}
+			}
+
+			if (_responseInfo.Status < .OK || (HttpStatus.NoContent | HttpStatus.NotModified).HasFlag(_responseInfo.Status))
+			{
+				/* RFC says we MUST not include a response for these statuses */
+				aIndCustomErrorMessage = false;
+				_headerOut.ContentLength = 0;
+			}
+
+			bool result = _responseInfo.Status == .OK || aIndCustomErrorMessage;
+
+			if (!result)
+			{
+				WriteError(_responseInfo.Status);
+				DelayFree(aOutputItem);
+			}
+
+			return result;
 		}
 
 	    protected override void ProcessHeaders()
 		{
 			/* Process request */
-			/*
-var
-  lPos, lConnParam: pchar;
-begin
-  { do HTTP/1.1 Host-field present check }
-  if (FRequestInfo.Version > 10) and (FParameters[hpHost] = nil) then
-  begin
-    WriteError(hsBadRequest);
-    exit;
-  end;
-      
-  lPos := StrScan(FRequestInfo.Argument, '?');
-  if lPos <> nil then
-  begin
-    lPos^ := #0;
-    FRequestInfo.QueryParams := lPos+1;
-  end;
+			/* Do HTTP/1.1 Host-field present check */
+			if (_requestInfo.Version > 10 && _parameters[(uint8)HttpParameter.Host] == null)
+			{
+				WriteError(.BadRequest);
+				return;
+			}
 
-  FKeepAlive := FRequestInfo.Version > 10;
-  lConnParam := FParameters[hpConnection];
-  if lConnParam <> nil then
-  begin
-    if StrIComp(lConnParam, 'keep-alive') = 0 then
-      FKeepAlive := true
-    else
-    if StrIComp(lConnParam, 'close') = 0 then
-      FKeepAlive := false;
-  end;
-  
-  HTTPDecode(FRequestInfo.Argument);
-  if not CheckPermission(FRequestInfo.Argument) then
-  begin
-    WriteError(hsForbidden);
-  end else begin
-    if not ProcessEncoding then
-    begin
-      WriteError(hsNotImplemented);
-      exit;
-    end;
-      
-    FCurrentInput := HandleURI;
-    { if we have a valid outputitem, wait until it is ready 
-      to produce its response }
-    if FCurrentInput = nil then
-    begin
-      if FResponseInfo.Status = hsOK then
-        WriteError(hsNotFound)
-      else
-        WriteError(FResponseInfo.Status);
-    end else if FRequestInputDone then
-      FCurrentInput.DoneInput;
-  end;
-			*/
+			uint8* pos = StrScan((uint8*)_requestInfo.Argument, (uint8)'?');
+
+			if (pos != null)
+			{
+				*pos = 0x0;
+				_requestInfo.QueryParams = (char8*)(pos + 1);
+			}
+
+			_keepAlive = _requestInfo.Version > 10;
+			uint8* connParam = _parameters[(uint8)HttpParameter.Connection];
+			String tmp = scope .();
+			tmp.Append((char8*)connParam);
+
+			if (connParam != null)
+			{
+				if (tmp.Equals("keep-alive", .OrdinalIgnoreCase))
+					_keepAlive = true;
+				else if (tmp.Equals("close", .OrdinalIgnoreCase))
+					_keepAlive = false;
+			}
+
+			tmp.Clear();
+			tmp.Append(_requestInfo.Argument);
+			String tmpArg = scope .();
+			HttpUtil.HttpDecode(tmp, tmpArg);
+
+			if (!HttpUtil.CheckPermission(tmpArg))
+			{
+				WriteError(.Forbidden);
+			}
+			else
+			{
+				if (!ProcessEncoding())
+				{
+					WriteError(.NotImplemented);
+					return;
+				}
+
+				_currentInput = HandleUri();
+
+				/* If we have a valid outputitem, wait until it is ready to produce its response */
+				if (_currentInput == null)
+					WriteError(_responseInfo.Status == .OK ? .NotFound : _responseInfo.Status);
+				else if (_requestInputDone)
+					_currentInput.[Friend]DoneInput();
+			}
 		}
 
 	    protected override void WriteError(HttpStatus aStatus)
@@ -353,78 +379,86 @@ begin
 
 	    protected void WriteHeaders(OutputItem aHeaderResponse, OutputItem aDataResponse)
 		{
-			/*
-var
-  lTemp: string[23];
-  lMessage: TStringBuffer;
-  tempStr: string;
-begin
-  lMessage := InitStringBuffer(504);
-  
-  AppendString(lMessage, 'HTTP/1.1 ');
-  Str(HTTPStatusCodes[FResponseInfo.Status], lTemp);
-  AppendString(lMessage, lTemp);
-  AppendChar(lMessage, ' ');
-  AppendString(lMessage, HTTPTexts[FResponseInfo.Status]);
-  AppendString(lMessage, #13#10+'Date: ');
-  AppendString(lMessage, FormatDateTime(HTTPDateFormat, FRequestInfo.DateTime));
-  AppendString(lMessage, ' GMT');
-  tempStr := TLHTTPServer(FCreator).ServerSoftware;
-  if Length(tempStr) > 0 then
-  begin
-    AppendString(lMessage, #13#10+'Server: ');
-    AppendString(lMessage, tempStr);
-  end;
-  if Length(FResponseInfo.ContentType) > 0 then
-  begin
-    AppendString(lMessage, #13#10+'Content-Type: ');
-    AppendString(lMessage, FResponseInfo.ContentType);
-    if Length(FResponseInfo.ContentCharset) > 0 then
-    begin
-      AppendString(lMessage, '; charset=');
-      AppendString(lMessage, FResponseInfo.ContentCharset);
-    end;
-  end;
-  if FHeaderOut.TransferEncoding = teIdentity then
-  begin
-    AppendString(lMessage, #13#10+'Content-Length: ');
-    Str(FHeaderOut.ContentLength, lTemp);
-    AppendString(lMessage, lTemp);
-  end else begin
-    { only other possibility: teChunked }
-    AppendString(lMessage, #13#10+'Transfer-Encoding: chunked');
-  end;
-  if FResponseInfo.LastModified <> 0.0 then
-  begin
-    AppendString(lMessage, #13#10+'Last-Modified: ');
-    AppendString(lMessage, FormatDateTime(HTTPDateFormat, FResponseInfo.LastModified));
-    AppendString(lMessage, ' GMT');
-  end;
-  AppendString(lMessage, #13#10+'Connection: ');
-  if FKeepAlive then
-    AppendString(lMessage, 'keep-alive')
-  else
-    AppendString(lMessage, 'close');
-  AppendString(lMessage, #13#10);
-  with FHeaderOut.ExtraHeaders do
-    AppendString(lMessage, Memory, Pos-Memory);
-  AppendString(lMessage, #13#10);
-  if AHeaderResponse <> nil then
-  begin
-    AHeaderResponse.FBuffer := lMessage.Memory;
-    AHeaderResponse.FBufferSize := lMessage.Pos-lMessage.Memory;
-  end else
-    AddToOutput(TMemoryOutput.Create(Self, lMessage.Memory, 0,
-      lMessage.Pos-lMessage.Memory, true));
+			StringBuffer msg = .Init(504);
+			String tmp = scope .();
+			msg.AppendString("HTTP/1.1 ");
+			_responseInfo.Status.Underlying.ToString(tmp);
+			msg.AppendString(tmp);
+			msg.AppendChar(' ');
+			msg.AppendString(_responseInfo.Status.StrVal);
+			msg.AppendString("\r\nDate: ");
+			tmp.Clear();
+			_requestInfo.DateTime.ToString(tmp, HttpUtil.HttpDateFormat);
+			msg.AppendString(tmp);
+			msg.AppendString(" GMT");
 
-  if ADataResponse <> nil then
-  begin
-    if FRequestInfo.RequestType = hmHead then
-      DelayFree(ADataResponse)
-    else
-      AddToOutput(ADataResponse);
-  end;
-			*/
+			tmp.Clear();
+			tmp.Append(((HttpServer)_creator).ServerSoftware);
+
+			if (tmp.Length > 0)
+			{
+				msg.AppendString("\r\nServer: ");
+				msg.AppendString(tmp);
+			}
+
+			if (_responseInfo.ContentType.Length > 0)
+			{
+				msg.AppendString("\r\nContent-Type: ");
+				msg.AppendString(_responseInfo.ContentType);
+
+				if (_responseInfo.ContentCharset.Length > 0)
+				{
+					msg.AppendString("; charset=");
+					msg.AppendString(_responseInfo.ContentCharset);
+				}
+			}
+
+			if (_headerOut.TransferEncoding == .Identity)
+			{
+				msg.AppendString("\r\nContent-Length: ");
+				tmp.Clear();
+				_headerOut.ContentLength.ToString(tmp);
+				msg.AppendString(tmp);
+			}
+			else
+			{
+				/* Only other possibility: .Chunked */
+				msg.AppendString("\r\nTransfer-Encoding: chunked");
+			}
+
+			if (_responseInfo.LastModified.Ticks != 0)
+			{
+				msg.AppendString("\r\nLast-Modified: ");
+				tmp.Clear();
+				_responseInfo.LastModified.ToString(tmp, HttpUtil.HttpDateFormat);
+				msg.AppendString(tmp);
+				msg.AppendString(" GMT");
+			}
+
+			msg.AppendString("\r\nConnection: ");
+			msg.AppendString(_keepAlive ? "keep-alive" : "close");
+
+			msg.AppendString("\r\n");
+			msg.AppendString(_headerOut.ExtraHeaders.Memory, (int32)(_headerOut.ExtraHeaders.Pos - _headerOut.ExtraHeaders.Memory));
+			msg.AppendString("\r\n");
+
+			if (aHeaderResponse != null)
+			{
+				aHeaderResponse.[Friend]_buffer = (uint8*)msg.Memory;
+				aHeaderResponse.[Friend]_bufferSize = (int32)(msg.Pos - msg.Memory);
+			}
+			else
+			{
+				AddToOutput(new MemoryOutput(this, msg.Memory, 0, (int32)(msg.Pos - msg.Memory), true));
+			}
+
+			if (aDataResponse != null)
+			{
+				if (_requestInfo.RequestType == .Head)
+					DelayFree(aDataResponse);
+				else
+					AddToOutput(aDataResponse);
+			}
 		}
 
 	    public this() : base()

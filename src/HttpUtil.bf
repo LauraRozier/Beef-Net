@@ -38,21 +38,21 @@ namespace Beef_Net
 		public readonly static char8[] Numeric = new .[10](
 			'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
 		) ~ delete _;
-		public readonly static char8[] HTTPAllowedChars  = new .[72](
+		public readonly static char8[] HttpAllowedChars  = new .[72](
 			'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
 			'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
 			'*', '@', '.', '_', '-',
 			'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
 			'$', '!', '\'', '(', ')'
 		) ~ delete _;
-		public readonly static char8[] URLAllowedChars = new .[74](
+		public readonly static char8[] UrlAllowedChars = new .[74](
 			'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
 			'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
 			'*', '@', '.', '_', '-',
 			'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
 			'$', '!', '\'', '(', ')', '=', '&'
 		) ~ delete _;
-		public const String HTTPDateFormat = "ddd, dd mmm yyyy hh:nn:ss";
+		public const String HttpDateFormat = "ddd, dd mmm yyyy hh:nn:ss";
 
 		public static int Search(char8[] aArr, char8 aVal)
 		{
@@ -138,7 +138,7 @@ namespace Beef_Net
 			while (ptrNext != null);
 		}
 
-		public static bool TryHTTPDateStrToDateTime(char8* aDateStr, ref DateTime aDest)
+		public static bool TryHttpDateStrToDateTime(char8* aDateStr, ref DateTime aDest)
 		{
 			int year, month, day;
 			int[3] timeArr = .(0, 0, 0);
@@ -146,7 +146,7 @@ namespace Beef_Net
 			String tmpCmpStr = scope .();
 			String tmpDateStr = scope .(aDateStr);
 
-			if (tmpDateStr.Length < HTTPDateFormat.Length + 4)
+			if (tmpDateStr.Length < HttpDateFormat.Length + 4)
 				return false;
 
 			// skip redundant short day string
@@ -291,26 +291,26 @@ namespace Beef_Net
 			  	return 0;
 		}
 
-		public static void HTTPEncode(StringView aStr, String aOutStr) =>
-			EncodeWithCharSet(aStr, HTTPAllowedChars, aOutStr);
+		public static void HttpEncode(StringView aStr, String aOutStr) =>
+			EncodeWithCharSet(aStr, HttpAllowedChars, aOutStr);
 
-		public static void HTTPDecode(StringView aStr, String aOutStr) =>
+		public static void HttpDecode(StringView aStr, String aOutStr) =>
 			DecodeWithSpaceChar(aStr, aOutStr, '+');
 
-		public static void URLEncode(StringView aStr, String aOutStr, bool aInQueryString = false) =>
-			EncodeWithCharSet(aStr, URLAllowedChars, aOutStr, aInQueryString ? "+" : "%20");
+		public static void UrlEncode(StringView aStr, String aOutStr, bool aInQueryString = false) =>
+			EncodeWithCharSet(aStr, UrlAllowedChars, aOutStr, aInQueryString ? "+" : "%20");
 
-		public static void URLDecode(StringView aStr, String aOutStr, bool aInQueryString = false) =>
+		public static void UrlDecode(StringView aStr, String aOutStr, bool aInQueryString = false) =>
 			DecodeWithSpaceChar(aStr, aOutStr, aInQueryString ? '+' : 0x0);
 
-		public static void ComposeURL(StringView aHost, StringView aUri, uint16 aPort, String aOutStr)
+		public static void ComposeUrl(StringView aHost, StringView aUri, uint16 aPort, String aOutStr)
 		{
 			aOutStr.Clear();
 			aOutStr.AppendF("{0}{1}:{2}", aHost, aUri, aPort);
 		}
 
 		/// Decompose URL and return TRUE when the protocol is HTTPS, else return FALSE
-		public static bool DecomposeURL(StringView aURL, String aOutHost, String aOutURI, out uint16 aOutPort)
+		public static bool DecomposeUrl(StringView aURL, String aOutHost, String aOutURI, out uint16 aOutPort)
 		{
 			URI uri = scope .();
 			URI.Parse(aURL, "http", 0, uri); // default to 0 so we can set SSL port
