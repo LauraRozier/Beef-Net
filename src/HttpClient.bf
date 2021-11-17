@@ -54,30 +54,29 @@ namespace Beef_Net
 
 	class ClientOutput : OutputItem
 	{
-		protected bool _persistent = false;
-
 		protected override void DoneInput() =>
 			((HttpClient)(((HttpClientSocket)_socket).[Friend]_creator)).[Friend]DoDoneInput((HttpClientSocket)_socket);
+
+		protected override int32 HandleInput(uint8* aBuffer, int32 aSize) =>
+			((HttpClient)(((HttpClientSocket)_socket).[Friend]_creator)).[Friend]DoHandleInput((HttpClientSocket)_socket, aBuffer, aSize);
+
+		protected override WriteBlockStatus WriteBlock() =>
+			((HttpClient)(((HttpClientSocket)_socket).[Friend]_creator)).[Friend]DoWriteBlock((HttpClientSocket)_socket);
 
 		public this(HttpClientSocket aSocket) : base(aSocket)
 		{
 			_persistent = true;
 		}
-
-		public new int32 HandleInput(uint8* aBuffer, int32 aSize) =>
-			((HttpClient)(((HttpClientSocket)_socket).[Friend]_creator)).[Friend]DoHandleInput((HttpClientSocket)_socket, aBuffer, aSize);
-
-		public new WriteBlockStatus WriteBlock() =>
-			((HttpClient)(((HttpClientSocket)_socket).[Friend]_creator)).[Friend]DoWriteBlock((HttpClientSocket)_socket);
 	}
 	
 	[AlwaysInclude(IncludeAllMethods=true), Reflect(.All)]
 	public class HttpClientSocket : HttpSocket
 	{
 	    protected HttpClientError _error = .None;
-	    protected ClientRequest* _request = null ~ if (_ != null) { delete _.QueryParams; delete _.Uri; };
-	    protected ClientResponse* _response = null ~ if (_ != null) { delete _.Reason; };
+	    protected ClientRequest* _request = null;// ~ if (_ != null) { delete _.QueryParams; delete _.Uri; };
+	    protected ClientResponse* _response = null;// ~ if (_ != null) { delete _.Reason; };
 	    protected HeaderOutInfo* _headerOut = null; // ~ if (_ != null) { _.ExtraHeaders.Free(); };
+		protected String* _userAgent = null;
 
 	    public HttpClientError Error
 		{
@@ -199,7 +198,7 @@ namespace Beef_Net
 		{
 			String tmp = scope .(23);
 			StringBuffer msg = .Init(504);
-			msg.AppendString(_request.Method.StrVal);
+			msg.AppendString(_request.Method.StrVal, true);
 			msg.AppendChar(' ');
 			msg.AppendString(_request.Uri);
 			msg.AppendChar(' ');
@@ -214,6 +213,13 @@ namespace Beef_Net
 			}
 
 			msg.AppendString("\r\n");
+
+			if ((*_userAgent).Length > 0)
+			{
+				tmp.Clear();
+				tmp.AppendF("User-Agent: {0}\r\n", *_userAgent);
+				msg.AppendString(tmp);
+			}
 
 			if (_headerOut.ContentLength > 0)
 			{
@@ -262,9 +268,9 @@ namespace Beef_Net
 
 	public class HttpClient : HttpConnection
 	{
-	    protected ClientRequest _request;
-	    protected ClientResponse _response;
-	    protected HeaderOutInfo _headerOut;
+	    protected ClientRequest _request = .() ~ { delete _.QueryParams; delete _.Uri; };
+	    protected ClientResponse _response = .() ~ { delete _.Reason; };
+	    protected HeaderOutInfo _headerOut = .();
 	    protected HttpClientState _state = .Idle;
 	    protected int32 _pendingResponses = 0;
 	    protected bool _outputEof = false;
@@ -272,6 +278,7 @@ namespace Beef_Net
 	    protected InputEvent _onInput = null;
 	    protected HttpClientEvent _onDoneInput = null;
 	    protected HttpClientEvent _onProcessHeaders = null;
+		protected String _userAgent = new .("Beef-Net/1.0") ~ delete _;
 
 	    public ClientRequest Request { get { return _request; } }
 	    public uint64 RangeStart
@@ -321,6 +328,11 @@ namespace Beef_Net
 		{
 			get { return _onProcessHeaders; }
 			set { _onProcessHeaders = value; }
+		}
+	    public StringView UserAgent
+		{
+			get { return _userAgent; }
+			set { _userAgent.Set(value); }
 		}
 
 		protected void EscapeCookie(StringView aInStr, String aOutStr)
@@ -380,6 +392,7 @@ namespace Beef_Net
 			((HttpClientSocket)aSocket).[Friend]_headerOut = &_headerOut;
 			((HttpClientSocket)aSocket).[Friend]_request = &_request;
 			((HttpClientSocket)aSocket).[Friend]_response = &_response;
+			((HttpClientSocket)aSocket).[Friend]_userAgent = &_userAgent;
 			return base.InitSocket(aSocket);
 		}
 
@@ -398,6 +411,8 @@ namespace Beef_Net
 			_port = 80;
 			SocketClass = typeof(HttpClientSocket);
 			_request.Method = .Get;
+			_request.QueryParams = new .();
+			_request.Uri = new .();
 			_headerOut.ExtraHeaders = .Init(256);
 			ResetRange();
 		}

@@ -377,6 +377,7 @@ namespace Beef_Net
 
 	public abstract class OutputItem
 	{
+		protected bool _persistent = false;
 		protected uint8* _buffer = null;
 		protected int32 _bufferPos = 0;
 		protected int32 _bufferSize = 0;
@@ -389,7 +390,8 @@ namespace Beef_Net
 		protected OutputItem _nextDelayFree = null;
 		protected HttpSocket _socket = null;
 		protected WriteBlockMethod _writeBlock = null;
-
+		
+		public bool Persistent { get { return _persistent; } }
 		public HttpSocket Socket { get { return _socket; } }
 
 		protected mixin BufferEmptyToWriteStatus(bool aValue)
@@ -436,7 +438,7 @@ namespace Beef_Net
 		public ~this()
 		{
 			if (_socket.[Friend]_currentInput == this)
-				DeleteAndNullify!(_socket.[Friend]_currentInput);
+				_socket.[Friend]_currentInput = null;
 
 			if (_prefDelayFree == null)
 				_socket.[Friend]_delayFreeItems = _nextDelayFree;
@@ -992,7 +994,9 @@ namespace Beef_Net
 			{
 				item = _delayFreeItems;
 				_delayFreeItems = _delayFreeItems.[Friend]_nextDelayFree;
-				delete item;
+
+				if (!item.Persistent)
+					delete item;
 			}
 		}
 
@@ -1358,7 +1362,8 @@ namespace Beef_Net
 			TypeInstance typeInst = (TypeInstance)typeof(HttpParameter);
 
 			for (let field in typeInst.GetFields())
-				RelocateVariable(ref _parameters[field.[Friend]mFieldData.mData]);
+				if (field.[Friend]mFieldData.mData != (int)HttpParameter.MaxVal)
+					RelocateVariable(ref _parameters[field.[Friend]mFieldData.mData]);
 		}
 
 	    protected virtual void ResetDefaults()
@@ -1489,6 +1494,7 @@ namespace Beef_Net
 				if (read == 0)
 					return;
 
+				_bufferEnd += read;
 				*_bufferEnd = 0x0;
 			}
 
@@ -1516,7 +1522,7 @@ namespace Beef_Net
 						_currentInput.[Friend]DoneInput();
 				}
 			} /* If parse func changed mid-run, then we should continue calling the new one: header + data */
-			while (parseFunc != _parseBuffer && result);
+			while (result && parseFunc != _parseBuffer);
 
 			return result;
 		}
@@ -1527,7 +1533,7 @@ namespace Beef_Net
 			{
 				if (_currentOutput == null)
 				{
-					if (!_outputDone || (!_requestInputDone && _keepAlive))
+					if ((!_outputDone) || ((!_requestInputDone) && _keepAlive))
 						break;
 
 					if (!_keepAlive)

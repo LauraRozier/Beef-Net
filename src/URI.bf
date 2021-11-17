@@ -282,7 +282,7 @@ namespace Beef_Net
 			{
 				if (str[i] == '/')
 				{
-					aOutUri.Document.Set(str.Substring(i + 1));
+					aOutUri.Document.Set(str.Substring(i));
 
 					if (aIndDecode)
 					{
@@ -343,7 +343,7 @@ namespace Beef_Net
 			{
 				bool validPort = true;
 
-				for (j = i + 1; i < str.Length; i++)
+				for (j = i + 1; j < authority.Length; j++)
 					if (HttpUtil.Search(Numeric, authority[j]) == -1)
 					{
 						validPort = false;

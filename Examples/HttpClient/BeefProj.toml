@@ -1,0 +1,14 @@
+FileVersion = 1
+Dependencies = {corlib = "*", Beef-Net = "*"}
+
+[Project]
+Name = "HttpClient"
+StartupObject = "HttpClient.Program"
+
+[Configs.Debug.Win64]
+DebugCommandArguments = "\"http://127.0.0.1:8000/microscape/microscape.html\""
+
+[[ProjectFolder.Items]]
+Type = "Folder"
+Path = "../Common"
+AutoInclude = true

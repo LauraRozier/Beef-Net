@@ -29,6 +29,7 @@ namespace Beef_Net.Connection
 		protected TimeVal _timeVal;
 		protected int64 _timeout = 0;
 		protected int32 _listenBacklog = DEFAULT_BACKLOG;
+		protected bool _ownsSession = false;
 		protected bool _reuseAddress = false;
 		protected int32 _socketNet;
 
@@ -84,6 +85,11 @@ namespace Beef_Net.Connection
 		{
 			get { return _session; }
 			set { SetSession(value); }
+		}
+		public bool OwnsSession
+		{
+			get { return _ownsSession; }
+			set { _ownsSession = value; }
 		}
 		public bool ReuseAddress
 		{
@@ -285,6 +291,9 @@ namespace Beef_Net.Connection
 
 			if (_eventer != null)
 				_eventer.DeleteRef();
+
+			if (_ownsSession && _session != null)
+				DeleteAndNullify!(_session);
 		}
 
 		public ref Socket Socks(int aIdx)

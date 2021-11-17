@@ -556,9 +556,10 @@ namespace Beef_Net
 		public override void RegisterWithComponent(BaseConnection aConnection)
 		{
 			base.RegisterWithComponent(aConnection);
+			Type type = typeof(SSLSocket);
 
-			if (aConnection.SocketClass != typeof(SSLSocket))
-				aConnection.SocketClass = typeof(SSLSocket);
+			if (aConnection.SocketClass != type && !aConnection.SocketClass.IsSubtypeOf(type))
+				aConnection.SocketClass = type;
 		}
 
 		public override void InitHandle(Handle aHandle)
