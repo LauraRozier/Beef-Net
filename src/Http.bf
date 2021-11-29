@@ -175,7 +175,7 @@ namespace Beef_Net
 			TypeInstance typeInst = (TypeInstance)typeof(Self);
 
 			for (let field in typeInst.GetFields())
-				if (field.[Friend]mFieldData.mData == aCode)
+				if ((uint32)field.[Friend]mFieldData.mData == aCode)
 					return *((Self*)(&field.[Friend]mFieldData.mData));
 
 			return .Unknown;
@@ -483,7 +483,7 @@ namespace Beef_Net
 			if (!_outputPending)
 				return .Done;
 
-			int32 written = _socket.Send(&_stream.[Friend]mMemory[_stream.Position], (int32)(_stream.Length - _stream.Position));
+			int32 written = _socket.Send(&_stream.[Friend]mMemory[(int)_stream.Position], (int32)(_stream.Length - _stream.Position));
 			_stream.Position = _stream.Position + written;
 			_outputPending = _stream.Position < _stream.Length;
 			_eof = !_outputPending;
@@ -537,7 +537,7 @@ namespace Beef_Net
 				aBuffer--;
 				result++;
 			}
-			while (aValue > 0)
+			while (aValue > 0);
 
 			return result;
 		} 

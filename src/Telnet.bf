@@ -656,7 +656,7 @@ namespace Beef_Net
 			int result = TrySilent!(_output.TryRead(.((uint8*)aData, aSize)));
 
 			if (_output.Position == _output.Length)
-				_output.RemoveFromStart(_output.Length);
+				_output.RemoveFromStart((int)_output.Length);
 
 			return (int32)result;
 		}
@@ -665,7 +665,7 @@ namespace Beef_Net
 		{
 			aOutMsg.Clear();
 			int result = 0;
-			int len = _output.Length;
+			int len = (int)_output.Length;
 
 			if (len > 0)
 			{
@@ -676,8 +676,7 @@ namespace Beef_Net
 
 				if (result > 0)
 				{
-					aOutMsg.Reserve(len);
-					aOutMsg.Length = len;
+					aOutMsg.PrepareBuffer(len);
 					System.Text.Encoding.ASCII.DecodeToUTF8(.(&buff[0], len), aOutMsg);
 					_output.RemoveFromStart(result);
 				}
@@ -697,9 +696,9 @@ namespace Beef_Net
 
   			if (aSize > 0)
 			{
-				String tmp = scope .(aSize);
+				String tmp = scope .();
+				tmp.PrepareBuffer(aSize);
 				Internal.MemMove(tmp.Ptr, aData, aSize);
-				tmp.Length = aSize;
     			DoubleIAC(tmp);
 
     			if (LocalEcho && (!OptionIsSet(OPT_ECHO)) && (!OptionIsSet(OPT_HYI)))

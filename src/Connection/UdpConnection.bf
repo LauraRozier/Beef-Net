@@ -71,7 +71,7 @@ namespace Beef_Net.Connection
 			if (n > 1)
 			{
 				StringView s = aAddress.Substring(0, n - 1);
-				uint16 p = UInt32.Parse(aAddress.Substring(n + 1)); // Word(StrToInt(Copy(Address, n+1, Length(aAddress))));
+				uint16 p = (uint16)UInt32.Parse(aAddress.Substring(n + 1)); // Word(StrToInt(Copy(Address, n+1, Length(aAddress))));
 				
 				Common.FillAddressInfo(ref _rootSock.[Friend]_peerAddress, (sa_family_t)_rootSock.[Friend]_socketNet, s, p);
 			}

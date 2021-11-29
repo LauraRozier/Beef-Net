@@ -215,7 +215,7 @@ namespace Beef_Net
 			get { return _connection.Eventer; }
 			set { _connection.Eventer = value; }
 		}
-	    public int Timeout
+	    public int64 Timeout
 		{
 			get { return _connection.Timeout; }
 			set { _connection.Timeout = value; }
@@ -799,7 +799,7 @@ namespace Beef_Net
 			delete enc;
 			
 			dummy.Seek(0);
-			dummy.TryRead(.((uint8*)aOutStr.PrepareBuffer(dummy.Length), dummy.Length));
+			dummy.TryRead(.((uint8*)aOutStr.PrepareBuffer((int)dummy.Length), (int)dummy.Length));
 		}
 
 		protected virtual void EncodeMimeHeaderText(StringView aStr, String aOutStr) =>

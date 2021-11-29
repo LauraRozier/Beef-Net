@@ -456,7 +456,7 @@ namespace Beef_Net
 			else
 			{
 				char8* tmpPtr = scope char8[MAX_ERROR]*;
-				int len = FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_ARGUMENT_ARRAY, null, (uint32)aErrNum, 0, &tmpPtr[0], MAX_ERROR, null);
+				int len = (int)FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_ARGUMENT_ARRAY, null, (uint32)aErrNum, 0, &tmpPtr[0], MAX_ERROR, null);
 				tmp.Append(tmpPtr, len);
 			}
 

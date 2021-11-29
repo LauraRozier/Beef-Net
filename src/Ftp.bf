@@ -191,7 +191,7 @@ namespace Beef_Net
 		protected String _featureString = new .() ~ delete _;
 		
 		public bool Connected { get { return GetConnected(); } }
-		public int Timeout
+		public int64 Timeout
 		{
 			get { return _control.Timeout; }
 			set

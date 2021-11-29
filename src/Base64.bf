@@ -68,7 +68,7 @@ namespace Beef_Net
 			Flush();
 		}
 
-		public override void Flush()
+		public override Result<void> Flush()
 		{
 			char8* writeBuf = scope .[4]*;
 
@@ -97,13 +97,15 @@ namespace Beef_Net
 				}
 			default: break;
 			}
+
+			return .Ok;
 		}
 
 		public override Result<int> TryWrite(Span<uint8> data)
 		{
 			int count = data.Length;
 			int result = count;
-			int64 readNow = 0;
+			int readNow = 0;
 			uint8* ptr = data.Ptr;
 			char8* writeBuf = scope .[4]*;
 
@@ -309,7 +311,7 @@ namespace Beef_Net
 
 				// Correct Count if at end of base64 input
 				if (_curPos + count > _decodedSize)
-					count = _decodedSize - _curPos;
+					count = (int)(_decodedSize - _curPos);
 			}
 
 			if (data.Length <= 0) // Nothing to read, quit
@@ -318,7 +320,7 @@ namespace Beef_Net
 			if (_decodedSize != -1) // Try using calculated size info if possible
 			{
 				if (_curPos + count > _decodedSize)
-					count = _decodedSize - _curPos;
+					count = (int)(_decodedSize - _curPos);
 
 				if (count <= 0)
 					return .Ok(0);

@@ -288,7 +288,7 @@ namespace Beef_Net
 					_localStream.TryWrite(.((uint8*)CRLF.Ptr, CRLF.Length));
 				}
 
-				tmp.PrepareBuffer(_localStream.Length - tmp.Length);
+				tmp.PrepareBuffer((int)(_localStream.Length - tmp.Length));
 				tmp.Length = TrySilent!(_localStream.TryRead(.((uint8*)tmp.Ptr, tmp.Length)));
 			}
 			else
@@ -362,7 +362,7 @@ namespace Beef_Net
 
 		protected override int GetSize()
 		{
-			int result = _buffer.Length + RecalculateSize(_stream.Length - _stream.Position);
+			int result = _buffer.Length + RecalculateSize((int)(_stream.Length - _stream.Position));
 
 			if (!_activated) // Include header size only when not yet activated
 			{
@@ -410,8 +410,8 @@ namespace Beef_Net
 					_localStream.TryWrite(.((uint8*)CRLF.Ptr, CRLF.Length));
 				}
 
-				tmp.PrepareBuffer(_localStream.Length - tmp.Length);
-				tmp.Length = TrySilent!(_localStream.TryRead(.((uint8*)tmp.Ptr, _localStream.Length)));
+				tmp.PrepareBuffer((int)(_localStream.Length - tmp.Length));
+				tmp.Length = TrySilent!(_localStream.TryRead(.((uint8*)tmp.Ptr, (int)_localStream.Length)));
 			}
 			else if (_stream.Length - _stream.Position == 0)
 			{

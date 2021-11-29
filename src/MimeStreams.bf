@@ -233,7 +233,7 @@ namespace Beef_Net
 
 		public override Result<void> Seek(int64 pos, SeekKind seekKind = .Absolute) => .Ok;
 
-		public override void Close() { }
+		public override Result<void> Close() { return .Ok; }
 	}
 
 	public class MimeOutputStream : Stream
@@ -286,6 +286,6 @@ namespace Beef_Net
 
 		public override Result<void> Seek(int64 pos, SeekKind seekKind = .Absolute) => .Ok;
 
-		public override void Close() { }
+		public override Result<void> Close() { return .Ok; }
 	}
 }
