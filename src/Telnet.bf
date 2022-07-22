@@ -645,8 +645,12 @@ namespace Beef_Net
 			_orders.Clear();
 		}
 
-		public virtual bool Connect(StringView aAddress, uint16 aPort) =>
-			_connection.Connect(aAddress, aPort);
+		public virtual bool Connect(StringView aAddress, uint16 aPort)
+		{
+			_host.Set(aAddress);
+			_port = aPort;
+			return _connection.Connect(aAddress, aPort);
+		}
 
 		public virtual bool Connect() =>
 			_connection.Connect(_host, _port);
