@@ -249,7 +249,7 @@ namespace Beef_Net
 
 			mixin Cleanup(bool aResult)
 			{
-				ClearAndDeleteItems!(tmp);
+				SmtpClient.ClearAndDeleteItemsSafe!(tmp);
 				delete tmp;
 				return aResult;
 			}
@@ -451,9 +451,22 @@ namespace Beef_Net
 	    protected void OnCs(Socket aSocket) =>
 			SendData(_status.First().Status == .Data);
 
+		
+
+		public static mixin ClearAndDeleteItemsSafe(var container)
+		{
+			for (var value in container)
+			{
+				if (value is String && ((String)value).IsDynAlloc)
+				delete value;
+			}
+
+			container.Clear();
+		}
+
     	protected void EvaluateServer()
 		{
-			ClearAndDeleteItems!(_featureList);
+			ClearAndDeleteItemsSafe!(_featureList);
 
 			if (_tempBuffer.Length == 0)
 				return;
@@ -466,7 +479,7 @@ namespace Beef_Net
 
     	protected void EvaluateFeatures()
 		{
-			ClearAndDeleteItems!(_featureList);
+			ClearAndDeleteItemsSafe!(_featureList);
 
 			if (_tempBuffer.IsEmpty)
 				return;
@@ -569,7 +582,7 @@ namespace Beef_Net
 						{
 							Eventize!(rec.Status, false);
 							Disconnect(false);
-							ClearAndDeleteItems!(_featureList);
+							ClearAndDeleteItemsSafe!(_featureList);
 							_tempBuffer.Clear();
 						}
 					}

@@ -132,7 +132,7 @@ namespace Beef_Net
 				}
 				else
 				{
-			      	ptrNext = null;
+					ptrNext = null;
 				}
 			}
 			while (ptrNext != null);

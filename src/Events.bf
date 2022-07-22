@@ -448,13 +448,13 @@ namespace Beef_Net
 				if ((!temp.[Friend]_dispose) && ((!temp.IgnoreWrite) || (!temp.IgnoreRead) || (!temp.IgnoreError)))
 				{
 					if (!temp.IgnoreWrite)
-						Common.FD_SET(temp.[Friend]_handle, ref _writeFDSet);
+						FD_SET(temp.[Friend]_handle, ref _writeFDSet);
 
 					if (!temp.IgnoreRead)
-						Common.FD_SET(temp.[Friend]_handle, ref _readFDSet);
+						FD_SET(temp.[Friend]_handle, ref _readFDSet);
 
 					if (!temp.IgnoreError)
-						Common.FD_SET(temp.[Friend]_handle, ref _errorFDSet);
+						FD_SET(temp.[Friend]_handle, ref _errorFDSet);
 
 					if (temp.[Friend]_handle > maxHandle)
 						maxHandle = temp.[Friend]_handle;

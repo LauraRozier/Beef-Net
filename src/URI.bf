@@ -81,8 +81,7 @@ namespace Beef_Net
 		private static void Unescape(StringView aStr, String aOutStr)
 		{
 			aOutStr.Clear();
-			aOutStr.Reserve(aStr.Length);
-			aOutStr.Length = aStr.Length;
+			aOutStr.PrepareBuffer(aStr.Length);
 
 			int i = 0;
 			int realLen = 0;
