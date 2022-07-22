@@ -680,7 +680,6 @@ namespace Beef_Net
 
 				if (result > 0)
 				{
-					aOutMsg.PrepareBuffer(len);
 					System.Text.Encoding.ASCII.DecodeToUTF8(.(&buff[0], len), aOutMsg);
 					_output.RemoveFromStart(result);
 				}
